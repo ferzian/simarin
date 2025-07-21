@@ -1,16 +1,57 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <title>Register</title>
-</head>
-<body class="flex items-center justify-center h-screen bg-gray-100">
-  <form action="/auth/register" method="POST" class="bg-white p-6 rounded shadow space-y-4">
-    <h1 class="text-xl font-bold">Register</h1>
-    <input type="text" name="username" placeholder="Username" class="w-full p-2 border rounded" required>
-    <input type="password" name="password" placeholder="Password" class="w-full p-2 border rounded" required minlength="4">
-    <button class="bg-blue-500 text-white w-full py-2 rounded hover:bg-blue-600">Daftar</button>
-    <p class="text-sm">Sudah punya akun? <a href="/login" class="text-blue-500">Login</a></p>
-  </form>
-</body>
+  <head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Register</title>
+  </head>
+  <body>
+    <nav class="bg-white shadow p-4 flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-blue-600">SIMARIN</h1>
+      <a href="/" class="text-gray-700 hover:text-blue-500">Beranda</a>
+      <div class="space-x-4">
+        <a
+          href="/login"
+          class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          >Login</a
+        >
+        <a href="/register" class="text-gray-700 hover:text-blue-500"
+          >Register</a
+        >
+      </div>
+    </nav>
+
+    <div class="flex items-center justify-center h-screen bg-gray-100">
+      <form
+        action="/auth/register"
+        method="POST"
+        class="bg-white p-6 rounded shadow space-y-4"
+      >
+        <h1 class="text-xl font-bold">Hai, Selamat Datang!</h1>
+        <p class="py-0">Silahkan daftar untuk membuat akun Anda.</p>
+        <input
+          type="text"
+          name="username"
+          placeholder="Username"
+          class="w-full p-2 border rounded"
+          required
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          class="w-full p-2 border rounded"
+          required
+          minlength="4"
+        />
+        <button
+          class="bg-blue-500 text-white w-full py-2 rounded hover:bg-blue-600"
+        >
+          Daftar
+        </button>
+        <p class="text-sm">
+          Sudah punya akun? <a href="/login" class="text-blue-500">Login</a>
+        </p>
+      </form>
+    </div>
+  </body>
 </html>
