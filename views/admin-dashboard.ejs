@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Admin Dashboard</title>
+</head>
+<body class="bg-gray-100 p-10">
+  <h1 class="text-3xl font-bold mb-6">Dashboard Admin</h1>
+
+  <h2 class="text-xl font-semibold mb-4">User Menunggu Persetujuan</h2>
+
+  <% if (pendingUsers.length === 0) { %>
+    <p class="text-gray-600">Tidak ada user yang menunggu approval.</p>
+  <% } else { %>
+    <ul class="space-y-4">
+      <% pendingUsers.forEach(user => { %>
+        <li class="bg-white p-4 rounded shadow flex justify-between items-center">
+          <div>
+            <p class="font-medium"><%= user.username %></p>
+          </div>
+          <form action="/auth/admin/approve/<%= user.id %>" method="POST">
+            <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+              Approve
+            </button>
+          </form>
+        </li>
+      <% }) %>
+    </ul>
+  <% } %>
+</body>
+</html>
