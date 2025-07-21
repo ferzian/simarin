@@ -18,11 +18,19 @@
           <div>
             <p class="font-medium"><%= user.username %></p>
           </div>
-          <form action="/auth/admin/approve/<%= user.id %>" method="POST">
-            <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-              Approve
+          <div class="flex gap-2">
+            <form action="/auth/admin/approve/<%= user.id %>" method="POST">
+              <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                Approve
+              </button>
+            </form>
+          </form>
+          <form action="/auth/admin/reject/<%= user.id %>" method="POST">
+            <button class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+              Reject
             </button>
           </form>
+        </div>
         </li>
       <% }) %>
     </ul>

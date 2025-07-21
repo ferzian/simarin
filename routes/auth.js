@@ -24,6 +24,10 @@ router.post('/login', async (req, res) => {
 router.post('/register', async (req, res) => {
   const { username, password } = req.body;
 
+if (!username || !password || password.length < 4) {
+  return res.send('Username dan password wajib diisi (min 4 karakter).');
+}
+
   const existing = await User.findOne({ where: { username } });
   if (existing) return res.send('Username sudah dipakai.');
 
@@ -48,6 +52,16 @@ router.post('/admin/approve/:id', async (req, res) => {
 
   res.redirect('/auth/admin/dashboard');
 });
+
+// Tolak user
+router.post('/admin/reject/:id', async (req, res) => {
+  const { id } = req.params;
+
+  await User.destroy({ where: { id } });
+
+  res.redirect('/auth/admin/dashboard?msg=reject');
+});
+
 
 
 module.exports = router;

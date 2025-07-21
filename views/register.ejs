@@ -2,14 +2,15 @@
 <html>
 <head>
   <script src="https://cdn.tailwindcss.com"></script>
-  <title>Login</title>
+  <title>Register</title>
 </head>
 <body class="flex items-center justify-center h-screen bg-gray-100">
   <form action="/auth/register" method="POST" class="bg-white p-6 rounded shadow space-y-4">
     <h1 class="text-xl font-bold">Register</h1>
-    <input type="text" name="username" placeholder="Username" class="w-full p-2 border rounded">
-    <input type="password" name="password" placeholder="Password" class="w-full p-2 border rounded">
-    <button class="bg-blue-500 text-white w-full py-2 rounded hover:bg-blue-600">Register</button>
+    <input type="text" name="username" placeholder="Username" class="w-full p-2 border rounded" required>
+    <input type="password" name="password" placeholder="Password" class="w-full p-2 border rounded" required minlength="4">
+    <button class="bg-blue-500 text-white w-full py-2 rounded hover:bg-blue-600">Daftar</button>
+    <p class="text-sm">Sudah punya akun? <a href="/login" class="text-blue-500">Login</a></p>
   </form>
 </body>
 </html>
