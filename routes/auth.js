@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User');
+const { User } = require('../models'); // ✅ Benar
 const { isAuthenticated, isAdmin } = require('../middleware/authMiddleware');
 
 // Route yang cuma boleh diakses admin
@@ -50,15 +50,6 @@ router.post('/register', async (req, res) => {
   res.send('Registrasi berhasil! Tunggu persetujuan admin.');
 });
 
-// Tampilkan dashboard admin
-router.get('/admin/dashboard', async (req, res) => {
-  const pendingUsers = await User.findAll({
-    where: { role: 'user', approved: false },
-  });
-
-  res.render('admin/index', { pendingUsers });
-});
-
 // Proses approval user
 router.post('/admin/approve/:id', async (req, res) => {
   const { id } = req.params;
@@ -83,7 +74,5 @@ router.post('/logout', (req, res) => {
     res.redirect('/');
   });
 });
-
-
 
 module.exports = router;

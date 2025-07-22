@@ -80,6 +80,20 @@
           </button>
         </form>
       </header>
+      <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+        <div class="p-6">
+          <h2 class="text-xl font-semibold mb-2">Kunjungan Bulan Ini:</h2>
+          <p class="text-3xl font-bold text-blue-600">
+            <%= visitCount %> orang
+          </p>
+        </div>
+        <a
+          href="/auth/admin/download-visitors"
+          class="mt-4 inline-block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+        >
+          Download Rekap Kunjungan
+        </a>
+      </main>
     </div>
 
     <script>
