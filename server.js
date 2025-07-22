@@ -5,6 +5,7 @@ const sequelize = require('./config/db');
 const authRoutes = require('./routes/auth');
 const User = require('./models/User');
 const path = require('path');
+const session = require('express-session');
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -16,6 +17,14 @@ app.set('views', path.join(__dirname, 'views'));
 app.get('/', (req, res) => res.render('index'));
 app.get('/login', (req, res) => res.render('login'));
 app.get('/register', (req, res) => res.render('register'));
+app.use(session({
+  secret: 'sempur123', // bisa kamu ganti jadi string acak yang aman
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 2 // 2 jam
+  }
+}));
 app.use('/auth', authRoutes);
 
 // Sync DB and start
