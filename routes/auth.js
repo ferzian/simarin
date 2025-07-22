@@ -54,7 +54,20 @@ router.get('/register', (req, res) => {
 
 // POST Register
 router.post('/register', async (req, res) => {
-  const { username, password } = req.body;
+  const {
+    username,
+    password,
+    confirmPassword,
+    email,
+    phone,
+    dob,
+    countryCode,
+  } = req.body;
+
+  // Validasi password dan konfirmasi
+  if (password !== confirmPassword) {
+    return res.render('register', { error: 'Password tidak sama.' });
+  }
 
   try {
     const existingUser = await User.findOne({ where: { username } });
@@ -62,12 +75,25 @@ router.post('/register', async (req, res) => {
       return res.render('register', { error: 'Username sudah digunakan.' });
     }
 
-    await User.create({ username, password, role: 'user', approved: false });
+    // Simpan data baru
+    await User.create({
+      username,
+      password,
+      email,
+      phone,
+      dob,
+      countryCode,
+      role: 'user',
+      approved: false,
+    });
+
     res.redirect('/');
   } catch (err) {
+    console.error(err);
     res.render('register', { error: 'Terjadi kesalahan saat register.' });
   }
 });
+
 
 // GET User Dashboard
 router.get('/user/dashboard', (req, res) => {
