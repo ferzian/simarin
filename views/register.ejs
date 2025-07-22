@@ -9,34 +9,57 @@
     />
     <style>
       body {
-        font-family: 'Poppins', sans-serif;
+        font-family: "Poppins", sans-serif;
       }
     </style>
   </head>
-  <body class="bg-gradient-to-br from-blue-100 to-purple-100 min-h-screen flex flex-col">
+  <body
+    class="bg-gradient-to-br from-blue-100 to-purple-100 min-h-screen flex flex-col"
+  >
     <nav class="bg-white shadow-lg p-4 flex justify-between items-center z-10">
       <h1 class="text-3xl font-bold text-blue-700 tracking-wide">SIMARIN</h1>
-      <a href="/" class="text-gray-700 hover:text-blue-600 transition duration-300 ease-in-out text-lg">Beranda</a>
+      <a
+        href="/"
+        class="text-gray-700 hover:text-blue-600 transition duration-300 ease-in-out text-lg"
+        >Beranda</a
+      >
       <div class="flex items-center space-x-6">
         <a
           href="/login"
           class="bg-blue-600 text-white px-6 py-2 rounded-full shadow-md hover:bg-blue-700 transition duration-300 ease-in-out text-lg"
           >Login</a
         >
-        <a href="/register" class="text-gray-700 hover:text-blue-600 transition duration-300 ease-in-out text-lg"
+        <a
+          href="/register"
+          class="text-gray-700 hover:text-blue-600 transition duration-300 ease-in-out text-lg"
           >Register</a
         >
       </div>
     </nav>
 
     <div class="flex-grow flex items-center justify-center p-6">
-      <div class="bg-white p-10 rounded-xl shadow-2xl space-y-7 max-w-md w-full transform transition-all duration-500 hover:scale-105">
-        <h1 class="text-3xl font-bold text-center text-gray-800">Yuk, Buat Akun Baru! ✨</h1>
-        <p class="text-center text-gray-600 text-lg">Silakan daftar untuk membuat akun Anda.</p>
-        
+      <div
+        class="bg-white p-10 rounded-xl shadow-2xl space-y-7 max-w-md w-full transform transition-all duration-500 hover:scale-105"
+      >
+        <h1 class="text-3xl font-bold text-center text-gray-800">
+          Yuk, Buat Akun Baru! ✨
+        </h1>
+        <p class="text-center text-gray-600 text-lg">
+          Silakan daftar untuk membuat akun Anda.
+        </p>
+        <% if (typeof error !== 'undefined' && error) { %>
+        <div
+          class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4"
+        >
+          <strong><%= error %></strong>
+        </div>
+        <% } %>
+
         <form action="/auth/register" method="POST" class="space-y-6">
           <div>
-            <label for="username" class="block text-gray-700 font-medium mb-2 text-lg"
+            <label
+              for="username"
+              class="block text-gray-700 font-medium mb-2 text-lg"
               >Username <span class="text-red-500">*</span></label
             >
             <input
@@ -50,7 +73,9 @@
           </div>
 
           <div>
-            <label for="password" class="block text-gray-700 font-medium mb-2 text-lg"
+            <label
+              for="password"
+              class="block text-gray-700 font-medium mb-2 text-lg"
               >Password <span class="text-red-500">*</span></label
             >
             <input
@@ -74,7 +99,9 @@
 
         <p class="text-center text-gray-600 text-md mt-6">
           Sudah punya akun?
-          <a href="/login" class="text-blue-600 hover:text-blue-800 font-semibold transition duration-300 ease-in-out"
+          <a
+            href="/login"
+            class="text-blue-600 hover:text-blue-800 font-semibold transition duration-300 ease-in-out"
             >Login di sini</a
           >
         </p>

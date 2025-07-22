@@ -11,20 +11,31 @@ router.get('/approval', isAuthenticated, isAdmin, async (req, res) => {
   res.render('admin/approval', { pendingUsers });
 });
 
-// Login
+// GET Login
+router.get('/login', (req, res) => {
+  res.render('login', { error: null });
+});
+
+// POST Login
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
   const user = await User.findOne({ where: { username, password } });
 
-  if (!user) return res.send('Login gagal.');
+  if (!user) {
+    return res.render('login', { error: 'Username atau password salah' });
+  }
   if (!user.approved && user.role !== 'admin') {
-    return res.send('Akun kamu belum disetujui admin.');
+    return res.render('login', { error: 'Akun kamu belum disetujui admin.' });
   }
 
-  // ✅ Simpan data ke session
-  req.session.userId = user.id;
-  req.session.username = user.username;
-  req.session.role = user.role;
+  // Simpan ke session
+  req.session.user = {
+    id: user.id,
+    username: user.username,
+    role: user.role,
+    isApproved: user.approved
+  };
+
 
   // Redirect sesuai role
   if (user.role === 'admin') {
@@ -35,20 +46,30 @@ router.post('/login', async (req, res) => {
 });
 
 
-// Register
+// GET Register
+router.get('/register', (req, res) => {
+  res.render('register', { error: null });
+});
+
+// POST Register
 router.post('/register', async (req, res) => {
   const { username, password } = req.body;
 
-  if (!username || !password || password.length < 4) {
-    return res.send('Username dan password wajib diisi (min 4 karakter).');
+  try {
+    const existingUser = await User.findOne({ where: { username } });
+    if (existingUser) {
+      return res.render('register', { error: 'Username sudah digunakan.' });
+    }
+
+    await User.create({ username, password, role: 'user', approved: false });
+    res.redirect('/');
+  } catch (err) {
+    res.render('register', { error: 'Terjadi kesalahan saat register.' });
   }
-
-  const existing = await User.findOne({ where: { username } });
-  if (existing) return res.send('Username sudah dipakai.');
-
-  await User.create({ username, password });
-  res.send('Registrasi berhasil! Tunggu persetujuan admin.');
 });
+
+
+
 
 // Proses approval user
 router.post('/admin/approve/:id', async (req, res) => {
