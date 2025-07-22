@@ -3,52 +3,108 @@
   <head>
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Login</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+      }
+    </style>
   </head>
-  <body>
-    <nav class="bg-white shadow p-4 flex justify-between items-center">
-      <h1 class="text-2xl font-bold text-blue-600">SIMARIN</h1>
-      <a href="/" class="text-gray-700 hover:text-blue-500">Beranda</a>
-      <div class="space-x-4">
+  <body
+    class="bg-gradient-to-br from-blue-100 to-purple-100 min-h-screen flex flex-col"
+  >
+    <nav class="bg-white shadow-lg p-4 flex justify-between items-center z-10">
+      <h1 class="text-3xl font-bold text-blue-700 tracking-wide">SIMARIN</h1>
+      <a
+        href="/"
+        class="text-gray-700 hover:text-blue-600 transition duration-300 ease-in-out text-lg"
+        >Beranda</a
+      >
+      <div class="flex items-center space-x-6">
         <a
           href="/login"
-          class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          class="bg-blue-600 text-white px-6 py-2 rounded-full shadow-md hover:bg-blue-700 transition duration-300 ease-in-out text-lg"
           >Login</a
         >
-        <a href="/register" class="text-gray-700 hover:text-blue-500"
+        <a
+          href="/register"
+          class="text-gray-700 hover:text-blue-600 transition duration-300 ease-in-out text-lg"
           >Register</a
         >
       </div>
     </nav>
 
-    <div class="flex items-center justify-center h-screen bg-gray-100">
-      <form
-        action="/auth/login"
-        method="POST"
-        class="bg-white p-6 rounded shadow space-y-4"
+    <div class="flex-grow flex items-center justify-center p-6">
+      <div
+        class="bg-white p-10 rounded-xl shadow-2xl space-y-7 max-w-md w-full transform transition-all duration-500 hover:scale-105"
       >
-        <h1 class="text-xl font-bold">Hai, Selamat Datang!</h1>
-        <p class="py-0">Silahkan masuk dengan akun Anda.</p>
-        <input
-          type="text"
-          name="username"
-          placeholder="Username"
-          class="w-full p-2 border rounded"
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          class="w-full p-2 border rounded"
-        />
-        <button
-          class="bg-blue-500 text-white w-full py-2 rounded hover:bg-blue-600"
-        >
-          Login
-        </button>
-        <p class="text-sm">
-          Belum punya akun? <a href="/register" class="text-blue-500">Daftar</a>
+        <h1 class="text-3xl font-bold text-center text-gray-800">
+          Hai, Selamat Datang! 👋
+        </h1>
+        <p class="text-center text-gray-600 text-lg">
+          Silakan masuk dengan akun Anda.
         </p>
-      </form>
+        <% if (typeof error !== 'undefined') { %>
+        <div
+          class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4"
+        >
+          <strong><%= error %></strong>
+        </div>
+        <% } %>
+
+        <form action="/auth/login" method="POST" class="space-y-6">
+          <div>
+            <label
+              for="username"
+              class="block text-gray-700 font-medium mb-2 text-lg"
+              >Username <span class="text-red-500">*</span></label
+            >
+            <input
+              type="text"
+              name="username"
+              id="username"
+              placeholder="Masukkan username Anda"
+              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-lg"
+              required
+            />
+          </div>
+
+          <div>
+            <label
+              for="password"
+              class="block text-gray-700 font-medium mb-2 text-lg"
+              >Password <span class="text-red-500">*</span></label
+            >
+            <input
+              type="password"
+              name="password"
+              id="password"
+              placeholder="Masukkan password Anda"
+              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-lg"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            class="bg-blue-600 text-white w-full py-3 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 ease-in-out font-semibold text-xl transform hover:scale-100"
+          >
+            Login
+          </button>
+        </form>
+
+        <p class="text-center text-gray-600 text-md mt-6">
+          Belum punya akun?
+          <a
+            href="/register"
+            class="text-blue-600 hover:text-blue-800 font-semibold transition duration-300 ease-in-out"
+            >Daftar sekarang</a
+          >
+        </p>
+      </div>
     </div>
   </body>
 </html>

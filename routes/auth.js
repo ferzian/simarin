@@ -1,48 +1,83 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User');
+const { User } = require('../models'); // ✅ Benar
+const { isAuthenticated, isAdmin } = require('../middleware/authMiddleware');
 
-// Login
+// Route yang cuma boleh diakses admin
+router.get('/admin/user', isAuthenticated, isAdmin, async (req, res) => {
+  const pendingUsers = await User.findAll({
+    where: { role: 'user', approved: false },
+  });
+  res.render('admin/user', { pendingUsers });
+});
+
+
+// GET Login
+router.get('/login', (req, res) => {
+  res.render('login', { error: null });
+});
+
+// POST Login
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
   const user = await User.findOne({ where: { username, password } });
 
-  if (!user) return res.send('Login gagal.');
-
-  if (user.role === 'admin') {
-  return res.redirect('/auth/admin/dashboard');
-}
-
-  if (!user.approved) {
-    return res.send('Akun kamu belum disetujui admin.');
+  if (!user) {
+    return res.render('login', { error: 'Username atau password salah' });
+  }
+  if (!user.approved && user.role !== 'admin') {
+    return res.render('login', { error: 'Akun kamu belum disetujui admin.' });
   }
 
-  res.render('user-dashboard', { username: user.username });
+  // Simpan ke session
+  req.session.user = {
+    id: user.id,
+    username: user.username,
+    role: user.role,
+    isApproved: user.approved
+  };
+
+
+  // Redirect sesuai role
+  if (user.role === 'admin') {
+    return res.redirect('/auth/admin/dashboard');
+  }
+
+  res.redirect('/auth/user/dashboard');
 });
 
-// Register
+
+// GET Register
+router.get('/register', (req, res) => {
+  res.render('register', { error: null });
+});
+
+// POST Register
 router.post('/register', async (req, res) => {
   const { username, password } = req.body;
 
-if (!username || !password || password.length < 4) {
-  return res.send('Username dan password wajib diisi (min 4 karakter).');
-}
+  try {
+    const existingUser = await User.findOne({ where: { username } });
+    if (existingUser) {
+      return res.render('register', { error: 'Username sudah digunakan.' });
+    }
 
-  const existing = await User.findOne({ where: { username } });
-  if (existing) return res.send('Username sudah dipakai.');
-
-  await User.create({ username, password });
-  res.send('Registrasi berhasil! Tunggu persetujuan admin.');
+    await User.create({ username, password, role: 'user', approved: false });
+    res.redirect('/');
+  } catch (err) {
+    res.render('register', { error: 'Terjadi kesalahan saat register.' });
+  }
 });
 
-// Tampilkan dashboard admin
-router.get('/admin/dashboard', async (req, res) => {
-  const pendingUsers = await User.findAll({
-    where: { role: 'user', approved: false },
-  });
+// GET User Dashboard
+router.get('/user/dashboard', (req, res) => {
+  if (!req.session.user || req.session.user.role !== 'user') {
+    return res.redirect('/auth/login');
+  }
 
-  res.render('admin-dashboard', { pendingUsers });
+  res.render('user-dashboard', { username: req.session.user.username });
 });
+
 
 // Proses approval user
 router.post('/admin/approve/:id', async (req, res) => {
@@ -62,6 +97,11 @@ router.post('/admin/reject/:id', async (req, res) => {
   res.redirect('/auth/admin/dashboard?msg=reject');
 });
 
-
+// Logout
+router.post('/logout', (req, res) => {
+  req.session.destroy(() => {
+    res.redirect('/');
+  });
+});
 
 module.exports = router;
