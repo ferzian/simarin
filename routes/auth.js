@@ -4,12 +4,13 @@ const { User } = require('../models'); // ✅ Benar
 const { isAuthenticated, isAdmin } = require('../middleware/authMiddleware');
 
 // Route yang cuma boleh diakses admin
-router.get('/approval', isAuthenticated, isAdmin, async (req, res) => {
+router.get('/admin/user', isAuthenticated, isAdmin, async (req, res) => {
   const pendingUsers = await User.findAll({
     where: { role: 'user', approved: false },
   });
-  res.render('admin/approval', { pendingUsers });
+  res.render('admin/user', { pendingUsers });
 });
+
 
 // GET Login
 router.get('/login', (req, res) => {
@@ -68,7 +69,14 @@ router.post('/register', async (req, res) => {
   }
 });
 
+// GET User Dashboard
+router.get('/user/dashboard', (req, res) => {
+  if (!req.session.user || req.session.user.role !== 'user') {
+    return res.redirect('/auth/login');
+  }
 
+  res.render('user-dashboard', { username: req.session.user.username });
+});
 
 
 // Proses approval user

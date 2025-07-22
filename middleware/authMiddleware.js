@@ -1,16 +1,15 @@
-// middleware/authMiddleware.js
 function isAuthenticated(req, res, next) {
-  if (req.session.userId) {
+  if (req.session.user) {
     return next();
   }
-  res.redirect('/');
+  return res.redirect('/auth/login');
 }
 
 function isAdmin(req, res, next) {
-  if (req.session.role === 'admin') {
+  if (req.session.user && req.session.user.role === 'admin') {
     return next();
   }
-  res.status(403).send('Akses ditolak');
+  return res.redirect('/');
 }
 
 module.exports = { isAuthenticated, isAdmin };
