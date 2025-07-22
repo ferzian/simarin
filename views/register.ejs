@@ -43,11 +43,54 @@
           required
           minlength="4"
         />
-        <button
-          class="bg-blue-500 text-white w-full py-2 rounded hover:bg-blue-600"
-        >
-          Daftar
-        </button>
+          <input
+          type="Konfirmasi password"
+          name="Konfirmasi password"
+          placeholder="Konfirmasi Password"
+          class="w-full p-2 border rounded"
+          required
+          minlength="4"
+        />
+          <div class="mb-4">
+            <label for="no_hp" class="block text-gray-700 font- mb-2">No HP</label>
+            <div class="flex space-x-2">
+              <!-- Dropdown kode negara -->
+              <select id="kode_negara" name="kode_negara" class="border border-gray-300 rounded-md px-3 py-2 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="+62">Indonesia (+62)</option>
+                <option value="+1">Amerika (+1)</option>
+                <option value="+60">Malaysia (+60)</option>
+                <option value="+91">India (+91)</option>
+                <!-- Tambahkan opsi lainnya sesuai kebutuhan -->
+              </select>
+      
+            <!-- Input nomor HP -->
+            <input type="tel" id="no_hp" name="no_hp" placeholder="81234567890" required
+              class="flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        </div>
+      
+          <input
+          type="Email"
+          name="Email"
+          placeholder="Email"
+          class="w-full p-2 border rounded"
+          required
+          minlength="4"
+        />
+          <input
+            type="Tanggal Lahir"
+            name="Tanggal Lahir"
+            placeholder="Tanggal Lahir"
+            class="w-full p-2 border rounded"
+            required
+            minlength="4"
+          />
+          <button
+            class="bg-blue-500 text-white w-full py-2 rounded hover:bg-blue-600"
+          >
+            Daftar
+          </button>
         <p class="text-sm">
           Sudah punya akun? <a href="/login" class="text-blue-500">Login</a>
         </p>
