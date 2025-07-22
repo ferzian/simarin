@@ -41,7 +41,7 @@ router.get('/admin/dashboard', async (req, res) => {
     where: { role: 'user', approved: false },
   });
 
-  res.render('admin-dashboard', { pendingUsers });
+  res.render('admin/admin-dashboard', { pendingUsers });
 });
 
 // Proses approval user
@@ -62,6 +62,11 @@ router.post('/admin/reject/:id', async (req, res) => {
   res.redirect('/auth/admin/dashboard?msg=reject');
 });
 
+// Logout
+router.post('/logout', (req, res) => {
+  // Kalau belum pakai session, cukup redirect aja
+  res.redirect('/');
+});
 
 
 module.exports = router;
