@@ -11,12 +11,28 @@ router.get('/admin/approval-akun', isAuthenticated, isAdmin, async (req, res) =>
   res.render('admin/approval-akun', { pendingUsers });
 });
 
-// Approval Magang
-router.get('/admin/approval-magang', isAuthenticated, isAdmin, async (req, res) => {
+// Approval Peserta
+router.get('/admin/approval-peserta', isAuthenticated, isAdmin, async (req, res) => {
   const pendingUsers = await User.findAll({
     where: { role: 'user', approved: false },
   });
-  res.render('admin/approval-magang', { pendingUsers });
+  res.render('admin/approval-peserta', { pendingUsers });
+});
+
+// Peserta
+router.get('/admin/peserta', isAuthenticated, isAdmin, async (req, res) => {
+  const pendingUsers = await User.findAll({
+    where: { role: 'user', approved: false },
+  });
+  res.render('admin/peserta', { pendingUsers });
+});
+
+// SKM
+router.get('/admin/skm', isAuthenticated, isAdmin, async (req, res) => {
+  const pendingUsers = await User.findAll({
+    where: { role: 'user', approved: false },
+  });
+  res.render('admin/skm', { pendingUsers });
 });
 
 
