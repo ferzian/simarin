@@ -21,7 +21,7 @@ router.get('/dashboard', async (req, res) => {
     }
   });
 
-  res.render('admin/index', {
+  res.render('admin/dashboard', {
     pendingUsers,
     visitCount
   });
