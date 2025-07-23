@@ -106,8 +106,15 @@
               <p class="font-semibold text-lg text-gray-800">
                 <%= user.username %>
               </p>
-              <p class="text-sm text-gray-500">ID: <%= user.id %></p>
+              <p class="text-sm text-gray-500">Email: <%= user.email %></p>
+              <p class="text-sm text-gray-500">
+                No HP: <%= user.phone %>
+              </p>
+              <p class="text-sm text-gray-500">
+                Tanggal Lahir: <%= user.dob %>
+              </p>
             </div>
+
             <div class="flex gap-3">
               <form action="/auth/admin/approve/<%= user.id %>" method="POST">
                 <button

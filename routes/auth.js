@@ -52,6 +52,7 @@ router.get('/register', (req, res) => {
   res.render('register', { error: null });
 });
 
+
 // POST Register
 router.post('/register', async (req, res) => {
   const {
