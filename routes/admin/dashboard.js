@@ -23,7 +23,8 @@ router.get('/dashboard', async (req, res) => {
 
   res.render('admin/dashboard', {
     pendingUsers,
-    visitCount
+    visitCount,
+    user: req.session.user
   });
 });
 
