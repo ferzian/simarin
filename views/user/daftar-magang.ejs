@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Daftar Magang</title>
+</head>
+<body>
+  <h1>Halo, <%= username %>!</h1>
+  <p>Silakan isi formulir untuk mendaftar magang di Balai Perikanan Budidaya Air Tawar.</p>
+
+  <form action="/auth/user/daftar-magang" method="POST">
+    <label>Nama Lengkap:</label><br>
+    <input type="text" name="nama" required><br><br>
+
+    <label>Instansi:</label><br>
+    <input type="text" name="instansi" required><br><br>
+
+    <label>Tanggal Mulai:</label><br>
+    <input type="date" name="mulai" required><br><br>
+
+    <label>Tanggal Selesai:</label><br>
+    <input type="date" name="selesai" required><br><br>
+
+    <button type="submit">Kirim</button>
+  </form>
+</body>
+</html>

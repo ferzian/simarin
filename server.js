@@ -48,7 +48,7 @@ app.use(async (req, res, next) => {
 });
 
 // Sync DB and start server
-sequelize.sync({ alter: true }).then(async () => {
+sequelize.sync({ force: true }).then(async () => {
   const admin = await User.findOne({ where: { role: 'admin' } });
   if (!admin) {
     await User.create({

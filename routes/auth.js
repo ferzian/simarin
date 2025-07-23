@@ -102,7 +102,19 @@ router.get('/user/dashboard', (req, res) => {
     return res.redirect('/auth/login');
   }
 
-  res.render('user-dashboard', { username: req.session.user.username });
+  res.render('user/user-dashboard', {
+    username: req.session.user.username
+  });
+});
+// user-daftar-magang
+router.get('/user/daftar-magang', (req, res) => {
+  if (!req.session.user || req.session.user.role !== 'user') {
+    return res.redirect('/auth/login');
+  }
+
+  res.render('user/daftar-magang', {
+    username: req.session.user.username
+  });
 });
 
 
@@ -130,5 +142,6 @@ router.post('/logout', (req, res) => {
     res.redirect('/');
   });
 });
+
 
 module.exports = router;
