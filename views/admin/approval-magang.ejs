@@ -90,7 +90,7 @@
       <header
         class="bg-gray-50 shadow-md px-6 py-4 flex justify-between items-center border-b border-gray-200"
       >
-        <h1 class="text-2xl font-semibold text-gray-700">Approval Akun</h1>
+        <h1 class="text-2xl font-semibold text-gray-700">Approval Magang</h1>
         <form action="/auth/logout" method="POST" class="ml-4">
           <button
             class="bg-red-600 text-white px-5 py-2 rounded-lg hover:bg-red-700 transition duration-200"
@@ -100,55 +100,9 @@
         </form>
       </header>
 
-      <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
-        <h2 class="text-2xl font-semibold mb-5 text-gray-800">
-          User Menunggu Persetujuan
-        </h2>
-
-        <% if (pendingUsers.length === 0) { %>
-        <div class="bg-white p-6 rounded-lg shadow-md text-center">
-          <p class="text-gray-600 text-lg">
-            Tidak ada user yang menunggu approval.
-          </p>
-        </div>
-        <% } else { %>
-        <ul class="space-y-4">
-          <% pendingUsers.forEach(user => { %>
-          <li
-            class="bg-white p-5 rounded-lg shadow-md flex justify-between items-center transition duration-200 hover:shadow-lg"
-          >
-            <div>
-              <p class="font-semibold text-lg text-gray-800">
-                <%= user.username %>
-              </p>
-              <p class="text-sm text-gray-500">Email: <%= user.email %></p>
-              <p class="text-sm text-gray-500">No HP: <%= user.phone %></p>
-              <p class="text-sm text-gray-500">
-                Tanggal Lahir: <%= user.dob %>
-              </p>
-            </div>
-
-            <div class="flex gap-3">
-              <form action="/auth/admin/approve/<%= user.id %>" method="POST">
-                <button
-                  class="bg-green-500 text-white px-5 py-2 rounded-lg hover:bg-green-600 transition duration-200 transform hover:scale-105"
-                >
-                  Approve
-                </button>
-              </form>
-              <form action="/auth/admin/reject/<%= user.id %>" method="POST">
-                <button
-                  class="bg-red-500 text-white px-5 py-2 rounded-lg hover:bg-red-600 transition duration-200 transform hover:scale-105"
-                >
-                  Reject
-                </button>
-              </form>
-            </div>
-          </li>
-          <% }) %>
-        </ul>
-        <% } %>
-      </main>
+      <main
+        class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6"
+      ></main>
     </div>
 
     <script>

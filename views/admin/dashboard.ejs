@@ -62,10 +62,25 @@
             <span class="menu-text">Approval Akun</span>
           </a>
           <a
-            href="/auth/admin/magang"
+            href="/auth/admin/approval-magang"
             class="flex items-center gap-3 px-4 py-2 rounded hover:bg-gray-700 transition"
           >
             <span class="menu-text">Approval Magang</span>
+          </a>
+        </div>
+        <div>
+          <h3 class="uppercase text-gray-500 text-sm mb-1 menu-text">Recap</h3>
+          <a
+            href="/auth/admin/magang"
+            class="flex items-center gap-3 px-4 py-2 rounded hover:bg-gray-700 transition"
+          >
+            <span class="menu-text">Magang</span>
+          </a>
+          <a
+            href="/auth/admin/skm"
+            class="flex items-center gap-3 px-4 py-2 rounded hover:bg-gray-700 transition"
+          >
+            <span class="menu-text">SKM</span>
           </a>
         </div>
       </nav>
@@ -92,7 +107,9 @@
           class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl"
         >
           <div class="p-6 bg-white rounded-lg shadow-md text-center">
-            <h2 class="text-xl text-gray-800 font-semibold mb-2">Kunjungan Bulan Ini:</h2>
+            <h2 class="text-xl text-gray-800 font-semibold mb-2">
+              Kunjungan Bulan Ini:
+            </h2>
             <p class="text-3xl font-bold text-green-600">
               <%= visitCount %> orang
             </p>

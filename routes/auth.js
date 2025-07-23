@@ -3,12 +3,20 @@ const router = express.Router();
 const { User } = require('../models'); // ✅ Benar
 const { isAuthenticated, isAdmin } = require('../middleware/authMiddleware');
 
-// Route yang cuma boleh diakses admin
+// Approval Akun
 router.get('/admin/approval-akun', isAuthenticated, isAdmin, async (req, res) => {
   const pendingUsers = await User.findAll({
     where: { role: 'user', approved: false },
   });
   res.render('admin/approval-akun', { pendingUsers });
+});
+
+// Approval Magang
+router.get('/admin/approval-magang', isAuthenticated, isAdmin, async (req, res) => {
+  const pendingUsers = await User.findAll({
+    where: { role: 'user', approved: false },
+  });
+  res.render('admin/approval-magang', { pendingUsers });
 });
 
 
