@@ -4,11 +4,11 @@ const { User } = require('../models'); // ✅ Benar
 const { isAuthenticated, isAdmin } = require('../middleware/authMiddleware');
 
 // Route yang cuma boleh diakses admin
-router.get('/admin/user', isAuthenticated, isAdmin, async (req, res) => {
+router.get('/admin/approval-akun', isAuthenticated, isAdmin, async (req, res) => {
   const pendingUsers = await User.findAll({
     where: { role: 'user', approved: false },
   });
-  res.render('admin/user', { pendingUsers });
+  res.render('admin/approval-akun', { pendingUsers });
 });
 
 
