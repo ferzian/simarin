@@ -54,6 +54,9 @@ sequelize.sync({ force: true }).then(async () => {
     await User.create({
       username: 'admin',
       password: 'admin123',
+      email: 'admin@example.com',
+      phone: '1234567890',
+      dob: '2000-01-01',
       role: 'admin',
       approved: true,
     });

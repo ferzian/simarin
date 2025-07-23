@@ -24,7 +24,7 @@
     >
       <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-bold">SIMARIN</h2>
-        <button id="sidebarToggle" class="text-white focus:outline-none">
+        <button id="sidebarToggle" class="text-gray-800 focus:outline-none">
           <svg
             class="w-6 h-6"
             fill="none"
@@ -41,38 +41,42 @@
           </svg>
         </button>
       </div>
-      <nav>
-        <a
-          href="/auth/admin/dashboard"
-          class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 text-lg font-medium mt-2"
-        >
-          Dashboard
-        </a>
-        <a
-          href="/auth/admin/user"
-          class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 active:bg-gray-700 text-lg font-medium"
-        >
-          User
-        </a>
-        <a
-          href="#"
-          class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 text-lg font-medium mt-2"
-        >
-          Manajemen Produk
-        </a>
-        <a
-          href="#"
-          class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 text-lg font-medium mt-2"
-        >
-          Pengaturan
-        </a>
+      <nav class="flex-1 p-4 space-y-4 text-lg">
+        <div>
+          <h3 class="uppercase text-gray-500 text-sm mb-1 menu-text">Core</h3>
+          <a
+            href="/auth/admin/dashboard"
+            class="flex items-center gap-3 px-4 py-2 rounded hover:bg-gray-700 transition"
+          >
+            <span class="menu-text">Dashboard</span>
+          </a>
+        </div>
+        <div>
+          <h3 class="uppercase text-gray-500 text-sm mt-6 mb-1 menu-text">
+            User
+          </h3>
+          <a
+            href="/auth/admin/approval-akun"
+            class="flex items-center gap-3 px-4 py-2 rounded hover:bg-gray-700 transition"
+          >
+            <span class="menu-text">Approval Akun</span>
+          </a>
+          <a
+            href="/auth/admin/magang"
+            class="flex items-center gap-3 px-4 py-2 rounded hover:bg-gray-700 transition"
+          >
+            <span class="menu-text">Approval Magang</span>
+          </a>
+        </div>
       </nav>
     </aside>
 
     <div class="flex-1 flex flex-col overflow-hidden">
-      <header class="bg-white shadow p-6 flex justify-between items-center">
-        <h1 class="text-3xl font-bold">Dashboard Admin</h1>
-        <form action="/auth/logout" method="POST">
+      <header
+        class="bg-gray-50 shadow-md px-6 py-4 flex justify-between items-center border-b border-gray-200"
+      >
+        <h1 class="text-2xl font-semibold text-gray-700">Approval Akun</h1>
+        <form action="/auth/logout" method="POST" class="ml-4">
           <button
             class="bg-red-600 text-white px-5 py-2 rounded-lg hover:bg-red-700 transition duration-200"
           >
@@ -80,19 +84,50 @@
           </button>
         </form>
       </header>
+
       <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
-        <div class="p-6">
-          <h2 class="text-xl font-semibold mb-2">Kunjungan Bulan Ini:</h2>
-          <p class="text-3xl font-bold text-blue-600">
-            <%= visitCount %> orang
+        <h2 class="text-2xl font-semibold mb-5 text-gray-800">
+          User Menunggu Persetujuan
+        </h2>
+
+        <% if (pendingUsers.length === 0) { %>
+        <div class="bg-white p-6 rounded-lg shadow-md text-center">
+          <p class="text-gray-600 text-lg">
+            Tidak ada user yang menunggu approval.
           </p>
         </div>
-        <a
-          href="/auth/admin/download-visitors"
-          class="mt-4 inline-block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-        >
-          Download Rekap Kunjungan
-        </a>
+        <% } else { %>
+        <ul class="space-y-4">
+          <% pendingUsers.forEach(user => { %>
+          <li
+            class="bg-white p-5 rounded-lg shadow-md flex justify-between items-center transition duration-200 hover:shadow-lg"
+          >
+            <div>
+              <p class="font-semibold text-lg text-gray-800">
+                <%= user.username %>
+              </p>
+              <p class="text-sm text-gray-500">ID: <%= user.id %></p>
+            </div>
+            <div class="flex gap-3">
+              <form action="/auth/admin/approve/<%= user.id %>" method="POST">
+                <button
+                  class="bg-green-500 text-white px-5 py-2 rounded-lg hover:bg-green-600 transition duration-200 transform hover:scale-105"
+                >
+                  Approve
+                </button>
+              </form>
+              <form action="/auth/admin/reject/<%= user.id %>" method="POST">
+                <button
+                  class="bg-red-500 text-white px-5 py-2 rounded-lg hover:bg-red-600 transition duration-200 transform hover:scale-105"
+                >
+                  Reject
+                </button>
+              </form>
+            </div>
+          </li>
+          <% }) %>
+        </ul>
+        <% } %>
       </main>
     </div>
 
@@ -140,3 +175,5 @@
     </script>
   </body>
 </html>
+
+<body class="bg-gray-100 p-10"></body>

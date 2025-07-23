@@ -41,73 +41,6 @@
       <div
         class="bg-white p-10 rounded-xl shadow-2xl space-y-7 max-w-md w-full transform transition-all duration-500 hover:scale-105"
       >
-        <h1 class="text-xl font-bold">Hai, Selamat Datang!</h1>
-        <p class="py-0">Silahkan daftar untuk membuat akun Anda.</p>
-        <input
-          type="text"
-          name="username"
-          placeholder="Username"
-          class="w-full p-2 border rounded"
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          class="w-full p-2 border rounded"
-          required
-          minlength="4"
-        />
-          <input
-          type="Konfirmasi password"
-          name="Konfirmasi password"
-          placeholder="Konfirmasi Password"
-          class="w-full p-2 border rounded"
-          required
-          minlength="4"
-        />
-          <div class="mb-4">
-            <label for="no_hp" class="block text-gray-700 font- mb-2">No HP</label>
-            <div class="flex space-x-2">
-              <!-- Dropdown kode negara -->
-              <select id="kode_negara" name="kode_negara" class="border border-gray-300 rounded-md px-3 py-2 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="+62">Indonesia (+62)</option>
-                <option value="+1">Amerika (+1)</option>
-                <option value="+60">Malaysia (+60)</option>
-                <option value="+91">India (+91)</option>
-                <!-- Tambahkan opsi lainnya sesuai kebutuhan -->
-              </select>
-      
-            <!-- Input nomor HP -->
-            <input type="tel" id="no_hp" name="no_hp" placeholder="81234567890" required
-              class="flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-        </div>
-      
-          <input
-          type="Email"
-          name="Email"
-          placeholder="Email"
-          class="w-full p-2 border rounded"
-          required
-          minlength="4"
-        />
-          <input
-            type="Tanggal Lahir"
-            name="Tanggal Lahir"
-            placeholder="Tanggal Lahir"
-            class="w-full p-2 border rounded"
-            required
-            minlength="4"
-          />
-          <button
-            class="bg-blue-500 text-white w-full py-2 rounded hover:bg-blue-600"
-          >
-            Daftar
-          </button>
-        <p class="text-sm">
-          Sudah punya akun? <a href="/login" class="text-blue-500">Login</a>
         <h1 class="text-3xl font-bold text-center text-gray-800">
           Yuk, Buat Akun Baru! ✨
         </h1>
@@ -122,13 +55,20 @@
         </div>
         <% } %>
 
-        <form action="/auth/register" method="POST" class="space-y-6">
+        <form
+          action="/auth/register"
+          method="POST"
+          class="space-y-6"
+          onsubmit="return validateForm()"
+        >
+          <!-- Username -->
           <div>
             <label
               for="username"
               class="block text-gray-700 font-medium mb-2 text-lg"
-              >Username <span class="text-red-500">*</span></label
             >
+              Username <span class="text-red-500">*</span>
+            </label>
             <input
               type="text"
               name="username"
@@ -139,12 +79,14 @@
             />
           </div>
 
+          <!-- Password -->
           <div>
             <label
               for="password"
               class="block text-gray-700 font-medium mb-2 text-lg"
-              >Password <span class="text-red-500">*</span></label
             >
+              Password <span class="text-red-500">*</span>
+            </label>
             <input
               type="password"
               name="password"
@@ -156,6 +98,81 @@
             />
           </div>
 
+          <!-- Konfirmasi Password -->
+          <div>
+            <label
+              for="confirmPassword"
+              class="block text-gray-700 font-medium mb-2 text-lg"
+            >
+              Konfirmasi Password <span class="text-red-500">*</span>
+            </label>
+            <input
+              type="password"
+              name="confirmPassword"
+              id="confirmPassword"
+              placeholder="Masukkan kembali password Anda"
+              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-lg"
+              required
+            />
+          </div>
+
+          <!-- No HP -->
+          <div>
+            <label
+              for="phone"
+              class="block text-gray-700 font-medium mb-2 text-lg"
+              >No HP</label
+            >
+            <div class="flex">
+              <select
+                name="countryCode"
+                class="p-3 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+              >
+                <option value="+62" selected>Indonesia (+62)</option>
+                <!-- Tambahkan kode lain kalau mau -->
+              </select>
+              <input
+                type="text"
+                name="phone"
+                id="phone"
+                placeholder="81234567890"
+                class="w-full p-3 border border-gray-300 rounded-r-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-lg"
+              />
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div>
+            <label
+              for="email"
+              class="block text-gray-700 font-medium mb-2 text-lg"
+              >Email</label
+            >
+            <input
+              type="email"
+              name="email"
+              id="email"
+              placeholder="Alamat email"
+              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-lg"
+            />
+          </div>
+
+          <!-- Tanggal Lahir -->
+          <div>
+            <label
+              for="dob"
+              class="block text-gray-700 font-medium mb-2 text-lg"
+              >Tanggal Lahir</label
+            >
+            <input
+              type="date"
+              name="dob"
+              id="dob"
+              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-lg"
+            />
+          </div>
+
+          <!-- Tombol Daftar -->
           <button
             type="submit"
             class="bg-blue-600 text-white w-full py-3 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 ease-in-out font-semibold text-xl transform hover:scale-100"
@@ -163,7 +180,6 @@
             Daftar Akun
           </button>
         </form>
-
         <p class="text-center text-gray-600 text-md mt-6">
           Sudah punya akun?
           <a
@@ -174,5 +190,19 @@
         </p>
       </div>
     </div>
+
+    <!-- JS Validasi Konfirmasi Password -->
+    <script>
+      function validateForm() {
+        const pw = document.getElementById("password").value;
+        const cpw = document.getElementById("confirmPassword").value;
+
+        if (pw !== cpw) {
+          alert("Konfirmasi password tidak cocok!");
+          return false;
+        }
+        return true;
+      }
+    </script>
   </body>
 </html>
