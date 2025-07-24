@@ -21,12 +21,17 @@ app.use(session({
 }));
 
 // Routes
+app.use((req, res, next) => {
+  res.locals.user = req.session.user;
+  next();
+});
 app.get('/', (req, res) => res.render('index'));
 app.get('/login', (req, res) => res.render('login'));
 app.get('/register', (req, res) => res.render('register'));
 app.use('/auth', authRoutes);
 app.use('/auth/admin', require('./routes/admin/dashboard'));
 app.use('/auth/admin', require('./routes/admin/download-visitors'));
+
 
 app.use(async (req, res, next) => {
   const ip = req.ip || req.connection.remoteAddress;

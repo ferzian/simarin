@@ -90,14 +90,88 @@
       <header
         class="bg-gray-50 shadow-md px-6 py-4 flex justify-between items-center border-b border-gray-200"
       >
-        <h1 class="text-2xl font-semibold text-gray-700">Data Peserta</h1>
-        <form action="/auth/logout" method="POST" class="ml-4">
-          <button
-            class="bg-red-600 text-white px-5 py-2 rounded-lg hover:bg-red-700 transition duration-200"
+        <h1 class="text-2xl font-semibold text-gray-700">Peserta</h1>
+
+        <div class="flex items-center gap-6 relative">
+          <!-- Notif -->
+          <% if (pendingUsers.length > 0) { %>
+          <a href="/auth/admin/approval-akun" class="relative">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 text-yellow-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C8.67 6.165 8 7.388 8 8.75v5.408c0 .538-.214 1.055-.595 1.437L6 17h5"
+              />
+            </svg>
+            <span
+              class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold px-1.5 py-0.5 rounded-full"
+            >
+              <%= pendingUsers.length %>
+            </span>
+          </a>
+          <% } else { %>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-9 w-9 text-gray-600"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
           >
-            Logout
-          </button>
-        </form>
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C8.67 6.165 8 7.388 8 8.75v5.408c0 .538-.214 1.055-.595 1.437L6 17h5"
+            />
+          </svg>
+          <% } %>
+
+          <!-- Dropdown Admin -->
+          <div class="relative">
+            <button
+              id="dropdownUserButton"
+              class="flex items-center gap-2 text-gray-700 hover:text-gray-900 focus:outline-none"
+            >
+              <span class="font-semibold text-lg"><%= user.username %> </span>
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                ></path>
+              </svg>
+            </button>
+
+            <div
+              id="dropdownUserMenu"
+              class="hidden absolute right-0 mt-2 w-44 bg-white rounded-lg shadow-lg border z-50 overflow-hidden"
+            >
+              <div class="px-4 py-2 text-gray-500 text-sm">Admin Menu</div>
+              <div class="border-t my-1"></div>
+              <form action="/auth/logout" method="POST">
+                <button
+                  class="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-100 font-semibold transition duration-150"
+                >
+                  Logout
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
       </header>
 
       <main
@@ -106,6 +180,20 @@
     </div>
 
     <script>
+      const userBtn = document.getElementById("dropdownUserButton");
+      const userMenu = document.getElementById("dropdownUserMenu");
+
+      userBtn.addEventListener("click", () => {
+        userMenu.classList.toggle("hidden");
+      });
+
+      // Tutup dropdown kalau klik di luar
+      window.addEventListener("click", function (e) {
+        if (!userBtn.contains(e.target) && !userMenu.contains(e.target)) {
+          userMenu.classList.add("hidden");
+        }
+      });
+
       const sidebar = document.getElementById("sidebar");
       const sidebarToggle = document.getElementById("sidebarToggle");
 
