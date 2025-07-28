@@ -1,151 +1,143 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" x-data="slider()" x-init="start()">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIMARIN - Pendaftaran Layanan</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <style>
-        .hero-gradient {
-            background: 
-                linear-gradient(rgba(30, 58, 138, 0.8), rgba(226, 226, 226, 0.8)),
-                url('https://pagaralampos.disway.id/upload/2ad54604146119b4661deaf027f874e1.jpeg') center/cover no-repeat;
-            position: relative;
-            overflow: hidden;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-        }
-        .simarin-text {
-            font-family: 'Bebas Neue', sans-serif;
-            letter-spacing: 0.2rem;
-        }
-        .program-text {
-            font-family: 'Poppins', sans-serif;
-        }
-        .service-card {
-            transition: all 0.3s ease;
-            border-bottom: 4px solid transparent;
-        }
-        .service-card:hover {
-            transform: translateY(-5px);
-            border-bottom-color: #f59e0b;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-        }
-        .nav-item {
-            position: relative;
-        }
-        .nav-item::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: 0;
-            left: 0;
-            background-color: #f59e0b;
-            transition: width 0.3s ease;
-        }
-        .nav-item:hover::after {
-            width: 100%;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SIMARIN - Pendaftaran Layanan</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    .simarin-text {
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 0.2rem;
+    }
+    .program-text {
+      font-family: 'Poppins', sans-serif;
+    }
+    .service-card {
+      transition: all 0.3s ease;
+      border-bottom: 4px solid transparent;
+    }
+    .service-card:hover {
+      transform: translateY(-5px);
+      border-bottom-color: #f59e0b;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+  </style>
 </head>
 <body class="bg-gray-50">
-    <!-- Navigation -->
-    <nav class="bg-white shadow-sm">
-        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="simarin-text text-4xl text-blue-800">SIMARIN</div>
-            <div class="flex space-x-8">
-                <a href="#" class="nav-item program-text text-gray-700 font-medium py-2">Beranda</a>
-                <a href="#" class="nav-item program-text text-gray-700 font-medium py-2">Layanan</a>
-                <a href="#" class="nav-item program-text text-gray-700 font-medium py-2">Kontak</a>
-                <a href="#" class="nav-item program-text text-gray-700 font-medium py-2">logout</a>
-            </div>
-        </div>
-    </nav>
 
-    <!-- Hero Section -->
-    <div class="hero-gradient text-white py-20 px-4">
-        <div class="max-w-4xl mx-auto text-center">
-            <h1 class="simarin-text text-5xl md:text-7xl mb-4">Sistem Informasi Magang dan Praktik Industri</h1>
-            <h2 class="program-text text-xl md:text-3xl font-bold uppercase tracking-wider mb-6">PENDAFTARAN LAYANAN</h2>
-            
-            <div class="mb-10">
-                <p class="program-text text-2xl md:text-3xl font-bold italic">MAGANG / PRAKTIK LAPANG / PENELITIAN</p>
-            </div>
-            
-            <div class="flex justify-center items-center space-x-2 mb-12">
-                <span class=/span>
-                <p class="program-text text-lg font-bold">#SIMARIN</p>
-            </div>
-            
-            
-        </div>
+<!-- Navigation -->
+<nav class="bg-white shadow-sm">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+    <div class="simarin-text text-4xl text-blue-800">SIMARIN</div>
+    <div class="flex space-x-8">
+      <a href="#" class="program-text text-gray-700 font-medium py-2">Beranda</a>
+      <a href="#" class="program-text text-gray-700 font-medium py-2">Layanan</a>
+      <a href="#" class="program-text text-gray-700 font-medium py-2">Kontak</a>
+      <a href="#" class="program-text text-gray-700 font-medium py-2">Logout</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<div 
+  class="text-white py-20 px-4 min-h-[90vh] flex items-center bg-cover bg-center transition-all duration-700"
+  :style="`background-image: linear-gradient(rgba(30, 58, 138, 0.7), rgba(0, 0, 0, 0.3)), url('${images[current]}')`"
+>
+  <div class="max-w-4xl mx-auto text-center">
+    <h1 class="simarin-text text-5xl md:text-7xl mb-4">Sistem Informasi Magang dan Praktik Industri</h1>
+    <h2 class="program-text text-xl md:text-3xl font-bold uppercase tracking-wider mb-6">PENDAFTARAN LAYANAN</h2>
+    <p class="program-text text-2xl md:text-3xl font-bold italic mb-6">MAGANG / PRAKTIK LAPANG / PENELITIAN</p>
+    <p class="program-text text-lg font-bold">#SIMARIN</p>
+  </div>
+</div>
+
+<!-- Layanan Section -->
+<div class="max-w-6xl mx-auto py-16 px-4">
+  <h2 class="program-text text-3xl font-bold text-center text-gray-800 mb-12">PILIH LAYANAN</h2>
+
+  <div class="grid md:grid-cols-3 gap-8">
+    <!-- Magang -->
+    <div class="service-card bg-white rounded-lg shadow-md p-6 text-center">
+      <div class="bg-blue-100 w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4">
+        <svg class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+        </svg>
+      </div>
+      <h3 class="program-text text-xl font-bold text-gray-800 mb-2">Pendaftaran Magang</h3>
+      <p class="program-text text-gray-600 mb-4">Daftar program magang di Balai Perikanan Budidaya Air Tawar</p>
+      <a href="/auth/user/daftar-magang" class="program-text inline-block px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">Daftar Sekarang</a>
     </div>
 
-    <!-- Services Section -->
-    <div class="max-w-6xl mx-auto py-16 px-4">
-        <h2 class="program-text text-3xl font-bold text-center text-gray-800 mb-12">PILIH LAYANAN</h2>
-        
-        <div class="grid md:grid-cols-3 gap-8">
-            <!-- Magang Card -->
-            <div class="service-card bg-white rounded-lg shadow-md p-6 text-center">
-                <div class="bg-blue-100 w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                </div>
-                <h3 class="program-text text-xl font-bold text-gray-800 mb-2">Pendaftaran Magang</h3>
-                <p class="program-text text-gray-600 mb-4">Daftar program magang di Balai Perikanan Budidaya Air Tawar</p>
-                <a href="/auth/user/daftar-magang" class="program-text inline-block px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">Daftar Sekarang</a>
-
-            </div>
-            
-            <!-- SKM Card -->
-            <div class="service-card bg-white rounded-lg shadow-md p-6 text-center">
-                <div class="bg-green-100 w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
-                </div>
-                <h3 class="program-text text-xl font-bold text-gray-800 mb-2">Surat Kepuasan Masyarakat (SKM)</h3>
-                <p class="program-text text-gray-600 mb-4">Ajukan permohonan Surat Kepuasan Masyarakat</p>
-                <a href="/auth/user/skm" class="program-text inline-block px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition">Ajukan SKM</a>
-            </div>
-            
-            <!-- Sertifikat Card -->
-            <div class="service-card bg-white rounded-lg shadow-md p-6 text-center">
-                <div class="bg-yellow-100 w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                </div>
-                <h3 class="program-text text-xl font-bold text-gray-800 mb-2">Sertifikat</h3>
-                <p class="program-text text-gray-600 mb-4">Permohonan penerbitan sertifikat kompetensi</p>
-                <a href="sertifikat" class="program-text inline-block px-6 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 transition">Minta Sertifikat</a>
-            </div>
-        </div>
+    <!-- SKM -->
+    <div class="service-card bg-white rounded-lg shadow-md p-6 text-center">
+      <div class="bg-green-100 w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4">
+        <svg class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+        </svg>
+      </div>
+      <h3 class="program-text text-xl font-bold text-gray-800 mb-2">Surat Kepuasan Masyarakat (SKM)</h3>
+      <p class="program-text text-gray-600 mb-4">Ajukan permohonan Surat Kepuasan Masyarakat</p>
+      <a href="/auth/user/skm" class="program-text inline-block px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition">Ajukan SKM</a>
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8">
-        <div class="max-w-6xl mx-auto px-4">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="mb-4 md:mb-0">
-                    <p class="simarin-text text-2xl">SIMARIN</p>
-                    <p class="program-text text-sm mt-1">Sistem Informasi Manajemen Perikanan</p>
-                </div>
-                <div class="flex space-x-4">
-                    <a href="#" class="program-text text-sm hover:text-yellow-400">Kebijakan Privasi</a>
-                    <a href="#" class="program-text text-sm hover:text-yellow-400">Syarat & Ketentuan</a>
-                    <a href="#" class="program-text text-sm hover:text-yellow-400">Kontak Kami</a>
-                </div>
-            </div>
-            <div class="border-t border-gray-700 mt-6 pt-6 text-center">
-                <p class="program-text text-sm text-gray-400">© 2023 SIMARIN. Seluruh hak cipta dilindungi.</p>
-            </div>
-        </div>
-    </footer>
+    <!-- Sertifikat -->
+    <div class="service-card bg-white rounded-lg shadow-md p-6 text-center">
+      <div class="bg-yellow-100 w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4">
+        <svg class="h-8 w-8 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </div>
+      <h3 class="program-text text-xl font-bold text-gray-800 mb-2">Sertifikat</h3>
+      <p class="program-text text-gray-600 mb-4">Permohonan penerbitan sertifikat kompetensi</p>
+      <a href="/auth/user/sertifikat" class="program-text inline-block px-6 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 transition">Minta Sertifikat</a>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-gray-800 text-white py-8">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="flex flex-col md:flex-row justify-between items-center">
+      <div class="mb-4 md:mb-0">
+        <p class="simarin-text text-2xl">SIMARIN</p>
+        <p class="program-text text-sm mt-1">Sistem Informasi Manajemen Perikanan</p>
+      </div>
+      <div class="flex space-x-4">
+        <a href="#" class="program-text text-sm hover:text-yellow-400">Kebijakan Privasi</a>
+        <a href="#" class="program-text text-sm hover:text-yellow-400">Syarat & Ketentuan</a>
+        <a href="#" class="program-text text-sm hover:text-yellow-400">Kontak Kami</a>
+      </div>
+    </div>
+    <div class="border-t border-gray-700 mt-6 pt-6 text-center">
+      <p class="program-text text-sm text-gray-400">© 2023 SIMARIN. Seluruh hak cipta dilindungi.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Alpine Slider Script -->
+<script>
+function slider() {
+  return {
+    images: [
+      'https://kkp.go.id/storage/Berita/kkp-kemhan-kolaborasi-bentuk-komcad-di-sektor-kelautan-perikanan-pZBr.jpg',
+      'https://kkp.go.id/storage/foto/foto-65f117df90a2f.jpg',
+      'https://images.bisnis.com/posts/2020/01/23/1193248/antara-tangkapan-nelayan-tradisional-mtb.jpg',
+    ],
+    current: 0,
+    start() {
+      setInterval(() => {
+        this.current = (this.current + 1) % this.images.length;
+      }, 3000);
+    }
+  }
+}
+</script>
+
 </body>
 </html>
