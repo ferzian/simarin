@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Surat Kepuasan Masyarakat - SIMARIN</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+  <nav class="bg-white shadow p-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-blue-700">SIMARIN</h1>
+    <div class="flex space-x-6">
+      <a href="/auth/user/dashboard" class="text-gray-700 hover:text-blue-600">Beranda</a>
+      <a href="/layanan" class="text-gray-700 hover:text-blue-600">Layanan</a>
+      <a href="/kontak" class="text-gray-700 hover:text-blue-600">Kontak</a>
+      <form action="/auth/logout" method="POST">
+        <button type="submit" class="text-red-600 hover:underline">Logout</button>
+      </form>
+    </div>  
+  </nav>
+  <!-- Content -->
+  <main class="flex-grow container mx-auto px-6 py-10">
+    <div class="max-w-md mx-auto p-8 bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
+      <div class="text-center mb-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">Formulir Umpan Balik Layanan</h2>
+        <p class="text-gray-600">Bantu kami meningkatkan kualitas layanan secara anonim</p>
+      </div>
+    
+      <form class="space-y-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Layanan</label>
+          <select class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <option disabled selected>Pilih layanan yang diterima...</option>
+            <option>Pelayanan Administrasi</option>
+            <option>Layanan Kesehatan</option>
+            <option>Pendidikan</option>
+            <option>Lainnya</option>
+          </select>
+        </div>
+    
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-3">Tingkat Kepuasan</label>
+          <div class="grid grid-cols-5 gap-2">
+            <label class="flex flex-col items-center cursor-pointer">
+              <input type="radio" name="rating" class="sr-only peer">
+              <div class="w-10 h-10 rounded-full border-2 border-gray-300 peer-checked:border-blue-500 peer-checked:bg-blue-500 flex items-center justify-center transition-colors">
+                <span class="text-xs">1</span>
+              </div>
+              <span class="mt-1 text-xs text-gray-600">Sangat Puas</span>
+            </label>
+            
+            <label class="flex flex-col items-center cursor-pointer">
+              <input type="radio" name="rating" class="sr-only peer">
+              <div class="w-10 h-10 rounded-full border-2 border-gray-300 peer-checked:border-blue-400 peer-checked:bg-blue-400 flex items-center justify-center transition-colors">
+                <span class="text-xs">2</span>
+              </div>
+              <span class="mt-1 text-xs text-gray-600">Puas</span>
+            </label>
+            
+            <label class="flex flex-col items-center cursor-pointer">
+              <input type="radio" name="rating" class="sr-only peer">
+              <div class="w-10 h-10 rounded-full border-2 border-gray-300 peer-checked:border-yellow-400 peer-checked:bg-yellow-400 flex items-center justify-center transition-colors">
+                <span class="text-xs">3</span>
+              </div>
+              <span class="mt-1 text-xs text-gray-600">Cukup</span>
+            </label>
+            
+            <label class="flex flex-col items-center cursor-pointer">
+              <input type="radio" name="rating" class="sr-only peer">
+              <div class="w-10 h-10 rounded-full border-2 border-gray-300 peer-checked:border-orange-400 peer-checked:bg-orange-400 flex items-center justify-center transition-colors">
+                <span class="text-xs">4</span>
+              </div>
+              <span class="mt-1 text-xs text-gray-600">Kurang</span>
+            </label>
+            
+            <label class="flex flex-col items-center cursor-pointer">
+              <input type="radio" name="rating" class="sr-only peer">
+              <div class="w-10 h-10 rounded-full border-2 border-gray-300 peer-checked:border-red-400 peer-checked:bg-red-400 flex items-center justify-center transition-colors">
+                <span class="text-xs">5</span>
+              </div>
+              <span class="mt-1 text-xs text-gray-600">Sangat Kurang</span>
+            </label>
+          </div>
+        </div>
+    
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Komentar (Opsional)</label>
+          <textarea class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" rows="3" placeholder="Masukkan saran atau kritik Anda..."></textarea>
+          <p class="mt-1 text-xs text-gray-500">Umpan balik Anda bersifat anonim</p>
+        </div>
+    
+        <div>
+          <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+            Kirim Umpan Balik
+          </button>
+        </div>
+      </form>
+    
+      <div class="mt-6 flex items-center justify-center text-sm text-gray-500 bg-gray-50 p-3 rounded-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+        </svg>
+        Data Anda terlindungi dan bersifat anonim
+      </div>
+    </div>

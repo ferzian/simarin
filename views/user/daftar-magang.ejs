@@ -1,27 +1,127 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Daftar Magang</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+  </style>
 </head>
-<body>
-  <h1>Halo, <%= username %>!</h1>
-  <p>Silakan isi formulir untuk mendaftar magang di Balai Perikanan Budidaya Air Tawar.</p>
+<body class="bg-gray-100">
+  <!-- Navbar -->
+  <nav class="bg-white shadow p-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-blue-700">SIMARIN</h1>
+    <div class="flex space-x-6">
+      <a href="/auth/user/dashboard" class="text-gray-700 hover:text-blue-600">Beranda</a>
+      <a href="/layanan" class="text-gray-700 hover:text-blue-600">Layanan</a>
+      <a href="/kontak" class="text-gray-700 hover:text-blue-600">Kontak</a>
+      <form action="/auth/logout" method="POST">
+        <button type="submit" class="text-red-600 hover:underline">Logout</button>
+      </form>
+    </div>
+  </nav>
 
-  <form action="/auth/user/daftar-magang" method="POST">
-    <label>Nama Lengkap:</label><br>
-    <input type="text" name="nama" required><br><br>
+  <!-- Main Content -->
+  <main class="max-w-3xl mx-auto mt-12 bg-white p-10 rounded shadow">
+    <h2 class="text-3xl font-bold mb-4">Halo, <%= username %>!</h2>
+    <p class="mb-6 text-gray-600">
+      Silakan isi formulir untuk mendaftar magang di Balai Perikanan Budidaya Air Tawar.
+    </p>
 
-    <label>Instansi:</label><br>
-    <input type="text" name="instansi" required><br><br>
+    <form action="/auth/user/daftar-magang" method="POST" class="space-y-6">
+      <div>
+        <label for="nama" class="block font-semibold text-gray-700 mb-1">Nama Lengkap</label>
+        <input type="text" id="nama" name="nama" required class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+      </div>
 
-    <label>Tanggal Mulai:</label><br>
-    <input type="date" name="mulai" required><br><br>
+      <div>
+        <label for="nama" class="block font-semibold text-gray-700 mb-1">Sekolah/Universitas</label>
+        <input type="text" id="nama" name="nama" required class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+      </div>
 
-    <label>Tanggal Selesai:</label><br>
-    <input type="date" name="selesai" required><br><br>
+      <div>
+        <label for="nama" class="block font-semibold text-gray-700 mb-1">Program Studi</label>
+        <input type="text" id="nama" name="nama" required class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+      </div>
 
-    <button type="submit">Kirim</button>
-  </form>
+      <div>
+        <label for="jenis Kelamin" class="block font-semibold text-gray-700 mb-1">Jenjang Pendidikan</label>
+        <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+          <option disabled selected>Jenjang Pendidikan</option>
+          <option>S1</option>
+          <option>S2</option>
+          <option>S3</option>
+        </select>
+      </div>
+
+        <div>
+          <label for="jenis Kelamin" class="block font-semibold text-gray-700 mb-1">Jenis Kelamin</label>
+          <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+            <option disabled selected>Jenis Kelamin</option>
+            <option>Laki-Laki</option>
+            <option>Perempuan</option>
+          </select>
+        </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label for="tanggalMulai" class="block font-semibold text-gray-700 mb-1">Tanggal Mulai</label>
+          <input type="date" id="tanggalMulai" name="tanggalMulai" required class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+        </div>
+
+        <div>
+          <label for="tanggalSelesai" class="block font-semibold text-gray-700 mb-1">Tanggal Selesai</label>
+          <input type="date" id="tanggalSelesai" name="tanggalSelesai" required class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+        </div>
+      </div>
+
+      <div>
+        <label for="Kegiatan" class="block font-semibold text-gray-700 mb-1">Kegiatan</label>
+        <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+          <option disabled selected>Kegiatan</option>
+          <option>Magang</option>
+          <option>PKL</option>
+          <option>Penelitian</option>
+        </select>
+      </div>
+      <div>
+        <label for="Lokasi Instansi" class="block font-semibold text-gray-700 mb-1">Lokasi Instansi</label>
+        <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+          <option disabled selected>Lokasi Instansi</option>
+          <option>Depok</option>
+          <option>Sempur</option>
+          <option>Cibalagung</option>
+          <option>Cijeruk</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Upload Surat Pengantar</label>
+        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg">
+          <div class="space-y-1 text-center">
+            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+              <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <div class="flex text-sm text-gray-600">
+              <label class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none">
+                <span>Upload file</span>
+                <input type="file" class="sr-only">
+              </label>
+              <p class="pl-1">atau drag and drop</p>
+            </div>
+            <p class="text-xs text-gray-500">PDF, JPG, PNG maksimal 10MB</p>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded shadow-md transition duration-300">
+        Kirim Pendaftaran
+      </button>
+    </form>
+  </main>
 </body>
 </html>

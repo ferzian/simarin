@@ -105,13 +105,36 @@ router.get('/user/dashboard', (req, res) => {
     username: req.session.user.username
   });
 });
-// user-daftar-magang
+
+// user daftar-magang 
 router.get('/user/daftar-magang', (req, res) => {
   if (!req.session.user || req.session.user.role !== 'user') {
     return res.redirect('/auth/login');
   }
 
   res.render('user/daftar-magang', {
+    username: req.session.user.username
+  });
+});
+
+// user surat-kepuasan-masyarakat
+router.get('/user/skm', (req, res) => {
+  if (!req.session.user || req.session.user.role !== 'user') {
+    return res.redirect('/auth/login');
+  }
+
+  res.render('user/skm', {
+    username: req.session.user.username
+  });
+});
+
+// user surat-sertifikat
+router.get('/user/sertifikat', (req, res) => {
+  if (!req.session.user || req.session.user.role !== 'user') {
+    return res.redirect('/auth/login');
+  }
+
+  res.render('user/sertifikat', {
     username: req.session.user.username
   });
 });
