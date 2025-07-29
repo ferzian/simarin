@@ -10,88 +10,78 @@
     />
     <!-- Favicon -->
     <link rel="icon" sizes="32x32" type="image/png" href="/images/logo.png" />
-    <style>
-      body {
-        font-family: "Poppins", sans-serif;
-      }
-      /* Transisi untuk sidebar */
-      .sidebar {
-        transition: width 0.3s ease-in-out;
-      }
-      .menu-item-link {
-        display: flex;
-        align-items: center;
-        gap: 12px; /* Setara dengan gap-3 Tailwind CSS */
-        padding: 10px 16px; /* Setara dengan px-4 py-2 Tailwind CSS */
-        border-radius: 0.375rem; /* Setara dengan rounded Tailwind CSS */
-        transition: background-color 0.3s ease-in-out;
-      }
-      .menu-item-link:hover {
-        background-color: #4a5568; /* hover:bg-gray-700 */
-      }
-      .menu-icon {
-        flex-shrink: 0; /* Pastikan ikon tidak menyusut saat teks tersembunyi */
-      }
-      .menu-text-wrapper {
-        flex-grow: 1; /* Biarkan teks mengisi sisa ruang */
-        overflow: hidden;
-        white-space: nowrap;
-        transition: opacity 0.3s ease-in-out, width 0.3s ease-in-out; /* Tambah transisi width */
-      }
-      .menu-text-wrapper.hidden-text {
-        opacity: 0;
-        width: 0;
-      }
-      /* Gaya untuk tombol ADM saat sidebar tertutup */
-      .sidebar.w-20 #sidebarTitleButton {
-        display: flex; /* Tampilkan tombol */
-        width: 100%; /* Agar mengisi lebar sidebar yang kecil */
-        justify-content: center; /* Pusatkan teks "ADM" */
-        align-items: center;
-        padding: 0.5rem;
-        font-size: 1.125rem; /* text-lg */
-        font-weight: 700; /* font-bold */
-        height: 48px; /* Sesuaikan dengan tinggi sebelumnya */
-        position: absolute; /* Posisikan secara absolut */
-        top: 24px; /* Sesuaikan posisi vertikal */
-        left: 0;
-        cursor: pointer;
-        color: white; /* Warna teks putih */
-        background: none; /* Tanpa latar belakang */
-        border: none; /* Tanpa border */
-      }
-      /* Sembunyikan judul asli saat tombol ADM aktif */
-      .sidebar.w-20 #sidebarTitle {
-        display: none;
-      }
-      /* Gaya kustom untuk tabel */
-      .table-header th {
-        @apply px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider;
-      }
-      .table-row td {
-        @apply px-6 py-4 whitespace-nowrap text-sm text-gray-900;
-      }
-      .table-row:nth-child(even) {
-        @apply bg-gray-50;
-      }
-    </style>
+    <link rel="stylesheet" href="/css/admin.css" />
   </head>
   <body class="bg-gray-100 flex h-screen">
     <script>
       // Pastikan variabel ini dikirim dari route Express Anda
       // Jika belum, hapus bagian ini saat integrasi backend
-      const user = { username: 'Admin Contoh' };
+      const user = { username: "Admin Contoh" };
       const pendingUsers = []; // Asumsi tidak ada pending user untuk halaman ini
       const pendingParticipants = []; // Asumsi tidak ada pending participant untuk halaman ini
 
       // Data dummy untuk halaman Data Peserta
       const participantsData = [
-        { id: 1, name: 'Adi Wijaya', gender: 'Laki-laki', major: 'Teknik Informatika', type: 'Magang', institution: 'Universitas ABC', startDate: '2024-01-15', endDate: '2024-04-15' },
-        { id: 2, name: 'Bunga Lestari', gender: 'Perempuan', major: 'Biologi Perikanan', type: 'Riset', institution: 'Universitas XYZ', startDate: '2023-07-01', endDate: '2024-06-30' },
-        { id: 3, name: 'Cahya Putra', gender: 'Laki-laki', major: 'Manajemen Bisnis', type: 'PKL', institution: 'SMK Maju', startDate: '2024-03-01', endDate: '2024-05-31' },
-        { id: 4, name: 'Dewi Sartika', gender: 'Perempuan', major: 'Agribisnis', type: 'Magang', institution: 'Institut Pertanian', startDate: '2024-02-10', endDate: '2024-05-10' },
-        { id: 5, name: 'Eko Prasetio', gender: 'Laki-laki', major: 'Teknik Mesin', type: 'PKL', institution: 'Politeknik Negeri', startDate: '2024-04-01', endDate: '2024-06-30' },
-        { id: 6, name: 'Fina Rachma', gender: 'Perempuan', major: 'Nutrisi Hewan', type: 'Riset', institution: 'Universitas Gajah Mada', startDate: '2023-10-01', endDate: '2024-09-30' },
+        {
+          id: 1,
+          name: "Adi Wijaya",
+          gender: "Laki-laki",
+          major: "Teknik Informatika",
+          type: "Magang",
+          institution: "Universitas ABC",
+          startDate: "2024-01-15",
+          endDate: "2024-04-15",
+        },
+        {
+          id: 2,
+          name: "Bunga Lestari",
+          gender: "Perempuan",
+          major: "Biologi Perikanan",
+          type: "Riset",
+          institution: "Universitas XYZ",
+          startDate: "2023-07-01",
+          endDate: "2024-06-30",
+        },
+        {
+          id: 3,
+          name: "Cahya Putra",
+          gender: "Laki-laki",
+          major: "Manajemen Bisnis",
+          type: "PKL",
+          institution: "SMK Maju",
+          startDate: "2024-03-01",
+          endDate: "2024-05-31",
+        },
+        {
+          id: 4,
+          name: "Dewi Sartika",
+          gender: "Perempuan",
+          major: "Agribisnis",
+          type: "Magang",
+          institution: "Institut Pertanian",
+          startDate: "2024-02-10",
+          endDate: "2024-05-10",
+        },
+        {
+          id: 5,
+          name: "Eko Prasetio",
+          gender: "Laki-laki",
+          major: "Teknik Mesin",
+          type: "PKL",
+          institution: "Politeknik Negeri",
+          startDate: "2024-04-01",
+          endDate: "2024-06-30",
+        },
+        {
+          id: 6,
+          name: "Fina Rachma",
+          gender: "Perempuan",
+          major: "Nutrisi Hewan",
+          type: "Riset",
+          institution: "Universitas Gajah Mada",
+          startDate: "2023-10-01",
+          endDate: "2024-09-30",
+        },
         // Tambahkan lebih banyak data dummy jika diperlukan untuk pengujian tampilan tabel
       ];
 
@@ -103,11 +93,22 @@
       id="sidebar"
     >
       <div class="flex justify-between items-center mb-6 px-2 relative">
-        <h2 class="text-2xl font-bold transition-all duration-300" id="sidebarTitle">SIMARIN</h2>
-        <button id="sidebarTitleButton" class="hidden absolute top-0 left-0 w-full h-full justify-center items-center text-lg font-bold text-white bg-gray-800 rounded-lg">
+        <h2
+          class="text-2xl font-bold transition-all duration-300"
+          id="sidebarTitle"
+        >
+          SIMARIN
+        </h2>
+        <button
+          id="sidebarTitleButton"
+          class="hidden absolute top-0 left-0 w-full h-full justify-center items-center text-lg font-bold text-white bg-gray-800 rounded-lg"
+        >
           ADM
         </button>
-        <button id="sidebarToggle" class="p-1 rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 z-10">
+        <button
+          id="sidebarToggle"
+          class="p-1 rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 z-10"
+        >
           <svg
             class="w-6 h-6 text-white"
             fill="none"
@@ -126,7 +127,9 @@
       </div>
       <nav class="flex-1 space-y-4 text-lg mt-8">
         <div>
-          <h3 class="uppercase text-gray-500 text-sm mb-2 menu-text-wrapper">Core</h3>
+          <h3 class="uppercase text-gray-500 text-sm mb-2 menu-text-wrapper">
+            Core
+          </h3>
           <a
             href="/auth/admin/dashboard"
             class="menu-item-link text-white hover:text-white"
@@ -149,7 +152,9 @@
           </a>
         </div>
         <div>
-          <h3 class="uppercase text-gray-500 text-sm mt-6 mb-2 menu-text-wrapper">
+          <h3
+            class="uppercase text-gray-500 text-sm mt-6 mb-2 menu-text-wrapper"
+          >
             User Management
           </h3>
           <a
@@ -202,7 +207,11 @@
           </a>
         </div>
         <div>
-          <h3 class="uppercase text-gray-500 text-sm mt-6 mb-2 menu-text-wrapper">Recap Data</h3>
+          <h3
+            class="uppercase text-gray-500 text-sm mt-6 mb-2 menu-text-wrapper"
+          >
+            Recap Data
+          </h3>
           <a
             href="/auth/admin/peserta"
             class="menu-item-link text-white hover:text-white relative bg-gray-700"
@@ -385,13 +394,17 @@
       </header>
 
       <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-8">
-        <h2 class="text-3xl font-bold mb-6 text-gray-800">Rekap Data Peserta</h2>
+        <h2 class="text-3xl font-bold mb-6 text-gray-800">
+          Rekap Data Peserta
+        </h2>
 
         <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
           <h3 class="text-xl font-semibold text-gray-700 mb-4">Filter Data</h3>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
-              <label for="filterYear" class="block text-gray-700 text-sm font-medium mb-2"
+              <label
+                for="filterYear"
+                class="block text-gray-700 text-sm font-medium mb-2"
                 >Tahun:</label
               >
               <select
@@ -405,7 +418,9 @@
               </select>
             </div>
             <div>
-              <label for="filterType" class="block text-gray-700 text-sm font-medium mb-2"
+              <label
+                for="filterType"
+                class="block text-gray-700 text-sm font-medium mb-2"
                 >Jenis Kegiatan:</label
               >
               <select
@@ -430,38 +445,66 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div class="bg-white rounded-xl shadow-lg p-6 text-center border-b-4 border-sky-500">
-            <h3 class="text-lg font-semibold text-gray-700 mb-2">Total Peserta</h3>
-            <p class="text-4xl font-bold text-sky-600" id="totalParticipants">0</p>
+          <div
+            class="bg-white rounded-xl shadow-lg p-6 text-center border-b-4 border-sky-500"
+          >
+            <h3 class="text-lg font-semibold text-gray-700 mb-2">
+              Total Peserta
+            </h3>
+            <p class="text-4xl font-bold text-sky-600" id="totalParticipants">
+              0
+            </p>
           </div>
-          <div class="bg-white rounded-xl shadow-lg p-6 text-center border-b-4 border-yellow-500">
-            <h3 class="text-lg font-semibold text-gray-700 mb-2">Rata-rata Durasi</h3>
-            <p class="text-4xl font-bold text-yellow-600" id="avgDuration">0 hari</p>
+          <div
+            class="bg-white rounded-xl shadow-lg p-6 text-center border-b-4 border-yellow-500"
+          >
+            <h3 class="text-lg font-semibold text-gray-700 mb-2">
+              Rata-rata Durasi
+            </h3>
+            <p class="text-4xl font-bold text-yellow-600" id="avgDuration">
+              0 hari
+            </p>
           </div>
-          <div class="bg-white rounded-xl shadow-lg p-6 text-center border-b-4 border-pink-500">
-            <h3 class="text-lg font-semibold text-gray-700 mb-2">Paling Populer</h3>
-            <p class="text-2xl font-bold text-pink-600" id="mostPopularType">N/A</p>
+          <div
+            class="bg-white rounded-xl shadow-lg p-6 text-center border-b-4 border-pink-500"
+          >
+            <h3 class="text-lg font-semibold text-gray-700 mb-2">
+              Paling Populer
+            </h3>
+            <p class="text-2xl font-bold text-pink-600" id="mostPopularType">
+              N/A
+            </p>
           </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           <div class="bg-white p-6 rounded-xl shadow-lg">
-            <h3 class="text-xl font-semibold text-gray-700 mb-4">Distribusi Jenis Kelamin</h3>
+            <h3 class="text-xl font-semibold text-gray-700 mb-4">
+              Distribusi Jenis Kelamin
+            </h3>
             <canvas id="genderChart"></canvas>
           </div>
           <div class="bg-white p-6 rounded-xl shadow-lg">
-            <h3 class="text-xl font-semibold text-gray-700 mb-4">Distribusi Jenis Kegiatan</h3>
+            <h3 class="text-xl font-semibold text-gray-700 mb-4">
+              Distribusi Jenis Kegiatan
+            </h3>
             <canvas id="activityTypeChart"></canvas>
           </div>
           <div class="bg-white p-6 rounded-xl shadow-lg lg:col-span-2">
-            <h3 class="text-xl font-semibold text-gray-700 mb-4">Distribusi Jurusan Populer</h3>
+            <h3 class="text-xl font-semibold text-gray-700 mb-4">
+              Distribusi Jurusan Populer
+            </h3>
             <canvas id="majorChart"></canvas>
           </div>
         </div>
 
         <div class="bg-white p-6 rounded-xl shadow-lg">
-          <h3 class="text-xl font-semibold text-gray-700 mb-4">Daftar Lengkap Peserta</h3>
-          <div class="mb-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <h3 class="text-xl font-semibold text-gray-700 mb-4">
+            Daftar Lengkap Peserta
+          </h3>
+          <div
+            class="mb-4 flex flex-col sm:flex-row justify-between items-center gap-4"
+          >
             <input
               type="text"
               id="searchTable"
@@ -502,14 +545,31 @@
                   <th>Periode</th>
                 </tr>
               </thead>
-              <tbody class="bg-white divide-y divide-gray-200" id="participantsTableBody">
-                </tbody>
+              <tbody
+                class="bg-white divide-y divide-gray-200"
+                id="participantsTableBody"
+              ></tbody>
             </table>
           </div>
           <div class="mt-4 flex justify-between items-center">
-            <button id="prevPageBtn" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 disabled:opacity-50" disabled>Sebelumnya</button>
-            <span class="text-gray-700">Halaman <span id="currentPage">1</span> dari <span id="totalPages">1</span></span>
-            <button id="nextPageBtn" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 disabled:opacity-50" disabled>Berikutnya</button>
+            <button
+              id="prevPageBtn"
+              class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 disabled:opacity-50"
+              disabled
+            >
+              Sebelumnya
+            </button>
+            <span class="text-gray-700"
+              >Halaman <span id="currentPage">1</span> dari
+              <span id="totalPages">1</span></span
+            >
+            <button
+              id="nextPageBtn"
+              class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 disabled:opacity-50"
+              disabled
+            >
+              Berikutnya
+            </button>
           </div>
         </div>
       </main>
@@ -575,21 +635,29 @@
       let currentPage = 1;
       const rowsPerPage = 5; // Jumlah baris per halaman
 
-      const totalParticipantsEl = document.getElementById('totalParticipants');
-      const avgDurationEl = document.getElementById('avgDuration');
-      const mostPopularTypeEl = document.getElementById('mostPopularType');
-      const genderChartCtx = document.getElementById('genderChart').getContext('2d');
-      const activityTypeChartCtx = document.getElementById('activityTypeChart').getContext('2d');
-      const majorChartCtx = document.getElementById('majorChart').getContext('2d');
-      const participantsTableBody = document.getElementById('participantsTableBody');
-      const filterYearSelect = document.getElementById('filterYear');
-      const filterTypeSelect = document.getElementById('filterType');
-      const applyFilterBtn = document.getElementById('applyFilterBtn');
-      const searchTableInput = document.getElementById('searchTable');
-      const prevPageBtn = document.getElementById('prevPageBtn');
-      const nextPageBtn = document.getElementById('nextPageBtn');
-      const currentPageSpan = document.getElementById('currentPage');
-      const totalPagesSpan = document.getElementById('totalPages');
+      const totalParticipantsEl = document.getElementById("totalParticipants");
+      const avgDurationEl = document.getElementById("avgDuration");
+      const mostPopularTypeEl = document.getElementById("mostPopularType");
+      const genderChartCtx = document
+        .getElementById("genderChart")
+        .getContext("2d");
+      const activityTypeChartCtx = document
+        .getElementById("activityTypeChart")
+        .getContext("2d");
+      const majorChartCtx = document
+        .getElementById("majorChart")
+        .getContext("2d");
+      const participantsTableBody = document.getElementById(
+        "participantsTableBody"
+      );
+      const filterYearSelect = document.getElementById("filterYear");
+      const filterTypeSelect = document.getElementById("filterType");
+      const applyFilterBtn = document.getElementById("applyFilterBtn");
+      const searchTableInput = document.getElementById("searchTable");
+      const prevPageBtn = document.getElementById("prevPageBtn");
+      const nextPageBtn = document.getElementById("nextPageBtn");
+      const currentPageSpan = document.getElementById("currentPage");
+      const totalPagesSpan = document.getElementById("totalPages");
 
       let genderChart;
       let activityTypeChart;
@@ -600,83 +668,92 @@
         totalParticipantsEl.textContent = data.length;
 
         if (data.length === 0) {
-          avgDurationEl.textContent = '0 hari';
-          mostPopularTypeEl.textContent = 'N/A';
+          avgDurationEl.textContent = "0 hari";
+          mostPopularTypeEl.textContent = "N/A";
           return;
         }
 
         // Hitung rata-rata durasi (ini membutuhkan data tanggal yang lebih akurat, ini hanya contoh)
         let totalDurationDays = 0;
-        data.forEach(p => {
-            const start = new Date(p.startDate);
-            const end = new Date(p.endDate);
-            if (!isNaN(start) && !isNaN(end)) {
-                totalDurationDays += (end - start) / (1000 * 60 * 60 * 24);
-            }
+        data.forEach((p) => {
+          const start = new Date(p.startDate);
+          const end = new Date(p.endDate);
+          if (!isNaN(start) && !isNaN(end)) {
+            totalDurationDays += (end - start) / (1000 * 60 * 60 * 24);
+          }
         });
-        avgDurationEl.textContent = `${Math.round(totalDurationDays / data.length)} hari`;
+        avgDurationEl.textContent = `${Math.round(
+          totalDurationDays / data.length
+        )} hari`;
 
         // Hitung jenis kegiatan paling populer
         const typeCounts = {};
-        data.forEach(p => {
+        data.forEach((p) => {
           typeCounts[p.type] = (typeCounts[p.type] || 0) + 1;
         });
-        const mostPopular = Object.keys(typeCounts).reduce((a, b) => typeCounts[a] > typeCounts[b] ? a : b, Object.keys(typeCounts)[0]);
-        mostPopularTypeEl.textContent = mostPopular || 'N/A';
+        const mostPopular = Object.keys(typeCounts).reduce(
+          (a, b) => (typeCounts[a] > typeCounts[b] ? a : b),
+          Object.keys(typeCounts)[0]
+        );
+        mostPopularTypeEl.textContent = mostPopular || "N/A";
       }
 
       // Fungsi untuk memperbarui grafik
       function updateCharts(data) {
         // Data untuk Jenis Kelamin
-        const genderCounts = { 'Laki-laki': 0, 'Perempuan': 0 };
-        data.forEach(p => {
-          if (p.gender === 'Laki-laki') genderCounts['Laki-laki']++;
-          else if (p.gender === 'Perempuan') genderCounts['Perempuan']++;
+        const genderCounts = { "Laki-laki": 0, Perempuan: 0 };
+        data.forEach((p) => {
+          if (p.gender === "Laki-laki") genderCounts["Laki-laki"]++;
+          else if (p.gender === "Perempuan") genderCounts["Perempuan"]++;
         });
 
         if (genderChart) genderChart.destroy();
         genderChart = new Chart(genderChartCtx, {
-          type: 'pie',
+          type: "pie",
           data: {
             labels: Object.keys(genderCounts),
-            datasets: [{
-              data: Object.values(genderCounts),
-              backgroundColor: ['#6366F1', '#EC4899'], // Indigo, Pink
-              hoverOffset: 4
-            }]
+            datasets: [
+              {
+                data: Object.values(genderCounts),
+                backgroundColor: ["#6366F1", "#EC4899"], // Indigo, Pink
+                hoverOffset: 4,
+              },
+            ],
           },
           options: {
             responsive: true,
             plugins: {
               legend: {
-                position: 'top',
+                position: "top",
               },
               title: {
                 display: false,
-                text: 'Distribusi Jenis Kelamin'
-              }
-            }
-          }
+                text: "Distribusi Jenis Kelamin",
+              },
+            },
+          },
         });
 
         // Data untuk Jenis Kegiatan
         const activityTypeCounts = {};
-        data.forEach(p => {
+        data.forEach((p) => {
           activityTypeCounts[p.type] = (activityTypeCounts[p.type] || 0) + 1;
         });
 
         if (activityTypeChart) activityTypeChart.destroy();
         activityTypeChart = new Chart(activityTypeChartCtx, {
-          type: 'bar',
+          type: "bar",
           data: {
             labels: Object.keys(activityTypeCounts),
-            datasets: [{
-              label: 'Jumlah Peserta',
-              data: Object.values(activityTypeCounts),
-              backgroundColor: ['#22C55E', '#3B82F6', '#A855F7'], // Green, Blue, Purple
-              borderColor: ['#16A34A', '#2563EB', '#9333EA'],
-              borderWidth: 1
-            }]
+            datasets: [
+              {
+                label: "Jumlah Peserta",
+                data: Object.values(activityTypeCounts),
+                backgroundColor: ["#22C55E", "#3B82F6", "#A855F7"], // Green, Blue, Purple
+                borderColor: ["#16A34A", "#2563EB", "#9333EA"],
+                borderWidth: 1,
+              },
+            ],
           },
           options: {
             responsive: true,
@@ -686,74 +763,78 @@
               },
               title: {
                 display: false,
-                text: 'Distribusi Jenis Kegiatan'
-              }
+                text: "Distribusi Jenis Kegiatan",
+              },
             },
             scales: {
               y: {
                 beginAtZero: true,
                 ticks: {
-                  stepSize: 1
-                }
-              }
-            }
-          }
+                  stepSize: 1,
+                },
+              },
+            },
+          },
         });
 
         // Data untuk Jurusan Populer (Bar Chart Horizontal)
         const majorCounts = {};
-        data.forEach(p => {
-            majorCounts[p.major] = (majorCounts[p.major] || 0) + 1;
+        data.forEach((p) => {
+          majorCounts[p.major] = (majorCounts[p.major] || 0) + 1;
         });
-        const sortedMajors = Object.entries(majorCounts).sort(([, a], [, b]) => b - a).slice(0, 5); // Ambil 5 teratas
+        const sortedMajors = Object.entries(majorCounts)
+          .sort(([, a], [, b]) => b - a)
+          .slice(0, 5); // Ambil 5 teratas
 
         if (majorChart) majorChart.destroy();
         majorChart = new Chart(majorChartCtx, {
-            type: 'bar',
-            data: {
-                labels: sortedMajors.map(item => item[0]),
-                datasets: [{
-                    label: 'Jumlah Peserta',
-                    data: sortedMajors.map(item => item[1]),
-                    backgroundColor: '#F97316', // Orange
-                    borderColor: '#EA580C',
-                    borderWidth: 1
-                }]
+          type: "bar",
+          data: {
+            labels: sortedMajors.map((item) => item[0]),
+            datasets: [
+              {
+                label: "Jumlah Peserta",
+                data: sortedMajors.map((item) => item[1]),
+                backgroundColor: "#F97316", // Orange
+                borderColor: "#EA580C",
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            indexAxis: "y", // Membuat bar horizontal
+            responsive: true,
+            plugins: {
+              legend: {
+                display: false,
+              },
+              title: {
+                display: false,
+                text: "Distribusi Jurusan Populer",
+              },
             },
-            options: {
-                indexAxis: 'y', // Membuat bar horizontal
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: false,
-                    },
-                    title: {
-                        display: false,
-                        text: 'Distribusi Jurusan Populer'
-                    }
+            scales: {
+              x: {
+                beginAtZero: true,
+                ticks: {
+                  stepSize: 1,
                 },
-                scales: {
-                    x: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1
-                        }
-                    }
-                }
-            }
+              },
+            },
+          },
         });
       }
 
       // Fungsi untuk merender tabel peserta
       function renderTable(data, page) {
-        participantsTableBody.innerHTML = '';
+        participantsTableBody.innerHTML = "";
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
         const paginatedData = data.slice(start, end);
 
-        paginatedData.forEach(p => {
-          const row = document.createElement('tr');
-          row.className = 'table-row';
+        paginatedData.forEach((p) => {
+          const row = document.createElement("tr");
+          row.className = "table-row";
           row.innerHTML = `
             <td>${p.name}</td>
             <td>${p.gender}</td>
@@ -782,27 +863,28 @@
       }
 
       // Event Listeners
-      applyFilterBtn.addEventListener('click', () => {
+      applyFilterBtn.addEventListener("click", () => {
         const year = filterYearSelect.value;
         const type = filterTypeSelect.value;
 
         let tempData = participantsData;
 
         if (year) {
-          tempData = tempData.filter(p => p.startDate.startsWith(year)); // Filter berdasarkan tahun mulai
+          tempData = tempData.filter((p) => p.startDate.startsWith(year)); // Filter berdasarkan tahun mulai
         }
         if (type) {
-          tempData = tempData.filter(p => p.type === type);
+          tempData = tempData.filter((p) => p.type === type);
         }
         updateUI(tempData);
       });
 
-      searchTableInput.addEventListener('keyup', () => {
+      searchTableInput.addEventListener("keyup", () => {
         const searchTerm = searchTableInput.value.toLowerCase();
-        const searchResults = filteredParticipants.filter(p =>
-          p.name.toLowerCase().includes(searchTerm) ||
-          p.institution.toLowerCase().includes(searchTerm) ||
-          p.type.toLowerCase().includes(searchTerm)
+        const searchResults = filteredParticipants.filter(
+          (p) =>
+            p.name.toLowerCase().includes(searchTerm) ||
+            p.institution.toLowerCase().includes(searchTerm) ||
+            p.type.toLowerCase().includes(searchTerm)
         );
         currentPage = 1; // Reset halaman saat pencarian
         renderTable(searchResults, currentPage);
@@ -810,50 +892,64 @@
         updateCharts(searchResults); // Perbarui grafik dengan hasil pencarian
       });
 
-      prevPageBtn.addEventListener('click', () => {
+      prevPageBtn.addEventListener("click", () => {
         if (currentPage > 1) {
           currentPage--;
           renderTable(filteredParticipants, currentPage);
         }
       });
 
-      nextPageBtn.addEventListener('click', () => {
-        if (currentPage < Math.ceil(filteredParticipants.length / rowsPerPage)) {
+      nextPageBtn.addEventListener("click", () => {
+        if (
+          currentPage < Math.ceil(filteredParticipants.length / rowsPerPage)
+        ) {
           currentPage++;
           renderTable(filteredParticipants, currentPage);
         }
       });
 
-      document.getElementById('downloadTableDataBtn').addEventListener('click', () => {
-        const headers = ['Nama', 'Jenis Kelamin', 'Jurusan', 'Jenis Kegiatan', 'Asal Instansi', 'Periode Mulai', 'Periode Selesai'];
-        const rows = filteredParticipants.map(p => [
-          p.name,
-          p.gender,
-          p.major,
-          p.type,
-          p.institution,
-          p.startDate,
-          p.endDate
-        ]);
+      document
+        .getElementById("downloadTableDataBtn")
+        .addEventListener("click", () => {
+          const headers = [
+            "Nama",
+            "Jenis Kelamin",
+            "Jurusan",
+            "Jenis Kegiatan",
+            "Asal Instansi",
+            "Periode Mulai",
+            "Periode Selesai",
+          ];
+          const rows = filteredParticipants.map((p) => [
+            p.name,
+            p.gender,
+            p.major,
+            p.type,
+            p.institution,
+            p.startDate,
+            p.endDate,
+          ]);
 
-        let csvContent = headers.join(',') + '\n';
-        rows.forEach(row => {
-          csvContent += row.map(e => `"${e}"`).join(',') + '\n'; // Kutip nilai untuk menghindari masalah koma
+          let csvContent = headers.join(",") + "\n";
+          rows.forEach((row) => {
+            csvContent += row.map((e) => `"${e}"`).join(",") + "\n"; // Kutip nilai untuk menghindari masalah koma
+          });
+
+          const blob = new Blob([csvContent], {
+            type: "text/csv;charset=utf-8;",
+          });
+          const link = document.createElement("a");
+          if (link.download !== undefined) {
+            // Feature detection
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", "data_peserta_simarin.csv");
+            link.style.visibility = "hidden";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          }
         });
-
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement('a');
-        if (link.download !== undefined) { // Feature detection
-          const url = URL.createObjectURL(blob);
-          link.setAttribute('href', url);
-          link.setAttribute('download', 'data_peserta_simarin.csv');
-          link.style.visibility = 'hidden';
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        }
-      });
-
 
       // Inisialisasi awal UI saat halaman dimuat
       window.onload = () => {
