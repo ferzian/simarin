@@ -8,6 +8,8 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <!-- Favicon -->
+    <link rel="icon" sizes="32x32" type="image/png" href="/images/logo.png" />
     <style>
       body {
         font-family: "Poppins", sans-serif;
@@ -77,21 +79,61 @@
   <body class="bg-gray-100 flex h-screen">
     <script>
       // Pastikan variabel ini dikirim dari route Express Anda
-      const user = { username: 'Admin Contoh' };
+      const user = { username: "Admin Contoh" };
       const pendingUsers = []; // Asumsi tidak ada pending user untuk halaman ini
       const pendingParticipants = []; // Asumsi tidak ada pending participant untuk halaman ini
       const visitCount = 0; // Data dummy untuk header
 
       // Data dummy untuk halaman SKM
       const skmData = [
-        { id: 1, date: '2024-07-20', rating: 'Sangat Baik', comment: 'Pelayanan sangat cepat dan ramah.' },
-        { id: 2, date: '2024-07-18', rating: 'Baik', comment: 'Cukup puas dengan fasilitas.' },
-        { id: 3, date: '2024-07-15', rating: 'Cukup', comment: 'Perlu peningkatan di kebersihan.' },
-        { id: 4, date: '2024-07-10', rating: 'Baik', comment: 'Informasi mudah diakses.' },
-        { id: 5, date: '2024-07-05', rating: 'Sangat Baik', comment: 'Pengalaman riset yang luar biasa.' },
-        { id: 6, date: '2024-07-02', rating: 'Kurang Baik', comment: 'Antrian agak panjang.' },
-        { id: 7, date: '2024-06-28', rating: 'Baik', comment: 'Proses magang berjalan lancar.' },
-        { id: 8, date: '2024-06-25', rating: 'Sangat Baik', comment: 'Pembimbing sangat membantu.' },
+        {
+          id: 1,
+          date: "2024-07-20",
+          rating: "Sangat Baik",
+          comment: "Pelayanan sangat cepat dan ramah.",
+        },
+        {
+          id: 2,
+          date: "2024-07-18",
+          rating: "Baik",
+          comment: "Cukup puas dengan fasilitas.",
+        },
+        {
+          id: 3,
+          date: "2024-07-15",
+          rating: "Cukup",
+          comment: "Perlu peningkatan di kebersihan.",
+        },
+        {
+          id: 4,
+          date: "2024-07-10",
+          rating: "Baik",
+          comment: "Informasi mudah diakses.",
+        },
+        {
+          id: 5,
+          date: "2024-07-05",
+          rating: "Sangat Baik",
+          comment: "Pengalaman riset yang luar biasa.",
+        },
+        {
+          id: 6,
+          date: "2024-07-02",
+          rating: "Kurang Baik",
+          comment: "Antrian agak panjang.",
+        },
+        {
+          id: 7,
+          date: "2024-06-28",
+          rating: "Baik",
+          comment: "Proses magang berjalan lancar.",
+        },
+        {
+          id: 8,
+          date: "2024-06-25",
+          rating: "Sangat Baik",
+          comment: "Pembimbing sangat membantu.",
+        },
       ];
     </script>
 
@@ -100,11 +142,22 @@
       id="sidebar"
     >
       <div class="flex justify-between items-center mb-6 px-2 relative">
-        <h2 class="text-2xl font-bold transition-all duration-300" id="sidebarTitle">SIMARIN</h2>
-        <button id="sidebarTitleButton" class="hidden absolute top-0 left-0 w-full h-full justify-center items-center text-lg font-bold text-white bg-gray-800 rounded-lg">
+        <h2
+          class="text-2xl font-bold transition-all duration-300"
+          id="sidebarTitle"
+        >
+          SIMARIN
+        </h2>
+        <button
+          id="sidebarTitleButton"
+          class="hidden absolute top-0 left-0 w-full h-full justify-center items-center text-lg font-bold text-white bg-gray-800 rounded-lg"
+        >
           ADM
         </button>
-        <button id="sidebarToggle" class="p-1 rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 z-10">
+        <button
+          id="sidebarToggle"
+          class="p-1 rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 z-10"
+        >
           <svg
             class="w-6 h-6 text-white"
             fill="none"
@@ -123,7 +176,9 @@
       </div>
       <nav class="flex-1 space-y-4 text-lg mt-8">
         <div>
-          <h3 class="uppercase text-gray-500 text-sm mb-2 menu-text-wrapper">Core</h3>
+          <h3 class="uppercase text-gray-500 text-sm mb-2 menu-text-wrapper">
+            Core
+          </h3>
           <a
             href="/auth/admin/dashboard"
             class="menu-item-link text-white hover:text-white"
@@ -146,7 +201,9 @@
           </a>
         </div>
         <div>
-          <h3 class="uppercase text-gray-500 text-sm mt-6 mb-2 menu-text-wrapper">
+          <h3
+            class="uppercase text-gray-500 text-sm mt-6 mb-2 menu-text-wrapper"
+          >
             User Management
           </h3>
           <a
@@ -199,10 +256,14 @@
           </a>
         </div>
         <div>
-          <h3 class="uppercase text-gray-500 text-sm mt-6 mb-2 menu-text-wrapper">Recap Data</h3>
+          <h3
+            class="uppercase text-gray-500 text-sm mt-6 mb-2 menu-text-wrapper"
+          >
+            Recap Data
+          </h3>
           <a
             href="/auth/admin/peserta"
-            class="menu-item-link text-white hover:text-white bg-gray-700"
+            class="menu-item-link text-white hover:text-white mb-2"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -222,7 +283,7 @@
           </a>
           <a
             href="/auth/admin/skm"
-            class="menu-item-link text-white hover:text-white mt-2"
+            class="menu-item-link text-white hover:text-white relative bg-gray-700"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -242,27 +303,6 @@
           </a>
         </div>
       </nav>
-      <!-- <form action="/auth/logout" method="POST" class="mt-auto px-2 py-4">
-        <button
-          class="menu-item-link text-red-400 hover:bg-red-700 hover:text-white w-full"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6 menu-icon"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-            />
-          </svg>
-          <span class="menu-text-wrapper">Logout</span>
-        </button>
-      </form> -->
     </aside>
 
     <div class="flex-1 flex flex-col overflow-hidden">
@@ -270,7 +310,9 @@
         class="bg-white shadow-md px-6 py-4 flex justify-between items-center border-b border-gray-200"
       >
         <div>
-          <h1 class="text-2xl font-bold text-gray-800">Survei Kepuasan Masyarakat</h1>
+          <h1 class="text-2xl font-bold text-gray-800">
+            Survei Kepuasan Masyarakat
+          </h1>
           <p class="text-sm text-gray-500">
             Balai Riset Perikanan Budidaya Air Tawar dan Penyuluhan Perikanan
           </p>
@@ -382,13 +424,17 @@
       </header>
 
       <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-8">
-        <h2 class="text-3xl font-bold mb-6 text-gray-800">Rekap Survei Kepuasan Masyarakat</h2>
+        <h2 class="text-3xl font-bold mb-6 text-gray-800">
+          Rekap Survei Kepuasan Masyarakat
+        </h2>
 
         <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
           <h3 class="text-xl font-semibold text-gray-700 mb-4">Filter Data</h3>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
-              <label for="filterYearSKM" class="block text-gray-700 text-sm font-medium mb-2"
+              <label
+                for="filterYearSKM"
+                class="block text-gray-700 text-sm font-medium mb-2"
                 >Tahun:</label
               >
               <select
@@ -402,7 +448,9 @@
               </select>
             </div>
             <div>
-              <label for="filterMonthSKM" class="block text-gray-700 text-sm font-medium mb-2"
+              <label
+                for="filterMonthSKM"
+                class="block text-gray-700 text-sm font-medium mb-2"
                 >Bulan:</label
               >
               <select
@@ -436,20 +484,36 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          <div class="bg-white rounded-xl shadow-lg p-6 text-center border-b-4 border-teal-500 lg:col-span-1">
-            <h3 class="text-lg font-semibold text-gray-700 mb-2">Indeks Kepuasan Masyarakat (IKM)</h3>
-            <p class="text-5xl font-bold text-teal-600 mb-2" id="ikmScore">0.00</p>
-            <p class="text-sm text-gray-500">Dari <span id="totalSKMResponses">0</span> tanggapan</p>
+          <div
+            class="bg-white rounded-xl shadow-lg p-6 text-center border-b-4 border-teal-500 lg:col-span-1"
+          >
+            <h3 class="text-lg font-semibold text-gray-700 mb-2">
+              Indeks Kepuasan Masyarakat (IKM)
+            </h3>
+            <p class="text-5xl font-bold text-teal-600 mb-2" id="ikmScore">
+              0.00
+            </p>
+            <p class="text-sm text-gray-500">
+              Dari <span id="totalSKMResponses">0</span> tanggapan
+            </p>
           </div>
-           <div class="bg-white rounded-xl shadow-lg p-6 text-center border-b-4 border-indigo-500 lg:col-span-2">
-            <h3 class="text-xl font-semibold text-gray-700 mb-4">Distribusi Tanggapan Kepuasan</h3>
+          <div
+            class="bg-white rounded-xl shadow-lg p-6 text-center border-b-4 border-indigo-500 lg:col-span-2"
+          >
+            <h3 class="text-xl font-semibold text-gray-700 mb-4">
+              Distribusi Tanggapan Kepuasan
+            </h3>
             <canvas id="satisfactionChart" class="max-h-64"></canvas>
           </div>
         </div>
 
         <div class="bg-white p-6 rounded-xl shadow-lg">
-          <h3 class="text-xl font-semibold text-gray-700 mb-4">Daftar Responden & Komentar Terbaru</h3>
-          <div class="mb-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <h3 class="text-xl font-semibold text-gray-700 mb-4">
+            Daftar Responden & Komentar Terbaru
+          </h3>
+          <div
+            class="mb-4 flex flex-col sm:flex-row justify-between items-center gap-4"
+          >
             <input
               type="text"
               id="searchSKMTable"
@@ -487,14 +551,31 @@
                   <th>Komentar</th>
                 </tr>
               </thead>
-              <tbody class="bg-white divide-y divide-gray-200" id="skmTableBody">
-                </tbody>
+              <tbody
+                class="bg-white divide-y divide-gray-200"
+                id="skmTableBody"
+              ></tbody>
             </table>
           </div>
           <div class="mt-4 flex justify-between items-center">
-            <button id="prevPageSKMBtn" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 disabled:opacity-50" disabled>Sebelumnya</button>
-            <span class="text-gray-700">Halaman <span id="currentSKMPage">1</span> dari <span id="totalSKMPages">1</span></span>
-            <button id="nextPageSKMBtn" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 disabled:opacity-50" disabled>Berikutnya</button>
+            <button
+              id="prevPageSKMBtn"
+              class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 disabled:opacity-50"
+              disabled
+            >
+              Sebelumnya
+            </button>
+            <span class="text-gray-700"
+              >Halaman <span id="currentSKMPage">1</span> dari
+              <span id="totalSKMPages">1</span></span
+            >
+            <button
+              id="nextPageSKMBtn"
+              class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 disabled:opacity-50"
+              disabled
+            >
+              Berikutnya
+            </button>
           </div>
         </div>
       </main>
@@ -537,29 +618,18 @@
 
         menuTextWrappers.forEach((el) => {
           el.classList.toggle("hidden-text");
-          if (sidebar.classList.contains("w-20")) {
-            el.style.width = "0px";
-          } else {
-            el.style.width = "auto";
-          }
+          el.style.width = sidebar.classList.contains("w-20") ? "0px" : "auto";
         });
 
-        if (sidebar.classList.contains("w-20")) {
-          sidebarTitle.classList.add("hidden");
-          sidebarTitleButton.classList.remove("hidden");
-          sidebarToggle.classList.add('absolute', 'right-2', 'top-6');
-        } else {
-          sidebarTitle.classList.remove("hidden");
-          sidebarTitleButton.classList.add("hidden");
-          sidebarToggle.classList.remove('absolute', 'right-2', 'top-6');
-        }
+        const isMinimized = sidebar.classList.contains("w-20");
+
+        // Sembunyikan judul sidebar dan tombol toggle saat diminimize
+        sidebarTitle.classList.toggle("hidden", isMinimized);
+        sidebarTitleButton.classList.toggle("hidden", !isMinimized);
+        sidebarToggle.classList.toggle("hidden", isMinimized); // 🔥 ini bikin tombol << hilang pas sidebar ditutup
 
         sidebar.querySelectorAll(".menu-item-link").forEach((item) => {
-          if (sidebar.classList.contains("w-20")) {
-            item.classList.add("justify-center");
-          } else {
-            item.classList.remove("justify-center");
-          }
+          item.classList.toggle("justify-center", isMinimized);
         });
       }
 
@@ -571,18 +641,20 @@
       let currentSKMPage = 1;
       const skmRowsPerPage = 5; // Jumlah baris per halaman
 
-      const ikmScoreEl = document.getElementById('ikmScore');
-      const totalSKMResponsesEl = document.getElementById('totalSKMResponses');
-      const satisfactionChartCtx = document.getElementById('satisfactionChart').getContext('2d');
-      const skmTableBody = document.getElementById('skmTableBody');
-      const filterYearSKMSelect = document.getElementById('filterYearSKM');
-      const filterMonthSKMSelect = document.getElementById('filterMonthSKM');
-      const applyFilterSKMBtn = document.getElementById('applyFilterSKMBtn');
-      const searchSKMTableInput = document.getElementById('searchSKMTable');
-      const prevPageSKMBtn = document.getElementById('prevPageSKMBtn');
-      const nextPageSKMBtn = document.getElementById('nextPageSKMBtn');
-      const currentSKMPageSpan = document.getElementById('currentSKMPage');
-      const totalSKMPagesSpan = document.getElementById('totalSKMPages');
+      const ikmScoreEl = document.getElementById("ikmScore");
+      const totalSKMResponsesEl = document.getElementById("totalSKMResponses");
+      const satisfactionChartCtx = document
+        .getElementById("satisfactionChart")
+        .getContext("2d");
+      const skmTableBody = document.getElementById("skmTableBody");
+      const filterYearSKMSelect = document.getElementById("filterYearSKM");
+      const filterMonthSKMSelect = document.getElementById("filterMonthSKM");
+      const applyFilterSKMBtn = document.getElementById("applyFilterSKMBtn");
+      const searchSKMTableInput = document.getElementById("searchSKMTable");
+      const prevPageSKMBtn = document.getElementById("prevPageSKMBtn");
+      const nextPageSKMBtn = document.getElementById("nextPageSKMBtn");
+      const currentSKMPageSpan = document.getElementById("currentSKMPage");
+      const totalSKMPagesSpan = document.getElementById("totalSKMPages");
 
       let satisfactionChart;
 
@@ -591,23 +663,23 @@
         totalSKMResponsesEl.textContent = data.length;
 
         if (data.length === 0) {
-          ikmScoreEl.textContent = '0.00';
+          ikmScoreEl.textContent = "0.00";
           return;
         }
 
         let totalScore = 0;
-        data.forEach(response => {
+        data.forEach((response) => {
           switch (response.rating) {
-            case 'Sangat Baik':
+            case "Sangat Baik":
               totalScore += 4;
               break;
-            case 'Baik':
+            case "Baik":
               totalScore += 3;
               break;
-            case 'Cukup':
+            case "Cukup":
               totalScore += 2;
               break;
-            case 'Kurang Baik':
+            case "Kurang Baik":
               totalScore += 1;
               break;
           }
@@ -618,8 +690,13 @@
 
       // Fungsi untuk memperbarui grafik kepuasan
       function updateSatisfactionChart(data) {
-        const ratingCounts = { 'Kurang Baik': 0, 'Cukup': 0, 'Baik': 0, 'Sangat Baik': 0 };
-        data.forEach(response => {
+        const ratingCounts = {
+          "Kurang Baik": 0,
+          Cukup: 0,
+          Baik: 0,
+          "Sangat Baik": 0,
+        };
+        data.forEach((response) => {
           if (ratingCounts.hasOwnProperty(response.rating)) {
             ratingCounts[response.rating]++;
           }
@@ -627,40 +704,42 @@
 
         if (satisfactionChart) satisfactionChart.destroy();
         satisfactionChart = new Chart(satisfactionChartCtx, {
-          type: 'doughnut', // Atau 'bar' jika ingin batang
+          type: "doughnut", // Atau 'bar' jika ingin batang
           data: {
             labels: Object.keys(ratingCounts),
-            datasets: [{
-              data: Object.values(ratingCounts),
-              backgroundColor: ['#EF4444', '#FCD34D', '#22C55E', '#3B82F6'], // Red, Yellow, Green, Blue
-              hoverOffset: 8
-            }]
+            datasets: [
+              {
+                data: Object.values(ratingCounts),
+                backgroundColor: ["#EF4444", "#FCD34D", "#22C55E", "#3B82F6"], // Red, Yellow, Green, Blue
+                hoverOffset: 8,
+              },
+            ],
           },
           options: {
             responsive: true,
             plugins: {
               legend: {
-                position: 'right', // Untuk doughnut chart, legend di kanan lebih baik
+                position: "right", // Untuk doughnut chart, legend di kanan lebih baik
               },
               title: {
                 display: false,
-                text: 'Distribusi Tanggapan Kepuasan'
-              }
-            }
-          }
+                text: "Distribusi Tanggapan Kepuasan",
+              },
+            },
+          },
         });
       }
 
       // Fungsi untuk merender tabel SKM
       function renderSKMTable(data, page) {
-        skmTableBody.innerHTML = '';
+        skmTableBody.innerHTML = "";
         const start = (page - 1) * skmRowsPerPage;
         const end = start + skmRowsPerPage;
         const paginatedData = data.slice(start, end);
 
-        paginatedData.forEach(response => {
-          const row = document.createElement('tr');
-          row.className = 'table-row';
+        paginatedData.forEach((response) => {
+          const row = document.createElement("tr");
+          row.className = "table-row";
           row.innerHTML = `
             <td>${response.date}</td>
             <td>${response.rating}</td>
@@ -673,7 +752,8 @@
         totalSKMPagesSpan.textContent = Math.ceil(data.length / skmRowsPerPage);
 
         prevPageSKMBtn.disabled = page === 1;
-        nextPageSKMBtn.disabled = page === Math.ceil(data.length / skmRowsPerPage);
+        nextPageSKMBtn.disabled =
+          page === Math.ceil(data.length / skmRowsPerPage);
       }
 
       // Fungsi utama untuk inisialisasi dan update UI
@@ -686,26 +766,31 @@
       }
 
       // Event Listeners
-      applyFilterSKMBtn.addEventListener('click', () => {
+      applyFilterSKMBtn.addEventListener("click", () => {
         const year = filterYearSKMSelect.value;
         const month = filterMonthSKMSelect.value;
 
         let tempData = skmData;
 
         if (year) {
-          tempData = tempData.filter(response => response.date.startsWith(year));
+          tempData = tempData.filter((response) =>
+            response.date.startsWith(year)
+          );
         }
         if (month) {
-          tempData = tempData.filter(response => response.date.substring(5, 7) === month);
+          tempData = tempData.filter(
+            (response) => response.date.substring(5, 7) === month
+          );
         }
         updateSKMUI(tempData);
       });
 
-      searchSKMTableInput.addEventListener('keyup', () => {
+      searchSKMTableInput.addEventListener("keyup", () => {
         const searchTerm = searchSKMTableInput.value.toLowerCase();
-        const searchResults = filteredSKMData.filter(response =>
-          response.rating.toLowerCase().includes(searchTerm) ||
-          response.comment.toLowerCase().includes(searchTerm)
+        const searchResults = filteredSKMData.filter(
+          (response) =>
+            response.rating.toLowerCase().includes(searchTerm) ||
+            response.comment.toLowerCase().includes(searchTerm)
         );
         currentSKMPage = 1; // Reset halaman saat pencarian
         renderSKMTable(searchResults, currentSKMPage);
@@ -713,46 +798,52 @@
         updateSatisfactionChart(searchResults);
       });
 
-      prevPageSKMBtn.addEventListener('click', () => {
+      prevPageSKMBtn.addEventListener("click", () => {
         if (currentSKMPage > 1) {
           currentSKMPage--;
           renderSKMTable(filteredSKMData, currentSKMPage);
         }
       });
 
-      nextPageSKMBtn.addEventListener('click', () => {
-        if (currentSKMPage < Math.ceil(filteredSKMData.length / skmRowsPerPage)) {
+      nextPageSKMBtn.addEventListener("click", () => {
+        if (
+          currentSKMPage < Math.ceil(filteredSKMData.length / skmRowsPerPage)
+        ) {
           currentSKMPage++;
           renderSKMTable(filteredSKMData, currentSKMPage);
         }
       });
 
-      document.getElementById('downloadSKMDataBtn').addEventListener('click', () => {
-        const headers = ['ID', 'Tanggal', 'Tanggapan', 'Komentar'];
-        const rows = filteredSKMData.map(r => [
-          r.id,
-          r.date,
-          r.rating,
-          r.comment.replace(/"/g, '""') // Escape double quotes for CSV
-        ]);
+      document
+        .getElementById("downloadSKMDataBtn")
+        .addEventListener("click", () => {
+          const headers = ["ID", "Tanggal", "Tanggapan", "Komentar"];
+          const rows = filteredSKMData.map((r) => [
+            r.id,
+            r.date,
+            r.rating,
+            r.comment.replace(/"/g, '""'), // Escape double quotes for CSV
+          ]);
 
-        let csvContent = headers.join(',') + '\n';
-        rows.forEach(row => {
-          csvContent += row.map(e => `"${e}"`).join(',') + '\n';
+          let csvContent = headers.join(",") + "\n";
+          rows.forEach((row) => {
+            csvContent += row.map((e) => `"${e}"`).join(",") + "\n";
+          });
+
+          const blob = new Blob([csvContent], {
+            type: "text/csv;charset=utf-8;",
+          });
+          const link = document.createElement("a");
+          if (link.download !== undefined) {
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", "data_skm_simarin.csv");
+            link.style.visibility = "hidden";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          }
         });
-
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement('a');
-        if (link.download !== undefined) {
-          const url = URL.createObjectURL(blob);
-          link.setAttribute('href', url);
-          link.setAttribute('download', 'data_skm_simarin.csv');
-          link.style.visibility = 'hidden';
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        }
-      });
 
       // Inisialisasi awal UI saat halaman dimuat
       window.onload = () => {

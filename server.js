@@ -4,7 +4,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const path = require('path');
 const session = require('express-session');
-const { User, Visitor, sequelize } = require('./models'); // ✅ PAKAI INI
+const { User, Visitor, sequelize } = require('./models');
 const authRoutes = require('./routes/auth');
 
 // Middleware
@@ -21,6 +21,7 @@ app.use(session({
 }));
 
 // Routes
+app.use(express.static(path.join(__dirname, 'public')));
 app.use((req, res, next) => {
   res.locals.user = req.session.user;
   next();

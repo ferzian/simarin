@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { User } = require('../models'); // ✅ Benar
+const { User } = require('../models');
 const { isAuthenticated, isAdmin } = require('../middleware/authMiddleware');
 
 // Approval Akun

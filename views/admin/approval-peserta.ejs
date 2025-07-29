@@ -7,6 +7,8 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <!-- Favicon -->
+    <link rel="icon" sizes="32x32" type="image/png" href="/images/logo.png" />
     <style>
       body {
         font-family: "Poppins", sans-serif;
@@ -105,12 +107,12 @@
         >
           SIMARIN
         </h2>
-        <!-- <button
+        <button
           id="sidebarTitleButton"
           class="hidden absolute top-0 left-0 w-full h-full justify-center items-center text-lg font-bold text-white bg-gray-800 rounded-lg"
         >
           ADM
-        </button> -->
+        </button>
         <button
           id="sidebarToggle"
           class="p-1 rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 z-10"
@@ -652,36 +654,20 @@
         sidebar.classList.toggle("w-64");
         sidebar.classList.toggle("w-20");
 
-        // Toggle visibility and width of menu text wrappers
         menuTextWrappers.forEach((el) => {
           el.classList.toggle("hidden-text");
-          if (sidebar.classList.contains("w-20")) {
-            el.style.width = "0px";
-          } else {
-            el.style.width = "auto";
-          }
+          el.style.width = sidebar.classList.contains("w-20") ? "0px" : "auto";
         });
 
-        // Toggle sidebar title and button
-        if (sidebar.classList.contains("w-20")) {
-          // Sidebar is closing
-          sidebarTitle.classList.add("hidden"); // Hide SIMARIN
-          sidebarTitleButton.classList.remove("hidden"); // Show ADM button
-          sidebarToggle.classList.add("absolute", "right-2", "top-6"); // Move toggle button
-        } else {
-          // Sidebar is opening
-          sidebarTitle.classList.remove("hidden"); // Show SIMARIN
-          sidebarTitleButton.classList.add("hidden"); // Hide ADM button
-          sidebarToggle.classList.remove("absolute", "right-2", "top-6"); // Reset toggle button position
-        }
+        const isMinimized = sidebar.classList.contains("w-20");
 
-        // Adjust justify-content for menu items when closed
+        // Sembunyikan judul sidebar dan tombol toggle saat diminimize
+        sidebarTitle.classList.toggle("hidden", isMinimized);
+        sidebarTitleButton.classList.toggle("hidden", !isMinimized);
+        sidebarToggle.classList.toggle("hidden", isMinimized); // 🔥 ini bikin tombol << hilang pas sidebar ditutup
+
         sidebar.querySelectorAll(".menu-item-link").forEach((item) => {
-          if (sidebar.classList.contains("w-20")) {
-            item.classList.add("justify-center");
-          } else {
-            item.classList.remove("justify-center");
-          }
+          item.classList.toggle("justify-center", isMinimized);
         });
       }
     </script>

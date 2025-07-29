@@ -8,6 +8,8 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <!-- Favicon -->
+    <link rel="icon" sizes="32x32" type="image/png" href="/images/logo.png" />
     <style>
       body {
         font-family: "Poppins", sans-serif;
@@ -203,7 +205,7 @@
           <h3 class="uppercase text-gray-500 text-sm mt-6 mb-2 menu-text-wrapper">Recap Data</h3>
           <a
             href="/auth/admin/peserta"
-            class="menu-item-link text-white hover:text-white bg-gray-700"
+            class="menu-item-link text-white hover:text-white relative bg-gray-700"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -550,29 +552,18 @@
 
         menuTextWrappers.forEach((el) => {
           el.classList.toggle("hidden-text");
-          if (sidebar.classList.contains("w-20")) {
-            el.style.width = "0px";
-          } else {
-            el.style.width = "auto";
-          }
+          el.style.width = sidebar.classList.contains("w-20") ? "0px" : "auto";
         });
 
-        if (sidebar.classList.contains("w-20")) {
-          sidebarTitle.classList.add("hidden");
-          sidebarTitleButton.classList.remove("hidden");
-          sidebarToggle.classList.add('absolute', 'right-2', 'top-6');
-        } else {
-          sidebarTitle.classList.remove("hidden");
-          sidebarTitleButton.classList.add("hidden");
-          sidebarToggle.classList.remove('absolute', 'right-2', 'top-6');
-        }
+        const isMinimized = sidebar.classList.contains("w-20");
+
+        // Sembunyikan judul sidebar dan tombol toggle saat diminimize
+        sidebarTitle.classList.toggle("hidden", isMinimized);
+        sidebarTitleButton.classList.toggle("hidden", !isMinimized);
+        sidebarToggle.classList.toggle("hidden", isMinimized); // 🔥 ini bikin tombol << hilang pas sidebar ditutup
 
         sidebar.querySelectorAll(".menu-item-link").forEach((item) => {
-          if (sidebar.classList.contains("w-20")) {
-            item.classList.add("justify-center");
-          } else {
-            item.classList.remove("justify-center");
-          }
+          item.classList.toggle("justify-center", isMinimized);
         });
       }
 
