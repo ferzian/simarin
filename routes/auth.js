@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { User } = require('../models'); // ✅ Benar
+const { User } = require('../models'); // 
 const { isAuthenticated, isAdmin } = require('../middleware/authMiddleware');
 
 // Route yang cuma boleh diakses admin
@@ -107,15 +107,28 @@ router.get('/user/dashboard', (req, res) => {
 });
 
 // user daftar-magang 
+// GET halaman form daftar magang
 router.get('/user/daftar-magang', (req, res) => {
   if (!req.session.user || req.session.user.role !== 'user') {
     return res.redirect('/auth/login');
   }
 
-  res.render('user/daftar-magang', {
+  res.render('user/daftar-magang/index', {
     username: req.session.user.username
   });
 });
+
+// GET halaman permintaan sertifikat
+router.get('/user/daftar-magang/sertifikat', (req, res) => {
+  if (!req.session.user || req.session.user.role !== 'user') {
+    return res.redirect('/auth/login');
+  }
+
+  res.render('user/daftar-magang/sertifikat', {
+    username: req.session.user.username
+  });
+});
+
 
 // user surat-kepuasan-masyarakat
 router.get('/user/skm', (req, res) => {
@@ -124,17 +137,6 @@ router.get('/user/skm', (req, res) => {
   }
 
   res.render('user/skm', {
-    username: req.session.user.username
-  });
-});
-
-// user surat-sertifikat
-router.get('/user/sertifikat', (req, res) => {
-  if (!req.session.user || req.session.user.role !== 'user') {
-    return res.redirect('/auth/login');
-  }
-
-  res.render('user/sertifikat', {
     username: req.session.user.username
   });
 });
