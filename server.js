@@ -4,7 +4,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const path = require('path');
 const session = require('express-session');
-const { User, Visitor, sequelize } = require('./models'); // ✅ PAKAI INI
+const { User, Visitor, sequelize } = require('./models');
 const authRoutes = require('./routes/auth');
 
 // Middleware
@@ -22,12 +22,18 @@ app.use(session({
 }));
 
 // Routes
+app.use(express.static(path.join(__dirname, 'public')));
+app.use((req, res, next) => {
+  res.locals.user = req.session.user;
+  next();
+});
 app.get('/', (req, res) => res.render('index'));
 app.get('/login', (req, res) => res.render('login'));
 app.get('/register', (req, res) => res.render('register'));
 app.use('/auth', authRoutes);
 app.use('/auth/admin', require('./routes/admin/dashboard'));
 app.use('/auth/admin', require('./routes/admin/download-visitors'));
+
 
 app.use(async (req, res, next) => {
   const ip = req.ip || req.connection.remoteAddress;
@@ -49,7 +55,7 @@ app.use(async (req, res, next) => {
 });
 
 // Sync DB and start server
-sequelize.sync({ force: true }).then(async () => {
+sequelize.sync({ alter: true }).then(async () => {
   const admin = await User.findOne({ where: { role: 'admin' } });
   if (!admin) {
     await User.create({

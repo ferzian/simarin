@@ -2,7 +2,7 @@
 <html>
   <head>
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Admin Dashboard SIMARIN</title>
+    <title>Approval Peserta Admin SIMARIN</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
@@ -12,6 +12,36 @@
     <link rel="stylesheet" href="/css/admin.css" />
   </head>
   <body class="bg-gray-100 flex h-screen">
+    <script>
+      const pendingParticipants = [
+        // Anda bisa menambahkan data dummy di sini jika ingin melihat tampilan kartu
+        // Contoh data dummy (hapus ini saat backend siap):
+        {
+          id: 1,
+          name: "Budi Santoso",
+          institution: "Universitas ABC",
+          applicationType: "Magang",
+          startDate: "2025-08-01",
+          endDate: "2025-11-30",
+          letterUrl: "#",
+          photoUrl: "#",
+          transcriptUrl: "#",
+        },
+        {
+          id: 2,
+          name: "Siti Aminah",
+          institution: "SMK Negeri 1 Jakarta",
+          applicationType: "PKL",
+          startDate: "2025-09-10",
+          endDate: "2025-12-10",
+          letterUrl: "#",
+          photoUrl: "#",
+          transcriptUrl: "#",
+        },
+      ];
+      // Pastikan pendingUsers juga didefinisikan jika halaman ini membutuhkannya
+      const pendingUsers = []; // Asumsi tidak ada pending user untuk halaman ini, sesuaikan jika perlu
+    </script>
     <aside
       class="sidebar bg-gray-800 text-white w-64 p-5 space-y-6 flex-shrink-0"
       id="sidebar"
@@ -23,7 +53,10 @@
         >
           SIMARIN
         </h2>
-        <button id="sidebarTitleButton" class="hidden absolute top-0 left-0 w-full h-full justify-center items-center text-lg font-bold text-white bg-gray-800 rounded-lg">
+        <button
+          id="sidebarTitleButton"
+          class="hidden absolute top-0 left-0 w-full h-full justify-center items-center text-lg font-bold text-white bg-gray-800 rounded-lg"
+        >
           ADM
         </button>
         <button
@@ -53,7 +86,7 @@
           </h3>
           <a
             href="/auth/admin/dashboard"
-            class="menu-item-link text-white hover:text-white relative bg-gray-700"
+            class="menu-item-link text-white hover:text-white"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -108,7 +141,7 @@
 
           <a
             href="/auth/admin/approval-peserta"
-            class="menu-item-link text-white hover:text-white mt-2"
+            class="menu-item-link text-white hover:text-white mt-2 bg-gray-700"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -182,7 +215,7 @@
         class="bg-white shadow-md px-6 py-4 flex justify-between items-center border-b border-gray-200"
       >
         <div>
-          <h1 class="text-2xl font-bold text-gray-800">Dashboard Admin</h1>
+          <h1 class="text-2xl font-bold text-gray-800">Approval Peserta</h1>
           <p class="text-sm text-gray-500">
             Balai Riset Perikanan Budidaya Air Tawar dan Penyuluhan Perikanan
           </p>
@@ -294,120 +327,239 @@
       </header>
 
       <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-8">
+        <h2 class="text-3xl font-bold mb-6 text-gray-800">
+          Peserta Menunggu Persetujuan
+        </h2>
+
+        <% if (pendingParticipants.length === 0) { %>
         <div
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-full"
+          class="bg-white p-10 rounded-xl shadow-lg text-center flex flex-col items-center justify-center min-h-[200px]"
         >
-          <div
-            class="bg-white rounded-xl shadow-lg p-7 flex items-center justify-between transform transition-all duration-300 hover:scale-105 hover:shadow-xl border-l-4 border-green-500"
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-20 w-20 text-blue-400 mb-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="1"
           >
-            <div>
-              <h2 class="text-xl text-gray-700 font-semibold mb-2">
-                Total Kunjungan (Bulan Ini)
-              </h2>
-              <p class="text-4xl font-bold text-green-600">
-                <%= visitCount %>
-                <span class="text-2xl font-normal">orang</span>
-              </p>
-            </div>
-            <div class="text-green-500">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-16 w-16"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="1.5"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.542 7l-1.479 1.479M12 12a3 3 0 100-6 3 3 0 000 6zm-8.707-3.293a1 1 0 010-1.414L3 7.586m4.707 7.707A7.95 7.95 0 0012 19c-2.28 0-4.42-.876-6.03-2.45m0 0l-1.293-1.293M12 21l-7-7"
-                />
-              </svg>
-            </div>
-          </div>
-
-          <div
-            class="bg-white rounded-xl shadow-lg p-7 flex items-center justify-between transform transition-all duration-300 hover:scale-105 hover:shadow-xl border-l-4 border-blue-500"
-          >
-            <div>
-              <h2 class="text-xl text-gray-700 font-semibold mb-2">
-                Peserta Aktif (Saat Ini)
-              </h2>
-              <p class="text-4xl font-bold text-blue-600">
-                120 <span class="text-2xl font-normal">orang</span>
-              </p>
-            </div>
-            <div class="text-blue-500">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-16 w-16"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="1.5"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-                />
-              </svg>
-            </div>
-          </div>
-
-          <div
-            class="bg-white rounded-xl shadow-lg p-7 flex items-center justify-between transform transition-all duration-300 hover:scale-105 hover:shadow-xl border-l-4 border-purple-500"
-          >
-            <div>
-              <h2 class="text-xl text-gray-700 font-semibold mb-2">
-                Pendaftar Baru (Bulan Ini)
-              </h2>
-              <p class="text-4xl font-bold text-purple-600">
-                35 <span class="text-2xl font-normal">orang</span>
-              </p>
-            </div>
-            <div class="text-purple-500">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-16 w-16"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="1.5"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM12 14c-1.428 0-2.857.067-4.286.2l-3.571 1.428A3 3 0 002 19.86v.296C2 21.01 2.99 22 4.143 22h15.714c1.153 0 2.143-.99 2.143-2.029v-.296a3 3 0 00-2.143-2.857L17 14.2z"
-                />
-              </svg>
-            </div>
-          </div>
-
-          <div class="md:col-span-3 text-center mt-4">
-            <a
-              href="/auth/admin/download-visitors"
-              class="inline-flex items-center bg-green-600 text-white px-8 py-3 rounded-full shadow-lg hover:bg-green-700 transition duration-300 text-lg font-semibold"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6 mr-2"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                />
-              </svg>
-              Download Rekap Kunjungan Bulanan
-            </a>
-          </div>
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <p class="text-gray-600 text-xl font-medium">
+            Tidak ada peserta yang menunggu persetujuan saat ini.
+          </p>
+          <p class="text-gray-500 text-sm mt-2">
+            Daftar pengajuan magang, PKL, atau riset akan muncul di sini.
+          </p>
         </div>
+        <% } else { %>
+        <ul class="space-y-6">
+          <% pendingParticipants.forEach(participant => { %>
+          <li
+            class="bg-white p-6 rounded-xl shadow-lg flex flex-col lg:flex-row lg:justify-between transition duration-300 hover:shadow-xl border-l-4 border-indigo-500"
+          >
+            <div class="mb-6 lg:mb-0 lg:w-2/3">
+              <h3 class="font-bold text-xl text-gray-800 mb-2">
+                <%= participant.name %>
+              </h3>
+              <div class="space-y-1 text-gray-600 text-sm">
+                <p class="flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-4 w-4 mr-2 text-gray-500"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"
+                    />
+                  </svg>
+                  Asal Instansi:
+                  <span class="ml-1 font-medium"
+                    ><%= participant.institution %></span
+                  >
+                </p>
+                <p class="flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-4 w-4 mr-2 text-gray-500"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M7 8h10M7 12h10M7 16h10"
+                    />
+                  </svg>
+                  Tipe Pengajuan:
+                  <span class="ml-1 font-medium"
+                    ><%= participant.applicationType %></span
+                  >
+                </p>
+                <p class="flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-4 w-4 mr-2 text-gray-500"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                  Periode:
+                  <span class="ml-1 font-medium"
+                    ><%= participant.startDate %> - <%= participant.endDate
+                    %></span
+                  >
+                </p>
+              </div>
+
+              <div class="mt-4 border-t border-gray-200 pt-4">
+                <p class="font-semibold text-gray-700 text-base mb-2">
+                  Dokumen Pendukung:
+                </p>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
+                  <a
+                    href="<%= participant.photoUrl %>"
+                    target="_blank"
+                    class="flex items-center justify-center p-2 border border-purple-300 rounded-md bg-purple-50 text-purple-700 hover:bg-purple-100 transition-colors"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-4 w-4 mr-1"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      />
+                    </svg>
+                    Foto
+                  </a>
+                  <a
+                    href="<%= participant.letterUrl %>"
+                    target="_blank"
+                    class="flex items-center justify-center p-2 border border-blue-300 rounded-md bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-4 w-4 mr-1"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                      />
+                    </svg>
+                    Surat Pengajuan
+                  </a>
+                  <a
+                    href="<%= participant.transcriptUrl %>"
+                    target="_blank"
+                    class="flex items-center justify-center p-2 border border-green-300 rounded-md bg-green-50 text-green-700 hover:bg-green-100 transition-colors"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-4 w-4 mr-1"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+                      />
+                    </svg>
+                    Transkrip Nilai
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="flex flex-col sm:flex-row gap-3 w-full lg:w-1/4 items-center lg:items-end lg:justify-end"
+            >
+              <form
+                action="/auth/admin/approve-participant/<%= participant.id %>"
+                method="POST"
+                class="w-full sm:w-auto"
+              >
+                <button
+                  class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition duration-200 transform hover:scale-105 flex items-center justify-center w-full"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                  Approve
+                </button>
+              </form>
+              <form
+                action="/auth/admin/reject-participant/<%= participant.id %>"
+                method="POST"
+                class="w-full sm:w-auto"
+              >
+                <button
+                  class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition duration-200 transform hover:scale-105 flex items-center justify-center w-full"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                  Reject
+                </button>
+              </form>
+            </div>
+          </li>
+          <% }) %>
+        </ul>
+        <% } %>
       </main>
     </div>
 

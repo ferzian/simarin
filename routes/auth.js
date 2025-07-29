@@ -1,14 +1,79 @@
 const express = require('express');
 const router = express.Router();
+<<<<<<< HEAD
 const { User } = require('../models'); // 
+=======
+const { User } = require('../models');
+>>>>>>> 701409f4f82f10fbad6ffdac85f4631db32721c3
 const { isAuthenticated, isAdmin } = require('../middleware/authMiddleware');
 
-// Route yang cuma boleh diakses admin
+// Approval Akun
 router.get('/admin/approval-akun', isAuthenticated, isAdmin, async (req, res) => {
   const pendingUsers = await User.findAll({
     where: { role: 'user', approved: false },
   });
   res.render('admin/approval-akun', { pendingUsers });
+});
+
+// Approval Peserta
+router.get('/admin/approval-peserta', isAuthenticated, isAdmin, async (req, res) => {
+  // const pendingUsers = await User.findAll({
+  //   where: { role: 'user', approved: false },
+  // });
+  // Data dummy untuk pengembangan UI
+  // Hapus atau ganti ini dengan data dari database Anda nanti
+  const pendingParticipants = [
+    {
+      id: 1,
+      name: "Budi Santoso",
+      institution: "Universitas ABC",
+      applicationType: "Magang",
+      startDate: "2025-08-01",
+      endDate: "2025-11-30",
+      letterUrl: "#",
+      photoUrl: "#",
+      transcriptUrl: "#",
+    },
+    {
+      id: 2,
+      name: "Siti Aminah",
+      institution: "SMK Negeri 1 Jakarta",
+      applicationType: "PKL",
+      startDate: "2025-09-10",
+      endDate: "2025-12-10",
+      letterUrl: "#",
+      photoUrl: "#",
+      transcriptUrl: "#",
+    },
+  ];
+
+  // Pastikan user juga dikirim, karena UI Anda menggunakannya
+  const user = { username: 'admin' }; // Data dummy user, sesuaikan jika Anda sudah punya dari sesi login
+
+  // Jika Anda juga memiliki pendingUsers untuk notifikasi di header, kirimkan juga
+  const pendingUsers = []; // Data dummy untuk pendingUsers
+
+  res.render('admin/approval-peserta', {
+    pendingParticipants: pendingParticipants,
+    user: user, // Pastikan user dikirim
+    pendingUsers: pendingUsers // Pastikan pendingUsers dikirim
+  });
+});
+
+// Peserta
+router.get('/admin/peserta', isAuthenticated, isAdmin, async (req, res) => {
+  const pendingUsers = await User.findAll({
+    where: { role: 'user', approved: false },
+  });
+  res.render('admin/peserta', { pendingUsers });
+});
+
+// SKM
+router.get('/admin/skm', isAuthenticated, isAdmin, async (req, res) => {
+  const pendingUsers = await User.findAll({
+    where: { role: 'user', approved: false },
+  });
+  res.render('admin/skm', { pendingUsers });
 });
 
 
@@ -51,6 +116,7 @@ router.post('/login', async (req, res) => {
 router.get('/register', (req, res) => {
   res.render('register', { error: null });
 });
+
 
 // POST Register
 router.post('/register', async (req, res) => {

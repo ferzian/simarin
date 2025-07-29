@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Survei Kepuasan Masyarakat SIMARIN</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Favicon -->
+    <link rel="icon" sizes="32x32" type="image/png" href="/images/logo.png" />
+    <link rel="stylesheet" href="/css/admin.css" />
+  </head>
+  <body class="bg-gray-100 flex h-screen">
+    <script>
+      // Pastikan variabel ini dikirim dari route Express Anda
+      const user = { username: "Admin Contoh" };
+      const pendingUsers = []; // Asumsi tidak ada pending user untuk halaman ini
+      const pendingParticipants = []; // Asumsi tidak ada pending participant untuk halaman ini
+      const visitCount = 0; // Data dummy untuk header
+
+      // Data dummy untuk halaman SKM
+      const skmData = [
+        {
+          id: 1,
+          date: "2024-07-20",
+          rating: "Sangat Baik",
+          comment: "Pelayanan sangat cepat dan ramah.",
+        },
+        {
+          id: 2,
+          date: "2024-07-18",
+          rating: "Baik",
+          comment: "Cukup puas dengan fasilitas.",
+        },
+        {
+          id: 3,
+          date: "2024-07-15",
+          rating: "Cukup",
+          comment: "Perlu peningkatan di kebersihan.",
+        },
+        {
+          id: 4,
+          date: "2024-07-10",
+          rating: "Baik",
+          comment: "Informasi mudah diakses.",
+        },
+        {
+          id: 5,
+          date: "2024-07-05",
+          rating: "Sangat Baik",
+          comment: "Pengalaman riset yang luar biasa.",
+        },
+        {
+          id: 6,
+          date: "2024-07-02",
+          rating: "Kurang Baik",
+          comment: "Antrian agak panjang.",
+        },
+        {
+          id: 7,
+          date: "2024-06-28",
+          rating: "Baik",
+          comment: "Proses magang berjalan lancar.",
+        },
+        {
+          id: 8,
+          date: "2024-06-25",
+          rating: "Sangat Baik",
+          comment: "Pembimbing sangat membantu.",
+        },
+      ];
+    </script>
+
+    <aside
+      class="sidebar bg-gray-800 text-white w-64 p-5 space-y-6 flex-shrink-0"
+      id="sidebar"
+    >
+      <div class="flex justify-between items-center mb-6 px-2 relative">
+        <h2
+          class="text-2xl font-bold transition-all duration-300"
+          id="sidebarTitle"
+        >
+          SIMARIN
+        </h2>
+        <button
+          id="sidebarTitleButton"
+          class="hidden absolute top-0 left-0 w-full h-full justify-center items-center text-lg font-bold text-white bg-gray-800 rounded-lg"
+        >
+          ADM
+        </button>
+        <button
+          id="sidebarToggle"
+          class="p-1 rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 z-10"
+        >
+          <svg
+            class="w-6 h-6 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
+            ></path>
+          </svg>
+        </button>
+      </div>
+      <nav class="flex-1 space-y-4 text-lg mt-8">
+        <div>
+          <h3 class="uppercase text-gray-500 text-sm mb-2 menu-text-wrapper">
+            Core
+          </h3>
+          <a
+            href="/auth/admin/dashboard"
+            class="menu-item-link text-white hover:text-white"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 menu-icon"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+              />
+            </svg>
+            <span class="menu-text-wrapper">Dashboard</span>
+          </a>
+        </div>
+        <div>
+          <h3
+            class="uppercase text-gray-500 text-sm mt-6 mb-2 menu-text-wrapper"
+          >
+            User Management
+          </h3>
+          <a
+            href="/auth/admin/approval-akun"
+            class="menu-item-link text-white hover:text-white relative"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 menu-icon"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.542 7l-1.479 1.479M12 12a3 3 0 100-6 3 3 0 000 6zm-8.707-3.293a1 1 0 010-1.414L3 7.586m4.707 7.707A7.95 7.95 0 0012 19c-2.28 0-4.42-.876-6.03-2.45m0 0l-1.293-1.293M12 21l-7-7"
+              />
+            </svg>
+            <span class="menu-text-wrapper">Approval Akun</span>
+            <% if (pendingUsers.length > 0) { %>
+            <span
+              class="absolute top-1 right-2 bg-red-500 text-white text-xs font-semibold px-2 py-0.5 rounded-full"
+            >
+              <%= pendingUsers.length %>
+            </span>
+            <% } %>
+          </a>
+
+          <a
+            href="/auth/admin/approval-peserta"
+            class="menu-item-link text-white hover:text-white mt-2"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 menu-icon"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+              />
+            </svg>
+            <span class="menu-text-wrapper">Approval Peserta</span>
+          </a>
+        </div>
+        <div>
+          <h3
+            class="uppercase text-gray-500 text-sm mt-6 mb-2 menu-text-wrapper"
+          >
+            Recap Data
+          </h3>
+          <a
+            href="/auth/admin/peserta"
+            class="menu-item-link text-white hover:text-white mb-2"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 menu-icon"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.143M9 16l-2.75 3.5L4 17l.75-1.5L7 14l2 2z"
+              />
+            </svg>
+            <span class="menu-text-wrapper">Data Peserta</span>
+          </a>
+          <a
+            href="/auth/admin/skm"
+            class="menu-item-link text-white hover:text-white relative bg-gray-700"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 menu-icon"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 17v-2m3 2v-4m3 2v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+            <span class="menu-text-wrapper">Data SKM</span>
+          </a>
+        </div>
+      </nav>
+    </aside>
+
+    <div class="flex-1 flex flex-col overflow-hidden">
+      <header
+        class="bg-white shadow-md px-6 py-4 flex justify-between items-center border-b border-gray-200"
+      >
+        <div>
+          <h1 class="text-2xl font-bold text-gray-800">
+            Survei Kepuasan Masyarakat
+          </h1>
+          <p class="text-sm text-gray-500">
+            Balai Riset Perikanan Budidaya Air Tawar dan Penyuluhan Perikanan
+          </p>
+        </div>
+
+        <div class="flex items-center gap-6 relative">
+          <% if (pendingUsers.length > 0) { %>
+          <a
+            href="/auth/admin/approval-akun"
+            class="relative p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-7 w-7 text-yellow-600 animate-bounce"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C8.67 6.165 8 7.388 8 8.75v5.408c0 .538-.214 1.055-.595 1.437L6 17h5"
+              />
+            </svg>
+            <span
+              class="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full"
+            >
+              <%= pendingUsers.length %>
+            </span>
+          </a>
+          <% } else { %>
+          <div
+            class="relative p-2 rounded-full text-gray-600 cursor-not-allowed"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-7 w-7"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C8.67 6.165 8 7.388 8 8.75v5.408c0 .538-.214 1.055-.595 1.437L6 17h5"
+              />
+            </svg>
+          </div>
+          <% } %>
+
+          <div class="relative">
+            <button
+              id="dropdownUserButton"
+              class="flex items-center gap-2 text-gray-700 hover:text-gray-900 focus:outline-none p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
+            >
+              <span class="font-semibold text-lg"><%= user.username %> </span>
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                ></path>
+              </svg>
+            </button>
+
+            <div
+              id="dropdownUserMenu"
+              class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 z-50 overflow-hidden"
+            >
+              <div class="px-4 py-3 text-gray-600 text-sm font-medium">
+                Administrator
+              </div>
+              <div class="border-t my-1"></div>
+              <form action="/auth/logout" method="POST">
+                <button
+                  class="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 hover:text-red-700 font-semibold transition duration-150"
+                >
+                  <div class="flex items-center gap-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                      />
+                    </svg>
+                    <span>Logout</span>
+                  </div>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-8">
+        <h2 class="text-3xl font-bold mb-6 text-gray-800">
+          Rekap Survei Kepuasan Masyarakat
+        </h2>
+
+        <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
+          <h3 class="text-xl font-semibold text-gray-700 mb-4">Filter Data</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label
+                for="filterYearSKM"
+                class="block text-gray-700 text-sm font-medium mb-2"
+                >Tahun:</label
+              >
+              <select
+                id="filterYearSKM"
+                class="block w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-800"
+              >
+                <option value="">Semua Tahun</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+              </select>
+            </div>
+            <div>
+              <label
+                for="filterMonthSKM"
+                class="block text-gray-700 text-sm font-medium mb-2"
+                >Bulan:</label
+              >
+              <select
+                id="filterMonthSKM"
+                class="block w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-800"
+              >
+                <option value="">Semua Bulan</option>
+                <option value="01">Januari</option>
+                <option value="02">Februari</option>
+                <option value="03">Maret</option>
+                <option value="04">April</option>
+                <option value="05">Mei</option>
+                <option value="06">Juni</option>
+                <option value="07">Juli</option>
+                <option value="08">Agustus</option>
+                <option value="09">September</option>
+                <option value="10">Oktober</option>
+                <option value="11">November</option>
+                <option value="12">Desember</option>
+              </select>
+            </div>
+            <div class="md:col-span-1 flex items-end">
+              <button
+                id="applyFilterSKMBtn"
+                class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 font-semibold"
+              >
+                Terapkan Filter
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          <div
+            class="bg-white rounded-xl shadow-lg p-6 text-center border-b-4 border-teal-500 lg:col-span-1"
+          >
+            <h3 class="text-lg font-semibold text-gray-700 mb-2">
+              Indeks Kepuasan Masyarakat (IKM)
+            </h3>
+            <p class="text-5xl font-bold text-teal-600 mb-2" id="ikmScore">
+              0.00
+            </p>
+            <p class="text-sm text-gray-500">
+              Dari <span id="totalSKMResponses">0</span> tanggapan
+            </p>
+          </div>
+          <div
+            class="bg-white rounded-xl shadow-lg p-6 text-center border-b-4 border-indigo-500 lg:col-span-2"
+          >
+            <h3 class="text-xl font-semibold text-gray-700 mb-4">
+              Distribusi Tanggapan Kepuasan
+            </h3>
+            <canvas id="satisfactionChart" class="max-h-64"></canvas>
+          </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-lg">
+          <h3 class="text-xl font-semibold text-gray-700 mb-4">
+            Daftar Responden & Komentar Terbaru
+          </h3>
+          <div
+            class="mb-4 flex flex-col sm:flex-row justify-between items-center gap-4"
+          >
+            <input
+              type="text"
+              id="searchSKMTable"
+              placeholder="Cari komentar atau rating..."
+              class="w-full sm:w-2/3 p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-800"
+            />
+            <button
+              id="downloadSKMDataBtn"
+              class="w-full sm:w-auto bg-green-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-green-700 transition duration-300 font-semibold flex items-center justify-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                />
+              </svg>
+              Download Excel
+            </button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr class="table-header">
+                  <th>Tanggal</th>
+                  <th>Tanggapan</th>
+                  <th>Komentar</th>
+                </tr>
+              </thead>
+              <tbody
+                class="bg-white divide-y divide-gray-200"
+                id="skmTableBody"
+              ></tbody>
+            </table>
+          </div>
+          <div class="mt-4 flex justify-between items-center">
+            <button
+              id="prevPageSKMBtn"
+              class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 disabled:opacity-50"
+              disabled
+            >
+              Sebelumnya
+            </button>
+            <span class="text-gray-700"
+              >Halaman <span id="currentSKMPage">1</span> dari
+              <span id="totalSKMPages">1</span></span
+            >
+            <button
+              id="nextPageSKMBtn"
+              class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 disabled:opacity-50"
+              disabled
+            >
+              Berikutnya
+            </button>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      // Sidebar & Dropdown (dari kode sebelumnya, tetap konsisten)
+      const userBtn = document.getElementById("dropdownUserButton");
+      const userMenu = document.getElementById("dropdownUserMenu");
+
+      userBtn.addEventListener("click", () => {
+        userMenu.classList.toggle("hidden");
+      });
+
+      window.addEventListener("click", function (e) {
+        if (!userBtn.contains(e.target) && !userMenu.contains(e.target)) {
+          userMenu.classList.add("hidden");
+        }
+      });
+
+      const sidebar = document.getElementById("sidebar");
+      const sidebarToggle = document.getElementById("sidebarToggle");
+      const sidebarTitle = document.getElementById("sidebarTitle");
+      const sidebarTitleButton = document.getElementById("sidebarTitleButton");
+      const menuTextWrappers = document.querySelectorAll(".menu-text-wrapper");
+
+      sidebarToggle.addEventListener("click", () => {
+        toggleSidebar();
+      });
+
+      sidebarTitleButton.addEventListener("click", () => {
+        if (sidebar.classList.contains("w-20")) {
+          toggleSidebar();
+        }
+      });
+
+      function toggleSidebar() {
+        sidebar.classList.toggle("w-64");
+        sidebar.classList.toggle("w-20");
+
+        menuTextWrappers.forEach((el) => {
+          el.classList.toggle("hidden-text");
+          el.style.width = sidebar.classList.contains("w-20") ? "0px" : "auto";
+        });
+
+        const isMinimized = sidebar.classList.contains("w-20");
+
+        // Sembunyikan judul sidebar dan tombol toggle saat diminimize
+        sidebarTitle.classList.toggle("hidden", isMinimized);
+        sidebarTitleButton.classList.toggle("hidden", !isMinimized);
+        sidebarToggle.classList.toggle("hidden", isMinimized); // 🔥 ini bikin tombol << hilang pas sidebar ditutup
+
+        sidebar.querySelectorAll(".menu-item-link").forEach((item) => {
+          item.classList.toggle("justify-center", isMinimized);
+        });
+      }
+
+      // --- Logika untuk Halaman SKM ---
+
+      // Data dummy (akan diambil dari `skmData` global)
+      let currentSKMData = skmData; // Gunakan data dummy global
+      let filteredSKMData = [];
+      let currentSKMPage = 1;
+      const skmRowsPerPage = 5; // Jumlah baris per halaman
+
+      const ikmScoreEl = document.getElementById("ikmScore");
+      const totalSKMResponsesEl = document.getElementById("totalSKMResponses");
+      const satisfactionChartCtx = document
+        .getElementById("satisfactionChart")
+        .getContext("2d");
+      const skmTableBody = document.getElementById("skmTableBody");
+      const filterYearSKMSelect = document.getElementById("filterYearSKM");
+      const filterMonthSKMSelect = document.getElementById("filterMonthSKM");
+      const applyFilterSKMBtn = document.getElementById("applyFilterSKMBtn");
+      const searchSKMTableInput = document.getElementById("searchSKMTable");
+      const prevPageSKMBtn = document.getElementById("prevPageSKMBtn");
+      const nextPageSKMBtn = document.getElementById("nextPageSKMBtn");
+      const currentSKMPageSpan = document.getElementById("currentSKMPage");
+      const totalSKMPagesSpan = document.getElementById("totalSKMPages");
+
+      let satisfactionChart;
+
+      // Fungsi untuk menghitung IKM dan update kartu ringkasan
+      function updateIKMSummary(data) {
+        totalSKMResponsesEl.textContent = data.length;
+
+        if (data.length === 0) {
+          ikmScoreEl.textContent = "0.00";
+          return;
+        }
+
+        let totalScore = 0;
+        data.forEach((response) => {
+          switch (response.rating) {
+            case "Sangat Baik":
+              totalScore += 4;
+              break;
+            case "Baik":
+              totalScore += 3;
+              break;
+            case "Cukup":
+              totalScore += 2;
+              break;
+            case "Kurang Baik":
+              totalScore += 1;
+              break;
+          }
+        });
+        const ikm = (totalScore / (data.length * 4)) * 100; // Hitung IKM dalam skala 0-100
+        ikmScoreEl.textContent = ikm.toFixed(2);
+      }
+
+      // Fungsi untuk memperbarui grafik kepuasan
+      function updateSatisfactionChart(data) {
+        const ratingCounts = {
+          "Kurang Baik": 0,
+          Cukup: 0,
+          Baik: 0,
+          "Sangat Baik": 0,
+        };
+        data.forEach((response) => {
+          if (ratingCounts.hasOwnProperty(response.rating)) {
+            ratingCounts[response.rating]++;
+          }
+        });
+
+        if (satisfactionChart) satisfactionChart.destroy();
+        satisfactionChart = new Chart(satisfactionChartCtx, {
+          type: "doughnut", // Atau 'bar' jika ingin batang
+          data: {
+            labels: Object.keys(ratingCounts),
+            datasets: [
+              {
+                data: Object.values(ratingCounts),
+                backgroundColor: ["#EF4444", "#FCD34D", "#22C55E", "#3B82F6"], // Red, Yellow, Green, Blue
+                hoverOffset: 8,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: "right", // Untuk doughnut chart, legend di kanan lebih baik
+              },
+              title: {
+                display: false,
+                text: "Distribusi Tanggapan Kepuasan",
+              },
+            },
+          },
+        });
+      }
+
+      // Fungsi untuk merender tabel SKM
+      function renderSKMTable(data, page) {
+        skmTableBody.innerHTML = "";
+        const start = (page - 1) * skmRowsPerPage;
+        const end = start + skmRowsPerPage;
+        const paginatedData = data.slice(start, end);
+
+        paginatedData.forEach((response) => {
+          const row = document.createElement("tr");
+          row.className = "table-row";
+          row.innerHTML = `
+            <td>${response.date}</td>
+            <td>${response.rating}</td>
+            <td>${response.comment}</td>
+          `;
+          skmTableBody.appendChild(row);
+        });
+
+        currentSKMPageSpan.textContent = page;
+        totalSKMPagesSpan.textContent = Math.ceil(data.length / skmRowsPerPage);
+
+        prevPageSKMBtn.disabled = page === 1;
+        nextPageSKMBtn.disabled =
+          page === Math.ceil(data.length / skmRowsPerPage);
+      }
+
+      // Fungsi utama untuk inisialisasi dan update UI
+      function updateSKMUI(data) {
+        filteredSKMData = data; // Set data awal atau data setelah filter
+        updateIKMSummary(filteredSKMData);
+        updateSatisfactionChart(filteredSKMData);
+        currentSKMPage = 1; // Reset halaman ke 1 setiap kali data berubah
+        renderSKMTable(filteredSKMData, currentSKMPage);
+      }
+
+      // Event Listeners
+      applyFilterSKMBtn.addEventListener("click", () => {
+        const year = filterYearSKMSelect.value;
+        const month = filterMonthSKMSelect.value;
+
+        let tempData = skmData;
+
+        if (year) {
+          tempData = tempData.filter((response) =>
+            response.date.startsWith(year)
+          );
+        }
+        if (month) {
+          tempData = tempData.filter(
+            (response) => response.date.substring(5, 7) === month
+          );
+        }
+        updateSKMUI(tempData);
+      });
+
+      searchSKMTableInput.addEventListener("keyup", () => {
+        const searchTerm = searchSKMTableInput.value.toLowerCase();
+        const searchResults = filteredSKMData.filter(
+          (response) =>
+            response.rating.toLowerCase().includes(searchTerm) ||
+            response.comment.toLowerCase().includes(searchTerm)
+        );
+        currentSKMPage = 1; // Reset halaman saat pencarian
+        renderSKMTable(searchResults, currentSKMPage);
+        // Anda bisa memilih untuk memperbarui grafik dengan hasil pencarian atau tidak
+        updateSatisfactionChart(searchResults);
+      });
+
+      prevPageSKMBtn.addEventListener("click", () => {
+        if (currentSKMPage > 1) {
+          currentSKMPage--;
+          renderSKMTable(filteredSKMData, currentSKMPage);
+        }
+      });
+
+      nextPageSKMBtn.addEventListener("click", () => {
+        if (
+          currentSKMPage < Math.ceil(filteredSKMData.length / skmRowsPerPage)
+        ) {
+          currentSKMPage++;
+          renderSKMTable(filteredSKMData, currentSKMPage);
+        }
+      });
+
+      document
+        .getElementById("downloadSKMDataBtn")
+        .addEventListener("click", () => {
+          const headers = ["ID", "Tanggal", "Tanggapan", "Komentar"];
+          const rows = filteredSKMData.map((r) => [
+            r.id,
+            r.date,
+            r.rating,
+            r.comment.replace(/"/g, '""'), // Escape double quotes for CSV
+          ]);
+
+          let csvContent = headers.join(",") + "\n";
+          rows.forEach((row) => {
+            csvContent += row.map((e) => `"${e}"`).join(",") + "\n";
+          });
+
+          const blob = new Blob([csvContent], {
+            type: "text/csv;charset=utf-8;",
+          });
+          const link = document.createElement("a");
+          if (link.download !== undefined) {
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", "data_skm_simarin.csv");
+            link.style.visibility = "hidden";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          }
+        });
+
+      // Inisialisasi awal UI saat halaman dimuat
+      window.onload = () => {
+        updateSKMUI(skmData); // Muat data SKM awal
+      };
+    </script>
+  </body>
+</html>

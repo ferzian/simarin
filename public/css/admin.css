@@ -1,0 +1,53 @@
+      body {
+        font-family: "Poppins", sans-serif;
+      }
+      /* Transisi untuk sidebar */
+      .sidebar {
+        transition: width 0.3s ease-in-out;
+      }
+      .menu-item-link {
+        display: flex;
+        align-items: center;
+        gap: 12px; /* Setara dengan gap-3 Tailwind CSS */
+        padding: 10px 16px; /* Setara dengan px-4 py-2 Tailwind CSS */
+        border-radius: 0.375rem; /* Setara dengan rounded Tailwind CSS */
+        transition: background-color 0.3s ease-in-out;
+      }
+      .menu-item-link:hover {
+        background-color: #4a5568; /* hover:bg-gray-700 */
+      }
+      .menu-icon {
+        flex-shrink: 0; /* Pastikan ikon tidak menyusut saat teks tersembunyi */
+      }
+      .menu-text-wrapper {
+        flex-grow: 1; /* Biarkan teks mengisi sisa ruang */
+        overflow: hidden;
+        white-space: nowrap;
+        transition: opacity 0.3s ease-in-out, width 0.3s ease-in-out; /* Tambah transisi width */
+      }
+      .menu-text-wrapper.hidden-text {
+        opacity: 0;
+        width: 0;
+      }
+      /* Gaya untuk tombol ADM saat sidebar tertutup */
+      .sidebar.w-20 #sidebarTitleButton {
+        display: flex; /* Tampilkan tombol */
+        width: 100%; /* Agar mengisi lebar sidebar yang kecil */
+        justify-content: center; /* Pusatkan teks "ADM" */
+        align-items: center;
+        padding: 0.5rem;
+        font-size: 1.125rem; /* text-lg */
+        font-weight: 700; /* font-bold */
+        height: 48px; /* Sesuaikan dengan tinggi sebelumnya */
+        position: absolute; /* Posisikan secara absolut */
+        top: 24px; /* Sesuaikan posisi vertikal */
+        left: 0;
+        cursor: pointer;
+        color: white; /* Warna teks putih */
+        background: none; /* Tanpa latar belakang */
+        border: none; /* Tanpa border */
+      }
+      /* Sembunyikan judul asli saat tombol ADM aktif */
+      .sidebar.w-20 #sidebarTitle {
+        display: none;
+      }

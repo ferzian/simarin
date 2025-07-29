@@ -7,6 +7,8 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <!-- Favicon -->
+    <link rel="icon" sizes="32x32" type="image/png" href="/images/logo.png" />
     <style>
       body {
         font-family: "Poppins", sans-serif;
@@ -18,12 +20,12 @@
   >
     <nav class="bg-white shadow-lg p-4 flex justify-between items-center z-10">
       <h1 class="text-3xl font-bold text-blue-700 tracking-wide">SIMARIN</h1>
-      <a
-        href="/"
-        class="text-gray-700 hover:text-blue-600 transition duration-300 ease-in-out text-lg"
-        >Beranda</a
-      >
       <div class="flex items-center space-x-6">
+        <a
+          href="/"
+          class="text-gray-700 hover:text-blue-600 transition duration-300 ease-in-out text-lg"
+          >Beranda</a
+        >
         <a
           href="/login"
           class="bg-blue-600 text-white px-6 py-2 rounded-full shadow-md hover:bg-blue-700 transition duration-300 ease-in-out text-lg"
@@ -39,7 +41,7 @@
 
     <div class="flex-grow flex items-center justify-center p-6">
       <div
-        class="bg-white p-10 rounded-xl shadow-2xl space-y-7 max-w-md w-full transform transition-all duration-500 hover:scale-105"
+        class="bg-white p-10 rounded-xl shadow-2xl space-y-7 max-w-lg w-full transform transition-all duration-500 hover:scale-105"
       >
         <h1 class="text-3xl font-bold text-center text-gray-800">
           Yuk, Buat Akun Baru! ✨
@@ -58,128 +60,186 @@
         <form
           action="/auth/register"
           method="POST"
-          class="space-y-6"
+          class="grid grid-cols-1 md:grid-cols-2 gap-6"
           onsubmit="return validateForm()"
         >
-          <!-- Username -->
-          <div>
-            <label
-              for="username"
-              class="block text-gray-700 font-medium mb-2 text-lg"
-            >
-              Username <span class="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              name="username"
-              id="username"
-              placeholder="Pilih username Anda"
-              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-lg"
-              required
-            />
-          </div>
-
-          <!-- Password -->
-          <div>
-            <label
-              for="password"
-              class="block text-gray-700 font-medium mb-2 text-lg"
-            >
-              Password <span class="text-red-500">*</span>
-            </label>
-            <input
-              type="password"
-              name="password"
-              id="password"
-              placeholder="Buat password Anda (min. 4 karakter)"
-              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-lg"
-              required
-              minlength="4"
-            />
-          </div>
-
-          <!-- Konfirmasi Password -->
-          <div>
-            <label
-              for="confirmPassword"
-              class="block text-gray-700 font-medium mb-2 text-lg"
-            >
-              Konfirmasi Password <span class="text-red-500">*</span>
-            </label>
-            <input
-              type="password"
-              name="confirmPassword"
-              id="confirmPassword"
-              placeholder="Masukkan kembali password Anda"
-              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-lg"
-              required
-            />
-          </div>
-
-          <!-- No HP -->
-          <div>
-            <label
-              for="phone"
-              class="block text-gray-700 font-medium mb-2 text-lg"
-              >No HP</label
-            >
-            <div class="flex">
-              <select
-                name="countryCode"
-                class="p-3 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+          <!-- KIRI -->
+          <div class="space-y-6">
+            <!-- Username -->
+            <div>
+              <label
+                for="username"
+                class="block text-gray-700 font-medium mb-2 text-lg"
               >
-                <option value="+62" selected>Indonesia (+62)</option>
-                <!-- Tambahkan kode lain kalau mau -->
-              </select>
+                Username <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="username"
+                id="username"
+                placeholder="Pilih username Anda"
+                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+                required
+              />
+            </div>
+
+            <!-- Password -->
+            <div>
+              <label
+                for="password"
+                class="block text-gray-700 font-medium mb-2 text-lg"
+              >
+                Password <span class="text-red-500">*</span>
+              </label>
+              <div class="relative">
+                <input
+                  type="password"
+                  name="password"
+                  id="password"
+                  placeholder="Buat password Anda (min. 4 karakter)"
+                  class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-lg pr-10"
+                  required
+                  minlength="4"
+                />
+                <button
+                  type="button"
+                  onclick="togglePasswordVisibility('password', this)"
+                  class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700"
+                >
+                  <!-- Icon mata -->
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 eye-icon"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Konfirmasi Password -->
+            <div>
+              <label
+                for="confirmPassword"
+                class="block text-gray-700 font-medium mb-2 text-lg"
+              >
+                Konfirmasi Password <span class="text-red-500">*</span>
+              </label>
+              <div class="relative">
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  id="confirmPassword"
+                  placeholder="Masukkan kembali password Anda"
+                  class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-lg pr-10"
+                  required
+                />
+                <button
+                  type="button"
+                  onclick="togglePasswordVisibility('confirmPassword', this)"
+                  class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700"
+                >
+                  <!-- Icon mata -->
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 eye-icon"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- KANAN -->
+          <div class="space-y-6">
+            <!-- No HP -->
+            <div>
+              <label
+                for="phone"
+                class="block text-gray-700 font-medium mb-2 text-lg"
+                >No HP</label
+              >
               <input
                 type="text"
                 name="phone"
                 id="phone"
-                placeholder="81234567890"
-                class="w-full p-3 border border-gray-300 rounded-r-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-lg"
+                placeholder="081234567890"
+                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-lg"
+              />
+            </div>
+
+            <!-- Email -->
+            <div>
+              <label
+                for="email"
+                class="block text-gray-700 font-medium mb-2 text-lg"
+                >Email</label
+              >
+              <input
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Alamat email"
+                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-lg"
+              />
+            </div>
+
+            <!-- Tanggal Lahir -->
+            <div>
+              <label
+                for="dob"
+                class="block text-gray-700 font-medium mb-2 text-lg"
+                >Tanggal Lahir</label
+              >
+              <input
+                type="date"
+                name="dob"
+                id="dob"
+                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-lg"
               />
             </div>
           </div>
 
-          <!-- Email -->
-          <div>
-            <label
-              for="email"
-              class="block text-gray-700 font-medium mb-2 text-lg"
-              >Email</label
+          <!-- Tombol submit full width -->
+          <div class="md:col-span-2">
+            <button
+              type="submit"
+              class="bg-blue-600 text-white w-full py-3 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 ease-in-out font-semibold text-xl"
             >
-            <input
-              type="email"
-              name="email"
-              id="email"
-              placeholder="Alamat email"
-              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-lg"
-            />
+              Daftar Akun
+            </button>
           </div>
-
-          <!-- Tanggal Lahir -->
-          <div>
-            <label
-              for="dob"
-              class="block text-gray-700 font-medium mb-2 text-lg"
-              >Tanggal Lahir</label
-            >
-            <input
-              type="date"
-              name="dob"
-              id="dob"
-              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-lg"
-            />
-          </div>
-
-          <!-- Tombol Daftar -->
-          <button
-            type="submit"
-            class="bg-blue-600 text-white w-full py-3 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 ease-in-out font-semibold text-xl transform hover:scale-100"
-          >
-            Daftar Akun
-          </button>
         </form>
+
         <p class="text-center text-gray-600 text-md mt-6">
           Sudah punya akun?
           <a
@@ -193,6 +253,31 @@
 
     <!-- JS Validasi Konfirmasi Password -->
     <script>
+      function togglePasswordVisibility(inputId, button) {
+        const input = document.getElementById(inputId);
+        const icon = button.querySelector(".eye-icon");
+
+        if (input.type === "password") {
+          input.type = "text";
+          icon.outerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 eye-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.956 9.956 0 012.41-4.362M9.88 9.88a3 3 0 104.24 4.24" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M3 3l18 18" />
+        </svg>`;
+        } else {
+          input.type = "password";
+          icon.outerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 eye-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+        </svg>`;
+        }
+      }
+
       function validateForm() {
         const pw = document.getElementById("password").value;
         const cpw = document.getElementById("confirmPassword").value;

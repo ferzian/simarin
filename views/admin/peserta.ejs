@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Data Peserta Admin SIMARIN</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Favicon -->
+    <link rel="icon" sizes="32x32" type="image/png" href="/images/logo.png" />
+    <link rel="stylesheet" href="/css/admin.css" />
+  </head>
+  <body class="bg-gray-100 flex h-screen">
+    <script>
+      // Pastikan variabel ini dikirim dari route Express Anda
+      // Jika belum, hapus bagian ini saat integrasi backend
+      const user = { username: "Admin Contoh" };
+      const pendingUsers = []; // Asumsi tidak ada pending user untuk halaman ini
+      const pendingParticipants = []; // Asumsi tidak ada pending participant untuk halaman ini
+
+      // Data dummy untuk halaman Data Peserta
+      const participantsData = [
+        {
+          id: 1,
+          name: "Adi Wijaya",
+          gender: "Laki-laki",
+          major: "Teknik Informatika",
+          type: "Magang",
+          institution: "Universitas ABC",
+          startDate: "2024-01-15",
+          endDate: "2024-04-15",
+        },
+        {
+          id: 2,
+          name: "Bunga Lestari",
+          gender: "Perempuan",
+          major: "Biologi Perikanan",
+          type: "Riset",
+          institution: "Universitas XYZ",
+          startDate: "2023-07-01",
+          endDate: "2024-06-30",
+        },
+        {
+          id: 3,
+          name: "Cahya Putra",
+          gender: "Laki-laki",
+          major: "Manajemen Bisnis",
+          type: "PKL",
+          institution: "SMK Maju",
+          startDate: "2024-03-01",
+          endDate: "2024-05-31",
+        },
+        {
+          id: 4,
+          name: "Dewi Sartika",
+          gender: "Perempuan",
+          major: "Agribisnis",
+          type: "Magang",
+          institution: "Institut Pertanian",
+          startDate: "2024-02-10",
+          endDate: "2024-05-10",
+        },
+        {
+          id: 5,
+          name: "Eko Prasetio",
+          gender: "Laki-laki",
+          major: "Teknik Mesin",
+          type: "PKL",
+          institution: "Politeknik Negeri",
+          startDate: "2024-04-01",
+          endDate: "2024-06-30",
+        },
+        {
+          id: 6,
+          name: "Fina Rachma",
+          gender: "Perempuan",
+          major: "Nutrisi Hewan",
+          type: "Riset",
+          institution: "Universitas Gajah Mada",
+          startDate: "2023-10-01",
+          endDate: "2024-09-30",
+        },
+        // Tambahkan lebih banyak data dummy jika diperlukan untuk pengujian tampilan tabel
+      ];
+
+      const visitCount = 0; // Data dummy untuk header, sesuaikan jika Anda punya
+    </script>
+
+    <aside
+      class="sidebar bg-gray-800 text-white w-64 p-5 space-y-6 flex-shrink-0"
+      id="sidebar"
+    >
+      <div class="flex justify-between items-center mb-6 px-2 relative">
+        <h2
+          class="text-2xl font-bold transition-all duration-300"
+          id="sidebarTitle"
+        >
+          SIMARIN
+        </h2>
+        <button
+          id="sidebarTitleButton"
+          class="hidden absolute top-0 left-0 w-full h-full justify-center items-center text-lg font-bold text-white bg-gray-800 rounded-lg"
+        >
+          ADM
+        </button>
+        <button
+          id="sidebarToggle"
+          class="p-1 rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 z-10"
+        >
+          <svg
+            class="w-6 h-6 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
+            ></path>
+          </svg>
+        </button>
+      </div>
+      <nav class="flex-1 space-y-4 text-lg mt-8">
+        <div>
+          <h3 class="uppercase text-gray-500 text-sm mb-2 menu-text-wrapper">
+            Core
+          </h3>
+          <a
+            href="/auth/admin/dashboard"
+            class="menu-item-link text-white hover:text-white"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 menu-icon"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+              />
+            </svg>
+            <span class="menu-text-wrapper">Dashboard</span>
+          </a>
+        </div>
+        <div>
+          <h3
+            class="uppercase text-gray-500 text-sm mt-6 mb-2 menu-text-wrapper"
+          >
+            User Management
+          </h3>
+          <a
+            href="/auth/admin/approval-akun"
+            class="menu-item-link text-white hover:text-white relative"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 menu-icon"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.542 7l-1.479 1.479M12 12a3 3 0 100-6 3 3 0 000 6zm-8.707-3.293a1 1 0 010-1.414L3 7.586m4.707 7.707A7.95 7.95 0 0012 19c-2.28 0-4.42-.876-6.03-2.45m0 0l-1.293-1.293M12 21l-7-7"
+              />
+            </svg>
+            <span class="menu-text-wrapper">Approval Akun</span>
+            <% if (pendingUsers.length > 0) { %>
+            <span
+              class="absolute top-1 right-2 bg-red-500 text-white text-xs font-semibold px-2 py-0.5 rounded-full"
+            >
+              <%= pendingUsers.length %>
+            </span>
+            <% } %>
+          </a>
+
+          <a
+            href="/auth/admin/approval-peserta"
+            class="menu-item-link text-white hover:text-white mt-2"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 menu-icon"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+              />
+            </svg>
+            <span class="menu-text-wrapper">Approval Peserta</span>
+          </a>
+        </div>
+        <div>
+          <h3
+            class="uppercase text-gray-500 text-sm mt-6 mb-2 menu-text-wrapper"
+          >
+            Recap Data
+          </h3>
+          <a
+            href="/auth/admin/peserta"
+            class="menu-item-link text-white hover:text-white relative bg-gray-700"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 menu-icon"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.143M9 16l-2.75 3.5L4 17l.75-1.5L7 14l2 2z"
+              />
+            </svg>
+            <span class="menu-text-wrapper">Data Peserta</span>
+          </a>
+          <a
+            href="/auth/admin/skm"
+            class="menu-item-link text-white hover:text-white mt-2"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 menu-icon"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 17v-2m3 2v-4m3 2v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+            <span class="menu-text-wrapper">Data SKM</span>
+          </a>
+        </div>
+      </nav>
+      <!-- <form action="/auth/logout" method="POST" class="mt-auto px-2 py-4">
+        <button
+          class="menu-item-link text-red-400 hover:bg-red-700 hover:text-white w-full"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 menu-icon"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+            />
+          </svg>
+          <span class="menu-text-wrapper">Logout</span>
+        </button>
+      </form> -->
+    </aside>
+
+    <div class="flex-1 flex flex-col overflow-hidden">
+      <header
+        class="bg-white shadow-md px-6 py-4 flex justify-between items-center border-b border-gray-200"
+      >
+        <div>
+          <h1 class="text-2xl font-bold text-gray-800">Data Peserta</h1>
+          <p class="text-sm text-gray-500">
+            Balai Riset Perikanan Budidaya Air Tawar dan Penyuluhan Perikanan
+          </p>
+        </div>
+
+        <div class="flex items-center gap-6 relative">
+          <% if (pendingUsers.length > 0) { %>
+          <a
+            href="/auth/admin/approval-akun"
+            class="relative p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-7 w-7 text-yellow-600 animate-bounce"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C8.67 6.165 8 7.388 8 8.75v5.408c0 .538-.214 1.055-.595 1.437L6 17h5"
+              />
+            </svg>
+            <span
+              class="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full"
+            >
+              <%= pendingUsers.length %>
+            </span>
+          </a>
+          <% } else { %>
+          <div
+            class="relative p-2 rounded-full text-gray-600 cursor-not-allowed"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-7 w-7"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C8.67 6.165 8 7.388 8 8.75v5.408c0 .538-.214 1.055-.595 1.437L6 17h5"
+              />
+            </svg>
+          </div>
+          <% } %>
+
+          <div class="relative">
+            <button
+              id="dropdownUserButton"
+              class="flex items-center gap-2 text-gray-700 hover:text-gray-900 focus:outline-none p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
+            >
+              <span class="font-semibold text-lg"><%= user.username %> </span>
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                ></path>
+              </svg>
+            </button>
+
+            <div
+              id="dropdownUserMenu"
+              class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 z-50 overflow-hidden"
+            >
+              <div class="px-4 py-3 text-gray-600 text-sm font-medium">
+                Administrator
+              </div>
+              <div class="border-t my-1"></div>
+              <form action="/auth/logout" method="POST">
+                <button
+                  class="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 hover:text-red-700 font-semibold transition duration-150"
+                >
+                  <div class="flex items-center gap-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                      />
+                    </svg>
+                    <span>Logout</span>
+                  </div>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-8">
+        <h2 class="text-3xl font-bold mb-6 text-gray-800">
+          Rekap Data Peserta
+        </h2>
+
+        <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
+          <h3 class="text-xl font-semibold text-gray-700 mb-4">Filter Data</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label
+                for="filterYear"
+                class="block text-gray-700 text-sm font-medium mb-2"
+                >Tahun:</label
+              >
+              <select
+                id="filterYear"
+                class="block w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-800"
+              >
+                <option value="">Semua Tahun</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+              </select>
+            </div>
+            <div>
+              <label
+                for="filterType"
+                class="block text-gray-700 text-sm font-medium mb-2"
+                >Jenis Kegiatan:</label
+              >
+              <select
+                id="filterType"
+                class="block w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-800"
+              >
+                <option value="">Semua Jenis</option>
+                <option value="Magang">Magang</option>
+                <option value="PKL">PKL</option>
+                <option value="Riset">Riset</option>
+              </select>
+            </div>
+            <div class="md:col-span-1 flex items-end">
+              <button
+                id="applyFilterBtn"
+                class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 font-semibold"
+              >
+                Terapkan Filter
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div
+            class="bg-white rounded-xl shadow-lg p-6 text-center border-b-4 border-sky-500"
+          >
+            <h3 class="text-lg font-semibold text-gray-700 mb-2">
+              Total Peserta
+            </h3>
+            <p class="text-4xl font-bold text-sky-600" id="totalParticipants">
+              0
+            </p>
+          </div>
+          <div
+            class="bg-white rounded-xl shadow-lg p-6 text-center border-b-4 border-yellow-500"
+          >
+            <h3 class="text-lg font-semibold text-gray-700 mb-2">
+              Rata-rata Durasi
+            </h3>
+            <p class="text-4xl font-bold text-yellow-600" id="avgDuration">
+              0 hari
+            </p>
+          </div>
+          <div
+            class="bg-white rounded-xl shadow-lg p-6 text-center border-b-4 border-pink-500"
+          >
+            <h3 class="text-lg font-semibold text-gray-700 mb-2">
+              Paling Populer
+            </h3>
+            <p class="text-2xl font-bold text-pink-600" id="mostPopularType">
+              N/A
+            </p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <div class="bg-white p-6 rounded-xl shadow-lg">
+            <h3 class="text-xl font-semibold text-gray-700 mb-4">
+              Distribusi Jenis Kelamin
+            </h3>
+            <canvas id="genderChart"></canvas>
+          </div>
+          <div class="bg-white p-6 rounded-xl shadow-lg">
+            <h3 class="text-xl font-semibold text-gray-700 mb-4">
+              Distribusi Jenis Kegiatan
+            </h3>
+            <canvas id="activityTypeChart"></canvas>
+          </div>
+          <div class="bg-white p-6 rounded-xl shadow-lg lg:col-span-2">
+            <h3 class="text-xl font-semibold text-gray-700 mb-4">
+              Distribusi Jurusan Populer
+            </h3>
+            <canvas id="majorChart"></canvas>
+          </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-lg">
+          <h3 class="text-xl font-semibold text-gray-700 mb-4">
+            Daftar Lengkap Peserta
+          </h3>
+          <div
+            class="mb-4 flex flex-col sm:flex-row justify-between items-center gap-4"
+          >
+            <input
+              type="text"
+              id="searchTable"
+              placeholder="Cari nama, institusi, atau jenis kegiatan..."
+              class="w-full sm:w-2/3 p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-800"
+            />
+            <button
+              id="downloadTableDataBtn"
+              class="w-full sm:w-auto bg-green-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-green-700 transition duration-300 font-semibold flex items-center justify-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                />
+              </svg>
+              Download Excel
+            </button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr class="table-header">
+                  <th>Nama</th>
+                  <th>Jenis Kelamin</th>
+                  <th>Jurusan</th>
+                  <th>Jenis Kegiatan</th>
+                  <th>Asal Instansi</th>
+                  <th>Periode</th>
+                </tr>
+              </thead>
+              <tbody
+                class="bg-white divide-y divide-gray-200"
+                id="participantsTableBody"
+              ></tbody>
+            </table>
+          </div>
+          <div class="mt-4 flex justify-between items-center">
+            <button
+              id="prevPageBtn"
+              class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 disabled:opacity-50"
+              disabled
+            >
+              Sebelumnya
+            </button>
+            <span class="text-gray-700"
+              >Halaman <span id="currentPage">1</span> dari
+              <span id="totalPages">1</span></span
+            >
+            <button
+              id="nextPageBtn"
+              class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 disabled:opacity-50"
+              disabled
+            >
+              Berikutnya
+            </button>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      // Sidebar & Dropdown (dari kode sebelumnya, tetap konsisten)
+      const userBtn = document.getElementById("dropdownUserButton");
+      const userMenu = document.getElementById("dropdownUserMenu");
+
+      userBtn.addEventListener("click", () => {
+        userMenu.classList.toggle("hidden");
+      });
+
+      window.addEventListener("click", function (e) {
+        if (!userBtn.contains(e.target) && !userMenu.contains(e.target)) {
+          userMenu.classList.add("hidden");
+        }
+      });
+
+      const sidebar = document.getElementById("sidebar");
+      const sidebarToggle = document.getElementById("sidebarToggle");
+      const sidebarTitle = document.getElementById("sidebarTitle");
+      const sidebarTitleButton = document.getElementById("sidebarTitleButton");
+      const menuTextWrappers = document.querySelectorAll(".menu-text-wrapper");
+
+      sidebarToggle.addEventListener("click", () => {
+        toggleSidebar();
+      });
+
+      sidebarTitleButton.addEventListener("click", () => {
+        if (sidebar.classList.contains("w-20")) {
+          toggleSidebar();
+        }
+      });
+
+      function toggleSidebar() {
+        sidebar.classList.toggle("w-64");
+        sidebar.classList.toggle("w-20");
+
+        menuTextWrappers.forEach((el) => {
+          el.classList.toggle("hidden-text");
+          el.style.width = sidebar.classList.contains("w-20") ? "0px" : "auto";
+        });
+
+        const isMinimized = sidebar.classList.contains("w-20");
+
+        // Sembunyikan judul sidebar dan tombol toggle saat diminimize
+        sidebarTitle.classList.toggle("hidden", isMinimized);
+        sidebarTitleButton.classList.toggle("hidden", !isMinimized);
+        sidebarToggle.classList.toggle("hidden", isMinimized); // 🔥 ini bikin tombol << hilang pas sidebar ditutup
+
+        sidebar.querySelectorAll(".menu-item-link").forEach((item) => {
+          item.classList.toggle("justify-center", isMinimized);
+        });
+      }
+
+      // --- Logika untuk Halaman Data Peserta ---
+
+      // Data dummy (akan diambil dari `participantsData` global)
+      let currentParticipants = participantsData; // Gunakan data dummy global
+      let filteredParticipants = [];
+      let currentPage = 1;
+      const rowsPerPage = 5; // Jumlah baris per halaman
+
+      const totalParticipantsEl = document.getElementById("totalParticipants");
+      const avgDurationEl = document.getElementById("avgDuration");
+      const mostPopularTypeEl = document.getElementById("mostPopularType");
+      const genderChartCtx = document
+        .getElementById("genderChart")
+        .getContext("2d");
+      const activityTypeChartCtx = document
+        .getElementById("activityTypeChart")
+        .getContext("2d");
+      const majorChartCtx = document
+        .getElementById("majorChart")
+        .getContext("2d");
+      const participantsTableBody = document.getElementById(
+        "participantsTableBody"
+      );
+      const filterYearSelect = document.getElementById("filterYear");
+      const filterTypeSelect = document.getElementById("filterType");
+      const applyFilterBtn = document.getElementById("applyFilterBtn");
+      const searchTableInput = document.getElementById("searchTable");
+      const prevPageBtn = document.getElementById("prevPageBtn");
+      const nextPageBtn = document.getElementById("nextPageBtn");
+      const currentPageSpan = document.getElementById("currentPage");
+      const totalPagesSpan = document.getElementById("totalPages");
+
+      let genderChart;
+      let activityTypeChart;
+      let majorChart;
+
+      // Fungsi untuk menghitung statistik dan update kartu ringkasan
+      function updateSummaryCards(data) {
+        totalParticipantsEl.textContent = data.length;
+
+        if (data.length === 0) {
+          avgDurationEl.textContent = "0 hari";
+          mostPopularTypeEl.textContent = "N/A";
+          return;
+        }
+
+        // Hitung rata-rata durasi (ini membutuhkan data tanggal yang lebih akurat, ini hanya contoh)
+        let totalDurationDays = 0;
+        data.forEach((p) => {
+          const start = new Date(p.startDate);
+          const end = new Date(p.endDate);
+          if (!isNaN(start) && !isNaN(end)) {
+            totalDurationDays += (end - start) / (1000 * 60 * 60 * 24);
+          }
+        });
+        avgDurationEl.textContent = `${Math.round(
+          totalDurationDays / data.length
+        )} hari`;
+
+        // Hitung jenis kegiatan paling populer
+        const typeCounts = {};
+        data.forEach((p) => {
+          typeCounts[p.type] = (typeCounts[p.type] || 0) + 1;
+        });
+        const mostPopular = Object.keys(typeCounts).reduce(
+          (a, b) => (typeCounts[a] > typeCounts[b] ? a : b),
+          Object.keys(typeCounts)[0]
+        );
+        mostPopularTypeEl.textContent = mostPopular || "N/A";
+      }
+
+      // Fungsi untuk memperbarui grafik
+      function updateCharts(data) {
+        // Data untuk Jenis Kelamin
+        const genderCounts = { "Laki-laki": 0, Perempuan: 0 };
+        data.forEach((p) => {
+          if (p.gender === "Laki-laki") genderCounts["Laki-laki"]++;
+          else if (p.gender === "Perempuan") genderCounts["Perempuan"]++;
+        });
+
+        if (genderChart) genderChart.destroy();
+        genderChart = new Chart(genderChartCtx, {
+          type: "pie",
+          data: {
+            labels: Object.keys(genderCounts),
+            datasets: [
+              {
+                data: Object.values(genderCounts),
+                backgroundColor: ["#6366F1", "#EC4899"], // Indigo, Pink
+                hoverOffset: 4,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: "top",
+              },
+              title: {
+                display: false,
+                text: "Distribusi Jenis Kelamin",
+              },
+            },
+          },
+        });
+
+        // Data untuk Jenis Kegiatan
+        const activityTypeCounts = {};
+        data.forEach((p) => {
+          activityTypeCounts[p.type] = (activityTypeCounts[p.type] || 0) + 1;
+        });
+
+        if (activityTypeChart) activityTypeChart.destroy();
+        activityTypeChart = new Chart(activityTypeChartCtx, {
+          type: "bar",
+          data: {
+            labels: Object.keys(activityTypeCounts),
+            datasets: [
+              {
+                label: "Jumlah Peserta",
+                data: Object.values(activityTypeCounts),
+                backgroundColor: ["#22C55E", "#3B82F6", "#A855F7"], // Green, Blue, Purple
+                borderColor: ["#16A34A", "#2563EB", "#9333EA"],
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                display: false,
+              },
+              title: {
+                display: false,
+                text: "Distribusi Jenis Kegiatan",
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  stepSize: 1,
+                },
+              },
+            },
+          },
+        });
+
+        // Data untuk Jurusan Populer (Bar Chart Horizontal)
+        const majorCounts = {};
+        data.forEach((p) => {
+          majorCounts[p.major] = (majorCounts[p.major] || 0) + 1;
+        });
+        const sortedMajors = Object.entries(majorCounts)
+          .sort(([, a], [, b]) => b - a)
+          .slice(0, 5); // Ambil 5 teratas
+
+        if (majorChart) majorChart.destroy();
+        majorChart = new Chart(majorChartCtx, {
+          type: "bar",
+          data: {
+            labels: sortedMajors.map((item) => item[0]),
+            datasets: [
+              {
+                label: "Jumlah Peserta",
+                data: sortedMajors.map((item) => item[1]),
+                backgroundColor: "#F97316", // Orange
+                borderColor: "#EA580C",
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            indexAxis: "y", // Membuat bar horizontal
+            responsive: true,
+            plugins: {
+              legend: {
+                display: false,
+              },
+              title: {
+                display: false,
+                text: "Distribusi Jurusan Populer",
+              },
+            },
+            scales: {
+              x: {
+                beginAtZero: true,
+                ticks: {
+                  stepSize: 1,
+                },
+              },
+            },
+          },
+        });
+      }
+
+      // Fungsi untuk merender tabel peserta
+      function renderTable(data, page) {
+        participantsTableBody.innerHTML = "";
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        const paginatedData = data.slice(start, end);
+
+        paginatedData.forEach((p) => {
+          const row = document.createElement("tr");
+          row.className = "table-row";
+          row.innerHTML = `
+            <td>${p.name}</td>
+            <td>${p.gender}</td>
+            <td>${p.major}</td>
+            <td>${p.type}</td>
+            <td>${p.institution}</td>
+            <td>${p.startDate} - ${p.endDate}</td>
+          `;
+          participantsTableBody.appendChild(row);
+        });
+
+        currentPageSpan.textContent = page;
+        totalPagesSpan.textContent = Math.ceil(data.length / rowsPerPage);
+
+        prevPageBtn.disabled = page === 1;
+        nextPageBtn.disabled = page === Math.ceil(data.length / rowsPerPage);
+      }
+
+      // Fungsi utama untuk inisialisasi dan update UI
+      function updateUI(data) {
+        filteredParticipants = data; // Set data awal atau data setelah filter
+        updateSummaryCards(filteredParticipants);
+        updateCharts(filteredParticipants);
+        currentPage = 1; // Reset halaman ke 1 setiap kali data berubah
+        renderTable(filteredParticipants, currentPage);
+      }
+
+      // Event Listeners
+      applyFilterBtn.addEventListener("click", () => {
+        const year = filterYearSelect.value;
+        const type = filterTypeSelect.value;
+
+        let tempData = participantsData;
+
+        if (year) {
+          tempData = tempData.filter((p) => p.startDate.startsWith(year)); // Filter berdasarkan tahun mulai
+        }
+        if (type) {
+          tempData = tempData.filter((p) => p.type === type);
+        }
+        updateUI(tempData);
+      });
+
+      searchTableInput.addEventListener("keyup", () => {
+        const searchTerm = searchTableInput.value.toLowerCase();
+        const searchResults = filteredParticipants.filter(
+          (p) =>
+            p.name.toLowerCase().includes(searchTerm) ||
+            p.institution.toLowerCase().includes(searchTerm) ||
+            p.type.toLowerCase().includes(searchTerm)
+        );
+        currentPage = 1; // Reset halaman saat pencarian
+        renderTable(searchResults, currentPage);
+        // Perluas logika ini untuk grafik juga jika diinginkan
+        updateCharts(searchResults); // Perbarui grafik dengan hasil pencarian
+      });
+
+      prevPageBtn.addEventListener("click", () => {
+        if (currentPage > 1) {
+          currentPage--;
+          renderTable(filteredParticipants, currentPage);
+        }
+      });
+
+      nextPageBtn.addEventListener("click", () => {
+        if (
+          currentPage < Math.ceil(filteredParticipants.length / rowsPerPage)
+        ) {
+          currentPage++;
+          renderTable(filteredParticipants, currentPage);
+        }
+      });
+
+      document
+        .getElementById("downloadTableDataBtn")
+        .addEventListener("click", () => {
+          const headers = [
+            "Nama",
+            "Jenis Kelamin",
+            "Jurusan",
+            "Jenis Kegiatan",
+            "Asal Instansi",
+            "Periode Mulai",
+            "Periode Selesai",
+          ];
+          const rows = filteredParticipants.map((p) => [
+            p.name,
+            p.gender,
+            p.major,
+            p.type,
+            p.institution,
+            p.startDate,
+            p.endDate,
+          ]);
+
+          let csvContent = headers.join(",") + "\n";
+          rows.forEach((row) => {
+            csvContent += row.map((e) => `"${e}"`).join(",") + "\n"; // Kutip nilai untuk menghindari masalah koma
+          });
+
+          const blob = new Blob([csvContent], {
+            type: "text/csv;charset=utf-8;",
+          });
+          const link = document.createElement("a");
+          if (link.download !== undefined) {
+            // Feature detection
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", "data_peserta_simarin.csv");
+            link.style.visibility = "hidden";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          }
+        });
+
+      // Inisialisasi awal UI saat halaman dimuat
+      window.onload = () => {
+        updateUI(participantsData); // Muat data peserta awal
+      };
+    </script>
+  </body>
+</html>
