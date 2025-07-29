@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-<<<<<<< HEAD
-const { User } = require('../models'); // 
-=======
+// <<<<<<< HEAD
 const { User } = require('../models');
->>>>>>> 701409f4f82f10fbad6ffdac85f4631db32721c3
+// =======
+// const { User } = require('../models');
+// >>>>>>> 701409f4f82f10fbad6ffdac85f4631db32721c3
 const { isAuthenticated, isAdmin } = require('../middleware/authMiddleware');
 
 // Approval Akun
