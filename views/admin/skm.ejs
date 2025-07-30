@@ -11,6 +11,7 @@
     <!-- Favicon -->
     <link rel="icon" sizes="32x32" type="image/png" href="/images/logo.png" />
     <link rel="stylesheet" href="/css/admin.css" />
+    <script src="/js/admin.js" defer></script>
   </head>
   <body class="bg-gray-100 flex h-screen">
     <script>
@@ -518,57 +519,6 @@
     </div>
 
     <script>
-      // Sidebar & Dropdown (dari kode sebelumnya, tetap konsisten)
-      const userBtn = document.getElementById("dropdownUserButton");
-      const userMenu = document.getElementById("dropdownUserMenu");
-
-      userBtn.addEventListener("click", () => {
-        userMenu.classList.toggle("hidden");
-      });
-
-      window.addEventListener("click", function (e) {
-        if (!userBtn.contains(e.target) && !userMenu.contains(e.target)) {
-          userMenu.classList.add("hidden");
-        }
-      });
-
-      const sidebar = document.getElementById("sidebar");
-      const sidebarToggle = document.getElementById("sidebarToggle");
-      const sidebarTitle = document.getElementById("sidebarTitle");
-      const sidebarTitleButton = document.getElementById("sidebarTitleButton");
-      const menuTextWrappers = document.querySelectorAll(".menu-text-wrapper");
-
-      sidebarToggle.addEventListener("click", () => {
-        toggleSidebar();
-      });
-
-      sidebarTitleButton.addEventListener("click", () => {
-        if (sidebar.classList.contains("w-20")) {
-          toggleSidebar();
-        }
-      });
-
-      function toggleSidebar() {
-        sidebar.classList.toggle("w-64");
-        sidebar.classList.toggle("w-20");
-
-        menuTextWrappers.forEach((el) => {
-          el.classList.toggle("hidden-text");
-          el.style.width = sidebar.classList.contains("w-20") ? "0px" : "auto";
-        });
-
-        const isMinimized = sidebar.classList.contains("w-20");
-
-        // Sembunyikan judul sidebar dan tombol toggle saat diminimize
-        sidebarTitle.classList.toggle("hidden", isMinimized);
-        sidebarTitleButton.classList.toggle("hidden", !isMinimized);
-        sidebarToggle.classList.toggle("hidden", isMinimized); // 🔥 ini bikin tombol << hilang pas sidebar ditutup
-
-        sidebar.querySelectorAll(".menu-item-link").forEach((item) => {
-          item.classList.toggle("justify-center", isMinimized);
-        });
-      }
-
       // --- Logika untuk Halaman SKM ---
 
       // Data dummy (akan diambil dari `skmData` global)
