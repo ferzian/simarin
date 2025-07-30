@@ -141,38 +141,38 @@ router.get('/user/skm', (req, res) => {
 });
 
 // Approve akun
-router.post('/admin/approve-akun/:id', isAuthenticated, isAdmin, async (req, res) => {
-  try {
-    const user = await User.findByPk(req.params.id);
-    if (!user) return res.status(404).send('User tidak ditemukan');
+// router.post('/admin/approve-akun/:id', isAuthenticated, isAdmin, async (req, res) => {
+//   try {
+//     const user = await User.findByPk(req.params.id);
+//     if (!user) return res.status(404).send('User tidak ditemukan');
 
-    user.approved = true;
-    await user.save();
+//     user.approved = true;
+//     await user.save();
 
-    await sendApprovalEmail(user);
+//     await sendApprovalEmail(user);
 
-    res.redirect('/auth/admin/approval-akun?status=approved');
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Gagal menyetujui akun');
-  }
-});
+//     res.redirect('/auth/admin/approval-akun?status=approved');
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).send('Gagal menyetujui akun');
+//   }
+// });
 
 // Reject akun (opsional, kalau kamu punya fitur tolak)
-router.post('/admin/reject-akun/:id', isAuthenticated, isAdmin, async (req, res) => {
-  try {
-    const user = await User.findByPk(req.params.id);
-    if (!user) return res.status(404).send('User tidak ditemukan');
+// router.post('/admin/reject-akun/:id', isAuthenticated, isAdmin, async (req, res) => {
+//   try {
+//     const user = await User.findByPk(req.params.id);
+//     if (!user) return res.status(404).send('User tidak ditemukan');
 
-    await sendRejectionEmail(user);
+//     await sendRejectionEmail(user);
 
-    await user.destroy();
-    res.redirect('/auth/admin/approval-akun?status=rejected');
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Gagal menolak akun');
-  }
-});
+//     await user.destroy();
+//     res.redirect('/auth/admin/approval-akun?status=rejected');
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).send('Gagal menolak akun');
+//   }
+// });
 
 
 // Logout
