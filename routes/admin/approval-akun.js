@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { User, Participant } = require('../../models');
 const { isAuthenticated, isAdmin } = require('../../middleware/authMiddleware');
+// const { sendApprovalEmail, sendRejectionEmail } = require('../../utils/sendEmail');
 
 router.get('/approval-akun', isAuthenticated, isAdmin, async (req, res) => {
   try {
@@ -21,5 +22,7 @@ router.get('/approval-akun', isAuthenticated, isAdmin, async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
+
 
 module.exports = router;

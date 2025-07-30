@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const { User, Participant } = require('../models');
+const { User } = require('../models');
+const sendAdminNotification = require('../utils/sendAdminNotification');
 const { isAuthenticated, isAdmin } = require('../middleware/authMiddleware');
+const { sendApprovalEmail, sendRejectionEmail } = require('../utils/sendEmail');
 
 // GET Login
 router.get('/login', (req, res) => {
@@ -45,6 +47,7 @@ router.get('/register', (req, res) => {
 
 
 // POST Register
+// POST Register
 router.post('/register', async (req, res) => {
   const {
     username,
@@ -67,8 +70,8 @@ router.post('/register', async (req, res) => {
       return res.render('register', { error: 'Username sudah digunakan.' });
     }
 
-    // Simpan data baru
-    await User.create({
+    // Simpan user baru
+    const newUser = await User.create({
       username,
       password,
       email,
@@ -79,12 +82,16 @@ router.post('/register', async (req, res) => {
       approved: false,
     });
 
+    // Kirim notifikasi ke admin
+    await sendAdminNotification(newUser);
+
     res.redirect('/?registered=success');
   } catch (err) {
     console.error(err);
     res.render('register', { error: 'Terjadi kesalahan saat register.' });
   }
 });
+
 
 
 // GET User Dashboard
@@ -133,24 +140,40 @@ router.get('/user/skm', (req, res) => {
   });
 });
 
+// Approve akun
+router.post('/admin/approve-akun/:id', isAuthenticated, isAdmin, async (req, res) => {
+  try {
+    const user = await User.findByPk(req.params.id);
+    if (!user) return res.status(404).send('User tidak ditemukan');
 
-// Proses approval user
-router.post('/admin/approve/:id', async (req, res) => {
-  const { id } = req.params;
+    user.approved = true;
+    await user.save();
 
-  await User.update({ approved: true }, { where: { id } });
+    await sendApprovalEmail(user); // kirim email notif
 
-  res.redirect('/auth/admin/dashboard');
+    res.redirect('/auth/admin/approval-akun?status=approved');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Gagal menyetujui akun');
+  }
 });
 
-// Tolak user
-router.post('/admin/reject/:id', async (req, res) => {
-  const { id } = req.params;
+// Reject akun (opsional, kalau kamu punya fitur tolak)
+router.post('/admin/reject-akun/:id', isAuthenticated, isAdmin, async (req, res) => {
+  try {
+    const user = await User.findByPk(req.params.id);
+    if (!user) return res.status(404).send('User tidak ditemukan');
 
-  await User.destroy({ where: { id } });
+    await sendRejectionEmail(user); // kirim email notif
 
-  res.redirect('/auth/admin/dashboard?msg=reject');
+    await user.destroy(); // atau tandai status akun = rejected
+    res.redirect('/auth/admin/approval-akun?status=rejected');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Gagal menolak akun');
+  }
 });
+
 
 // Logout
 router.post('/logout', (req, res) => {
