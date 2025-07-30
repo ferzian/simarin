@@ -149,7 +149,7 @@ router.post('/admin/approve-akun/:id', isAuthenticated, isAdmin, async (req, res
     user.approved = true;
     await user.save();
 
-    await sendApprovalEmail(user); // kirim email notif
+    await sendApprovalEmail(user);
 
     res.redirect('/auth/admin/approval-akun?status=approved');
   } catch (err) {
@@ -164,9 +164,9 @@ router.post('/admin/reject-akun/:id', isAuthenticated, isAdmin, async (req, res)
     const user = await User.findByPk(req.params.id);
     if (!user) return res.status(404).send('User tidak ditemukan');
 
-    await sendRejectionEmail(user); // kirim email notif
+    await sendRejectionEmail(user);
 
-    await user.destroy(); // atau tandai status akun = rejected
+    await user.destroy();
     res.redirect('/auth/admin/approval-akun?status=rejected');
   } catch (err) {
     console.error(err);
