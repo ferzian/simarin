@@ -1,63 +1,49 @@
 const express = require('express');
 const router = express.Router();
-// <<<<<<< HEAD
-const { User } = require('../models');
-// =======
-// const { User } = require('../models');
-// >>>>>>> 701409f4f82f10fbad6ffdac85f4631db32721c3
+const { User, Participant } = require('../models');
 const { isAuthenticated, isAdmin } = require('../middleware/authMiddleware');
 
 // Approval Akun
 router.get('/admin/approval-akun', isAuthenticated, isAdmin, async (req, res) => {
-  const pendingUsers = await User.findAll({
-    where: { role: 'user', approved: false },
-  });
-  res.render('admin/approval-akun', { pendingUsers });
+  try {
+    const pendingUsers = await User.findAll({
+      where: { role: 'user', approved: false },
+    });
+
+    const pendingParticipants = await Participant.findAll({
+      where: { statusSelesai: false },
+      include: [{ model: User }]
+    });
+
+    res.render('admin/approval-akun', {
+      pendingUsers,
+      pendingParticipants
+    });
+  } catch (err) {
+    console.error('❌ Gagal ambil data approval akun:', err);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
-// Approval Peserta
+
 router.get('/admin/approval-peserta', isAuthenticated, isAdmin, async (req, res) => {
-  // const pendingUsers = await User.findAll({
-  //   where: { role: 'user', approved: false },
-  // });
-  // Data dummy untuk pengembangan UI
-  // Hapus atau ganti ini dengan data dari database Anda nanti
-  const pendingParticipants = [
-    {
-      id: 1,
-      name: "Budi Santoso",
-      institution: "Universitas ABC",
-      applicationType: "Magang",
-      startDate: "2025-08-01",
-      endDate: "2025-11-30",
-      letterUrl: "#",
-      photoUrl: "#",
-      transcriptUrl: "#",
-    },
-    {
-      id: 2,
-      name: "Siti Aminah",
-      institution: "SMK Negeri 1 Jakarta",
-      applicationType: "PKL",
-      startDate: "2025-09-10",
-      endDate: "2025-12-10",
-      letterUrl: "#",
-      photoUrl: "#",
-      transcriptUrl: "#",
-    },
-  ];
+  try {
+    const pendingParticipants = await Participant.findAll({
+      where: {
+        statusSelesai: false
+      },
+      include: [{ model: User }]
+    });
 
-  // Pastikan user juga dikirim, karena UI Anda menggunakannya
-  const user = { username: 'admin' }; // Data dummy user, sesuaikan jika Anda sudah punya dari sesi login
-
-  // Jika Anda juga memiliki pendingUsers untuk notifikasi di header, kirimkan juga
-  const pendingUsers = []; // Data dummy untuk pendingUsers
-
-  res.render('admin/approval-peserta', {
-    pendingParticipants: pendingParticipants,
-    user: user, // Pastikan user dikirim
-    pendingUsers: pendingUsers // Pastikan pendingUsers dikirim
-  });
+    res.render('admin/approval-peserta', {
+      pendingParticipants,
+      user: req.session.user,
+      pendingUsers: [] // bisa pakai jika ada notifikasi lain
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Gagal mengambil data peserta');
+  }
 });
 
 // Peserta

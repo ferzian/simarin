@@ -13,36 +13,6 @@
     <script src="/js/admin.js" defer></script>
   </head>
   <body class="bg-gray-100 flex h-screen">
-    <script>
-      const pendingParticipants = [
-        // Anda bisa menambahkan data dummy di sini jika ingin melihat tampilan kartu
-        // Contoh data dummy (hapus ini saat backend siap):
-        {
-          id: 1,
-          name: "Budi Santoso",
-          institution: "Universitas ABC",
-          applicationType: "Magang",
-          startDate: "2025-08-01",
-          endDate: "2025-11-30",
-          letterUrl: "#",
-          photoUrl: "#",
-          transcriptUrl: "#",
-        },
-        {
-          id: 2,
-          name: "Siti Aminah",
-          institution: "SMK Negeri 1 Jakarta",
-          applicationType: "PKL",
-          startDate: "2025-09-10",
-          endDate: "2025-12-10",
-          letterUrl: "#",
-          photoUrl: "#",
-          transcriptUrl: "#",
-        },
-      ];
-      // Pastikan pendingUsers juga didefinisikan jika halaman ini membutuhkannya
-      const pendingUsers = []; // Asumsi tidak ada pending user untuk halaman ini, sesuaikan jika perlu
-    </script>
     <aside
       class="sidebar bg-gray-800 text-white w-64 p-5 space-y-6 flex-shrink-0"
       id="sidebar"
@@ -142,7 +112,7 @@
 
           <a
             href="/auth/admin/approval-peserta"
-            class="menu-item-link text-white hover:text-white mt-2 bg-gray-700"
+            class="menu-item-link text-white hover:text-white mt-2 relative"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -159,6 +129,13 @@
               />
             </svg>
             <span class="menu-text-wrapper">Approval Peserta</span>
+            <% if (pendingParticipants.length > 0) { %>
+            <span
+              class="absolute top-1 right-2 bg-red-500 text-white text-xs font-semibold px-2 py-0.5 rounded-full"
+            >
+              <%= pendingParticipants.length %>
+            </span>
+            <% } %>
           </a>
         </div>
         <div>
