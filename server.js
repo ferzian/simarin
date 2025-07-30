@@ -50,7 +50,11 @@ app.use(async (req, res, next) => {
 });
 app.use('/auth', authRoutes);
 app.use('/auth/admin', require('./routes/admin/dashboard'));
-app.use('/auth/admin', require('./routes/admin/download-visitors'));
+app.use('/auth/admin', require('./routes/admin/approval-akun'));
+app.use('/auth/admin', require('./routes/admin/approval-peserta'));
+app.use('/auth/admin', require('./routes/admin/peserta'));
+app.use('/auth/admin', require('./routes/admin/skm'));
+app.use('/auth/admin', require('./routes/admin/download-rekap'));
 
 // Sync DB and start server
 sequelize.sync({ alter: true }).then(async () => {
