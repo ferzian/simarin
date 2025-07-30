@@ -28,6 +28,10 @@ router.get('/admin/approval-akun', isAuthenticated, isAdmin, async (req, res) =>
 
 router.get('/admin/approval-peserta', isAuthenticated, isAdmin, async (req, res) => {
   try {
+    const pendingUsers = await User.findAll({
+      where: { role: 'user', approved: false },
+    });
+
     const pendingParticipants = await Participant.findAll({
       where: {
         statusSelesai: false
@@ -38,7 +42,7 @@ router.get('/admin/approval-peserta', isAuthenticated, isAdmin, async (req, res)
     res.render('admin/approval-peserta', {
       pendingParticipants,
       user: req.session.user,
-      pendingUsers: [] // bisa pakai jika ada notifikasi lain
+      pendingUsers
     });
   } catch (err) {
     console.error(err);
@@ -48,18 +52,44 @@ router.get('/admin/approval-peserta', isAuthenticated, isAdmin, async (req, res)
 
 // Peserta
 router.get('/admin/peserta', isAuthenticated, isAdmin, async (req, res) => {
-  const pendingUsers = await User.findAll({
-    where: { role: 'user', approved: false },
-  });
-  res.render('admin/peserta', { pendingUsers });
+  try {
+    const pendingUsers = await User.findAll({
+      where: { role: 'user', approved: false },
+    });
+
+    const pendingParticipants = await Participant.findAll({
+      where: { statusSelesai: false },
+      include: [{ model: User }]
+    });
+    res.render('admin/peserta', {
+      pendingUsers,
+      pendingParticipants
+    });
+  } catch (err) {
+    console.error('❌ Gagal ambil data approval akun:', err);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
 // SKM
 router.get('/admin/skm', isAuthenticated, isAdmin, async (req, res) => {
-  const pendingUsers = await User.findAll({
-    where: { role: 'user', approved: false },
-  });
-  res.render('admin/skm', { pendingUsers });
+  try {
+    const pendingUsers = await User.findAll({
+      where: { role: 'user', approved: false },
+    });
+
+    const pendingParticipants = await Participant.findAll({
+      where: { statusSelesai: false },
+      include: [{ model: User }]
+    });
+    res.render('admin/skm', {
+      pendingUsers,
+      pendingParticipants
+    });
+  } catch (err) {
+    console.error('❌ Gagal ambil data approval akun:', err);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
 
