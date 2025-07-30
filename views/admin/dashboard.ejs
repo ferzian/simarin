@@ -24,7 +24,10 @@
         >
           SIMARIN
         </h2>
-        <button id="sidebarTitleButton" class="hidden absolute top-0 left-0 w-full h-full justify-center items-center text-lg font-bold text-white bg-gray-800 rounded-lg">
+        <button
+          id="sidebarTitleButton"
+          class="hidden absolute top-0 left-0 w-full h-full justify-center items-center text-lg font-bold text-white bg-gray-800 rounded-lg"
+        >
           ADM
         </button>
         <button
@@ -296,7 +299,7 @@
 
       <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-8">
         <div
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-full"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-full"
         >
           <div
             class="bg-white rounded-xl shadow-lg p-7 flex items-center justify-between transform transition-all duration-300 hover:scale-105 hover:shadow-xl border-l-4 border-green-500"
@@ -336,7 +339,8 @@
                 Peserta Aktif (Saat Ini)
               </h2>
               <p class="text-4xl font-bold text-blue-600">
-                120 <span class="text-2xl font-normal">orang</span>
+                <%= aktifCount %>
+                <span class="text-2xl font-normal">orang</span>
               </p>
             </div>
             <div class="text-blue-500">
