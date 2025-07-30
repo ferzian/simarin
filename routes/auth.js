@@ -2,8 +2,6 @@ const express = require('express');
 const router = express.Router();
 const { User } = require('../models');
 const sendAdminNotification = require('../utils/sendAdminNotification');
-const { isAuthenticated, isAdmin } = require('../middleware/authMiddleware');
-const { sendApprovalEmail, sendRejectionEmail } = require('../utils/sendEmail');
 
 // GET Login
 router.get('/login', (req, res) => {
@@ -139,41 +137,6 @@ router.get('/user/skm', (req, res) => {
     username: req.session.user.username
   });
 });
-
-// Approve akun
-// router.post('/admin/approve-akun/:id', isAuthenticated, isAdmin, async (req, res) => {
-//   try {
-//     const user = await User.findByPk(req.params.id);
-//     if (!user) return res.status(404).send('User tidak ditemukan');
-
-//     user.approved = true;
-//     await user.save();
-
-//     await sendApprovalEmail(user);
-
-//     res.redirect('/auth/admin/approval-akun?status=approved');
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send('Gagal menyetujui akun');
-//   }
-// });
-
-// Reject akun (opsional, kalau kamu punya fitur tolak)
-// router.post('/admin/reject-akun/:id', isAuthenticated, isAdmin, async (req, res) => {
-//   try {
-//     const user = await User.findByPk(req.params.id);
-//     if (!user) return res.status(404).send('User tidak ditemukan');
-
-//     await sendRejectionEmail(user);
-
-//     await user.destroy();
-//     res.redirect('/auth/admin/approval-akun?status=rejected');
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send('Gagal menolak akun');
-//   }
-// });
-
 
 // Logout
 router.post('/logout', (req, res) => {
