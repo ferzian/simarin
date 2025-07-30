@@ -79,7 +79,7 @@ router.post('/register', async (req, res) => {
       approved: false,
     });
 
-    res.redirect('/');
+    res.redirect('/?registered=success');
   } catch (err) {
     console.error(err);
     res.render('register', { error: 'Terjadi kesalahan saat register.' });
