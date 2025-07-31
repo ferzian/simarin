@@ -13,12 +13,15 @@ router.get('/skm', isAuthenticated, isAdmin, async (req, res) => {
             where: { statusSelesai: false },
             include: [{ model: User }]
         });
+
+        const surveys = await Survey.findAll();
         res.render('admin/skm', {
             pendingUsers,
-            pendingParticipants
+            pendingParticipants,
+            skmData: JSON.stringify(surveys),
         });
     } catch (err) {
-        console.error('❌ Gagal ambil data approval akun:', err);
+        console.error('❌ Gagal ambil data SKM:', err);
         res.status(500).send('Internal Server Error');
     }
 });

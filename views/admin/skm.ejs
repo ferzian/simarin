@@ -12,66 +12,11 @@
     <link rel="icon" sizes="32x32" type="image/png" href="/images/logo.png" />
     <link rel="stylesheet" href="/css/admin.css" />
     <script src="/js/admin/index.js" defer></script>
+    <script src="/js/admin/skm.js" defer></script>
   </head>
   <body class="bg-gray-100 flex h-screen">
     <script>
-      // Pastikan variabel ini dikirim dari route Express Anda
-      const user = { username: "Admin Contoh" };
-      const pendingUsers = []; // Asumsi tidak ada pending user untuk halaman ini
-      const pendingParticipants = []; // Asumsi tidak ada pending participant untuk halaman ini
-      const visitCount = 0; // Data dummy untuk header
-
-      // Data dummy untuk halaman SKM
-      const skmData = [
-        {
-          id: 1,
-          date: "2024-07-20",
-          rating: "Sangat Baik",
-          comment: "Pelayanan sangat cepat dan ramah.",
-        },
-        {
-          id: 2,
-          date: "2024-07-18",
-          rating: "Baik",
-          comment: "Cukup puas dengan fasilitas.",
-        },
-        {
-          id: 3,
-          date: "2024-07-15",
-          rating: "Cukup",
-          comment: "Perlu peningkatan di kebersihan.",
-        },
-        {
-          id: 4,
-          date: "2024-07-10",
-          rating: "Baik",
-          comment: "Informasi mudah diakses.",
-        },
-        {
-          id: 5,
-          date: "2024-07-05",
-          rating: "Sangat Baik",
-          comment: "Pengalaman riset yang luar biasa.",
-        },
-        {
-          id: 6,
-          date: "2024-07-02",
-          rating: "Kurang Baik",
-          comment: "Antrian agak panjang.",
-        },
-        {
-          id: 7,
-          date: "2024-06-28",
-          rating: "Baik",
-          comment: "Proses magang berjalan lancar.",
-        },
-        {
-          id: 8,
-          date: "2024-06-25",
-          rating: "Sangat Baik",
-          comment: "Pembimbing sangat membantu.",
-        },
-      ];
+      const skmData = <%- skmData %>;
     </script>
 
     <aside
