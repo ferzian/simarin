@@ -1,218 +1,239 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Daftar Magang</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-    }
-    .error-message {
-      color: #ef4444;
-      font-size: 0.875rem;
-      margin-top: 0.25rem;
-      display: none;
-    }
-    .error-border {
-      border-color: #ef4444 !important;
-    }
-  </style>
-</head>
-<body class="bg-gray-100">
+  <!DOCTYPE html>
+  <html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daftar Magang</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/js/daftar-magang.js"></script>
+    <link rel="stylesheet" href="/css/user.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+    <style>
+      body {
+        font-family: 'Poppins', sans-serif;
+      }
+      .error-message {
+        color: #ef4444;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+        display: none;
+      }
+      .error-border {
+        border-color: #ef4444 !important;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100">
 
-  <!-- Navbar -->
-  <nav class="bg-white shadow p-4 flex justify-between items-center">
-    <h1 class="text-2xl font-bold text-blue-700 pl-10">SIMARIN</h1>
-    <div class="flex space-x-6">
-      <a href="/auth/user/dashboard" class="text-gray-700 hover:text-blue-600">Beranda</a>
-      <a href="/layanan" class="text-gray-700 hover:text-blue-600">Layanan</a>
-      <a href="/kontak" class="text-gray-700 hover:text-blue-600">Kontak</a>
-      <form action="/auth/logout" method="POST">
-        <button type="submit" class="text-red-600 hover:underline">Logout</button>
-      </form>
-    </div>
-  </nav>
-
-  <!-- Main Content -->
-  <main class="max-w-3xl mx-auto mt-12 bg-white p-10 rounded shadow">
-    <div class="flex justify-between items-center relative -top-4">
-      <h2 class="text-3xl font-bold">Halo, <%= username %>!</h2>
-      <div class="bg-white-200 p-2 rounded-md w-24 md:w-32">
-        <img src="https://mediacenter.riau.go.id/uploads/1631946238an%20dan%20Perikanan.jpg" alt="Logo" 
-             class="h-15 md:h-30 w-full object-contain">
+    <!-- Navbar -->
+    <nav class="bg-white shadow p-4 flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-blue-700 pl-10">SIMARIN</h1>
+      <div class="flex space-x-6">
+        <a href="/auth/user/dashboard" class="text-gray-700 hover:text-blue-600">Beranda</a>
+        <a href="/layanan" class="text-gray-700 hover:text-blue-600">Layanan</a>
+        <a href="/kontak" class="text-gray-700 hover:text-blue-600">Kontak</a>
+        <form action="/auth/logout" method="POST">
+          <button type="submit" class="text-red-600 hover:underline">Logout</button>
+        </form>
       </div>
-    </div>
-    <p class="mb-6 text-gray-600">Silakan isi formulir untuk mendaftar magang di Balai Perikanan Budidaya Air!</p>
+    </nav>
 
-    <form id="formMagang" enctype="multipart/form-data" class="space-y-6">
-      <!-- Global Error Message -->
-      <div id="globalError" class="bg-red-50 border-l-4 border-red-500 p-4 hidden">
-        <div class="flex">
-          <div class="flex-shrink-0">
-            <svg class="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+    <!-- Main Content -->
+    <main class="max-w-3xl mx-auto mt-12 bg-white p-10 rounded shadow">
+      <div class="flex justify-between items-center relative -top-4">
+        <h2 class="text-3xl font-bold">Halo, <%= username %>!</h2>
+        <div class="bg-white-200 p-2 rounded-md w-24 md:w-32">
+          <img src="https://mediacenter.riau.go.id/uploads/1631946238an%20dan%20Perikanan.jpg" alt="Logo" 
+              class="h-15 md:h-30 w-full object-contain">
+        </div>
+      </div>
+      <p class="mb-6 text-gray-600">Silakan isi formulir untuk mendaftar magang di Balai Perikanan Budidaya Air!</p>
+
+      <form id="formMagang" method="POST" action="/auth/user/daftar-magang" enctype="multipart/form-data" class="space-y-6">
+        <!-- Global Error Message -->
+        <div id="globalError" class="bg-red-50 border-l-4 border-red-500 p-4 hidden">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg class="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div class="ml-3">
+              <p class="text-sm text-red-700">Harap lengkapi semua field yang wajib diisi!</p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-gray-700 mb-1">Nama Lengkap</label>
+          <input type="text" name="namaLengkap" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400" />
+          <div class="error-message" id="error-namaLengkap">Harap isi nama lengkap</div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-gray-700 mb-1">Alamat domisili</label>
+          <input type="text" name="alamat" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400" />
+          <div class="error-message" id="error-namaLengkap">Harap isi Alamat domisili</div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-gray-700 mb-1">NIP/NIM/NIS</label>
+          <input type="text" name="nipNim" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400" />
+          <div class="error-message" id="error-namaLengkap"> Harap isi NIP/NIM/NIS</div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-gray-700 mb-1">Asal Sekolah/PT/Instansi
+          </label>
+          <input type="text" name="institusi" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400" />
+          <div class="error-message" id="error-institusi">Harap isi Asal Sekolah/PT/Instansi
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-gray-700 mb-1">Nomor Telpon</label>
+          <input type="text" name="telepon" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400" />
+          <div class="error-message" id="error-prodi">Harap isi Nomor Telponi</div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-gray-700 mb-1">Program Studi</label>
+          <input type="text" name="prodi" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400" />
+          <div class="error-message" id="error-prodi">Harap isi program studi</div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-gray-700 mb-1">Jenjang Pendidikan</label>
+          <select name="jenjang" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400">
+            <option value="" disabled selected>-- Pilih Jenjang --</option>
+            <option>Sekolah</option>
+            <option>D3/D4</option>
+            <option>S1</option>
+            <option>S2</option>
+            <option>S3</option>
+          </select>
+          <div class="error-message" id="error-jenjang">Harap pilih jenjang pendidikan</div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-gray-700 mb-1">Jenis Kelamin</label>
+          <select name="jenisKelamin" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400">
+            <option value="" disabled selected>-- Pilih Jenis Kelamin --</option>
+            <option>Laki-Laki</option>
+            <option>Perempuan</option>
+          </select>
+          <div class="error-message" id="error-jenisKelamin">Harap pilih jenis kelamin</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block font-semibold text-gray-700 mb-1">Tanggal Mulai</label>
+            <input type="date" name="tanggalMulai" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400" />
+            <div class="error-message" id="error-tanggalMulai">Harap pilih tanggal mulai</div>
+          </div>
+          
+          <div>
+            <label class="block font-semibold text-gray-700 mb-1">Tanggal Selesai</label>
+            <input type="date" name="tanggalSelesai" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400" />
+            <div class="error-message" id="error-tanggalSelesai">Harap pilih tanggal selesai</div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-gray-700 mb-1">Kegiatan</label>
+          <select name="kegiatan" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400">
+            <option value="" disabled selected>-- Pilih Kegiatan --</option>
+            <option>Magang</option>
+            <option>PKL</option>
+            <option>KKL</option>
+            <option>KKP</option>
+          </select>
+          <div class="error-message" id="error-kegiatan">Harap pilih kegiatan</div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-gray-700 mb-1">Lokasi Instansi</label>
+          <select name="lokasi" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400">
+            <option value="" disabled selected>-- Pilih Lokasi --</option>
+            <option>Depok</option>
+            <option>Sempur</option>
+            <option>Cibalagung</option>
+            <option>Cijeruk</option>
+          </select>
+          <div class="error-message" id="error-lokasi">Harap pilih lokasi instansi</div>
+        </div>
+            <!-- AREA DROP -->
+        <script src="/js/daftar-magang.js"></script>
+        <link rel="stylesheet" href="/css/user.css" />
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Upload Surat Pengantar</label>
+        
+            <!-- Upload Surat Pengantar -->
+
+        <div class="mb-6">
+          <label for="uploadPengantar" class="flex flex-col items-center justify-center w-full h-48 px-4 transition bg-white border-2 border-dashed rounded-md cursor-pointer hover:border-blue-500 focus:outline-none">
+            <svg class="w-10 h-10 text-blue-400 mb-2" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 15a4 4 0 004 4h10a4 4 0 004-4m-4-4l-4-4m0 0l-4 4m4-4v12" />
             </svg>
-          </div>
-          <div class="ml-3">
-            <p class="text-sm text-red-700">Harap lengkapi semua field yang wajib diisi!</p>
-          </div>
+            <p class="text-sm text-gray-600"><span class="font-medium text-blue-600 hover:underline">Klik untuk unggah</span> atau tarik ke sini</p>
+            <p id="fileNamePengantar" class="mt-2 text-xs text-gray-400">Tidak ada file yang dipilih</p>
+          </label>
+          <input id="uploadPengantar" name="suratPengantar" type="file" accept=".pdf,.jpg,.jpeg,.png" class="hidden" required />
         </div>
-      </div>
 
-      <div>
-        <label class="block font-semibold text-gray-700 mb-1">Nama Lengkap</label>
-        <input type="text" name="namaLengkap" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400" />
-        <div class="error-message" id="error-namaLengkap">Harap isi nama lengkap</div>
-      </div>
+        <!-- Upload Pas Foto -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Upload Pas Foto</label>
+          <label for="uploadFoto" class="flex flex-col items-center justify-center w-full h-48 px-4 transition bg-white border-2 border-dashed rounded-md cursor-pointer hover:border-blue-500 focus:outline-none">
+            <svg class="w-10 h-10 text-blue-400 mb-2" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 15a4 4 0 004 4h10a4 4 0 004-4m-4-4l-4-4m0 0l-4 4m4-4v12" />
+            </svg>
+            <p class="text-sm text-gray-600"><span class="font-medium text-blue-600 hover:underline">Klik untuk unggah</span> atau tarik ke sini</p>
+            <p id="fileNameFoto" class="mt-2 text-xs text-gray-400">Tidak ada file yang dipilih</p>
+          </label>
+          <input id="uploadFoto" name="pasFoto" type="file" accept=".pdf,.jpg,.jpeg,.png" class="hidden" required />
+        </div>
 
-      <div>
-        <label class="block font-semibold text-gray-700 mb-1">Sekolah/Universitas</label>
-        <input type="text" name="institusi" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400" />
-        <div class="error-message" id="error-institusi">Harap isi sekolah/universitas</div>
-      </div>
-
-      <div>
-        <label class="block font-semibold text-gray-700 mb-1">Program Studi</label>
-        <input type="text" name="prodi" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400" />
-        <div class="error-message" id="error-prodi">Harap isi program studi</div>
-      </div>
-
-      <div>
-        <label class="block font-semibold text-gray-700 mb-1">Jenjang Pendidikan</label>
-        <select name="jenjang" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400">
-          <option value="" disabled selected>-- Pilih Jenjang --</option>
-          <option>S1</option>
-          <option>S2</option>
-          <option>S3</option>
-        </select>
-        <div class="error-message" id="error-jenjang">Harap pilih jenjang pendidikan</div>
-      </div>
-
-      <div>
-        <label class="block font-semibold text-gray-700 mb-1">Jenis Kelamin</label>
-        <select name="jenisKelamin" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400">
-          <option value="" disabled selected>-- Pilih Jenis Kelamin --</option>
-          <option>Laki-Laki</option>
-          <option>Perempuan</option>
-        </select>
-        <div class="error-message" id="error-jenisKelamin">Harap pilih jenis kelamin</div>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label class="block font-semibold text-gray-700 mb-1">Tanggal Mulai</label>
-          <input type="date" name="tanggalMulai" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400" />
-          <div class="error-message" id="error-tanggalMulai">Harap pilih tanggal mulai</div>
+        <!-- Upload Surat Keterangan Sehat -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Upload Surat Keterangan Sehat</label>
+          <label for="uploadSehat" class="flex flex-col items-center justify-center w-full h-48 px-4 transition bg-white border-2 border-dashed rounded-md cursor-pointer hover:border-blue-500 focus:outline-none">
+            <svg class="w-10 h-10 text-blue-400 mb-2" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 15a4 4 0 004 4h10a4 4 0 004-4m-4-4l-4-4m0 0l-4 4m4-4v12" />
+            </svg>
+            <p class="text-sm text-gray-600"><span class="font-medium text-blue-600 hover:underline">Klik untuk unggah</span> atau tarik ke sini</p>
+            <p id="fileNameSehat" class="mt-2 text-xs text-gray-400">Tidak ada file yang dipilih</p>
+          </label>
+          <input id="uploadSehat" name="suratSehat" type="file" accept=".pdf,.jpg,.jpeg,.png" class="hidden" required />
         </div>
         <div>
-          <label class="block font-semibold text-gray-700 mb-1">Tanggal Selesai</label>
-          <input type="date" name="tanggalSelesai" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400" />
-          <div class="error-message" id="error-tanggalSelesai">Harap pilih tanggal selesai</div>
+          <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded shadow-md transition">
+            Kirim Pendaftaran
+          </button>
         </div>
-      </div>
-
-      <div>
-        <label class="block font-semibold text-gray-700 mb-1">Kegiatan</label>
-        <select name="kegiatan" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400">
-          <option value="" disabled selected>-- Pilih Kegiatan --</option>
-          <option>Magang</option>
-          <option>PKL</option>
-          <option>Penelitian</option>
-        </select>
-        <div class="error-message" id="error-kegiatan">Harap pilih kegiatan</div>
-      </div>
-
-      <div>
-        <label class="block font-semibold text-gray-700 mb-1">Lokasi Instansi</label>
-        <select name="lokasi" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400">
-          <option value="" disabled selected>-- Pilih Lokasi --</option>
-          <option>Depok</option>
-          <option>Sempur</option>
-          <option>Cibalagung</option>
-          <option>Cijeruk</option>
-        </select>
-        <div class="error-message" id="error-lokasi">Harap pilih lokasi instansi</div>
-      </div>
-
-      <div class="mb-6">
-        <label class="block text-sm font-medium text-gray-700 mb-2">Upload Surat Pengantar</label>
-      
-        <!-- AREA DROP -->
-        <label for="fileUpload" class="flex flex-col items-center justify-center w-full h-48 px-4 transition bg-white border-2 border-dashed rounded-md appearance-none cursor-pointer hover:border-blue-500 focus:outline-none">
-          <svg class="w-10 h-10 text-blue-400 mb-2" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M3 15a4 4 0 004 4h10a4 4 0 004-4m-4-4l-4-4m0 0l-4 4m4-4v12"/>
-          </svg>
-          <p class="text-sm text-gray-600"><span class="font-medium text-blue-600 hover:underline">Klik untuk unggah</span> atau tarik ke sini</p>
-          <p id="fileName" class="mt-2 text-xs text-gray-400">Tidak ada file yang dipilih</p>
-        </label>
-      
-        <input id="fileUpload" name="suratPengantar" type="file" accept=".pdf,.jpg,.jpeg,.png"
-               class="hidden" required />
-        <div class="error-message" id="error-suratPengantar">Harap unggah surat pengantar</div>
-        <p class="text-xs text-gray-500 mt-2 text-center">Format: PDF, JPG, PNG. Max: 10MB</p>
-      </div>
-      
-      <div>
-        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded shadow-md transition">
-          Kirim Pendaftaran
-        </button>
-      </div>
-    </form>
-  </main>
-
-<script>
-  const fileInput = document.getElementById('fileUpload');
-  const fileName = document.getElementById('fileName');
-
-  fileInput.addEventListener('change', function () {
-    if (this.files.length > 0) {
-      fileName.textContent = this.files[0].name;
-    } else {
-      fileName.textContent = "Tidak ada file yang dipilih";
-    }
-  });
-
-  // Form validation
-  document.getElementById('formMagang').addEventListener('submit', function(e) {
-    e.preventDefault();
-    let isValid = true;
+      </form>
+    </main>
+  </body>
     
-    // Reset error states
-    document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
-    document.querySelectorAll('input, select').forEach(el => el.classList.remove('error-border'));
-    document.getElementById('globalError').classList.add('hidden');
-    
-    // Validate all required fields
-    const requiredFields = [
-      'namaLengkap', 'institusi', 'prodi', 'jenjang', 'jenisKelamin',
-      'tanggalMulai', 'tanggalSelesai', 'kegiatan', 'lokasi', 'suratPengantar'
+  <script>
+    const uploads = [
+      { inputId: 'uploadPengantar', labelId: 'fileNamePengantar' },
+      { inputId: 'uploadFoto', labelId: 'fileNameFoto' },
+      { inputId: 'uploadSehat', labelId: 'fileNameSehat' },
     ];
     
-    requiredFields.forEach(field => {
-      const input = document.querySelector(`[name="${field}"]`);
-      const errorElement = document.getElementById(`error-${field}`);
-      
-      if (!input.value) {
-        input.classList.add('error-border');
-        errorElement.style.display = 'block';
-        isValid = false;
-      }
-    });
+    uploads.forEach(({ inputId, labelId }) => {
+      const input = document.getElementById(inputId);
+      const label = document.getElementById(labelId);
     
-    if (!isValid) {
-      document.getElementById('globalError').classList.remove('hidden');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      // Form is valid, proceed with submission
-      alert('Formulir pendaftaran berhasil dikirim!');
-      // this.submit(); // Uncomment for actual form submission
-    }
-  });
-</script>
-
-</body>
+      input.addEventListener('change', function () {
+        if (this.files.length > 0) {
+          label.textContent = this.files[0].name;
+        } else {
+          label.textContent = "Tidak ada file yang dipilih";
+        }
+      });
+    });
+      </script>
+    </body>
 </html>

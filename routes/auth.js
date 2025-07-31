@@ -172,18 +172,6 @@ router.get('/user/dashboard', (req, res) => {
   });
 });
 
-// user daftar-magang 
-// GET halaman form daftar magang
-router.get('/user/daftar-magang', (req, res) => {
-  if (!req.session.user || req.session.user.role !== 'user') {
-    return res.redirect('/auth/login');
-  }
-
-  res.render('user/daftar-magang/index', {
-    username: req.session.user.username
-  });
-});
-
 // GET halaman permintaan sertifikat
 router.get('/user/daftar-magang/sertifikat', (req, res) => {
   if (!req.session.user || req.session.user.role !== 'user') {
