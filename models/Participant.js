@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     nama: DataTypes.STRING,
     alamat: DataTypes.STRING,
-    nipNim: DataTypes.STRING,   
+    nipNim: DataTypes.STRING,
     instansi: DataTypes.STRING,
     telepon: DataTypes.STRING,
     prodi: DataTypes.STRING,
@@ -17,15 +17,15 @@ module.exports = (sequelize, DataTypes) => {
     kegiatan: DataTypes.STRING,
     lokasi: DataTypes.STRING,
     suratPengantar: DataTypes.STRING,
-    pasFoto: DataTypes.STRING,        
-    suratSehat: DataTypes.STRING,  
+    pasFoto: DataTypes.STRING,
+    suratSehat: DataTypes.STRING,
     statusSelesai: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
   });
 
-  Participant.associate = function(models) {
+  Participant.associate = function (models) {
     Participant.belongsTo(models.User, { foreignKey: 'userId' });
   };
 

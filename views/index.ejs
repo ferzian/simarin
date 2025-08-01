@@ -9,6 +9,9 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- Favicon -->
     <link rel="icon" sizes="32x32" type="image/png" href="/images/logo.png" />
 
@@ -157,5 +160,18 @@
         </div>
       </div>
     </footer>
+    
+    <script>
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('registered') === 'success') {
+    Swal.fire({
+      icon: 'success',
+      title: 'Registrasi Berhasil!',
+      text: 'Silakan tunggu admin untuk menyetujui akun Anda.',
+      confirmButtonColor: '#3B82F6', // Tailwind Blue-500
+    });
+  }
+</script>
+
   </body>
 </html>

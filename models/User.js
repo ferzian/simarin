@@ -1,7 +1,11 @@
 const { Model, DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-  class User extends Model { }
+  class User extends Model {
+    static associate(models) {
+      User.hasMany(models.Participant, { foreignKey: 'userId' });
+    }
+  }
 
   User.init({
     username: {
@@ -21,14 +25,8 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    phone: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    dob: {
-      type: DataTypes.DATEONLY,
-      allowNull: true,
-    },
+    phone: DataTypes.STRING,
+    dob: DataTypes.DATEONLY,
     role: {
       type: DataTypes.STRING,
       defaultValue: 'user',

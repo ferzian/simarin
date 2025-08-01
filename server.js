@@ -24,6 +24,8 @@ app.use(session({
 }));
 
 // Middleware untuk menyimpan session user ke res.locals
+// Routes
+
 app.use((req, res, next) => {
   res.locals.user = req.session.user;
   next();
@@ -44,6 +46,12 @@ app.use('/auth/user/daftar-magang', require('./routes/user/daftar-magang'));
 app.use('/auth/user', require('./routes/user/sertifikat'));
 
 // Middleware log IP visitor (letakkan di bawah route)
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.get('/', (req, res) => res.render('index'));
+app.get('/login', (req, res) => res.render('login'));
+app.get('/register', (req, res) => res.render('register'));
+
 app.use(async (req, res, next) => {
   const ip = req.ip || req.connection.remoteAddress;
   const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
@@ -61,6 +69,13 @@ app.use(async (req, res, next) => {
 
   next();
 });
+app.use('/auth', authRoutes);
+app.use('/auth/admin', require('./routes/admin/dashboard'));
+app.use('/auth/admin', require('./routes/admin/approval-akun'));
+app.use('/auth/admin', require('./routes/admin/approval-peserta'));
+app.use('/auth/admin', require('./routes/admin/peserta'));
+app.use('/auth/admin', require('./routes/admin/skm'));
+app.use('/auth/admin', require('./routes/admin/download-rekap'));
 
 // Sync database & jalankan server
 sequelize.sync({ alter: true }).then(async () => {

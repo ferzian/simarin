@@ -11,66 +11,12 @@
     <!-- Favicon -->
     <link rel="icon" sizes="32x32" type="image/png" href="/images/logo.png" />
     <link rel="stylesheet" href="/css/admin.css" />
+    <script src="/js/admin/index.js" defer></script>
+    <script src="/js/admin/skm.js" defer></script>
   </head>
   <body class="bg-gray-100 flex h-screen">
     <script>
-      // Pastikan variabel ini dikirim dari route Express Anda
-      const user = { username: "Admin Contoh" };
-      const pendingUsers = []; // Asumsi tidak ada pending user untuk halaman ini
-      const pendingParticipants = []; // Asumsi tidak ada pending participant untuk halaman ini
-      const visitCount = 0; // Data dummy untuk header
-
-      // Data dummy untuk halaman SKM
-      const skmData = [
-        {
-          id: 1,
-          date: "2024-07-20",
-          rating: "Sangat Baik",
-          comment: "Pelayanan sangat cepat dan ramah.",
-        },
-        {
-          id: 2,
-          date: "2024-07-18",
-          rating: "Baik",
-          comment: "Cukup puas dengan fasilitas.",
-        },
-        {
-          id: 3,
-          date: "2024-07-15",
-          rating: "Cukup",
-          comment: "Perlu peningkatan di kebersihan.",
-        },
-        {
-          id: 4,
-          date: "2024-07-10",
-          rating: "Baik",
-          comment: "Informasi mudah diakses.",
-        },
-        {
-          id: 5,
-          date: "2024-07-05",
-          rating: "Sangat Baik",
-          comment: "Pengalaman riset yang luar biasa.",
-        },
-        {
-          id: 6,
-          date: "2024-07-02",
-          rating: "Kurang Baik",
-          comment: "Antrian agak panjang.",
-        },
-        {
-          id: 7,
-          date: "2024-06-28",
-          rating: "Baik",
-          comment: "Proses magang berjalan lancar.",
-        },
-        {
-          id: 8,
-          date: "2024-06-25",
-          rating: "Sangat Baik",
-          comment: "Pembimbing sangat membantu.",
-        },
-      ];
+      const skmData = <%- skmData %>;
     </script>
 
     <aside
@@ -255,51 +201,98 @@
         </div>
 
         <div class="flex items-center gap-6 relative">
-          <% if (pendingUsers.length > 0) { %>
-          <a
-            href="/auth/admin/approval-akun"
-            class="relative p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-7 w-7 text-yellow-600 animate-bounce"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
+          <div class="relative">
+            <button
+              id="notifDropdownButton"
+              class="relative p-2 rounded-full hover:bg-gray-100 transition duration-200"
+              onclick="toggleNotifDropdown()"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C8.67 6.165 8 7.388 8 8.75v5.408c0 .538-.214 1.055-.595 1.437L6 17h5"
-              />
-            </svg>
-            <span
-              class="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full"
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-7 w-7 text-gray-700 <%= (pendingUsers.length > 0 || pendingParticipants.length > 0) ? 'animate-bounce text-yellow-600' : '' %>"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C8.67 6.165 8 7.388 8 8.75v5.408c0 .538-.214 1.055-.595 1.437L6 17h5"
+                />
+              </svg>
+
+              <% if (pendingUsers.length > 0 || pendingParticipants.length > 0)
+              { %>
+              <span
+                class="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full"
+              >
+                !
+              </span>
+              <% } %>
+            </button>
+
+            <!-- Dropdown -->
+            <div
+              id="notifDropdownMenu"
+              class="hidden absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 z-50 overflow-hidden text-sm"
             >
-              <%= pendingUsers.length %>
-            </span>
-          </a>
-          <% } else { %>
-          <div
-            class="relative p-2 rounded-full text-gray-600 cursor-not-allowed"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-7 w-7"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C8.67 6.165 8 7.388 8 8.75v5.408c0 .538-.214 1.055-.595 1.437L6 17h5"
-              />
-            </svg>
+              <div class="p-4 border-b font-semibold text-gray-700">
+                Notifikasi
+              </div>
+              <% if (pendingUsers.length > 0) { %>
+              <a
+                href="/auth/admin/approval-akun"
+                class="flex items-start gap-2 px-4 py-2 hover:bg-gray-50 text-gray-800"
+              >
+                <svg
+                  class="w-5 h-5 text-yellow-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M12 12a3 3 0 100-6 3 3 0 000 6z"
+                  />
+                </svg>
+                <span
+                  ><%= pendingUsers.length %> akun menunggu persetujuan</span
+                >
+              </a>
+              <% } %> <% if (pendingParticipants.length > 0) { %>
+              <a
+                href="/auth/admin/approval-peserta"
+                class="flex items-start gap-2 px-4 py-2 hover:bg-gray-50 text-gray-800"
+              >
+                <svg
+                  class="w-5 h-5 text-blue-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 12a3 3 0 100-6 3 3 0 000 6zM7 20h10v-2a5 5 0 00-10 0v2z"
+                  />
+                </svg>
+                <span
+                  ><%= pendingParticipants.length %> peserta menunggu
+                  persetujuan</span
+                >
+              </a>
+              <% } %> <% if (pendingUsers.length === 0 &&
+              pendingParticipants.length === 0) { %>
+              <div class="px-4 py-2 text-gray-500 text-center">
+                Tidak ada notifikasi baru
+              </div>
+              <% } %>
+            </div>
           </div>
-          <% } %>
 
           <div class="relative">
             <button
@@ -518,57 +511,6 @@
     </div>
 
     <script>
-      // Sidebar & Dropdown (dari kode sebelumnya, tetap konsisten)
-      const userBtn = document.getElementById("dropdownUserButton");
-      const userMenu = document.getElementById("dropdownUserMenu");
-
-      userBtn.addEventListener("click", () => {
-        userMenu.classList.toggle("hidden");
-      });
-
-      window.addEventListener("click", function (e) {
-        if (!userBtn.contains(e.target) && !userMenu.contains(e.target)) {
-          userMenu.classList.add("hidden");
-        }
-      });
-
-      const sidebar = document.getElementById("sidebar");
-      const sidebarToggle = document.getElementById("sidebarToggle");
-      const sidebarTitle = document.getElementById("sidebarTitle");
-      const sidebarTitleButton = document.getElementById("sidebarTitleButton");
-      const menuTextWrappers = document.querySelectorAll(".menu-text-wrapper");
-
-      sidebarToggle.addEventListener("click", () => {
-        toggleSidebar();
-      });
-
-      sidebarTitleButton.addEventListener("click", () => {
-        if (sidebar.classList.contains("w-20")) {
-          toggleSidebar();
-        }
-      });
-
-      function toggleSidebar() {
-        sidebar.classList.toggle("w-64");
-        sidebar.classList.toggle("w-20");
-
-        menuTextWrappers.forEach((el) => {
-          el.classList.toggle("hidden-text");
-          el.style.width = sidebar.classList.contains("w-20") ? "0px" : "auto";
-        });
-
-        const isMinimized = sidebar.classList.contains("w-20");
-
-        // Sembunyikan judul sidebar dan tombol toggle saat diminimize
-        sidebarTitle.classList.toggle("hidden", isMinimized);
-        sidebarTitleButton.classList.toggle("hidden", !isMinimized);
-        sidebarToggle.classList.toggle("hidden", isMinimized); // 🔥 ini bikin tombol << hilang pas sidebar ditutup
-
-        sidebar.querySelectorAll(".menu-item-link").forEach((item) => {
-          item.classList.toggle("justify-center", isMinimized);
-        });
-      }
-
       // --- Logika untuk Halaman SKM ---
 
       // Data dummy (akan diambil dari `skmData` global)

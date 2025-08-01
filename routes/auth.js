@@ -1,81 +1,7 @@
 const express = require('express');
 const router = express.Router();
-// <<<<<<< HEAD
 const { User } = require('../models');
-// =======
-// const { User } = require('../models');
-// >>>>>>> 701409f4f82f10fbad6ffdac85f4631db32721c3
-const { isAuthenticated, isAdmin } = require('../middleware/authMiddleware');
-
-// Approval Akun
-router.get('/admin/approval-akun', isAuthenticated, isAdmin, async (req, res) => {
-  const pendingUsers = await User.findAll({
-    where: { role: 'user', approved: false },
-  });
-  res.render('admin/approval-akun', { pendingUsers });
-});
-
-// Approval Peserta
-router.get('/admin/approval-peserta', isAuthenticated, isAdmin, async (req, res) => {
-  // const pendingUsers = await User.findAll({
-  //   where: { role: 'user', approved: false },
-  // });
-  // Data dummy untuk pengembangan UI
-  // Hapus atau ganti ini dengan data dari database Anda nanti
-  const pendingParticipants = [
-    {
-      id: 1,
-      name: "Budi Santoso",
-      institution: "Universitas ABC",
-      applicationType: "Magang",
-      startDate: "2025-08-01",
-      endDate: "2025-11-30",
-      letterUrl: "#",
-      photoUrl: "#",
-      transcriptUrl: "#",
-    },
-    {
-      id: 2,
-      name: "Siti Aminah",
-      institution: "SMK Negeri 1 Jakarta",
-      applicationType: "PKL",
-      startDate: "2025-09-10",
-      endDate: "2025-12-10",
-      letterUrl: "#",
-      photoUrl: "#",
-      transcriptUrl: "#",
-    },
-  ];
-
-  // Pastikan user juga dikirim, karena UI Anda menggunakannya
-  const user = { username: 'admin' }; // Data dummy user, sesuaikan jika Anda sudah punya dari sesi login
-
-  // Jika Anda juga memiliki pendingUsers untuk notifikasi di header, kirimkan juga
-  const pendingUsers = []; // Data dummy untuk pendingUsers
-
-  res.render('admin/approval-peserta', {
-    pendingParticipants: pendingParticipants,
-    user: user, // Pastikan user dikirim
-    pendingUsers: pendingUsers // Pastikan pendingUsers dikirim
-  });
-});
-
-// Peserta
-router.get('/admin/peserta', isAuthenticated, isAdmin, async (req, res) => {
-  const pendingUsers = await User.findAll({
-    where: { role: 'user', approved: false },
-  });
-  res.render('admin/peserta', { pendingUsers });
-});
-
-// SKM
-router.get('/admin/skm', isAuthenticated, isAdmin, async (req, res) => {
-  const pendingUsers = await User.findAll({
-    where: { role: 'user', approved: false },
-  });
-  res.render('admin/skm', { pendingUsers });
-});
-
+const sendAdminNotification = require('../utils/sendAdminNotification');
 
 // GET Login
 router.get('/login', (req, res) => {
@@ -119,6 +45,7 @@ router.get('/register', (req, res) => {
 
 
 // POST Register
+// POST Register
 router.post('/register', async (req, res) => {
   const {
     username,
@@ -141,8 +68,8 @@ router.post('/register', async (req, res) => {
       return res.render('register', { error: 'Username sudah digunakan.' });
     }
 
-    // Simpan data baru
-    await User.create({
+    // Simpan user baru
+    const newUser = await User.create({
       username,
       password,
       email,
@@ -153,12 +80,16 @@ router.post('/register', async (req, res) => {
       approved: false,
     });
 
-    res.redirect('/');
+    // Kirim notifikasi ke admin
+    await sendAdminNotification(newUser);
+
+    res.redirect('/?registered=success');
   } catch (err) {
     console.error(err);
     res.render('register', { error: 'Terjadi kesalahan saat register.' });
   }
 });
+
 
 
 // GET User Dashboard
@@ -193,25 +124,6 @@ router.get('/user/skm', (req, res) => {
   res.render('user/skm', {
     username: req.session.user.username
   });
-});
-
-
-// Proses approval user
-router.post('/admin/approve/:id', async (req, res) => {
-  const { id } = req.params;
-
-  await User.update({ approved: true }, { where: { id } });
-
-  res.redirect('/auth/admin/dashboard');
-});
-
-// Tolak user
-router.post('/admin/reject/:id', async (req, res) => {
-  const { id } = req.params;
-
-  await User.destroy({ where: { id } });
-
-  res.redirect('/auth/admin/dashboard?msg=reject');
 });
 
 // Logout
