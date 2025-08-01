@@ -5,82 +5,71 @@ const path = require('path');
 const { Op } = require('sequelize');
 const { User, Visitor, sequelize } = require('./models');
 const authRoutes = require('./routes/auth');
+const daftarMagangRoute = require('./routes/user/daftar-magang');
 
 const app = express();
 
-// Middleware bawaan
+// ... semua require di awal tetap
+
+// Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Middleware session
 app.use(session({
   secret: 'sempur123',
   resave: false,
   saveUninitialized: false,
-  cookie: { maxAge: 1000 * 60 * 60 * 2 } // 2 jam
+  cookie: { maxAge: 1000 * 60 * 60 * 2 }
 }));
-
-// Middleware untuk menyimpan session user ke res.locals
-// Routes
 
 app.use((req, res, next) => {
   res.locals.user = req.session.user;
   next();
 });
 
-// Routes halaman umum
-app.get('/', (req, res) => res.render('index'));
+// Halaman umum
+app.get('/', (req, res) => res.render('index')); // ← Kembalikan baris ini
 app.get('/login', (req, res) => res.render('login'));
 app.get('/register', (req, res) => res.render('register'));
 
-// Routes autentikasi & admin
+
+// Routes 
 app.use('/auth', authRoutes);
-app.use('/auth/admin', require('./routes/admin/dashboard'));
-app.use('/auth/admin', require('./routes/admin/download-visitors'));
+app.use('/admin', require('./routes/admin/dashboard'));
+// app.use('/auth/admin', require('./routes/admin/download-visitors')); // ← sementara nonaktifkan jika file belum ada
+app.use('/admin', require('./routes/admin/approval-akun'));
+app.use('/admin', require('./routes/admin/approval-peserta'));
+app.use('/admin', require('./routes/admin/peserta'));
+app.use('/admin', require('./routes/admin/skm'));
+app.use('/admin', require('./routes/admin/download-rekap'));
 
-// ✅ Tambahkan route user (DAFTAR MAGANG & SERTIFIKAT)
-app.use('/auth/user/daftar-magang', require('./routes/user/daftar-magang'));
-app.use('/auth/user', require('./routes/user/sertifikat'));
+app.use('/user/daftar-magang', require('./routes/user/daftar-magang'));
+app.use('/user', require('./routes/user/sertifikat'));
+app.use('/user/dashboard', require('./routes/user/user-dashboard'));
 
-// Middleware log IP visitor (letakkan di bawah route)
 
-app.use(express.static(path.join(__dirname, 'public')));
-app.get('/', (req, res) => res.render('index'));
-app.get('/login', (req, res) => res.render('login'));
-app.get('/register', (req, res) => res.render('register'));
-
+// Visitor tracking
 app.use(async (req, res, next) => {
   const ip = req.ip || req.connection.remoteAddress;
   const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
 
   const exists = await Visitor.findOne({
-    where: {
-      ip,
-      createdAt: { [Op.gte]: startOfMonth }
-    }
+    where: { ip, createdAt: { [Op.gte]: startOfMonth } }
   });
 
   if (!exists) {
     await Visitor.create({ ip });
-  }
+  }   
 
   next();
 });
-app.use('/auth', authRoutes);
-app.use('/auth/admin', require('./routes/admin/dashboard'));
-app.use('/auth/admin', require('./routes/admin/approval-akun'));
-app.use('/auth/admin', require('./routes/admin/approval-peserta'));
-app.use('/auth/admin', require('./routes/admin/peserta'));
-app.use('/auth/admin', require('./routes/admin/skm'));
-app.use('/auth/admin', require('./routes/admin/download-rekap'));
 
-// Sync database & jalankan server
+// Sync DB + Start server
 sequelize.sync({ alter: true }).then(async () => {
   const admin = await User.findOne({ where: { role: 'admin' } });
-
   if (!admin) {
     await User.create({
       username: 'admin',

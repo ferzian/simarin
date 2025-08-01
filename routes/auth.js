@@ -126,12 +126,16 @@ router.get('/user/skm', (req, res) => {
   });
 });
 
-// Logout
+// routes/auth.js atau server.js
 router.post('/logout', (req, res) => {
-  req.session.destroy(() => {
-    res.redirect('/');
+  req.session.destroy((err) => {
+    if (err) {
+      console.log(err);
+      return res.redirect('/user/dashboard'); // fallback jika error
+    }
+    res.clearCookie('connect.sid');
+    res.redirect('/auth/login'); // redirect ke halaman login, bukan render 'index'
   });
 });
-
 
 module.exports = router;

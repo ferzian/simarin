@@ -1,12 +1,15 @@
 <!DOCTYPE html>
-<html lang="id" x-data="slider()" x-init="start()">
+<html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SIMARIN - Pendaftaran Layanan</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<script src="/js/user/user-dashboard.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     .simarin-text {
       font-family: 'Bebas Neue', sans-serif;
@@ -40,35 +43,69 @@
       
       <!-- Kanan: Menu Navigasi -->
       <div class="flex space-x-8">
-        <a href="#" class="program-text text-gray-700 font-medium py-2">Beranda</a>
-        <a href="#" class="program-text text-gray-700 font-medium py-2">Layanan</a>
-        <a href="#" class="program-text text-gray-700 font-medium py-2">Kontak</a>
-        <a href="#" class="program-text text-gray-700 font-medium py-2">Logout</a>
-      </div>
-    </div>
-  </nav>
+        <div class="flex space-x-8">
+          <a href="#" class="program-text text-gray-700 font-semibold py-2 text-xl">Beranda</a>
+          <a href="#" class="program-text text-gray-700 font-semibold py-2 text-xl">Layanan</a>
+          <a href="#" class="program-text text-gray-700 font-semibold py-2 text-xl">Kontak</a>
+          <div class="relative inline-block text-left" x-data="{ open: false }">
+            <!-- Tombol Hamburger -->
+            <button @click="open = !open" class="p-2 text-gray-700 hover:text-blue-600 focus:outline-none">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+      
+              <!-- Dropdown Menu --> 
+            <div x-show="open" @click.outside="open = false"
+                 x-transition
+                 class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+              <a href="/user/profil" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                Profil
+              </a>
+              <button onclick="confirmLogout()" class="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">
+                Logout
+              </button>
+              
+              </form>
+            </div>
+          </div>
+        </div>
+     </nav>
   
 <!-- Hero Section -->
-<div class="relative w-full h-[90vh] overflow-hidden" x-data="slider()" x-init="start()">
-    <!-- Slides -->
-    <template x-for="(img, index) in images" :key="index">
-      <div 
-        class="absolute top-0 left-0 w-full h-full bg-center bg-cover transition-opacity duration-1000"
-        :style="`background-image: linear-gradient(rgba(30, 58, 138, 0.6), rgba(0, 0, 0, 0.3)), url('${img}')`"
-        :class="{ 'opacity-100 z-20': current === index, 'opacity-0 z-10': current !== index }">
-      </div>
-    </template>
-  
-    <!-- Konten Hero -->
-    <div class="relative z-30 flex items-center justify-center h-full text-white text-center px-4">
-      <div class="max-w-4xl">
-        <h1 class="simarin-text text-5xl md:text-7xl mb-4">Sistem Informasi Magang dan Praktik Industri</h1>
-        <h2 class="program-text text-xl md:text-3xl font-bold uppercase tracking-wider mb-6">PENDAFTARAN LAYANAN</h2>
-        <p class="program-text text-2xl md:text-3xl font-bold italic mb-6">MAGANG / PRAKTIK LAPANG / PENELITIAN</p>
-        <p class="program-text text-lg font-bold">#SIMARIN</p>
-      </div>
+<div 
+  class="relative w-full h-[90vh] overflow-hidden" 
+  x-data="slider()" 
+  x-init="start()"
+>
+  <!-- Slides -->
+  <template x-for="(img, index) in images" :key="index">
+    <div 
+      class="absolute top-0 left-0 w-full h-full bg-center bg-cover transition-opacity duration-1000"
+      :style="`background-image: linear-gradient(rgba(30, 58, 138, 0.6), rgba(0, 0, 0, 0.3)), url('${img}')`"
+      :class="{ 'opacity-100 z-20': current === index, 'opacity-0 z-10': current !== index }"
+    ></div>
+  </template>
+
+  <!-- Hero Content -->
+  <div class="relative z-30 flex items-center justify-center h-full text-white text-center px-4">
+    <div class="max-w-4xl">
+      <h1 class="simarin-text text-5xl md:text-7xl mb-4">
+        Sistem Informasi Magang dan Praktik Industri
+      </h1>
+      <h2 class="program-text text-xl md:text-3xl font-bold uppercase tracking-wider mb-6">
+        PENDAFTARAN LAYANAN
+      </h2>
+      <p class="program-text text-2xl md:text-3xl font-bold italic mb-6">
+        MAGANG / PRAKTIK LAPANG / PENELITIAN
+      </p>
+      <p class="program-text text-lg font-bold">
+        #SIMARIN
+      </p>
     </div>
-  
+  </div>
+</div>
+
       <!-- Tombol Sebelumnya -->
       <button @click="prev"
       class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white bg-black/50 p-3 rounded-full shadow-lg border border-white/20 hover:bg-black/80 hover:scale-105 transition-all duration-200 z-40">
@@ -97,46 +134,66 @@
     </div>
   </div>
   
-<!-- Layanan Section -->
-<div class="max-w-6xl mx-auto py-16 px-4">
-  <h2 class="program-text text-3xl font-bold text-center text-gray-800 mb-12">PILIH LAYANAN</h2>
+<div class="max-w-6xl mx-auto px-4 py-12">
+  <div class="flex flex-col md:flex-row justify-center gap-8">
 
-  <div class="grid md:grid-cols-2 gap-8 max-w-2xl mx-auto">
-    <!-- Magang -->
-    <div class="service-card bg-white rounded-lg shadow-md p-6 text-center">
-      <div class="bg-blue-100 w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4">
-        <svg class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-        </svg>
+    <!-- Card 1 -->
+    <div
+      class="bg-white p-6 rounded-2xl shadow-md w-full md:w-1/2 flex flex-col justify-between transform transition duration-300 hover:scale-105 hover:shadow-2xl">
+      <div>
+        <!-- Icon -->
+        <div class="flex justify-center mb-4">
+          <svg class="w-14 h-14 text-blue-600" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M12 11c0 1.105-.895 2-2 2s-2-.895-2-2 .895-2 2-2 2 .895 2 2zM6 20h12M6 4h12m-2 4H8m0 0h8" />
+          </svg>
+        </div>
+        <h2 class="text-2xl font-bold text-center text-gray-800">Pendaftaran Magang</h2>
+        <p class="text-center text-gray-500 mt-2">
+          Daftar program magang di Balai Perikanan Budidaya Air Tawar.
+        </p>
       </div>
-      <h3 class="program-text text-xl font-bold text-gray-800 mb-2">Pendaftaran Magang</h3>
-      <p class="program-text text-gray-600 mb-4">Daftar program magang di Balai Perikanan Budidaya Air Tawar</p>
-      <a href="/auth/user/daftar-magang" class="program-text inline-block px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">Daftar Sekarang</a>
+      <div class="mt-6 flex justify-center">
+        <a href="/auth/user/daftar-magang"
+          class="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition">Daftar Sekarang</a>
+      </div>
     </div>
 
-    <!-- SKM -->
-    <div class="service-card bg-white rounded-lg shadow-md p-6 text-center">
-      <div class="bg-green-100 w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4">
-        <svg class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-        </svg>
+    <!-- Card 2 -->
+    <div
+      class="bg-white p-6 rounded-2xl shadow-md w-full md:w-1/2 flex flex-col justify-between transform transition duration-300 hover:scale-105 hover:shadow-2xl">
+      <div>
+        <!-- Icon -->
+        <div class="flex justify-center mb-4">
+          <svg class="w-14 h-14 text-green-600" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M9 12l2 2 4-4M7 12c0-2.21 1.79-4 4-4s4 1.79 4 4-1.79 4-4 4-4-1.79-4-4zM5 20h14" />
+          </svg>
+        </div>
+        <h2 class="text-2xl font-bold text-center text-gray-800">Surat Kepuasan Masyarakat (SKM)</h2>
+        <p class="text-center text-gray-500 mt-2">
+          Ajukan permohonan Surat Kepuasan Masyarakat.
+        </p>
       </div>
-      <h3 class="program-text text-xl font-bold text-gray-800 mb-2">Surat Kepuasan Masyarakat (SKM)</h3>
-      <p class="program-text text-gray-600 mb-4">Ajukan permohonan Surat Kepuasan Masyarakat</p>
-      <a href="/auth/user/skm" class="program-text inline-block px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition">Ajukan SKM</a>
+      <div class="mt-6 flex justify-center">
+        <a href="/auth/user/skm"
+          class="bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-700 transition">Ajukan SKM</a>
+      </div>
     </div>
+
   </div>
 </div>
 
-<!-- Footer -->
+</div>
+
 <footer class="bg-gray-800 text-white py-8">
   <div class="max-w-6xl mx-auto px-4">
     <div class="flex flex-col md:flex-row justify-between items-center">
       <div class="mb-4 md:mb-0">
         <p class="simarin-text text-2xl">SIMARIN</p>
-        <p class="program-text text-sm mt-1">Sistem Informasi Manajemen Perikanan</p>
+        <p class="program-text text-sm mt-1">Sistem Informasi Magang dan Praktik Industri</p>
       </div>
       <div class="flex space-x-4">
         <a href="#" class="program-text text-sm hover:text-yellow-400">Kebijakan Privasi</a>
@@ -146,37 +203,8 @@
     </div>
     <div class="border-t border-gray-700 mt-6 pt-6 text-center">
       <p class="program-text text-sm text-gray-400">© 2025 SIMARIN. Seluruh hak cipta dilindungi.</p>
-    </div>
-  </div>
-</footer>
-
-<!-- Alpine Slider Script -->
-<script>
-    function slider() {
-      return {
-        images: [
-          'https://images.bisnis.com/posts/2020/01/23/1193248/antara-tangkapan-nelayan-tradisional-mtb.jpg',
-          'http://www.wwf.id/sites/default/files/slider/24.MARINE%26FISHERIES_TENTANG%20LAUT.jpg',
-          'https://kkp.go.id/storage/foto/foto-65f117df90a2f.jpg',
-        ],
-        current: 0,
-        interval: null,
-        start() {
-          this.interval = setInterval(() => {
-            this.next();
-          }, 3000);
-        },
-        next() {
-          this.current = (this.current + 1) % this.images.length;
-        },
-        prev() {
-          this.current = (this.current - 1 + this.images.length) % this.images.length;
-        },
-        goTo(index) {
-          this.current = index;
-        }
-      }
-    }
-    </script>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>

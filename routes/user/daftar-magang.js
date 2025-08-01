@@ -9,13 +9,12 @@ router.get('/', (req, res) => {
     return res.redirect('/auth/login');
   }
 
-  // Render halaman daftar magang
   res.render('user/daftar-magang/index', {
     username: req.session.user.username
   });
 });
 
-// Handler untuk proses POST form pendaftaran magang
+// ✅ HANYA SATU POST handler
 router.post('/', upload.fields([
   { name: 'suratPengantar', maxCount: 1 },
   { name: 'pasFoto', maxCount: 1 },
@@ -38,34 +37,34 @@ router.post('/', upload.fields([
       lokasi
     } = req.body;
 
-    // Simpan data ke database
+    // Simpan data peserta magang
     await Participant.create({
-        userId,
-        nama: namaLengkap,
-        alamat,
-        nipNim,
-        telepon,
-        instansi: institusi,
-        prodi,
-        jenjang,
-        jenisKelamin,
-        tanggalMulai,
-        tanggalSelesai,
-        kegiatan,
-        lokasi,
-        suratPengantar: req.files.suratPengantar?.[0].filename,
-        pasFoto: req.files.pasFoto?.[0].filename,
-        suratSehat: req.files.suratSehat?.[0].filename,
-        statusSelesai: false
-      });
-      
+      userId,
+      nama: namaLengkap,
+      alamat,
+      nipNim,
+      telepon,
+      instansi: institusi,
+      prodi,
+      jenjang,
+      jenisKelamin,
+      tanggalMulai,
+      tanggalSelesai,
+      kegiatan,
+      lokasi,
+      suratPengantar: req.files.suratPengantar?.[0].filename,
+      pasFoto: req.files.pasFoto?.[0].filename,
+      suratSehat: req.files.suratSehat?.[0].filename,
+      statusSelesai: false
+    });
 
-    // Redirect ke halaman sertifikat setelah berhasil submit
-    res.redirect('/auth/user/sertifikat');
+    // ✅ Redirect dan kirim notifikasi berhasil
+    return res.redirect('/auth/user/daftar-magang?success=true');
   } catch (err) {
     console.error('❌ Gagal menyimpan data peserta:', err);
-    res.status(500).send("Terjadi kesalahan saat menyimpan data.");
+    return res.status(500).send("Terjadi kesalahan saat menyimpan data.");
   }
 });
 
 module.exports = router;
+
