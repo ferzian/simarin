@@ -35,7 +35,7 @@ router.post('/approve-akun/:id', isAuthenticated, isAdmin, async (req, res) => {
 
     await sendApprovalEmail(user);
 
-    res.redirect('/auth/admin/approval-akun?status=approved');
+    res.redirect('/admin/approval-akun?status=approved');
   } catch (err) {
     console.error(err);
     res.status(500).send('Gagal menyetujui akun');
@@ -51,7 +51,7 @@ router.post('/reject-akun/:id', isAuthenticated, isAdmin, async (req, res) => {
     await sendRejectionEmail(user);
 
     await user.destroy();
-    res.redirect('/auth/admin/approval-akun?status=rejected');
+    res.redirect('/admin/approval-akun?status=rejected');
   } catch (err) {
     console.error(err);
     res.status(500).send('Gagal menolak akun');

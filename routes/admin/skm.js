@@ -14,11 +14,11 @@ router.get('/skm', isAuthenticated, isAdmin, async (req, res) => {
             include: [{ model: User }]
         });
 
-        const surveys = await Survey.findAll();
+        // const surveys = await Survey.findAll();
         res.render('admin/skm', {
             pendingUsers,
             pendingParticipants,
-            skmData: JSON.stringify(surveys),
+            // skmData: JSON.stringify(surveys),
         });
     } catch (err) {
         console.error('❌ Gagal ambil data SKM:', err);

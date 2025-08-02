@@ -16,7 +16,6 @@
   </head>
   <body class="bg-gray-100 flex h-screen">
     <script>
-      const skmData = <%- skmData %>;
     </script>
 
     <aside
@@ -62,7 +61,7 @@
             Core
           </h3>
           <a
-            href="/auth/admin/dashboard"
+            href="/admin/dashboard"
             class="menu-item-link text-white hover:text-white"
           >
             <svg
@@ -89,7 +88,7 @@
             User Management
           </h3>
           <a
-            href="/auth/admin/approval-akun"
+            href="/admin/approval-akun"
             class="menu-item-link text-white hover:text-white relative"
           >
             <svg
@@ -117,7 +116,7 @@
           </a>
 
           <a
-            href="/auth/admin/approval-peserta"
+            href="/admin/approval-peserta"
             class="menu-item-link text-white hover:text-white mt-2"
           >
             <svg
@@ -144,7 +143,7 @@
             Recap Data
           </h3>
           <a
-            href="/auth/admin/peserta"
+            href="/admin/peserta"
             class="menu-item-link text-white hover:text-white mb-2"
           >
             <svg
@@ -164,7 +163,7 @@
             <span class="menu-text-wrapper">Data Peserta</span>
           </a>
           <a
-            href="/auth/admin/skm"
+            href="/admin/skm"
             class="menu-item-link text-white hover:text-white relative bg-gray-700"
           >
             <svg
@@ -242,7 +241,7 @@
               </div>
               <% if (pendingUsers.length > 0) { %>
               <a
-                href="/auth/admin/approval-akun"
+                href="/admin/approval-akun"
                 class="flex items-start gap-2 px-4 py-2 hover:bg-gray-50 text-gray-800"
               >
                 <svg
@@ -264,7 +263,7 @@
               </a>
               <% } %> <% if (pendingParticipants.length > 0) { %>
               <a
-                href="/auth/admin/approval-peserta"
+                href="/admin/approval-peserta"
                 class="flex items-start gap-2 px-4 py-2 hover:bg-gray-50 text-gray-800"
               >
                 <svg
