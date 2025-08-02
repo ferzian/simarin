@@ -8,10 +8,12 @@ const sequelize = new Sequelize('simarin', 'root', '', {
 const User = require('./User')(sequelize, DataTypes);
 const Visitor = require('./Visitor')(sequelize, DataTypes);
 const Participant = require('./Participant')(sequelize, DataTypes);
+const Survey = require('./Survey')(sequelize, DataTypes);
 
 // Jalankan relasi antar model
 User.associate?.({ Participant });
 Participant.associate?.({ User });
+Survey.associate?.({ Participant });
 
 // Export semua model + instance sequelize-nya
 module.exports = {
@@ -20,5 +22,6 @@ module.exports = {
   User,
   Visitor,
   Participant,
+  Survey
 };
 
