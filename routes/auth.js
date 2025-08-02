@@ -103,18 +103,6 @@ router.get('/user/dashboard', (req, res) => {
   });
 });
 
-// user daftar-magang 
-// GET halaman form daftar magang
-router.get('/user/daftar-magang', (req, res) => {
-  if (!req.session.user || req.session.user.role !== 'user') {
-    return res.redirect('/auth/login');
-  }
-
-  res.render('user/daftar-magang/index', {
-    username: req.session.user.username
-  });
-});
-
 // GET halaman permintaan sertifikat
 router.get('/user/daftar-magang/sertifikat', (req, res) => {
   if (!req.session.user || req.session.user.role !== 'user') {
@@ -138,12 +126,16 @@ router.get('/user/skm', (req, res) => {
   });
 });
 
-// Logout
+// routes/auth.js atau server.js
 router.post('/logout', (req, res) => {
-  req.session.destroy(() => {
-    res.redirect('/');
+  req.session.destroy((err) => {
+    if (err) {
+      console.log(err);
+      return res.redirect('/user/dashboard'); // fallback jika error
+    }
+    res.clearCookie('connect.sid');
+    res.redirect('/auth/login'); // redirect ke halaman login, bukan render 'index'
   });
 });
-
 
 module.exports = router;

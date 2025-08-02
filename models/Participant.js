@@ -1,4 +1,3 @@
-// models/Participant.js
 module.exports = (sequelize, DataTypes) => {
   const Participant = sequelize.define('Participant', {
     userId: {
@@ -6,7 +5,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     nama: DataTypes.STRING,
+    alamat: DataTypes.STRING,
+    nipNim: DataTypes.STRING,
     instansi: DataTypes.STRING,
+    telepon: DataTypes.STRING,
     prodi: DataTypes.STRING,
     jenjang: DataTypes.STRING,
     jenisKelamin: DataTypes.STRING,
@@ -14,7 +16,9 @@ module.exports = (sequelize, DataTypes) => {
     tanggalSelesai: DataTypes.DATEONLY,
     kegiatan: DataTypes.STRING,
     lokasi: DataTypes.STRING,
-    suratPengantar: DataTypes.STRING, // simpan nama file
+    suratPengantar: DataTypes.STRING,
+    pasFoto: DataTypes.STRING,
+    suratSehat: DataTypes.STRING,
     statusSelesai: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
@@ -24,6 +28,6 @@ module.exports = (sequelize, DataTypes) => {
   Participant.associate = function (models) {
     Participant.belongsTo(models.User, { foreignKey: 'userId' });
   };
-
+    
   return Participant;
 };

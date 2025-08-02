@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Profil Pengguna</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+  <div class="max-w-3xl mx-auto p-6 mt-10 bg-white rounded shadow">
+    <h1 class="text-2xl font-bold text-blue-800 mb-4">Halo, <%= username %> 👋</h1>
+
+    <!-- ✅ Informasi Akun -->
+    <div class="mt-6 p-4 border rounded bg-gray-50">
+      <h2 class="text-lg font-semibold mb-2 text-gray-700">Informasi Akun:</h2>
+      <p><strong>Username:</strong> <%= user.username %></p>
+      <p><strong>Email:</strong> <%= user.email %></p>
+      <p><strong>Password:</strong> *********</p>
+      <a href="/user/ganti-password" class="text-blue-600 hover:underline text-sm">Ganti password?</a>
+    </div>
+
+    <!-- ✅ Informasi Pendaftaran Magang -->
+    <% if (participant) { %>
+      <div class="mt-6 space-y-3">
+        <h2 class="text-lg font-semibold text-gray-700">Data Pendaftaran Magang:</h2>
+        <p><strong>Nama:</strong> <%= participant.nama %></p>
+        <p><strong>Alamat:</strong> <%= participant.alamat %></p>
+        <p><strong>NIP/NIM:</strong> <%= participant.nipNim %></p>
+        <p><strong>Instansi:</strong> <%= participant.instansi %></p>
+        <p><strong>Telepon:</strong> <%= participant.telepon %></p>
+        <p><strong>Program Studi:</strong> <%= participant.prodi %></p>
+        <p><strong>Jenjang:</strong> <%= participant.jenjang %></p>
+        <p><strong>Jenis Kelamin:</strong> <%= participant.jenisKelamin %></p>
+        <p><strong>Tanggal Mulai:</strong> <%= participant.tanggalMulai %></p>
+        <p><strong>Tanggal Selesai:</strong> <%= participant.tanggalSelesai %></p>
+        <p><strong>Kegiatan:</strong> <%= participant.kegiatan %></p>
+        <p><strong>Lokasi:</strong> <%= participant.lokasi %></p>
+        <p><strong>Status Selesai:</strong> <%= participant.statusSelesai ? "Selesai" : "Belum Selesai" %></p>
+      </div>
+    <% } else { %>
+      <p class="text-red-500 mt-6">Belum ada data pendaftaran magang.</p>
+    <% } %>
+  </div>
+</body>
+</html>
