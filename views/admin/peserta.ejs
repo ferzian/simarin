@@ -118,7 +118,7 @@
 
           <a
             href="/admin/approval-peserta"
-            class="menu-item-link text-white hover:text-white mt-2"
+            class="menu-item-link text-white hover:text-white mt-2 relative"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -135,6 +135,13 @@
               />
             </svg>
             <span class="menu-text-wrapper">Approval Peserta</span>
+            <% if (pendingParticipants.length > 0) { %>
+            <span
+              class="absolute top-1 right-2 bg-red-500 text-white text-xs font-semibold px-2 py-0.5 rounded-full"
+            >
+              <%= pendingParticipants.length %>
+            </span>
+            <% } %>
           </a>
         </div>
         <div>
