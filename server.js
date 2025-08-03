@@ -8,6 +8,7 @@ const authRoutes = require('./routes/auth');
 const daftarMagangRoute = require('./routes/user/daftar-magang');
 const profilRoutes = require('./routes/user/profil');
 
+
 const app = express();
 
 // ... semua require di awal tetap
