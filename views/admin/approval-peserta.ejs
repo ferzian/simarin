@@ -386,7 +386,7 @@
         <ul class="space-y-6">
           <% pendingParticipants.forEach(participant => { %>
           <li
-            class="bg-white p-6 rounded-xl shadow-lg flex flex-col lg:flex-row lg:justify-between transition duration-300 hover:shadow-xl border-l-4 border-indigo-500"
+            class="bg-white p-6 rounded-xl shadow-lg flex flex-col lg:flex-row lg:justify-between transition duration-300 hover:shadow-xl <%= participant.jenisKelamin === 'Laki-Laki' ? 'border-l-4 border-blue-500' : 'border-l-4 border-pink-400' %>"
           >
             <div class="mb-6 lg:mb-0 lg:w-2/3">
               <h3 class="font-bold text-xl text-gray-800 mb-2">
