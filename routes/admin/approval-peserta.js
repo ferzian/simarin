@@ -27,4 +27,39 @@ router.get('/approval-peserta', isAuthenticated, isAdmin, async (req, res) => {
     }
 });
 
+router.post('/approve-participant/:id', isAuthenticated, isAdmin, async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const participant = await Participant.findByPk(id);
+        if (!participant) {
+            return res.status(404).send('Peserta tidak ditemukan');
+        }
+
+        // Diapprove -> statusSelesai true (atau kamu bisa tambah field baru 'approved' kalau perlu)
+        await participant.update({ statusSelesai: true });
+
+        res.redirect('/admin/approval-peserta');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Gagal meng-approve peserta');
+    }
+});
+
+router.post('/reject-participant/:id', isAuthenticated, isAdmin, async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const participant = await Participant.findByPk(id);
+        if (!participant) {
+            return res.status(404).send('Peserta tidak ditemukan');
+        }
+        await participant.destroy();
+        res.redirect('/admin/approval-peserta');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Gagal menolak peserta');
+    }
+});
+
 module.exports = router;
