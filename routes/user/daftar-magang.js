@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
   });
 });
 
-// ✅ HANYA SATU POST handler
+//  HANYA SATU POST handler
 router.post('/', upload.fields([
   { name: 'suratPengantar', maxCount: 1 },
   { name: 'pasFoto', maxCount: 1 },
@@ -58,8 +58,8 @@ router.post('/', upload.fields([
       statusSelesai: false
     });
 
-    // ✅ Redirect dan kirim notifikasi berhasil
-    return res.redirect('/auth/user/daftar-magang?success=true');
+    //  Redirect dan kirim notifikasi berhasil
+    return res.redirect('/user/daftar-magang?success=true');
   } catch (err) {
     console.error('❌ Gagal menyimpan data peserta:', err);
     return res.status(500).send("Terjadi kesalahan saat menyimpan data.");

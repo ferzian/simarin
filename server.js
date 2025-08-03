@@ -50,7 +50,7 @@ app.use('/admin', require('./routes/admin/download-rekap'));
 
 app.use('/user/daftar-magang', require('./routes/user/daftar-magang'));
 app.use('/user', require('./routes/user/sertifikat'));
-app.use('/user/dashboard', require('./routes/user/user-dashboard'));
+app.use('/user', require('./routes/user/user-dashboard'));
 app.use('/user', profilRoutes);
 
 

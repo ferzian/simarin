@@ -65,7 +65,7 @@
       </div>
       <p class="mb-6 text-gray-600">Silakan isi formulir untuk mendaftar magang di Balai Perikanan Budidaya Air!</p>
 
-      <form id="formMagang" method="POST" action="/auth/user/daftar-magang" enctype="multipart/form-data" class="space-y-6">
+      <form id="formMagang" method="POST" action="/user/daftar-magang" enctype="multipart/form-data">
         <!-- Global Error Message -->
         <div id="globalError" class="bg-red-50 border-l-4 border-red-500 p-4 hidden">
           <div class="flex">
@@ -81,150 +81,147 @@
         </div>
 
         <!-- Field Input -->
-        <div>
-          <label class="block font-semibold text-gray-700 mb-1">Nama Lengkap</label>
-          <input type="text" name="namaLengkap" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400 bg-white bg-opacity-50" />
-          <div class="error-message" id="error-namaLengkap">Harap isi nama lengkap</div>
-        </div>
+<!-- Nomor Telepon -->
+<div class="mb-6">
+  <label for="telepon" class="block text-base font-semibold text-gray-700 mb-1">Nomor Telepon</label>
+  <input type="tel" id="telepon" name="telepon"
+    class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm placeholder-gray-400 transition duration-300"
+    placeholder="Masukkan nomor telepon Anda" required>
+</div>
 
-        <div>
-          <label class="block font-semibold text-gray-700 mb-1">Alamat domisili</label>
-          <input type="text" name="alamat" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400 bg-white bg-opacity-50" />
-          <div class="error-message" id="error-alamat">Harap isi alamat domisili</div>
-        </div>
+<!-- Program Studi -->
+<div class="mb-6">
+  <label for="prodi" class="block text-base font-semibold text-gray-700 mb-1">Program Studi</label>
+  <input type="text" id="prodi" name="prodi"
+    class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm placeholder-gray-400 transition duration-300"
+    placeholder="Masukkan program studi Anda" required>
+</div>
 
-        <div>
-          <label class="block font-semibold text-gray-700 mb-1">NIP/NIM/NIS</label>
-          <input type="text" name="nipNim" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400 bg-white bg-opacity-50" />
-          <div class="error-message" id="error-nipNim">Harap isi NIP/NIM/NIS</div>
-        </div>
+<!-- Jenjang Pendidikan -->
+<div class="mb-6">
+  <label for="jenjang" class="block text-base font-semibold text-gray-700 mb-1">Jenjang Pendidikan</label>
+  <select id="jenjang" name="jenjang"
+    class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm transition duration-300"
+    required>
+    <option value="" disabled selected>-- Pilih Jenjang --</option>
+    <option>Sekolah</option>
+    <option>D3/D4</option>
+    <option>S1</option>
+    <option>S2</option>
+    <option>S3</option>
+  </select>
+</div>
 
-        <div>
-          <label class="block font-semibold text-gray-700 mb-1">Asal Sekolah/PT/Instansi</label>
-          <input type="text" name="institusi" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400 bg-white bg-opacity-50" />
-          <div class="error-message" id="error-institusi">Harap isi Asal Sekolah/PT/Instansi</div>
-        </div>
+<!-- Jenis Kelamin -->
+<div class="mb-6">
+  <label for="jenisKelamin" class="block text-base font-semibold text-gray-700 mb-1">Jenis Kelamin</label>
+  <select id="jenisKelamin" name="jenisKelamin"
+    class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm transition duration-300"
+    required>
+    <option value="" disabled selected>-- Pilih Jenis Kelamin --</option>
+    <option>Laki-Laki</option>
+    <option>Perempuan</option>
+  </select>
+</div>
 
-        <div>
-          <label class="block font-semibold text-gray-700 mb-1">Nomor Telpon</label>
-          <input type="text" name="telepon" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400 bg-white bg-opacity-50" />
-          <div class="error-message" id="error-telepon">Harap isi Nomor Telepon</div>
-        </div>
+<!-- Tanggal Mulai dan Tanggal Selesai -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <div class="mb-6">
+    <label for="tanggalMulai" class="block text-base font-semibold text-gray-700 mb-1">Tanggal Mulai</label>
+    <input type="date" id="tanggalMulai" name="tanggalMulai"
+      class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm transition duration-300"
+      required>
+  </div>
+  <div class="mb-6">
+    <label for="tanggalSelesai" class="block text-base font-semibold text-gray-700 mb-1">Tanggal Selesai</label>
+    <input type="date" id="tanggalSelesai" name="tanggalSelesai"
+      class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm transition duration-300"
+      required>
+  </div>
+</div>
 
-        <div>
-          <label class="block font-semibold text-gray-700 mb-1">Program Studi</label>
-          <input type="text" name="prodi" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400 bg-white bg-opacity-50" />
-          <div class="error-message" id="error-prodi">Harap isi program studi</div>
-        </div>
+<!-- Kegiatan -->
+<div class="mb-6">
+  <label for="kegiatan" class="block text-base font-semibold text-gray-700 mb-1">Kegiatan</label>
+  <select id="kegiatan" name="kegiatan"
+    class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm transition duration-300"
+    required>
+    <option value="" disabled selected>-- Pilih Kegiatan --</option>
+    <option>Magang</option>
+    <option>PKL</option>
+    <option>KKL</option>
+    <option>KKP</option>
+  </select>
+</div>
 
-        <div>
-          <label class="block font-semibold text-gray-700 mb-1">Jenjang Pendidikan</label>
-          <select name="jenjang" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400 bg-white bg-opacity-50">
-            <option value="" disabled selected>-- Pilih Jenjang --</option>
-            <option>Sekolah</option>
-            <option>D3/D4</option>
-            <option>S1</option>
-            <option>S2</option>
-            <option>S3</option>
-          </select>
-          <div class="error-message" id="error-jenjang">Harap pilih jenjang pendidikan</div>
-        </div>
+<!-- Lokasi Instansi -->
+<div class="mb-6">
+  <label for="lokasi" class="block text-base font-semibold text-gray-700 mb-1">Lokasi Instansi</label>
+  <select id="lokasi" name="lokasi"
+    class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm transition duration-300"
+    required>
+    <option value="" disabled selected>-- Pilih Lokasi --</option>
+    <option>Depok</option>
+    <option>Sempur</option>
+    <option>Cibalagung</option>
+    <option>Cijeruk</option>
+  </select>
+</div>
 
-        <div>
-          <label class="block font-semibold text-gray-700 mb-1">Jenis Kelamin</label>
-          <select name="jenisKelamin" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400 bg-white bg-opacity-50">
-            <option value="" disabled selected>-- Pilih Jenis Kelamin --</option>
-            <option>Laki-Laki</option>
-            <option>Perempuan</option>
-          </select>
-          <div class="error-message" id="error-jenisKelamin">Harap pilih jenis kelamin</div>
-        </div>
+<!-- Upload Surat Pengantar -->
+<div class="mb-6">
+  <label for="uploadPengantar" class="block text-base font-semibold text-gray-700 mb-1">Upload Surat Pengantar</label>
+  <input
+    type="file"
+    id="uploadPengantar"
+    name="surat_pengantar"
+    accept=".pdf,.doc,.docx"
+    class="w-full border border-gray-300 px-4 py-3 rounded-xl text-gray-700 bg-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200 transition"
+    required
+  />
+</div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label class="block font-semibold text-gray-700 mb-1">Tanggal Mulai</label>
-            <input type="date" name="tanggalMulai" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400 bg-white bg-opacity-50" />
-            <div class="error-message" id="error-tanggalMulai">Harap pilih tanggal mulai</div>
-          </div>
+<!-- Upload Pas Foto -->
+<div class="mb-6">
+  <label for="uploadFoto" class="block text-base font-semibold text-gray-700 mb-1">Upload Pas Foto</label>
+  <input
+    type="file"
+    id="uploadFoto"
+    name="pas_foto"
+    accept="image/*"
+    class="w-full border border-gray-300 px-4 py-3 rounded-xl text-gray-700 bg-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-100 file:text-green-700 hover:file:bg-green-200 transition"
+    required
+  />
+</div>
 
-          <div>
-            <label class="block font-semibold text-gray-700 mb-1">Tanggal Selesai</label>
-            <input type="date" name="tanggalSelesai" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400 bg-white bg-opacity-50" />
-            <div class="error-message" id="error-tanggalSelesai">Harap pilih tanggal selesai</div>
-          </div>
-        </div>
+<!-- Upload Surat Keterangan Sehat -->
+<div class="mb-6">
+  <label for="uploadSehat" class="block text-base font-semibold text-gray-700 mb-1">Upload Surat Keterangan Sehat</label>
+  <input
+    type="file"
+    id="uploadSehat"
+    name="surat_sehat"
+    accept=".pdf,.jpg,.png"
+    class="w-full border border-gray-300 px-4 py-3 rounded-xl text-gray-700 bg-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-100 file:text-purple-700 hover:file:bg-purple-200 transition"
+    required
+  />
+</div>
 
-        <div>
-          <label class="block font-semibold text-gray-700 mb-1">Kegiatan</label>
-          <select name="kegiatan" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400 bg-white bg-opacity-50">
-            <option value="" disabled selected>-- Pilih Kegiatan --</option>
-            <option>Magang</option>
-            <option>PKL</option>
-            <option>KKL</option>
-            <option>KKP</option>
-          </select>
-          <div class="error-message" id="error-kegiatan">Harap pilih kegiatan</div>
-        </div>
 
-        <div>
-          <label class="block font-semibold text-gray-700 mb-1">Lokasi Instansi</label>
-          <select name="lokasi" required class="w-full border border-gray-300 rounded px-4 py-2 focus:ring-blue-400 bg-white bg-opacity-50">
-            <option value="" disabled selected>-- Pilih Lokasi --</option>
-            <option>Depok</option>
-            <option>Sempur</option>
-            <option>Cibalagung</option>
-            <option>Cijeruk</option>
-          </select>
-          <div class="error-message" id="error-lokasi">Harap pilih lokasi instansi</div>
-        </div>
-
-      <!-- Upload Surat Pengantar -->
-      <div class="mb-6">
-        <label class="block text-sm font-medium text-gray-700 mb-2">Upload Surat Pengantar</label>
-        <label for="uploadPengantar" class="flex flex-col items-center justify-center w-full h-48 px-4 transition bg-white bg-opacity-50 border-2 border-dashed rounded-md cursor-pointer hover:border-blue-500 focus:outline-none">
-          <svg class="w-10 h-10 text-blue-400 mb-2" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3 15a4 4 0 004 4h10a4 4 0 004-4m-4-4l-4-4m0 0l-4 4m4-4v12" />
-          </svg>
-          <p class="text-sm text-gray-600"><span class="font-medium text-blue-600 hover:underline">Klik untuk unggah</span> atau tarik ke sini</p>
-          <p id="fileNamePengantar" class="mt-2 text-xs text-gray-400">Tidak ada file yang dipilih</p>
-          <img id="previewPengantar" class="hidden mt-2 w-24 h-24 object-cover rounded-md border" alt="Preview Surat Pengantar">
-        </label>
-        <input id="uploadPengantar" name="suratPengantar" type="file" accept=".pdf,.jpg,.jpeg,.png" class="hidden" required />
+      <div class="mt-6">
+        <button type="submit"
+          class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1">
+          <span class="flex items-center justify-center space-x-2">
+            <svg class="w-5 h-5 animate-pulse" fill="none" stroke="currentColor" stroke-width="2"
+              viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span>Kirim Pendaftaran</span>
+          </span>
+        </button>
       </div>
-
-      <!-- Upload Pas Foto -->
-      <div class="mb-6">
-        <label class="block text-sm font-medium text-gray-700 mb-2">Upload Pas Foto</label>
-        <label for="uploadFoto" class="flex flex-col items-center justify-center w-full h-48 px-4 transition bg-white bg-opacity-50 border-2 border-dashed rounded-md cursor-pointer hover:border-blue-500 focus:outline-none">
-          <svg class="w-10 h-10 text-blue-400 mb-2" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3 15a4 4 0 004 4h10a4 4 0 004-4m-4-4l-4-4m0 0l-4 4m4-4v12" />
-          </svg>
-          <p class="text-sm text-gray-600"><span class="font-medium text-blue-600 hover:underline">Klik untuk unggah</span> atau tarik ke sini</p>
-          <p id="fileNameFoto" class="mt-2 text-xs text-gray-400">Tidak ada file yang dipilih</p>
-          <img id="previewFoto" class="hidden mt-2 w-24 h-24 object-cover rounded-md border" alt="Preview Foto">
-        </label>
-        <input id="uploadFoto" name="pasFoto" type="file" accept=".jpg,.jpeg,.png" class="hidden" required />
-      </div>
-
-      <!-- Upload Surat Sehat -->
-      <div class="mb-6">
-        <label class="block text-sm font-medium text-gray-700 mb-2">Upload Surat Sehat</label>
-        <label for="uploadSehat" class="flex flex-col items-center justify-center w-full h-48 px-4 transition bg-white bg-opacity-50 border-2 border-dashed rounded-md cursor-pointer hover:border-blue-500 focus:outline-none">
-          <svg class="w-10 h-10 text-blue-400 mb-2" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3 15a4 4 0 004 4h10a4 4 0 004-4m-4-4l-4-4m0 0l-4 4m4-4v12" />
-          </svg>
-          <p class="text-sm text-gray-600"><span class="font-medium text-blue-600 hover:underline">Klik untuk unggah</span> atau tarik ke sini</p>
-          <p id="fileNameSehat" class="mt-2 text-xs text-gray-400">Tidak ada file yang dipilih</p>
-          <img id="previewSehat" class="hidden mt-2 w-24 h-24 object-cover rounded-md border" alt="Preview Surat Sehat">
-        </label>
-        <input id="uploadSehat" name="suratSehat" type="file" accept=".pdf,.jpg,.jpeg,.png" class="hidden" required />
-      </div>
-
-        <div>
-          <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded shadow-md transition">
-            Kirim Pendaftaran
-            </button>
-          </div>
+      
         </form>
       </main>
     </div>

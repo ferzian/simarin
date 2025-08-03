@@ -34,7 +34,7 @@ router.post('/login', async (req, res) => {
     return res.redirect('/admin/dashboard');
   }
 
-  res.redirect('/auth/user/dashboard');
+  res.redirect('/user/dashboard');
 });
 
 
@@ -44,7 +44,6 @@ router.get('/register', (req, res) => {
 });
 
 
-// POST Register
 // POST Register
 router.post('/register', async (req, res) => {
   const {
@@ -88,54 +87,6 @@ router.post('/register', async (req, res) => {
     console.error(err);
     res.render('register', { error: 'Terjadi kesalahan saat register.' });
   }
-});
-
-
-
-// GET User Dashboard
-router.get('/user/dashboard', (req, res) => {
-  if (!req.session.user || req.session.user.role !== 'user') {
-    return res.redirect('/auth/login');
-  }
-
-  res.render('user/user-dashboard', {
-    username: req.session.user.username
-  });
-});
-
-// GET halaman permintaan sertifikat
-router.get('/user/daftar-magang/sertifikat', (req, res) => {
-  if (!req.session.user || req.session.user.role !== 'user') {
-    return res.redirect('/auth/login');
-  }
-
-  res.render('user/daftar-magang/sertifikat', {
-    username: req.session.user.username
-  });
-});
-
-
-// user surat-kepuasan-masyarakat
-router.get('/user/skm', (req, res) => {
-  if (!req.session.user || req.session.user.role !== 'user') {
-    return res.redirect('/auth/login');
-  }
-
-  res.render('user/skm', {
-    username: req.session.user.username
-  });
-});
-
-// routes/auth.js atau server.js
-router.post('/logout', (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.log(err);
-      return res.redirect('/user/dashboard'); // fallback jika error
-    }
-    res.clearCookie('connect.sid');
-    res.redirect('/auth/login'); // redirect ke halaman login, bukan render 'index'
-  });
 });
 
 module.exports = router;
