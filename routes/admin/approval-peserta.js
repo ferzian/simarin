@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { User, Participant } = require('../../models');
 const { isAuthenticated, isAdmin } = require('../../middleware/authMiddleware');
+const { sendApprovalParticipantEmail, sendRejectionParticipantEmail } = require('../../utils/sendEmail');
 
 router.get('/approval-peserta', isAuthenticated, isAdmin, async (req, res) => {
     try {
@@ -31,13 +32,18 @@ router.post('/approve-participant/:id', isAuthenticated, isAdmin, async (req, re
     const { id } = req.params;
 
     try {
-        const participant = await Participant.findByPk(id);
-        if (!participant) {
-            return res.status(404).send('Peserta tidak ditemukan');
-        }
+        const participant = await Participant.findByPk(id, {
+            include: [{ model: User }],
+        });
 
-        // Diapprove -> statusSelesai true (atau kamu bisa tambah field baru 'approved' kalau perlu)
+        if (!participant) return res.status(404).send('Peserta tidak ditemukan');
+
         await participant.update({ statusSelesai: true });
+
+        // Kirim email ke user terkait
+        if (participant.User) {
+            await sendApprovalParticipantEmail(participant.User);
+        }
 
         res.redirect('/admin/approval-peserta');
     } catch (err) {
@@ -46,20 +52,30 @@ router.post('/approve-participant/:id', isAuthenticated, isAdmin, async (req, re
     }
 });
 
+
 router.post('/reject-participant/:id', isAuthenticated, isAdmin, async (req, res) => {
     const { id } = req.params;
 
     try {
-        const participant = await Participant.findByPk(id);
-        if (!participant) {
-            return res.status(404).send('Peserta tidak ditemukan');
+        const participant = await Participant.findByPk(id, {
+            include: [{ model: User }],
+        });
+
+        if (!participant) return res.status(404).send('Peserta tidak ditemukan');
+
+        // Kirim email sebelum dihapus
+        if (participant.User) {
+            await sendRejectionParticipantEmail(participant.User);
         }
+
         await participant.destroy();
+
         res.redirect('/admin/approval-peserta');
     } catch (err) {
         console.error(err);
         res.status(500).send('Gagal menolak peserta');
     }
 });
+
 
 module.exports = router;
