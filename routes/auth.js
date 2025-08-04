@@ -89,4 +89,18 @@ router.post('/register', async (req, res) => {
   }
 });
 
+// POST Logout
+router.post('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('❌ Gagal logout:', err);
+      return res.status(500).send('Logout gagal');
+    }
+
+    res.clearCookie('connect.sid'); // Hapus cookie sesi (opsional)
+    res.redirect('/login'); // Arahkan ke halaman login
+  });
+});
+
+
 module.exports = router;
