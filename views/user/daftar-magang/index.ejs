@@ -8,6 +8,8 @@
   <link rel="stylesheet" href="/css/user.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
   <script src="/js/daftar-magang.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -25,9 +27,11 @@
     .error-border {
       border-color: #ef4444 !important;
     }
+    
+    
   </style>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-100" data-error="<%= typeof error !== 'undefined' ? error : '' %>">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <!-- Navigation -->
@@ -65,7 +69,8 @@
       </div>
       <p class="mb-6 text-gray-600">Silakan isi formulir untuk mendaftar magang di Balai Perikanan Budidaya Air!</p>
 
-      <form id="formMagang" method="POST" action="/user/daftar-magang" enctype="multipart/form-data">
+      <form id="formMagang" method="POST" action="/user/daftar-magang" enctype="multipart/form-data" class="space-y-6">
+
         <!-- Global Error Message -->
         <div id="globalError" class="bg-red-50 border-l-4 border-red-500 p-4 hidden">
           <div class="flex">
@@ -81,131 +86,158 @@
         </div>
 
         <!-- Field Input -->
-<!-- Nomor Telepon -->
-<div class="mb-6">
-  <label for="telepon" class="block text-base font-semibold text-gray-700 mb-1">Nomor Telepon</label>
-  <input type="tel" id="telepon" name="telepon"
-    class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm placeholder-gray-400 transition duration-300"
-    placeholder="Masukkan nomor telepon Anda" required>
-</div>
 
-<!-- Program Studi -->
-<div class="mb-6">
-  <label for="prodi" class="block text-base font-semibold text-gray-700 mb-1">Program Studi</label>
-  <input type="text" id="prodi" name="prodi"
-    class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm placeholder-gray-400 transition duration-300"
-    placeholder="Masukkan program studi Anda" required>
-</div>
+        <!--nama lengkap-->
+        <div class="mb-6">
+          <label for="Nama lengkap" class="block text-base font-semibold text-gray-700 mb-1">Nama lengkap</label>
+          <input type="text" id="Nama lengkap" name="nama_lengkap"
+            class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm placeholder-gray-400 transition duration-300"
+            placeholder="Masukkan Nama lengkap" required>
+        </div>
 
-<!-- Jenjang Pendidikan -->
-<div class="mb-6">
-  <label for="jenjang" class="block text-base font-semibold text-gray-700 mb-1">Jenjang Pendidikan</label>
-  <select id="jenjang" name="jenjang"
-    class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm transition duration-300"
-    required>
-    <option value="" disabled selected>-- Pilih Jenjang --</option>
-    <option>Sekolah</option>
-    <option>D3/D4</option>
-    <option>S1</option>
-    <option>S2</option>
-    <option>S3</option>
-  </select>
-</div>
+        <!--alamat domisili-->
+        <div class="mb-6">
+          <label for="Alamat Domisili" class="block text-base font-semibold text-gray-700 mb-1">Alamat Domisili</label>
+          <input type="text" id="Alamat Domisili" name="alamat_domisili"
+            class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm placeholder-gray-400 transition duration-300"
+            placeholder="Masukkan Alamat Domisili" required>
+        </div>
 
-<!-- Jenis Kelamin -->
-<div class="mb-6">
-  <label for="jenisKelamin" class="block text-base font-semibold text-gray-700 mb-1">Jenis Kelamin</label>
-  <select id="jenisKelamin" name="jenisKelamin"
-    class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm transition duration-300"
-    required>
-    <option value="" disabled selected>-- Pilih Jenis Kelamin --</option>
-    <option>Laki-Laki</option>
-    <option>Perempuan</option>
-  </select>
-</div>
+          <!-- Nomor Telepon -->
+          <div class="mb-6">
+            <label for="telepon" class="block text-base font-semibold text-gray-700 mb-1">Nomor Telepon</label>
+            <input type="text" id="telepon" name="telepon"
+              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm placeholder-gray-400 transition duration-300"
+              placeholder="Masukkan nomor telepon Anda" required>
+          </div>
 
-<!-- Tanggal Mulai dan Tanggal Selesai -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-  <div class="mb-6">
-    <label for="tanggalMulai" class="block text-base font-semibold text-gray-700 mb-1">Tanggal Mulai</label>
-    <input type="date" id="tanggalMulai" name="tanggalMulai"
-      class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm transition duration-300"
-      required>
-  </div>
-  <div class="mb-6">
-    <label for="tanggalSelesai" class="block text-base font-semibold text-gray-700 mb-1">Tanggal Selesai</label>
-    <input type="date" id="tanggalSelesai" name="tanggalSelesai"
-      class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm transition duration-300"
-      required>
-  </div>
-</div>
 
-<!-- Kegiatan -->
-<div class="mb-6">
-  <label for="kegiatan" class="block text-base font-semibold text-gray-700 mb-1">Kegiatan</label>
-  <select id="kegiatan" name="kegiatan"
-    class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm transition duration-300"
-    required>
-    <option value="" disabled selected>-- Pilih Kegiatan --</option>
-    <option>Magang</option>
-    <option>PKL</option>
-    <option>KKL</option>
-    <option>KKP</option>
-  </select>
-</div>
+          <!--Sekolah/PT/Instansi-->
+          <div class="mb-6">
+            <label for="Sekolah/PT/Instansi" class="block text-base font-semibold text-gray-700 mb-1">Sekolah/PT/Instansi</label>
+            <input type="text" id="Sekolah/PT/Instansi" name="instansi"
+              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm placeholder-gray-400 transition duration-300"
+              placeholder="Masukkan program studi Anda" required>
+          </div>
+          
 
-<!-- Lokasi Instansi -->
-<div class="mb-6">
-  <label for="lokasi" class="block text-base font-semibold text-gray-700 mb-1">Lokasi Instansi</label>
-  <select id="lokasi" name="lokasi"
-    class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm transition duration-300"
-    required>
-    <option value="" disabled selected>-- Pilih Lokasi --</option>
-    <option>Depok</option>
-    <option>Sempur</option>
-    <option>Cibalagung</option>
-    <option>Cijeruk</option>
-  </select>
-</div>
+          <!-- Program Studi -->
+          <div class="mb-6">
+            <label for="prodi" class="block text-base font-semibold text-gray-700 mb-1">Program Studi</label>
+            <input type="text" id="prodi" name="prodi"
+              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm placeholder-gray-400 transition duration-300"
+              placeholder="Masukkan program studi Anda" required>
+          </div>
 
-<!-- Upload Surat Pengantar -->
-<div class="mb-6">
-  <label for="uploadPengantar" class="block text-base font-semibold text-gray-700 mb-1">Upload Surat Pengantar</label>
-  <input
-    type="file"
-    id="uploadPengantar"
-    name="surat_pengantar"
-    accept=".pdf,.doc,.docx"
-    class="w-full border border-gray-300 px-4 py-3 rounded-xl text-gray-700 bg-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200 transition"
-    required
-  />
-</div>
+          <!-- Jenjang Pendidikan -->
+          <div class="mb-6">
+            <label for="jenjang" class="block text-base font-semibold text-gray-700 mb-1">Jenjang Pendidikan</label>
+            <select id="jenjang" name="jenjang"
+              class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm transition duration-300"
+              required>
+              <option value="" disabled selected>-- Pilih Jenjang --</option>
+              <option>Sekolah</option>
+              <option>D3/D4</option>
+              <option>S1</option>
+              <option>S2</option>
+              <option>S3</option>
+            </select>
+          </div>
 
-<!-- Upload Pas Foto -->
-<div class="mb-6">
-  <label for="uploadFoto" class="block text-base font-semibold text-gray-700 mb-1">Upload Pas Foto</label>
-  <input
-    type="file"
-    id="uploadFoto"
-    name="pas_foto"
-    accept="image/*"
-    class="w-full border border-gray-300 px-4 py-3 rounded-xl text-gray-700 bg-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-100 file:text-green-700 hover:file:bg-green-200 transition"
-    required
-  />
-</div>
+          <!-- Jenis Kelamin -->
+          <div class="mb-6">
+            <label for="jenisKelamin" class="block text-base font-semibold text-gray-700 mb-1">Jenis Kelamin</label>
+            <select id="jenisKelamin" name="jenis_kelamin"
+              class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm transition duration-300"
+              required>
+              <option value="" disabled selected>-- Pilih Jenis Kelamin --</option>
+              <option>Laki-Laki</option>
+              <option>Perempuan</option>
+            </select>
+          </div>
 
-<!-- Upload Surat Keterangan Sehat -->
-<div class="mb-6">
-  <label for="uploadSehat" class="block text-base font-semibold text-gray-700 mb-1">Upload Surat Keterangan Sehat</label>
-  <input
-    type="file"
-    id="uploadSehat"
-    name="surat_sehat"
-    accept=".pdf,.jpg,.png"
-    class="w-full border border-gray-300 px-4 py-3 rounded-xl text-gray-700 bg-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-100 file:text-purple-700 hover:file:bg-purple-200 transition"
-    required
-  />
-</div>
+          <!-- Tanggal Mulai dan Tanggal Selesai -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="mb-6">
+              <label for="tanggalMulai" class="block text-base font-semibold text-gray-700 mb-1">Tanggal Mulai</label>
+              <input type="date" id="tanggalMulai" name="tanggal_mulai"
+                class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm transition duration-300"
+                required>
+            </div>
+            <div class="mb-6">
+              <label for="tanggalSelesai" class="block text-base font-semibold text-gray-700 mb-1">Tanggal Selesai</label>
+              <input type="date" id="tanggalSelesai" name="tanggal_selesai"
+                class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm transition duration-300"
+                required>
+            </div>
+          </div>
+
+          <!-- Kegiatan -->
+          <div class="mb-6">
+            <label for="kegiatan" class="block text-base font-semibold text-gray-700 mb-1">Kegiatan</label>
+            <select id="kegiatan" name="kegiatan"
+              class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm transition duration-300"
+              required>
+              <option value="" disabled selected>-- Pilih Kegiatan --</option>
+              <option>Magang</option>
+              <option>PKL</option>
+              <option>KKL</option>
+              <option>KKP</option>
+            </select>
+          </div>
+
+          <!-- Lokasi Instansi -->
+          <div class="mb-6">
+            <label for="lokasi" class="block text-base font-semibold text-gray-700 mb-1">Lokasi Instansi</label>
+            <select id="lokasi" name="lokasi"
+              class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm transition duration-300"
+              required>
+              <option value="" disabled selected>-- Pilih Lokasi --</option>
+              <option>Depok</option>
+              <option>Sempur</option>
+              <option>Cibalagung</option>
+              <option>Cijeruk</option>
+            </select>
+          </div>
+
+          <!-- Upload Surat Pengantar -->
+          <div class="mb-6">
+            <label for="uploadPengantar" class="block text-base font-semibold text-gray-700 mb-1">Upload Surat Pengantar</label>
+            <input
+              type="file"
+              id="uploadPengantar"
+              name="surat_pengantar"
+              accept=".pdf,.doc,.docx"
+              class="w-full border border-gray-300 px-4 py-3 rounded-xl text-gray-700 bg-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200 transition"
+              required
+            />
+          </div>
+
+          <!-- Upload Pas Foto -->
+          <div class="mb-6">
+            <label for="uploadFoto" class="block text-base font-semibold text-gray-700 mb-1">Upload Pas Foto</label>
+            <input
+              type="file"
+              id="uploadFoto"
+              name="pas_foto"
+              accept="image/*"
+              class="w-full border border-gray-300 px-4 py-3 rounded-xl text-gray-700 bg-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-100 file:text-green-700 hover:file:bg-green-200 transition"
+              required
+            />
+          </div>
+
+          <!-- Upload Surat Keterangan Sehat -->
+          <div class="mb-6">
+            <label for="uploadSehat" class="block text-base font-semibold text-gray-700 mb-1">Upload Surat Keterangan Sehat</label>
+            <input
+              type="file"
+              id="uploadSehat"
+              name="surat_sehat"
+              accept=".pdf,.jpg,.png"
+              class="w-full border border-gray-300 px-4 py-3 rounded-xl text-gray-700 bg-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-100 file:text-purple-700 hover:file:bg-purple-200 transition"
+              required
+            />
+          </div>
 
 
       <div class="mt-6">
@@ -221,9 +253,20 @@
           </span>
         </button>
       </div>
-      
         </form>
       </main>
     </div>
+    <% if (success) { %>
+  <script>
+    Swal.fire({
+      icon: 'success',
+      title: 'Pendaftaran Berhasil!',
+      text: 'Data kamu sudah berhasil dikirim.',
+      confirmButtonText: 'OK'
+    });
+  </script>
+<% } %>
+
+    <script src="/js/user/alert-handler.js"></script>
   </body>
 </html>

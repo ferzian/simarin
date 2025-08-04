@@ -44,38 +44,41 @@ function updateSummaryCards(data) {
         return;
     }
 
-    // Hitung rata-rata durasi (ini membutuhkan data tanggal yang lebih akurat, ini hanya contoh)
     let totalDurationDays = 0;
+    let typeCounts = {};
+
     data.forEach((p) => {
-        const start = new Date(p.startDate);
-        const end = new Date(p.endDate);
+        const start = new Date(p.tanggalMulai);
+        const end = new Date(p.tanggalSelesai);
         if (!isNaN(start) && !isNaN(end)) {
             totalDurationDays += (end - start) / (1000 * 60 * 60 * 24);
         }
+
+        if (p.kegiatan) {
+            typeCounts[p.kegiatan] = (typeCounts[p.kegiatan] || 0) + 1;
+        }
     });
+
     avgDurationEl.textContent = `${Math.round(
         totalDurationDays / data.length
     )} hari`;
 
-    // Hitung jenis kegiatan paling populer
-    const typeCounts = {};
-    data.forEach((p) => {
-        typeCounts[p.type] = (typeCounts[p.type] || 0) + 1;
-    });
     const mostPopular = Object.keys(typeCounts).reduce(
         (a, b) => (typeCounts[a] > typeCounts[b] ? a : b),
-        Object.keys(typeCounts)[0]
+        Object.keys(typeCounts)[0] || "N/A"
     );
     mostPopularTypeEl.textContent = mostPopular || "N/A";
 }
 
+
 // Fungsi untuk memperbarui grafik
 function updateCharts(data) {
     // Data untuk Jenis Kelamin
-    const genderCounts = { "Laki-laki": 0, Perempuan: 0 };
+    const genderCounts = { "Laki-Laki": 0, Perempuan: 0 };
     data.forEach((p) => {
-        if (p.gender === "Laki-laki") genderCounts["Laki-laki"]++;
-        else if (p.gender === "Perempuan") genderCounts["Perempuan"]++;
+        if (p.jenisKelamin === "Laki-Laki") genderCounts["Laki-Laki"]++;
+        else if (p.jenisKelamin === "Perempuan") genderCounts["Perempuan"]++;
+
     });
 
     if (genderChart) genderChart.destroy();
@@ -108,7 +111,7 @@ function updateCharts(data) {
     // Data untuk Jenis Kegiatan
     const activityTypeCounts = {};
     data.forEach((p) => {
-        activityTypeCounts[p.type] = (activityTypeCounts[p.type] || 0) + 1;
+        activityTypeCounts[p.kegiatan] = (activityTypeCounts[p.kegiatan] || 0) + 1;
     });
 
     if (activityTypeChart) activityTypeChart.destroy();
@@ -151,7 +154,7 @@ function updateCharts(data) {
     // Data untuk Jurusan Populer (Bar Chart Horizontal)
     const majorCounts = {};
     data.forEach((p) => {
-        majorCounts[p.major] = (majorCounts[p.major] || 0) + 1;
+        majorCounts[p.prodi] = (majorCounts[p.prodi] || 0) + 1;
     });
     const sortedMajors = Object.entries(majorCounts)
         .sort(([, a], [, b]) => b - a)
@@ -207,13 +210,13 @@ function renderTable(data, page) {
         const row = document.createElement("tr");
         row.className = "table-row";
         row.innerHTML = `
-            <td>${p.name}</td>
-            <td>${p.gender}</td>
-            <td>${p.major}</td>
-            <td>${p.type}</td>
-            <td>${p.institution}</td>
-            <td>${p.startDate} - ${p.endDate}</td>
-          `;
+            <td class="px-4 py-2">${p.nama}</td>
+            <td class="px-4 py-2">${p.jenisKelamin}</td>
+            <td class="px-4 py-2">${p.prodi}</td>
+            <td class="px-4 py-2">${p.kegiatan}</td>
+            <td class="px-4 py-2">${p.instansi}</td>
+            <td class="px-4 py-2">${formatIndoDate(p.tanggalMulai)} - ${formatIndoDate(p.tanggalSelesai)}</td>
+        `;
         participantsTableBody.appendChild(row);
     });
 
@@ -241,10 +244,10 @@ applyFilterBtn.addEventListener("click", () => {
     let tempData = participantsData;
 
     if (year) {
-        tempData = tempData.filter((p) => p.startDate.startsWith(year)); // Filter berdasarkan tahun mulai
+        tempData = tempData.filter((p) => p.tanggalMulai.startsWith(year));
     }
     if (type) {
-        tempData = tempData.filter((p) => p.type === type);
+        tempData = tempData.filter((p) => p.kegiatan === type);
     }
     updateUI(tempData);
 });
@@ -253,9 +256,9 @@ searchTableInput.addEventListener("keyup", () => {
     const searchTerm = searchTableInput.value.toLowerCase();
     const searchResults = filteredParticipants.filter(
         (p) =>
-            p.name.toLowerCase().includes(searchTerm) ||
-            p.institution.toLowerCase().includes(searchTerm) ||
-            p.type.toLowerCase().includes(searchTerm)
+            p.nama.toLowerCase().includes(searchTerm) ||
+            p.instansi.toLowerCase().includes(searchTerm) ||
+            p.kegiatan.toLowerCase().includes(searchTerm)
     );
     currentPage = 1; // Reset halaman saat pencarian
     renderTable(searchResults, currentPage);
@@ -279,48 +282,51 @@ nextPageBtn.addEventListener("click", () => {
     }
 });
 
-document
-    .getElementById("downloadTableDataBtn")
-    .addEventListener("click", () => {
-        const headers = [
-            "Nama",
-            "Jenis Kelamin",
-            "Jurusan",
-            "Jenis Kegiatan",
-            "Asal Instansi",
-            "Periode Mulai",
-            "Periode Selesai",
-        ];
-        const rows = filteredParticipants.map((p) => [
-            p.name,
-            p.gender,
-            p.major,
-            p.type,
-            p.institution,
-            p.startDate,
-            p.endDate,
-        ]);
+function formatIndoDate(dateStr) {
+    const options = { day: "numeric", month: "long", year: "numeric" };
+    return new Date(dateStr).toLocaleDateString("id-ID", options);
+}
 
-        let csvContent = headers.join(",") + "\n";
-        rows.forEach((row) => {
-            csvContent += row.map((e) => `"${e}"`).join(",") + "\n"; // Kutip nilai untuk menghindari masalah koma
-        });
+document.getElementById("downloadTableDataBtn").addEventListener("click", () => {
+    const headers = [
+        "Nama",
+        "Jenis Kelamin",
+        "Jurusan",
+        "Jenis Kegiatan",
+        "Asal Instansi",
+        "Tanggal Mulai",
+        "Tanggal Selesai",
+    ];
 
-        const blob = new Blob([csvContent], {
-            type: "text/csv;charset=utf-8;",
-        });
-        const link = document.createElement("a");
-        if (link.download !== undefined) {
-            // Feature detection
-            const url = URL.createObjectURL(blob);
-            link.setAttribute("href", url);
-            link.setAttribute("download", "data_peserta_simarin.csv");
-            link.style.visibility = "hidden";
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
+    const rows = filteredParticipants.map((p) => [
+        p.nama,
+        p.jenisKelamin,
+        p.prodi,
+        p.kegiatan,
+        p.instansi,
+        formatIndoDate(p.tanggalMulai),
+        formatIndoDate(p.tanggalSelesai),
+    ]);
+
+    let csvContent = headers.join(",") + "\n";
+    rows.forEach((row) => {
+        csvContent += row.map((e) => `"${e}"`).join(",") + "\n"; // Bungkus kutip biar aman
     });
+
+    const blob = new Blob([csvContent], {
+        type: "text/csv;charset=utf-8;",
+    });
+    const link = document.createElement("a");
+    if (link.download !== undefined) {
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", "data_peserta_simarin.csv");
+        link.style.visibility = "hidden";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+});
 
 // Inisialisasi awal UI saat halaman dimuat
 window.onload = () => {

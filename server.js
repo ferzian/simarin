@@ -20,6 +20,8 @@ app.use(express.json());
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 app.use(session({
   secret: 'sempur123',
   resave: false,

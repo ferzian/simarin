@@ -20,15 +20,23 @@ router.get('/peserta', isAuthenticated, isAdmin, async (req, res) => {
       include: [{ model: User }]
     });
 
+    const formatDate = (dateStr) =>
+      new Date(dateStr).toLocaleDateString('id-ID', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      });
+
+
     res.render('admin/peserta', {
       participants: participants.map((p) => ({
-        name: p.User.username,
-        gender: p.jenisKelamin,
-        major: p.jurusan,
-        type: p.jenisKegiatan,
-        institution: p.asalInstansi,
-        startDate: p.tanggalMulai.toISOString().split('T')[0],
-        endDate: p.tanggalSelesai.toISOString().split('T')[0],
+        nama: p.User.username,
+        jenisKelamin: p.jenisKelamin,
+        prodi: p.prodi,
+        kegiatan: p.kegiatan,
+        instansi: p.instansi,
+        tanggalMulai: p.tanggalMulai, 
+        tanggalSelesai: p.tanggalSelesai,
       })),
       pendingUsers,
       pendingParticipants,

@@ -11,6 +11,7 @@
     <link rel="icon" sizes="32x32" type="image/png" href="/images/logo.png" />
     <link rel="stylesheet" href="/css/admin.css" />
     <script src="/js/admin/index.js" defer></script>
+    <script src="/js/admin/approval-peserta.js" defer></script>
   </head>
   <body class="bg-gray-100 flex h-screen">
     <aside
@@ -385,11 +386,11 @@
         <ul class="space-y-6">
           <% pendingParticipants.forEach(participant => { %>
           <li
-            class="bg-white p-6 rounded-xl shadow-lg flex flex-col lg:flex-row lg:justify-between transition duration-300 hover:shadow-xl border-l-4 border-indigo-500"
+            class="bg-white p-6 rounded-xl shadow-lg flex flex-col lg:flex-row lg:justify-between transition duration-300 hover:shadow-xl <%= participant.jenisKelamin === 'Laki-Laki' ? 'border-l-4 border-blue-500' : 'border-l-4 border-pink-400' %>"
           >
             <div class="mb-6 lg:mb-0 lg:w-2/3">
               <h3 class="font-bold text-xl text-gray-800 mb-2">
-                <%= participant.name %>
+                <%= participant.nama %>
               </h3>
               <div class="space-y-1 text-gray-600 text-sm">
                 <p class="flex items-center">
@@ -409,7 +410,7 @@
                   </svg>
                   Asal Instansi:
                   <span class="ml-1 font-medium"
-                    ><%= participant.institution %></span
+                    ><%= participant.instansi %></span
                   >
                 </p>
                 <p class="flex items-center">
@@ -429,7 +430,7 @@
                   </svg>
                   Tipe Pengajuan:
                   <span class="ml-1 font-medium"
-                    ><%= participant.applicationType %></span
+                    ><%= participant.kegiatan %></span
                   >
                 </p>
                 <p class="flex items-center">
@@ -449,8 +450,8 @@
                   </svg>
                   Periode:
                   <span class="ml-1 font-medium"
-                    ><%= participant.startDate %> - <%= participant.endDate
-                    %></span
+                    ><%= participant.tanggalMulai %> - <%=
+                    participant.tanggalSelesai %></span
                   >
                 </p>
               </div>
@@ -461,8 +462,8 @@
                 </p>
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
                   <a
-                    href="<%= participant.photoUrl %>"
-                    target="_blank"
+                    href="javascript:void(0);"
+                    onclick="openImageModal('/uploads/user/pas-foto/<%= participant.pasFoto %>')"
                     class="flex items-center justify-center p-2 border border-purple-300 rounded-md bg-purple-50 text-purple-700 hover:bg-purple-100 transition-colors"
                   >
                     <svg
@@ -482,9 +483,9 @@
                     Foto
                   </a>
                   <a
-                    href="<%= participant.letterUrl %>"
-                    target="_blank"
-                    class="flex items-center justify-center p-2 border border-blue-300 rounded-md bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors"
+                    href="javascript:void(0);"
+                    onclick="openImageModal('/uploads/user/surat-pengantar/<%= participant.suratPengantar %>')"
+                    class="flex items-center justify-center p-2 border border-blue-300 rounded-md bg-blue-50 text-blue-700 hover:bg-blue-100 hover:bg-blue-100 transition-colors"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -503,8 +504,8 @@
                     Surat Pengajuan
                   </a>
                   <a
-                    href="<%= participant.medicalUrl %>"
-                    target="_blank"
+                    href="javascript:void(0);"
+                    onclick="openImageModal('/uploads/user/surat-sehat/<%= participant.suratSehat %>')"
                     class="flex items-center justify-center p-2 border border-green-300 rounded-md bg-green-50 text-green-700 hover:bg-green-100 transition-colors"
                   >
                     <svg
@@ -523,6 +524,20 @@
                     </svg>
                     Surat Sehat
                   </a>
+                  <!-- Modal -->
+                  <div
+                    id="imageModal"
+                    class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden"
+                    onclick="closeImageModal(event)"
+                  >
+                    <img
+                      id="modalImage"
+                      src=""
+                      alt="Dokumen"
+                      class="max-h-[70vh] max-w-[70vw] rounded-xl shadow-2xl transition-transform duration-300"
+                      onwheel="zoomImage(event)"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -531,7 +546,7 @@
               class="flex flex-col sm:flex-row gap-3 w-full lg:w-1/4 items-center lg:items-end lg:justify-end"
             >
               <form
-                action="/auth/admin/approve-participant/<%= participant.id %>"
+                action="/admin/approve-participant/<%= participant.id %>"
                 method="POST"
                 class="w-full sm:w-auto"
               >
@@ -556,7 +571,7 @@
                 </button>
               </form>
               <form
-                action="/auth/admin/reject-participant/<%= participant.id %>"
+                action="/admin/reject-participant/<%= participant.id %>"
                 method="POST"
                 class="w-full sm:w-auto"
               >

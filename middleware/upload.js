@@ -20,8 +20,8 @@ const upload = multer({
   storage: multer.diskStorage({
     destination: function (req, file, cb) {
       let target = 'surat-pengantar';
-      if (file.fieldname === 'pasFoto') target = 'pas-foto';
-      else if (file.fieldname === 'suratSehat') target = 'surat-sehat';
+      if (file.fieldname === 'pas_foto') target = 'pas-foto';
+      else if (file.fieldname === 'surat_sehat') target = 'surat-sehat';
       const folderPath = path.join(__dirname, `../public/uploads/user/${target}`);
       fs.mkdirSync(folderPath, { recursive: true });
       cb(null, folderPath);
