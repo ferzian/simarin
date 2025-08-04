@@ -83,9 +83,9 @@ router.post(
     } catch (err) {
       console.error('❌ Gagal menyimpan data peserta:', err);
 
-      // ❌ Render kembali halaman dengan error
+      // ❌ Render kembali halaman dengan error (✅ diperbaiki di sini)
       return res.render('user/daftar-magang/index', {
-        username: req.session.user.username,
+        username: req.session.user?.username || 'Pengguna',
         error: 'Terjadi kesalahan saat menyimpan data.',
         success: false,
       });
