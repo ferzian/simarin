@@ -1,7 +1,8 @@
+const { Op } = require('sequelize'); // Jangan lupa import Op
 const express = require('express');
 const router = express.Router();
 const { User } = require('../models');
-const sendAdminNotification = require('../utils/sendAdminNotification');
+const bcrypt = require('bcrypt');
 
 // GET Login
 router.get('/login', (req, res) => {
@@ -10,79 +11,99 @@ router.get('/login', (req, res) => {
 
 // POST Login
 router.post('/login', async (req, res) => {
-  const { username, password } = req.body;
-  const user = await User.findOne({ where: { username, password } });
+  const { loginId, password } = req.body; // ← pakai loginId
 
-  if (!user) {
-    return res.render('login', { error: 'Username atau password salah' });
+  try {
+    // Cari berdasarkan username ATAU email
+    const user = await User.findOne({
+      where: {
+        [Op.or]: [{ username: loginId }, { email: loginId }]
+      }
+    });
+
+    if (!user) {
+      return res.render('login', { error: 'Username/email atau password salah' });
+    }
+
+    // Verifikasi password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.render('login', { error: 'Username/email atau password salah' });
+    }
+
+    // Simpan ke session
+    req.session.user = {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+      isApproved: user.approved
+    };
+
+    // Redirect
+    if (user.role === 'admin') {
+      return res.redirect('/admin/dashboard');
+    }
+
+    res.redirect('/user/dashboard');
+  } catch (err) {
+    console.error('❌ Login error:', err);
+    res.render('login', { error: 'Terjadi kesalahan saat login.' });
   }
-  if (!user.approved && user.role !== 'admin') {
-    return res.render('login', { error: 'Akun kamu belum disetujui admin.' });
-  }
-
-  // Simpan ke session
-  req.session.user = {
-    id: user.id,
-    username: user.username,
-    role: user.role,
-    isApproved: user.approved
-  };
-
-
-  // Redirect sesuai role
-  if (user.role === 'admin') {
-    return res.redirect('/admin/dashboard');
-  }
-
-  res.redirect('/user/dashboard');
 });
-
 
 // GET Register
 router.get('/register', (req, res) => {
   res.render('register', { error: null });
 });
 
-
 // POST Register
 router.post('/register', async (req, res) => {
-  const {
-    username,
-    password,
-    confirmPassword,
-    email,
-    phone,
-    instansi,
-  } = req.body;
+  const { username, password, confirmPassword, email, phone, instansi } = req.body;
+  const hashedPassword = await bcrypt.hash(password, 10); // tambahkan ini
 
-  // Validasi password dan konfirmasi
   if (password !== confirmPassword) {
     return res.render('register', { error: 'Password tidak sama.' });
   }
 
   try {
-    const existingUser = await User.findOne({ where: { username } });
+    // Cek apakah username ATAU email sudah ada (OR condition)
+    const existingUser = await User.findOne({
+      where: {
+        [Op.or]: [
+          { username },
+          { email }
+        ]
+      }
+    });
+
     if (existingUser) {
-      return res.render('register', { error: 'Username sudah digunakan.' });
+      if (existingUser.username === username) {
+        return res.render('register', { error: 'Username sudah digunakan.' });
+      }
+      if (existingUser.email === email) {
+        return res.render('register', { error: 'Email sudah digunakan.' });
+      }
     }
 
-    // Simpan user baru
+    // Buat user baru
     const newUser = await User.create({
       username,
-      password,
+      password: hashedPassword,
       email,
       phone,
       instansi,
       role: 'user',
-      approved: false,
+      approved: true, // Langsung approved tanpa verifikasi admin
     });
-
-    // Kirim notifikasi ke admin
-    await sendAdminNotification(newUser);
 
     res.redirect('/?registered=success');
   } catch (err) {
     console.error(err);
+    // Beri pesan error yang lebih spesifik
+    if (err.name === 'SequelizeUniqueConstraintError') {
+      return res.render('register', { error: 'Username atau email sudah terdaftar.' });
+    }
     res.render('register', { error: 'Terjadi kesalahan saat register.' });
   }
 });
