@@ -190,11 +190,12 @@
                 >No HP</label
               >
               <input
-                type="text"
+                type="tel"
                 name="phone"
                 id="phone"
                 placeholder="081234567890"
                 class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-lg"
+                oninput="this.value = this.value.replace(/[^0-9]/g, '');"
               />
             </div>
 
@@ -217,14 +218,16 @@
             <!-- Tanggal Lahir -->
             <div>
               <label
-                for="dob"
+                for="instansi"
                 class="block text-gray-700 font-medium mb-2 text-lg"
-                >Tanggal Lahir</label
+                >Asal Instansi</label
               >
+              <!-- sekarang -->
               <input
-                type="date"
-                name="dob"
-                id="dob"
+                type="text"
+                name="instansi"
+                placeholder="Asal Instansi"
+                required
                 class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-lg"
               />
             </div>

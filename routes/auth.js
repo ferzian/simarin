@@ -52,8 +52,7 @@ router.post('/register', async (req, res) => {
     confirmPassword,
     email,
     phone,
-    dob,
-    countryCode,
+    instansi,
   } = req.body;
 
   // Validasi password dan konfirmasi
@@ -73,8 +72,7 @@ router.post('/register', async (req, res) => {
       password,
       email,
       phone,
-      dob,
-      countryCode,
+      instansi,
       role: 'user',
       approved: false,
     });

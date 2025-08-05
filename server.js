@@ -81,7 +81,7 @@ sequelize.authenticate().then(async () => {
       password: 'admin123',
       email: 'admin@example.com',
       phone: '1234567890',
-      dob: '2000-01-01',
+      instansi: '',
       role: 'admin',
       approved: true,
     });

@@ -16,7 +16,6 @@ module.exports = (sequelize) => {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      // unique: true,
       validate: {
         isEmail: true,
       }
@@ -26,7 +25,7 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
     phone: DataTypes.STRING,
-    dob: DataTypes.DATEONLY,
+    instansi: DataTypes.STRING,
     role: {
       type: DataTypes.STRING,
       defaultValue: 'user',
