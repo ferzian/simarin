@@ -35,7 +35,7 @@ router.post(
       const {
         namaLengkap,
         alamat,
-        nipNim,
+        nisNpm,
         telepon,
         institusi,
         prodi,
@@ -62,7 +62,7 @@ router.post(
         userId,
         nama: namaLengkap,
         alamat,
-        nipNim,
+        nisNpm,
         telepon,
         instansi: institusi,
         prodi,
