@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
   <script src="/js/daftar-magang.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
   <style>
     body {
@@ -46,15 +47,75 @@
     
     <!-- Kanan: Menu Navigasi -->
     <div class="flex space-x-8">
-      <div class="flex space-x-8">
-        <a href="#" class="program-text text-gray-700 font-semibold py-2 text-xl">Beranda</a>
-        <a href="#" class="program-text text-gray-700 font-semibold py-2 text-xl">Layanan</a>
-        <a href="#" class="program-text text-gray-700 font-semibold py-2 text-xl">Kontak</a>
-        <a href="#" class="program-text text-gray-700 font-semibold py-2 text-xl">Logout</a>
-      </div>
+        <a href="#" class="text-gray-700 font-semibold py-2 text-xl">Beranda</a>
+
+        <!-- Layanan dengan dropdown -->
+        <div x-data="{ open: false }" class="relative inline-flex items-center">
+          <button @click="open = !open" class="text-gray-700 font-semibold py-2 text-xl focus:outline-none">
+            Layanan
+          </button>
+          <div x-show="open" @click.away="open = false"
+               class="absolute top-full mt-2 w-40 bg-white rounded shadow-lg py-2 z-50"
+               x-transition>
+            <a href="/user/daftar-magang" class="flex items-center gap-2 px-4 py-2 text-gray-800 hover:bg-gray-100">
+              Daftar Magang
+           <a href="/user/SKM" class="flex items-center gap-2 px-4 py-2 text-gray-800 hover:bg-gray-100">
+               SKM
+            </a>
+          </div>
+        </div>
+  
+        <!-- Kontak dengan dropdown -->
+        <div x-data="{ open: false }" class="relative inline-flex items-center">
+          <button @click="open = !open" class="text-gray-700 font-semibold py-2 text-xl focus:outline-none">
+            Kontak
+          </button>
+          <div x-show="open" @click.away="open = false"
+               class="absolute top-full mt-2 w-40 bg-white rounded shadow-lg py-2 z-50"
+               x-transition>
+               <a href="https://www.instagram.com/bppsdm_brpbatpp_bogor" target="_blank"
+               class="flex items-center gap-2 px-4 py-2 text-gray-800 hover:bg-gray-100">
+              <!-- Ikon Instagram -->
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                   stroke-width="1.5" stroke="currentColor"
+                   class="w-5 h-5 text-pink-600">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M2.25 6.75C2.25 4.679 3.929 3 6 3h12c2.071 0 3.75 1.679 3.75 3.75v12c0 2.071-1.679 3.75-3.75 3.75H6A3.75 3.75 0 0 1 2.25 18.75v-12zM16.5 10.5a4.5 4.5 0 1 0-9 0 4.5 4.5 0 0 0 9 0zM17.25 6.75h.008v.008h-.008V6.75z"/>
+              </svg>
+              <span class="text-base font-semibold">instagram</span>
+            </a>
+            
+          </div>
+        </div>
       
-  </div>
-</nav>
+        <div class="relative inline-block text-left" x-data="{ open: false }">
+          <!-- Tombol Hamburger -->
+          <button @click="open = !open" class="p-2 text-gray-700 hover:text-blue-600 focus:outline-none">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+    
+            <!-- Dropdown Menu --> 
+          <div x-show="open" @click.outside="open = false"
+               x-transition
+               class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+               <a href="/user/profil" class="flex items-center px-4 py-2 text-base text-gray-700 hover:bg-gray-100">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A9 9 0 1112 21v-6.063a3 3 0 100-6V3a9 9 0 00-6.879 14.804z" />
+                </svg>
+                Profil
+              </a> 
+            <button onclick="confirmLogout()" class="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">
+              Logout
+            </button>
+            
+            </form>
+          </div>
+        </div>
+      </div>
+   </nav>
+
 
   <!-- Main Content -->
   <div class="max-w-3xl mx-auto mt-12 rounded shadow relative">
