@@ -36,7 +36,6 @@ app.get('/', (req, res) => res.render('index')); // ← Kembalikan baris ini
 app.get('/login', (req, res) => res.render('login'));
 app.get('/register', (req, res) => res.render('register'));
 
-
 // Routes 
 app.use('/auth', authRoutes);
 app.use('/admin', require('./routes/admin/dashboard'));
@@ -48,7 +47,6 @@ app.use('/user/daftar-magang', require('./routes/user/daftar-magang'));
 app.use('/user', require('./routes/user/sertifikat'));
 app.use('/user', require('./routes/user/user-dashboard'));
 app.use('/user', profilRoutes);
-
 
 // Visitor tracking
 app.use(async (req, res, next) => {
