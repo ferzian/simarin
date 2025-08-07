@@ -32,7 +32,7 @@ app.use((req, res, next) => {
 });
 
 // Halaman umum
-app.get('/', (req, res) => res.render('index')); // ← Kembalikan baris ini
+app.get('/', (req, res) => res.render('index')); 
 app.get('/login', (req, res) => res.render('login'));
 app.get('/register', (req, res) => res.render('register'));
 
@@ -67,7 +67,7 @@ app.use(async (req, res, next) => {
 sequelize.authenticate().then(async () => {
   const admin = await User.findOne({ where: { role: 'admin' } });
   if (!admin) {
-    const hashedPassword = await bcrypt.hash('admin123', 10); // hash password dulu
+    const hashedPassword = await bcrypt.hash('admin123', 10); 
 
     await User.create({
       username: 'admin',

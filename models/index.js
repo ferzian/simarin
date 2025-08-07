@@ -18,7 +18,6 @@ Survey.associate?.({ Participant });
 // Export semua model + instance sequelize-nya
 module.exports = {
   sequelize,
-  Sequelize,
   User,
   Visitor,
   Participant,

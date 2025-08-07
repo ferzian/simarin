@@ -33,6 +33,9 @@ module.exports = (sequelize) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+    resetToken: DataTypes.STRING,
+    resetTokenExpires: DataTypes.DATE,
+
   }, {
     sequelize,
     modelName: 'User',
