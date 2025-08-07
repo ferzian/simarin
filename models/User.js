@@ -11,12 +11,10 @@ module.exports = (sequelize) => {
     username: {
       type: DataTypes.STRING,
       allowNull: false,
-      // unique: true,
     },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      // unique: true,
       validate: {
         isEmail: true,
       }
@@ -26,7 +24,7 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
     phone: DataTypes.STRING,
-    dob: DataTypes.DATEONLY,
+    instansi: DataTypes.STRING,
     role: {
       type: DataTypes.STRING,
       defaultValue: 'user',
@@ -35,6 +33,9 @@ module.exports = (sequelize) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+    resetToken: DataTypes.STRING,
+    resetTokenExpires: DataTypes.DATE,
+
   }, {
     sequelize,
     modelName: 'User',

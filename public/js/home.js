@@ -3,8 +3,10 @@ if (urlParams.get('registered') === 'success') {
     Swal.fire({
         icon: 'success',
         title: 'Registrasi Berhasil!',
-        text: 'Silakan tunggu admin untuk menyetujui akun Anda.',
-        confirmButtonColor: '#3B82F6', // Tailwind Blue-500
+        text: 'Silakan login untuk masuk ke dashboard Anda.',
+        confirmButtonColor: '#3B82F6',
+    }).then((result) => {
+        window.location.href = '/login'; // Ganti dengan URL login Anda
     });
 }
 

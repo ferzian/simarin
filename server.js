@@ -1,4 +1,5 @@
 const express = require('express');
+const bcrypt = require('bcrypt');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const path = require('path');
@@ -7,11 +8,7 @@ const { User, Visitor, sequelize } = require('./models');
 const authRoutes = require('./routes/auth');
 const daftarMagangRoute = require('./routes/user/daftar-magang');
 const profilRoutes = require('./routes/user/profil');
-
-
 const app = express();
-
-// ... semua require di awal tetap
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -35,17 +32,13 @@ app.use((req, res, next) => {
 });
 
 // Halaman umum
-app.get('/', (req, res) => res.render('index')); // ← Kembalikan baris ini
+app.get('/', (req, res) => res.render('index')); 
 app.get('/login', (req, res) => res.render('login'));
 app.get('/register', (req, res) => res.render('register'));
-
 
 // Routes 
 app.use('/auth', authRoutes);
 app.use('/admin', require('./routes/admin/dashboard'));
-// app.use('/auth/admin', require('./routes/admin/download-visitors')); // ← sementara nonaktifkan jika file belum ada
-app.use('/admin', require('./routes/admin/approval-akun'));
-app.use('/admin', require('./routes/admin/approval-peserta'));
 app.use('/admin', require('./routes/admin/peserta'));
 app.use('/admin', require('./routes/admin/skm'));
 app.use('/admin', require('./routes/admin/download-rekap'));
@@ -54,7 +47,6 @@ app.use('/user/daftar-magang', require('./routes/user/daftar-magang'));
 app.use('/user', require('./routes/user/sertifikat'));
 app.use('/user', require('./routes/user/user-dashboard'));
 app.use('/user', profilRoutes);
-
 
 // Visitor tracking
 app.use(async (req, res, next) => {
@@ -72,20 +64,20 @@ app.use(async (req, res, next) => {
   next();
 });
 
-// Sync DB + Start server
 sequelize.authenticate().then(async () => {
   const admin = await User.findOne({ where: { role: 'admin' } });
   if (!admin) {
+    const hashedPassword = await bcrypt.hash('admin123', 10); 
+
     await User.create({
       username: 'admin',
-      password: 'admin123',
-      email: 'admin@example.com',
-      phone: '1234567890',
-      dob: '2000-01-01',
+      password: hashedPassword, 
+      email: 'admin@gmail.com',
+      phone: '(0251) 8313200',
+      instansi: 'BRPBATPP',
       role: 'admin',
       approved: true,
     });
-    console.log('Admin created');
   }
 
   app.listen(3000, () => console.log('✅ Server jalan di http://localhost:3000'));
