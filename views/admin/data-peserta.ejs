@@ -3,7 +3,7 @@
   <head>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <title>Data Peserta Admin SIMARIN</title>
+    <title>Statistik Peserta Admin SIMARIN</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
@@ -12,7 +12,7 @@
     <link rel="icon" sizes="32x32" type="image/png" href="/images/logo.png" />
     <link rel="stylesheet" href="/css/admin.css" />
     <script src="/js/admin/index.js" defer></script>
-    <script src="/js/admin/data-peserta.js" defer></script>
+    <script src="/js/admin/peserta.js" defer></script>
   </head>
   <body class="bg-gray-100 flex h-screen">
     <script>
@@ -261,6 +261,9 @@
       </header>
 
       <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-8">
+        <h2 class="text-3xl font-bold mb-6 text-gray-800">
+          Informasi Data Peserta
+        </h2>
         <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
           <h3 class="text-xl font-semibold text-gray-700 mb-4">
             Daftar Lengkap Peserta
@@ -301,9 +304,10 @@
                 <tr class="table-header">
                   <th class="px-4 py-2">Nama</th>
                   <th class="px-4 py-2">Jenis Kelamin</th>
+                  <th class="px-4 py-2">Asal Instansi</th>
                   <th class="px-4 py-2">Jurusan</th>
                   <th class="px-4 py-2">Jenis Kegiatan</th>
-                  <th class="px-4 py-2">Asal Instansi</th>
+                  <th class="px-4 py-2">Lokasi</th>
                   <th class="px-4 py-2">Periode</th>
                 </tr>
               </thead>

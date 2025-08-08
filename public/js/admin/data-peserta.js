@@ -2,7 +2,8 @@
 let currentParticipants = participantsData; // Gunakan data dummy global
 let filteredParticipants = [];
 let currentPage = 1;
-const rowsPerPage = 15; // Jumlah baris per halaman
+const rowsPerPage = 5; // Jumlah baris per halaman
+
 const participantsTableBody = document.getElementById(
     "participantsTableBody"
 );
@@ -25,9 +26,10 @@ function renderTable(data, page) {
         row.innerHTML = `
             <td class="px-4 py-2">${p.nama}</td>
             <td class="px-4 py-2">${p.jenisKelamin}</td>
+            <td class="px-4 py-2">${p.instansi}</td>
             <td class="px-4 py-2">${p.prodi}</td>
             <td class="px-4 py-2">${p.kegiatan}</td>
-            <td class="px-4 py-2">${p.instansi}</td>
+            <td class="px-4 py-2">${p.lokasi}</td>
             <td class="px-4 py-2">${formatIndoDate(p.tanggalMulai)} - ${formatIndoDate(p.tanggalSelesai)}</td>
         `;
         participantsTableBody.appendChild(row);
@@ -38,15 +40,6 @@ function renderTable(data, page) {
 
     prevPageBtn.disabled = page === 1;
     nextPageBtn.disabled = page === Math.ceil(data.length / rowsPerPage);
-}
-
-// Fungsi utama untuk inisialisasi dan update UI
-function updateUI(data) {
-    filteredParticipants = data; // Set data awal atau data setelah filter
-    updateSummaryCards(filteredParticipants);
-    updateCharts(filteredParticipants);
-    currentPage = 1; // Reset halaman ke 1 setiap kali data berubah
-    renderTable(filteredParticipants, currentPage);
 }
 
 searchTableInput.addEventListener("keyup", () => {
@@ -88,9 +81,10 @@ document.getElementById("downloadTableDataBtn").addEventListener("click", () => 
     const headers = [
         "Nama",
         "Jenis Kelamin",
+        "Asal Instansi",
         "Jurusan",
         "Jenis Kegiatan",
-        "Asal Instansi",
+        "Lokasi Kegiatan",
         "Tanggal Mulai",
         "Tanggal Selesai",
     ];
@@ -98,9 +92,10 @@ document.getElementById("downloadTableDataBtn").addEventListener("click", () => 
     const rows = filteredParticipants.map((p) => [
         p.nama,
         p.jenisKelamin,
+        p.instansi,
         p.prodi,
         p.kegiatan,
-        p.instansi,
+        p.lokasi,
         formatIndoDate(p.tanggalMulai),
         formatIndoDate(p.tanggalSelesai),
     ]);

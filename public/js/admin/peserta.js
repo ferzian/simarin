@@ -7,15 +7,14 @@ const rowsPerPage = 5; // Jumlah baris per halaman
 const totalParticipantsEl = document.getElementById("totalParticipants");
 const avgDurationEl = document.getElementById("avgDuration");
 const mostPopularTypeEl = document.getElementById("mostPopularType");
-const genderChartCtx = document
-    .getElementById("genderChart")
-    .getContext("2d");
-const activityTypeChartCtx = document
-    .getElementById("activityTypeChart")
-    .getContext("2d");
-const majorChartCtx = document
-    .getElementById("majorChart")
-    .getContext("2d");
+const genderChartCanvas = document.getElementById("genderChart");
+const activityTypeChartCanvas = document.getElementById("activityTypeChart");
+const majorChartCanvas = document.getElementById("majorChart");
+
+const genderChartCtx = genderChartCanvas ? genderChartCanvas.getContext("2d") : null;
+const activityTypeChartCtx = activityTypeChartCanvas ? activityTypeChartCanvas.getContext("2d") : null;
+const majorChartCtx = majorChartCanvas ? majorChartCanvas.getContext("2d") : null;
+
 const participantsTableBody = document.getElementById(
     "participantsTableBody"
 );
@@ -35,11 +34,11 @@ let majorChart;
 
 // Fungsi untuk menghitung statistik dan update kartu ringkasan
 function updateSummaryCards(data) {
-    totalParticipantsEl.textContent = data.length;
+    if (totalParticipantsEl) totalParticipantsEl.textContent = data.length;
 
     if (data.length === 0) {
-        avgDurationEl.textContent = "0 hari";
-        mostPopularTypeEl.textContent = "N/A";
+        if (avgDurationEl) avgDurationEl.textContent = "0 hari";
+        if (mostPopularTypeEl) mostPopularTypeEl.textContent = "N/A";
         return;
     }
 
@@ -58,144 +57,83 @@ function updateSummaryCards(data) {
         }
     });
 
-    avgDurationEl.textContent = `${Math.round(
-        totalDurationDays / data.length
-    )} hari`;
+    if (avgDurationEl) avgDurationEl.textContent = `${Math.round(totalDurationDays / data.length)} hari`;
 
     const mostPopular = Object.keys(typeCounts).reduce(
         (a, b) => (typeCounts[a] > typeCounts[b] ? a : b),
         Object.keys(typeCounts)[0] || "N/A"
     );
-    mostPopularTypeEl.textContent = mostPopular || "N/A";
+    if (mostPopularTypeEl) mostPopularTypeEl.textContent = mostPopular || "N/A";
 }
-
 
 // Fungsi untuk memperbarui grafik
 function updateCharts(data) {
-    // Data untuk Jenis Kelamin
-    const genderCounts = { "Laki-Laki": 0, Perempuan: 0 };
-    data.forEach((p) => {
-        if (p.jenisKelamin === "Laki-Laki") genderCounts["Laki-Laki"]++;
-        else if (p.jenisKelamin === "Perempuan") genderCounts["Perempuan"]++;
+    // Gender Chart
+    if (genderChartCtx) {
+        const genderCounts = { "Laki-Laki": 0, Perempuan: 0 };
+        data.forEach((p) => {
+            if (p.jenisKelamin === "Laki-Laki") genderCounts["Laki-Laki"]++;
+            else if (p.jenisKelamin === "Perempuan") genderCounts["Perempuan"]++;
+        });
 
-    });
-
-    if (genderChart) genderChart.destroy();
-    genderChart = new Chart(genderChartCtx, {
-        type: "pie",
-        data: {
-            labels: Object.keys(genderCounts),
-            datasets: [
-                {
+        if (genderChart) genderChart.destroy();
+        genderChart = new Chart(genderChartCtx, {
+            type: "pie",
+            data: {
+                labels: Object.keys(genderCounts),
+                datasets: [{
                     data: Object.values(genderCounts),
-                    backgroundColor: ["#6366F1", "#EC4899"], // Indigo, Pink
-                    hoverOffset: 4,
-                },
-            ],
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: "top",
-                },
-                title: {
-                    display: false,
-                    text: "Distribusi Jenis Kelamin",
-                },
+                    backgroundColor: ["#6366F1", "#EC4899"],
+                }],
             },
-        },
-    });
+        });
+    }
 
-    // Data untuk Jenis Kegiatan
-    const activityTypeCounts = {};
-    data.forEach((p) => {
-        activityTypeCounts[p.kegiatan] = (activityTypeCounts[p.kegiatan] || 0) + 1;
-    });
+    // Activity Type Chart
+    if (activityTypeChartCtx) {
+        const activityTypeCounts = {};
+        data.forEach((p) => {
+            activityTypeCounts[p.kegiatan] = (activityTypeCounts[p.kegiatan] || 0) + 1;
+        });
 
-    if (activityTypeChart) activityTypeChart.destroy();
-    activityTypeChart = new Chart(activityTypeChartCtx, {
-        type: "bar",
-        data: {
-            labels: Object.keys(activityTypeCounts),
-            datasets: [
-                {
+        if (activityTypeChart) activityTypeChart.destroy();
+        activityTypeChart = new Chart(activityTypeChartCtx, {
+            type: "bar",
+            data: {
+                labels: Object.keys(activityTypeCounts),
+                datasets: [{
                     label: "Jumlah Peserta",
                     data: Object.values(activityTypeCounts),
-                    backgroundColor: ["#22C55E", "#3B82F6", "#A855F7"], // Green, Blue, Purple
-                    borderColor: ["#16A34A", "#2563EB", "#9333EA"],
-                    borderWidth: 1,
-                },
-            ],
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    display: false,
-                },
-                title: {
-                    display: false,
-                    text: "Distribusi Jenis Kegiatan",
-                },
+                    backgroundColor: ["#22C55E", "#3B82F6", "#A855F7"],
+                }],
             },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 1,
-                    },
-                },
-            },
-        },
-    });
+        });
+    }
 
-    // Data untuk Jurusan Populer (Bar Chart Horizontal)
-    const majorCounts = {};
-    data.forEach((p) => {
-        majorCounts[p.prodi] = (majorCounts[p.prodi] || 0) + 1;
-    });
-    const sortedMajors = Object.entries(majorCounts)
-        .sort(([, a], [, b]) => b - a)
-        .slice(0, 5); // Ambil 5 teratas
+    // Major Chart
+    if (majorChartCtx) {
+        const majorCounts = {};
+        data.forEach((p) => {
+            majorCounts[p.prodi] = (majorCounts[p.prodi] || 0) + 1;
+        });
+        const sortedMajors = Object.entries(majorCounts)
+            .sort(([, a], [, b]) => b - a)
+            .slice(0, 5);
 
-    if (majorChart) majorChart.destroy();
-    majorChart = new Chart(majorChartCtx, {
-        type: "bar",
-        data: {
-            labels: sortedMajors.map((item) => item[0]),
-            datasets: [
-                {
+        if (majorChart) majorChart.destroy();
+        majorChart = new Chart(majorChartCtx, {
+            type: "bar",
+            data: {
+                labels: sortedMajors.map((item) => item[0]),
+                datasets: [{
                     label: "Jumlah Peserta",
                     data: sortedMajors.map((item) => item[1]),
-                    backgroundColor: "#F97316", // Orange
-                    borderColor: "#EA580C",
-                    borderWidth: 1,
-                },
-            ],
-        },
-        options: {
-            indexAxis: "y", // Membuat bar horizontal
-            responsive: true,
-            plugins: {
-                legend: {
-                    display: false,
-                },
-                title: {
-                    display: false,
-                    text: "Distribusi Jurusan Populer",
-                },
+                    backgroundColor: "#F97316",
+                }],
             },
-            scales: {
-                x: {
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 1,
-                    },
-                },
-            },
-        },
-    });
+            options: { indexAxis: "y" },
+        });
+    }
 }
 
 // Fungsi untuk merender tabel peserta
@@ -237,24 +175,23 @@ function updateUI(data) {
 }
 
 // Event Listeners
-applyFilterBtn.addEventListener("click", () => {
-    const year = filterYearSelect.value;
-    const type = filterTypeSelect.value;
-    const location = filterLocationSelect.value;
+if (applyFilterBtn) {
+    applyFilterBtn.addEventListener("click", () => {
+        let tempData = participantsData;
 
-    let tempData = participantsData;
+        if (filterYearSelect && filterYearSelect.value) {
+            tempData = tempData.filter((p) => p.tanggalMulai.startsWith(filterYearSelect.value));
+        }
+        if (filterTypeSelect && filterTypeSelect.value) {
+            tempData = tempData.filter((p) => p.kegiatan === filterTypeSelect.value);
+        }
+        if (filterLocationSelect && filterLocationSelect.value) {
+            tempData = tempData.filter((p) => p.lokasi === filterLocationSelect.value);
+        }
 
-    if (year) {
-        tempData = tempData.filter((p) => p.tanggalMulai.startsWith(year));
-    }
-    if (type) {
-        tempData = tempData.filter((p) => p.kegiatan === type);
-    }
-    if (location) {
-        tempData = tempData.filter((p) => p.lokasi === location);
-    }
-    updateUI(tempData);
-});
+        updateUI(tempData);
+    });
+}
 
 searchTableInput.addEventListener("keyup", () => {
     const searchTerm = searchTableInput.value.toLowerCase();
