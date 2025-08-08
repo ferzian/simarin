@@ -3,7 +3,7 @@ const router = express.Router();
 const { User, Participant } = require('../../models');
 const { isAuthenticated, isAdmin } = require('../../middleware/authMiddleware');
 
-router.get('/peserta', isAuthenticated, isAdmin, async (req, res) => {
+router.get('/data-peserta', isAuthenticated, isAdmin, async (req, res) => {
   try {
     const participants = await Participant.findAll({
       include: [
@@ -22,13 +22,13 @@ router.get('/peserta', isAuthenticated, isAdmin, async (req, res) => {
       });
 
 
-    res.render('admin/peserta', {
+    res.render('admin/data-peserta', {
       participants: participants.map((p) => ({
         nama: p.User.username,
         jenisKelamin: p.jenisKelamin,
         prodi: p.prodi,
-        kegiatan: p.kegiatan,
         instansi: p.instansi,
+        kegiatan: p.kegiatan,
         lokasi: p.lokasi,
         tanggalMulai: p.tanggalMulai,
         tanggalSelesai: p.tanggalSelesai,
