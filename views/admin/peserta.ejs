@@ -262,11 +262,11 @@
 
       <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-8">
         <h2 class="text-3xl font-bold mb-6 text-gray-800">
-          Rekap Data Peserta
+          Statistik Data Peserta
         </h2>
         <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
           <h3 class="text-xl font-semibold text-gray-700 mb-4">Filter Data</h3>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div>
               <label
                 for="filterYear"
@@ -325,7 +325,24 @@
                 <option value="Riset">Riset</option>
               </select>
             </div>
-            <div class="md:col-span-3 flex items-end">
+            <div>
+              <label
+                for="filterLocation"
+                class="block text-gray-700 text-sm font-medium mb-2"
+                >Lokasi Kegiatan:</label
+              >
+              <select
+                id="filterLocation"
+                class="block w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-800"
+              >
+                <option value="">Semua Lokasi</option>
+                <option value="Depok">Depok</option>
+                <option value="Sempur">Sempur</option>
+                <option value="Cibalagung">Cibalagung</option>
+                <option value="Cijeruk">Cijeruk</option>
+              </select>
+            </div>
+            <div class="md:col-span-4 flex items-end">
               <button
                 id="applyFilterBtn"
                 class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 font-semibold"

@@ -1,5 +1,3 @@
-// --- Logika untuk Halaman Data Peserta ---
-
 // Data dummy (akan diambil dari `participantsData` global)
 let currentParticipants = participantsData; // Gunakan data dummy global
 let filteredParticipants = [];
@@ -23,6 +21,7 @@ const participantsTableBody = document.getElementById(
 );
 const filterYearSelect = document.getElementById("filterYear");
 const filterTypeSelect = document.getElementById("filterType");
+const filterLocationSelect = document.getElementById("filterLocation");
 const applyFilterBtn = document.getElementById("applyFilterBtn");
 const searchTableInput = document.getElementById("searchTable");
 const prevPageBtn = document.getElementById("prevPageBtn");
@@ -241,6 +240,7 @@ function updateUI(data) {
 applyFilterBtn.addEventListener("click", () => {
     const year = filterYearSelect.value;
     const type = filterTypeSelect.value;
+    const location = filterLocationSelect.value;
 
     let tempData = participantsData;
 
@@ -249,6 +249,9 @@ applyFilterBtn.addEventListener("click", () => {
     }
     if (type) {
         tempData = tempData.filter((p) => p.kegiatan === type);
+    }
+    if (location) {
+        tempData = tempData.filter((p) => p.lokasi === location);
     }
     updateUI(tempData);
 });
