@@ -9,7 +9,7 @@ router.get('/data-peserta', isAuthenticated, isAdmin, async (req, res) => {
       include: [
         {
           model: User,
-          where: { role: 'user', approved: true }, // hanya user yang approved
+          where: { role: 'user'}, // hanya user yang approved
         },
       ],
     });
@@ -24,10 +24,14 @@ router.get('/data-peserta', isAuthenticated, isAdmin, async (req, res) => {
 
     res.render('admin/data-peserta', {
       participants: participants.map((p) => ({
-        nama: p.User.username,
+        nama: p.nama,
+        nipNim: p.nipNim,
         jenisKelamin: p.jenisKelamin,
-        prodi: p.prodi,
+        telepon: p.telepon,
+        alamat: p.alamat,
+        jenjang: p.jenjang,
         instansi: p.instansi,
+        prodi: p.prodi,
         kegiatan: p.kegiatan,
         lokasi: p.lokasi,
         tanggalMulai: p.tanggalMulai,
