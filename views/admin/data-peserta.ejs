@@ -272,51 +272,112 @@
             <h3 class="text-3xl font-extrabold text-gray-900">
               Daftar Lengkap Peserta
             </h3>
+          </div>
 
-            <div class="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
-              <div class="relative w-full">
-                <div
-                  class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5 text-gray-400"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                </div>
-                <input
-                  type="text"
-                  id="searchTable"
-                  placeholder="Cari nama, instansi, atau kegiatan..."
-                  class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-blue-500 focus:border-blue-500 text-gray-800 transition-all duration-200"
-                />
-              </div>
-              <button
-                id="downloadTableDataBtn"
-                class="bg-green-600 text-white px-6 py-3 rounded-xl shadow-md hover:bg-green-700 transition duration-300 font-bold flex items-center justify-center gap-2 text-sm md:text-base flex-shrink-0"
+          <div
+            class="flex flex-wrap items-end justify-start gap-4 mb-2 md:mb-2"
+          >
+            <div class="flex flex-wrap gap-2">
+              <select
+                id="filterYear"
+                class="border border-gray-300 rounded-xl px-4 py-2 text-gray-800 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+              >
+                <option value="">Semua Tahun</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+              </select>
+
+              <select
+                id="filterMonthStart"
+                class="border border-gray-300 rounded-xl px-4 py-2 text-gray-800 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+              >
+                <option value="">Bulan Mulai</option>
+                <option value="01">Januari</option>
+                <option value="02">Februari</option>
+                <option value="03">Maret</option>
+                <option value="04">April</option>
+                <option value="05">Mei</option>
+                <option value="06">Juni</option>
+                <option value="07">Juli</option>
+                <option value="08">Agustus</option>
+                <option value="09">September</option>
+                <option value="10">Oktober</option>
+                <option value="11">November</option>
+                <option value="12">Desember</option>
+              </select>
+
+              <select
+                id="filterMonthEnd"
+                class="border border-gray-300 rounded-xl px-4 py-2 text-gray-800 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+              >
+                <option value="">Bulan Selesai</option>
+                <option value="01">Januari</option>
+                <option value="02">Februari</option>
+                <option value="03">Maret</option>
+                <option value="04">April</option>
+                <option value="05">Mei</option>
+                <option value="06">Juni</option>
+                <option value="07">Juli</option>
+                <option value="08">Agustus</option>
+                <option value="09">September</option>
+                <option value="10">Oktober</option>
+                <option value="11">November</option>
+                <option value="12">Desember</option>
+              </select>
+            </div>
+
+            <button
+              id="applyFilterBtn"
+              class="bg-blue-500 text-white px-4 py-2 rounded-xl shadow-md hover:bg-blue-600 transition duration-300 font-semibold"
+            >
+              Terapkan
+            </button>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-4 w-full">
+            <div class="relative w-full">
+              <div
+                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5"
+                  class="size-6 text-gray-400 mb-2"
                   viewBox="0 0 20 20"
                   fill="currentColor"
                 >
                   <path
                     fill-rule="evenodd"
-                    d="M3 17a1 1 0 011-1h12a1 1 0 011 1v1a1 1 0 01-1 1H4a1 1 0 01-1-1v-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
                     clip-rule="evenodd"
                   />
                 </svg>
-                Unduh Excel
-              </button>
+              </div>
+              <input
+                type="text"
+                id="searchTable"
+                placeholder="Cari nama, nis/nim, instansi, kegiatan atau lokasi..."
+                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-blue-500 focus:border-blue-500 text-gray-800 transition-all duration-200"
+              />
             </div>
+            <button
+              id="downloadTableDataBtn"
+              class="bg-green-600 text-white px-5 py-2 rounded-xl shadow-md hover:bg-green-700 transition duration-300 font-bold flex items-center justify-center gap-2 text-sm md:text-base flex-shrink-0 mb-3"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M3 17a1 1 0 011-1h12a1 1 0 011 1v1a1 1 0 01-1 1H4a1 1 0 01-1-1v-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              Unduh Excel
+            </button>
           </div>
 
           <div
@@ -545,14 +606,18 @@
                     ></span>
                   </p>
                   <p class="text-sm mt-3">
-                    <span class="text-gray-500 font-medium">Lokasi Kegiatan:</span>
+                    <span class="text-gray-500 font-medium"
+                      >Lokasi Kegiatan:</span
+                    >
                     <span
                       id="detailLokasi"
                       class="block text-gray-900 font-semibold mt-1"
                     ></span>
                   </p>
                   <p class="text-sm mt-3">
-                    <span class="text-gray-500 font-medium">Waktu Pelaksanaan:</span>
+                    <span class="text-gray-500 font-medium"
+                      >Waktu Pelaksanaan:</span
+                    >
                     <span
                       id="detailPeriode"
                       class="block text-gray-900 font-semibold mt-1"

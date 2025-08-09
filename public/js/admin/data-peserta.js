@@ -271,20 +271,31 @@ function updateUI(data) {
 
 if (applyFilterBtn) {
     applyFilterBtn.addEventListener("click", () => {
-        let tempData = participantsData;
+        let tempData = participantsData.slice();
 
-        if (filterYearSelect && filterYearSelect.value) {
-            tempData = tempData.filter((p) => p.tanggalMulai.startsWith(filterYearSelect.value));
+        const year = filterYearSelect.value;
+        const monthStart = document.getElementById("filterMonthStart").value;
+        const monthEnd = document.getElementById("filterMonthEnd").value;
+
+        // Filter Tahun
+        if (year) {
+            tempData = tempData.filter(p => p.tanggalMulai.startsWith(year));
         }
-        if (filterTypeSelect && filterTypeSelect.value) {
-            tempData = tempData.filter((p) => p.kegiatan === filterTypeSelect.value);
-        }
-        if (filterLocationSelect && filterLocationSelect.value) {
-            tempData = tempData.filter((p) => p.lokasi === filterLocationSelect.value);
+
+        // Filter Bulan ke Bulan
+        if (monthStart && monthEnd) {
+            const startMonthNum = parseInt(monthStart);
+            const endMonthNum = parseInt(monthEnd);
+
+            tempData = tempData.filter(p => {
+                const monthNum = new Date(p.tanggalMulai).getMonth() + 1;
+                return monthNum >= startMonthNum && monthNum <= endMonthNum;
+            });
         }
 
         updateUI(tempData);
     });
+
 }
 
 searchTableInput.addEventListener("input", () => {
@@ -312,7 +323,7 @@ searchTableInput.addEventListener("input", () => {
         });
     }
 
-    currentPage = 1; 
+    currentPage = 1;
     renderTable(filteredParticipants, currentPage);
     updateCharts(filteredParticipants);
 });
@@ -378,5 +389,5 @@ document.getElementById("downloadTableDataBtn").addEventListener("click", () => 
 });
 
 window.onload = () => {
-    updateUI(participantsData); 
+    updateUI(participantsData);
 };
