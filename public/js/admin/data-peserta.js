@@ -154,6 +154,7 @@ function renderTable(data, page) {
   <td class="px-4 py-2">${p.nipNim}</td>
   <td class="px-4 py-2">${p.instansi}</td>
   <td class="px-4 py-2">${p.kegiatan}</td>
+  <td class="px-4 py-2">${p.lokasi}</td>
   <td class="px-4 py-2">
     <button class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600" 
       onclick='showDetail(${JSON.stringify(p)})'>

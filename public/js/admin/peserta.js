@@ -8,10 +8,12 @@ const totalParticipantsEl = document.getElementById("totalParticipants");
 const avgDurationEl = document.getElementById("avgDuration");
 const mostPopularTypeEl = document.getElementById("mostPopularType");
 const genderChartCanvas = document.getElementById("genderChart");
+const locationChartCanvas = document.getElementById("locationChart");
 const activityTypeChartCanvas = document.getElementById("activityTypeChart");
 const majorChartCanvas = document.getElementById("majorChart");
 
 const genderChartCtx = genderChartCanvas ? genderChartCanvas.getContext("2d") : null;
+const locationChartCtx = locationChartCanvas ? locationChartCanvas.getContext("2d") : null;
 const activityTypeChartCtx = activityTypeChartCanvas ? activityTypeChartCanvas.getContext("2d") : null;
 const majorChartCtx = majorChartCanvas ? majorChartCanvas.getContext("2d") : null;
 
@@ -28,6 +30,7 @@ const currentPageSpan = document.getElementById("currentPage");
 const totalPagesSpan = document.getElementById("totalPages");
 
 let genderChart;
+let locationChart;
 let activityTypeChart;
 let majorChart;
 
@@ -67,24 +70,87 @@ function updateSummaryCards(data) {
 
 // Fungsi untuk memperbarui grafik
 function updateCharts(data) {
+    // Fungsi helper untuk filter data kosong
+    const filterZeroData = (obj) => Object.entries(obj).filter(([_, count]) => count > 0);
+
+    // Fungsi helper untuk tooltip persentase
+    const tooltipPercent = {
+        callbacks: {
+            label: (context) => {
+                let value = context.raw;
+                let total = context.chart._metasets[0].total;
+                let percentage = ((value / total) * 100).toFixed(1);
+                return `${context.label}: ${value} (${percentage}%)`;
+            }
+        }
+    };
+
     // Gender Chart
     if (genderChartCtx) {
-        const genderCounts = { "Laki-Laki": 0, Perempuan: 0 };
+        const genderCounts = { "Laki-Laki": 0, "Perempuan": 0 };
         data.forEach((p) => {
             if (p.jenisKelamin === "Laki-Laki") genderCounts["Laki-Laki"]++;
             else if (p.jenisKelamin === "Perempuan") genderCounts["Perempuan"]++;
         });
 
+        const filtered = filterZeroData(genderCounts);
+
         if (genderChart) genderChart.destroy();
         genderChart = new Chart(genderChartCtx, {
             type: "pie",
             data: {
-                labels: Object.keys(genderCounts),
+                labels: filtered.map(([label]) => label),
                 datasets: [{
-                    data: Object.values(genderCounts),
-                    backgroundColor: ["#6366F1", "#EC4899"],
+                    data: filtered.map(([_, count]) => count),
+                    backgroundColor: ["#6366F1", "#EC4899"], // Biru, Pink
                 }],
             },
+            options: {
+                aspectRatio: 1,
+                plugins: {
+                    legend: {
+                        display: filtered.length > 0,
+                        position: 'bottom',
+                        labels: { color: '#374151', font: { size: 14 } }
+                    },
+                    tooltip: tooltipPercent
+                }
+            }
+        });
+    }
+
+    // Location Chart
+    if (locationChartCtx) {
+        const locationCounts = { Sempur: 0, Depok: 0, Cibalagung: 0, Cijeruk: 0 };
+        data.forEach((p) => {
+            if (locationCounts.hasOwnProperty(p.lokasi)) {
+                locationCounts[p.lokasi]++;
+            }
+        });
+
+        const filtered = filterZeroData(locationCounts);
+
+        if (locationChart) locationChart.destroy();
+        locationChart = new Chart(locationChartCtx, {
+            type: "pie",
+            data: {
+                labels: filtered.map(([label]) => label),
+                datasets: [{
+                    data: filtered.map(([_, count]) => count),
+                    backgroundColor: ["#f87171", "#60a5fa", "#34d399", "#fbbf24"], // Merah, Biru, Hijau, Kuning
+                }],
+            },
+            options: {
+                aspectRatio: 1,
+                plugins: {
+                    legend: {
+                        display: filtered.length > 0,
+                        position: 'bottom',
+                        labels: { color: '#374151', font: { size: 14 } }
+                    },
+                    tooltip: tooltipPercent
+                }
+            }
         });
     }
 
@@ -95,17 +161,29 @@ function updateCharts(data) {
             activityTypeCounts[p.kegiatan] = (activityTypeCounts[p.kegiatan] || 0) + 1;
         });
 
+        const filtered = filterZeroData(activityTypeCounts);
+
         if (activityTypeChart) activityTypeChart.destroy();
         activityTypeChart = new Chart(activityTypeChartCtx, {
-            type: "bar",
+            type: "pie",
             data: {
-                labels: Object.keys(activityTypeCounts),
+                labels: filtered.map(([label]) => label),
                 datasets: [{
-                    label: "Jumlah Peserta",
-                    data: Object.values(activityTypeCounts),
-                    backgroundColor: ["#22C55E", "#3B82F6", "#A855F7"],
+                    data: filtered.map(([_, count]) => count),
+                    backgroundColor: ["#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", "#EC4899"],
                 }],
             },
+            options: {
+                aspectRatio: 1,
+                plugins: {
+                    legend: {
+                        display: filtered.length > 0,
+                        position: 'bottom',
+                        labels: { color: '#374151', font: { size: 14 } }
+                    },
+                    tooltip: tooltipPercent
+                }
+            }
         });
     }
 
@@ -123,17 +201,28 @@ function updateCharts(data) {
         majorChart = new Chart(majorChartCtx, {
             type: "bar",
             data: {
-                labels: sortedMajors.map((item) => item[0]),
+                labels: sortedMajors.map(([label]) => label),
                 datasets: [{
                     label: "Jumlah Peserta",
-                    data: sortedMajors.map((item) => item[1]),
+                    data: sortedMajors.map(([_, count]) => count),
                     backgroundColor: "#F97316",
                 }],
             },
-            options: { indexAxis: "y" },
+            options: {
+                indexAxis: "y",
+                plugins: {
+                    legend: { display: false },
+                    tooltip: tooltipPercent
+                },
+                scales: {
+                    x: { ticks: { color: '#374151' } },
+                    y: { ticks: { color: '#374151' } }
+                }
+            }
         });
     }
 }
+
 
 // Fungsi untuk merender tabel peserta
 function renderTable(data, page) {
