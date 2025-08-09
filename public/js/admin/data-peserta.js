@@ -145,29 +145,60 @@ function renderTable(data, page) {
 
     paginatedData.forEach((p) => {
         const row = document.createElement("tr");
-        row.className = "table-row";
         row.innerHTML = `
-            <td class="px-4 py-2">${p.nama}</td>
-            <td class="px-4 py-2">${p.nipNim}</td>
-            <td class="px-4 py-2">${p.jenisKelamin}</td>
-            <td class="px-4 py-2">${p.telepon}</td>
-            <td class="px-4 py-2">${p.alamat}</td>
-            <td class="px-4 py-2">${p.jenjang}</td>
-            <td class="px-4 py-2">${p.instansi}</td>
-            <td class="px-4 py-2">${p.prodi}</td>
-            <td class="px-4 py-2">${p.kegiatan}</td>
-            <td class="px-4 py-2">${p.lokasi}</td>
-            <td class="px-4 py-2">${formatIndoDate(p.tanggalMulai)} - ${formatIndoDate(p.tanggalSelesai)}</td>
-        `;
+  <td class="px-4 py-2">
+    <img src="${p.foto ? `/uploads/${p.foto}` : '/images/no-image.png'}" 
+         class="w-12 h-12 object-cover rounded-full border" />
+  </td>
+  <td class="px-4 py-2">${p.nama}</td>
+  <td class="px-4 py-2">${p.nipNim}</td>
+  <td class="px-4 py-2">${p.instansi}</td>
+  <td class="px-4 py-2">${p.kegiatan}</td>
+  <td class="px-4 py-2">
+    <button class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600" 
+      onclick='showDetail(${JSON.stringify(p)})'>
+      Detail
+    </button>
+  </td>
+`;
+
         participantsTableBody.appendChild(row);
     });
 
     currentPageSpan.textContent = page;
     totalPagesSpan.textContent = Math.ceil(data.length / rowsPerPage);
-
     prevPageBtn.disabled = page === 1;
     nextPageBtn.disabled = page === Math.ceil(data.length / rowsPerPage);
 }
+
+// Tampilkan modal
+function showDetail(p) {
+    document.getElementById("detailNama").textContent = p.nama;
+    document.getElementById("detailNipNim").textContent = p.nipNim;
+    document.getElementById("detailJenisKelamin").textContent = p.jenisKelamin;
+    document.getElementById("detailTelepon").textContent = p.telepon;
+    document.getElementById("detailAlamat").textContent = p.alamat;
+    document.getElementById("detailJenjang").textContent = p.jenjang;
+    document.getElementById("detailInstansi").textContent = p.instansi;
+    document.getElementById("detailProdi").textContent = p.prodi;
+    document.getElementById("detailKegiatan").textContent = p.kegiatan;
+    document.getElementById("detailLokasi").textContent = p.lokasi;
+    document.getElementById("detailPeriode").textContent = `${formatIndoDate(p.tanggalMulai)} - ${formatIndoDate(p.tanggalSelesai)}`;
+
+    document.getElementById("detailFoto").src = p.foto ? `/uploads/${p.foto}` : "/images/no-image.png";
+    document.getElementById("detailSuratSehat").href = p.suratSehat ? `/uploads/${p.suratSehat}` : "#";
+    document.getElementById("detailLaporan").href = p.laporanKegiatan ? `/uploads/${p.laporanKegiatan}` : "#";
+    document.getElementById("detailPpt").href = p.pptHasil ? `/uploads/${p.pptHasil}` : "#";
+    document.getElementById("detailSertifikat").href = p.sertifikat ? `/uploads/${p.sertifikat}` : "#";
+
+    document.getElementById("detailModal").classList.remove("hidden");
+}
+
+// Tutup modal
+document.getElementById("closeModalBtn").addEventListener("click", () => {
+    document.getElementById("detailModal").classList.add("hidden");
+});
+
 
 // Fungsi utama untuk inisialisasi dan update UI
 function updateUI(data) {
@@ -272,25 +303,15 @@ document.getElementById("downloadTableDataBtn").addEventListener("click", () => 
         formatIndoDate(p.tanggalSelesai),
     ]);
 
-    let csvContent = headers.join(",") + "\n";
-    rows.forEach((row) => {
-        csvContent += row.map((e) => `"${e}"`).join(",") + "\n"; // Bungkus kutip biar aman
-    });
+    // Buat worksheet dan workbook
+    const worksheet = XLSX.utils.aoa_to_sheet([headers, ...rows]);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Data Peserta");
 
-    const blob = new Blob([csvContent], {
-        type: "text/csv;charset=utf-8;",
-    });
-    const link = document.createElement("a");
-    if (link.download !== undefined) {
-        const url = URL.createObjectURL(blob);
-        link.setAttribute("href", url);
-        link.setAttribute("download", "data_peserta_simarin.csv");
-        link.style.visibility = "hidden";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
+    // Simpan sebagai file Excel
+    XLSX.writeFile(workbook, "data_peserta_simarin.xlsx");
 });
+
 
 // Inisialisasi awal UI saat halaman dimuat
 window.onload = () => {

@@ -3,6 +3,7 @@
   <head>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
     <title>Statistik Peserta Admin SIMARIN</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
@@ -301,27 +302,132 @@
           <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
               <thead class="bg-gray-50 text-left text-sm text-gray-600">
-                <tr class="table-header">
-                  <th class="px-4 py-2">Nama Lengkap</th>
-                  <th class="px-4 py-2">NIS/NIM</th>
-                  <th class="px-4 py-2">Jenis Kelamin</th>
-                  <th class="px-4 py-2">No. Telepon</th>
-                  <th class="px-4 py-2">Alamat Domisili</th>
-                  <th class="px-4 py-2">Jenjang Pendidikan</th>
-                  <th class="px-4 py-2">Asal Instansi</th>
-                  <th class="px-4 py-2">Jurusan</th>
-                  <th class="px-4 py-2">Jenis Kegiatan</th>
-                  <th class="px-4 py-2">Lokasi Kegiatan</th>
-                  <th class="px-4 py-2">Periode Kegiatan</th>
+                <tr>
+                  <th class="px-4 py-2">Foto</th>
+                  <th class="px-4 py-2">Nama</th>
+                  <th class="px-4 py-2">NIP/NIM</th>
+                  <th class="px-4 py-2">Instansi</th>
+                  <th class="px-4 py-2">Kegiatan</th>
+                  <th class="px-4 py-2">Aksi</th>
                 </tr>
               </thead>
-
               <tbody
                 class="bg-white divide-y divide-gray-200"
                 id="participantsTableBody"
               ></tbody>
             </table>
           </div>
+
+          <!-- Modal Detail -->
+          <div
+            id="detailModal"
+            class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+          >
+            <div
+              class="bg-white rounded-xl shadow-lg w-full max-w-4xl p-6 overflow-y-auto max-h-[90vh]"
+            >
+              <!-- Header -->
+              <div class="flex justify-between items-center border-b pb-3 mb-4">
+                <h2 class="text-2xl font-bold text-gray-800">Detail Peserta</h2>
+                <button
+                  id="closeModalBtn"
+                  class="text-gray-500 hover:text-gray-700 text-2xl"
+                >
+                  &times;
+                </button>
+              </div>
+
+              <!-- Foto besar -->
+              <div class="flex justify-center mb-6">
+                <img
+                  id="detailFoto"
+                  class="w-40 h-40 object-cover rounded-xl border shadow-md"
+                />
+              </div>
+
+              <!-- Informasi Dasar -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+                  <p><strong>Nama:</strong> <span id="detailNama"></span></p>
+                  <p>
+                    <strong>NIP/NIM:</strong> <span id="detailNipNim"></span>
+                  </p>
+                  <p>
+                    <strong>Jenis Kelamin:</strong>
+                    <span id="detailJenisKelamin"></span>
+                  </p>
+                  <p>
+                    <strong>Telepon:</strong> <span id="detailTelepon"></span>
+                  </p>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+                  <p>
+                    <strong>Alamat:</strong> <span id="detailAlamat"></span>
+                  </p>
+                  <p>
+                    <strong>Jenjang:</strong> <span id="detailJenjang"></span>
+                  </p>
+                  <p>
+                    <strong>Instansi:</strong> <span id="detailInstansi"></span>
+                  </p>
+                  <p>
+                    <strong>Jurusan:</strong> <span id="detailProdi"></span>
+                  </p>
+                </div>
+              </div>
+
+              <!-- Kegiatan -->
+              <div class="bg-gray-50 p-4 rounded-lg shadow-sm mb-6">
+                <p>
+                  <strong>Kegiatan:</strong> <span id="detailKegiatan"></span>
+                </p>
+                <p><strong>Lokasi:</strong> <span id="detailLokasi"></span></p>
+                <p>
+                  <strong>Periode:</strong> <span id="detailPeriode"></span>
+                </p>
+              </div>
+
+              <!-- Dokumen -->
+              <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+                <h3 class="text-lg font-semibold mb-3">Dokumen</h3>
+                <ul class="list-disc pl-5 space-y-1">
+                  <li>
+                    <a
+                      id="detailSuratSehat"
+                      target="_blank"
+                      class="text-blue-500 hover:underline"
+                      >Surat Sehat</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      id="detailLaporan"
+                      target="_blank"
+                      class="text-blue-500 hover:underline"
+                      >Laporan Kegiatan</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      id="detailPpt"
+                      target="_blank"
+                      class="text-blue-500 hover:underline"
+                      >PPT Hasil</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      id="detailSertifikat"
+                      target="_blank"
+                      class="text-blue-500 hover:underline"
+                      >Sertifikat</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
           <div class="mt-4 flex justify-between items-center">
             <button
               id="prevPageBtn"
