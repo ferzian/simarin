@@ -147,7 +147,7 @@ function renderTable(data, page) {
         const row = document.createElement("tr");
         row.innerHTML = `
   <td class="px-4 py-2">
-    <img src="${p.foto ? `/uploads/${p.foto}` : '/images/no-image.png'}" 
+    <img src="${p.pasFoto ? `/uploads/user/pas-foto/${p.pasFoto}` : '/images/no-image.png'}" 
          class="w-12 h-12 object-cover rounded-full border" />
   </td>
   <td class="px-4 py-2">${p.nama}</td>
@@ -161,7 +161,6 @@ function renderTable(data, page) {
     </button>
   </td>
 `;
-
         participantsTableBody.appendChild(row);
     });
 
@@ -185,18 +184,36 @@ function showDetail(p) {
     document.getElementById("detailLokasi").textContent = p.lokasi;
     document.getElementById("detailPeriode").textContent = `${formatIndoDate(p.tanggalMulai)} - ${formatIndoDate(p.tanggalSelesai)}`;
 
-    document.getElementById("detailFoto").src = p.foto ? `/uploads/${p.foto}` : "/images/no-image.png";
-    document.getElementById("detailSuratSehat").href = p.suratSehat ? `/uploads/${p.suratSehat}` : "#";
-    document.getElementById("detailLaporan").href = p.laporanKegiatan ? `/uploads/${p.laporanKegiatan}` : "#";
-    document.getElementById("detailPpt").href = p.pptHasil ? `/uploads/${p.pptHasil}` : "#";
-    document.getElementById("detailSertifikat").href = p.sertifikat ? `/uploads/${p.sertifikat}` : "#";
+    // FOTO
+    document.getElementById("detailFoto").src = p.pasFoto
+        ? `/uploads/user/pas-foto/${p.pasFoto}`
+        : "/images/no-image.png";
 
+    // LINK FILE
+    document.getElementById("detailSuratPengantar").href = p.suratPengantar
+        ? `/uploads/user/surat-pengantar/${p.suratPengantar}`
+        : "#";
+
+    document.getElementById("detailSuratSehat").href = p.suratSehat
+        ? `/uploads/user/surat-sehat/${p.suratSehat}`
+        : "#";
+
+    // TAMPILKAN MODAL
     document.getElementById("detailModal").classList.remove("hidden");
 }
 
-// Tutup modal
+
+// Tutup modal dengan tombol X
 document.getElementById("closeModalBtn").addEventListener("click", () => {
     document.getElementById("detailModal").classList.add("hidden");
+});
+
+// Tutup modal dengan klik di luar konten
+document.getElementById("detailModal").addEventListener("click", (e) => {
+    // Cek apakah yang diklik adalah area overlay (bukan konten modal)
+    if (e.target.id === "detailModal") {
+        document.getElementById("detailModal").classList.add("hidden");
+    }
 });
 
 

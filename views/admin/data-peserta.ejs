@@ -305,7 +305,7 @@
                 <tr>
                   <th class="px-4 py-2">Foto</th>
                   <th class="px-4 py-2">Nama</th>
-                  <th class="px-4 py-2">NIP/NIM</th>
+                  <th class="px-4 py-2">NIS/NIM</th>
                   <th class="px-4 py-2">Instansi</th>
                   <th class="px-4 py-2">Kegiatan</th>
                   <th class="px-4 py-2">Aksi</th>
@@ -324,10 +324,12 @@
             class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
           >
             <div
-              class="bg-white rounded-xl shadow-lg w-full max-w-4xl p-6 overflow-y-auto max-h-[90vh]"
+              class="bg-white rounded-xl shadow-lg w-full max-w-4xl overflow-hidden max-h-[90vh] flex flex-col"
             >
               <!-- Header -->
-              <div class="flex justify-between items-center border-b pb-3 mb-4">
+              <div
+                class="flex justify-between items-center border-b px-6 py-3 sticky top-0 bg-white z-10"
+              >
                 <h2 class="text-2xl font-bold text-gray-800">Detail Peserta</h2>
                 <button
                   id="closeModalBtn"
@@ -337,93 +339,120 @@
                 </button>
               </div>
 
-              <!-- Foto besar -->
-              <div class="flex justify-center mb-6">
-                <img
-                  id="detailFoto"
-                  class="w-40 h-40 object-cover rounded-xl border shadow-md"
-                />
-              </div>
+              <!-- Isi Modal Scrollable -->
+              <div class="p-6 overflow-y-auto">
+                <!-- Foto besar -->
+                <div class="flex justify-center mb-6">
+                  <img
+                    id="detailFoto"
+                    class="w-40 h-40 object-cover rounded-xl border shadow-md"
+                  />
+                </div>
 
-              <!-- Informasi Dasar -->
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
-                  <p><strong>Nama:</strong> <span id="detailNama"></span></p>
+                <!-- Informasi Dasar -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                  <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+                    <p><strong>Nama:</strong> <span id="detailNama"></span></p>
+                    <p>
+                      <strong>Jenis Kelamin:</strong>
+                      <span id="detailJenisKelamin"></span>
+                    </p>
+                    <p>
+                      <strong>Email:</strong> <span id="detailEmail"></span>
+                    </p>
+                    <p>
+                      <strong>Telepon:</strong> <span id="detailTelepon"></span>
+                    </p>
+                    <p>
+                      <strong>Alamat:</strong> <span id="detailAlamat"></span>
+                    </p>
+                  </div>
+                  <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+                    <p>
+                      <strong>NIS/NIM:</strong> <span id="detailNipNim"></span>
+                    </p>
+                    <p>
+                      <strong>Jenjang:</strong> <span id="detailJenjang"></span>
+                    </p>
+                    <p>
+                      <strong>Jurusan:</strong> <span id="detailProdi"></span>
+                    </p>
+                    <p>
+                      <strong>Instansi:</strong>
+                      <span id="detailInstansi"></span>
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Kegiatan -->
+                <div class="bg-gray-50 p-4 rounded-lg shadow-sm mb-6">
                   <p>
-                    <strong>NIP/NIM:</strong> <span id="detailNipNim"></span>
+                    <strong>Kegiatan:</strong> <span id="detailKegiatan"></span>
                   </p>
                   <p>
-                    <strong>Jenis Kelamin:</strong>
-                    <span id="detailJenisKelamin"></span>
+                    <strong>Lokasi:</strong> <span id="detailLokasi"></span>
                   </p>
                   <p>
-                    <strong>Telepon:</strong> <span id="detailTelepon"></span>
+                    <strong>Periode:</strong> <span id="detailPeriode"></span>
                   </p>
                 </div>
+
+                <!-- Dokumen -->
                 <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
-                  <p>
-                    <strong>Alamat:</strong> <span id="detailAlamat"></span>
-                  </p>
-                  <p>
-                    <strong>Jenjang:</strong> <span id="detailJenjang"></span>
-                  </p>
-                  <p>
-                    <strong>Instansi:</strong> <span id="detailInstansi"></span>
-                  </p>
-                  <p>
-                    <strong>Jurusan:</strong> <span id="detailProdi"></span>
-                  </p>
+                  <h1 class="text-lg font-bold mb-3">Dokumen</h1>
+                  <ul class="list-disc pl-5 space-y-1">
+                    <li>
+                      <strong>Surat Pengantar:</strong>
+                      <a
+                        id="detailSuratPengantar"
+                        target="_blank"
+                        download
+                        class="text-blue-500 hover:underline"
+                        >Download</a
+                      >
+                    </li>
+                    <li>
+                      <strong>Surat Sehat:</strong>
+                      <a
+                        id="detailSuratSehat"
+                        target="_blank"
+                        download
+                        class="text-blue-500 hover:underline"
+                        >Download</a
+                      >
+                    </li>
+                    <li>
+                      <strong>Laporan Kegiatan:</strong>
+                      <a
+                        id="detailLaporan"
+                        target="_blank"
+                        download
+                        class="text-blue-500 hover:underline"
+                        >Download</a
+                      >
+                    </li>
+                    <li>
+                      <strong>PPT Hasil:</strong>
+                      <a
+                        id="detailPpt"
+                        target="_blank"
+                        download
+                        class="text-blue-500 hover:underline"
+                        >Download</a
+                      >
+                    </li>
+                    <li>
+                      <strong>Sertifikat:</strong>
+                      <a
+                        id="detailSertifikat"
+                        target="_blank"
+                        download
+                        class="text-blue-500 hover:underline"
+                        >Download</a
+                      >
+                    </li>
+                  </ul>
                 </div>
-              </div>
-
-              <!-- Kegiatan -->
-              <div class="bg-gray-50 p-4 rounded-lg shadow-sm mb-6">
-                <p>
-                  <strong>Kegiatan:</strong> <span id="detailKegiatan"></span>
-                </p>
-                <p><strong>Lokasi:</strong> <span id="detailLokasi"></span></p>
-                <p>
-                  <strong>Periode:</strong> <span id="detailPeriode"></span>
-                </p>
-              </div>
-
-              <!-- Dokumen -->
-              <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
-                <h3 class="text-lg font-semibold mb-3">Dokumen</h3>
-                <ul class="list-disc pl-5 space-y-1">
-                  <li>
-                    <a
-                      id="detailSuratSehat"
-                      target="_blank"
-                      class="text-blue-500 hover:underline"
-                      >Surat Sehat</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      id="detailLaporan"
-                      target="_blank"
-                      class="text-blue-500 hover:underline"
-                      >Laporan Kegiatan</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      id="detailPpt"
-                      target="_blank"
-                      class="text-blue-500 hover:underline"
-                      >PPT Hasil</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      id="detailSertifikat"
-                      target="_blank"
-                      class="text-blue-500 hover:underline"
-                      >Sertifikat</a
-                    >
-                  </li>
-                </ul>
               </div>
             </div>
           </div>

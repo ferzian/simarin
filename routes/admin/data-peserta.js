@@ -9,7 +9,7 @@ router.get('/data-peserta', isAuthenticated, isAdmin, async (req, res) => {
       include: [
         {
           model: User,
-          where: { role: 'user'}, // hanya user yang approved
+          where: { role: 'user' }, // hanya user yang approved
         },
       ],
     });
@@ -36,14 +36,13 @@ router.get('/data-peserta', isAuthenticated, isAdmin, async (req, res) => {
         lokasi: p.lokasi,
         tanggalMulai: p.tanggalMulai,
         tanggalSelesai: p.tanggalSelesai,
-        foto: p.foto, // path file foto
-        suratSehat: p.suratSehat, // path file surat sehat
-        laporanKegiatan: p.laporanKegiatan, // path file laporan
-        pptHasil: p.pptHasil, // path file ppt
-        sertifikat: p.sertifikat // path file sertifikat
+        pasFoto: p.pasFoto,  // foto
+        suratPengantar: p.suratPengantar, // file pengantar
+        suratSehat: p.suratSehat, // file sehat
       })),
       user: req.session.user
     });
+
   } catch (err) {
     console.error('❌ Gagal ambil data peserta:', err);
     res.status(500).send('Internal Server Error');
