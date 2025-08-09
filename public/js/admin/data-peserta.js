@@ -177,6 +177,7 @@ function showDetail(p) {
     document.getElementById("detailNipNim").textContent = p.nipNim;
     document.getElementById("detailJenisKelamin").textContent = p.jenisKelamin;
     document.getElementById("detailTelepon").textContent = p.telepon;
+    document.getElementById("detailEmail").textContent = p.email;
     document.getElementById("detailAlamat").textContent = p.alamat;
     document.getElementById("detailJenjang").textContent = p.jenjang;
     document.getElementById("detailInstansi").textContent = p.instansi;

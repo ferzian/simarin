@@ -28,6 +28,7 @@ router.get('/data-peserta', isAuthenticated, isAdmin, async (req, res) => {
         nipNim: p.nipNim,
         jenisKelamin: p.jenisKelamin,
         telepon: p.telepon,
+        email: p.User.email,
         alamat: p.alamat,
         jenjang: p.jenjang,
         instansi: p.instansi,

@@ -24,7 +24,7 @@ router.get('/peserta', isAuthenticated, isAdmin, async (req, res) => {
 
     res.render('admin/peserta', {
       participants: participants.map((p) => ({
-        nama: p.User.username,
+        nama: p.nama,
         jenisKelamin: p.jenisKelamin,
         prodi: p.prodi,
         kegiatan: p.kegiatan,
