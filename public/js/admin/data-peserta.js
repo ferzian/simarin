@@ -1,13 +1,13 @@
-// Data dummy (akan diambil dari `participantsData` global)
-let currentParticipants = participantsData; // Gunakan data dummy global
+let currentParticipants = participantsData;
 let filteredParticipants = [];
 let currentPage = 1;
 let genderChart;
 let activityTypeChart;
 let majorChart;
 let currentSort = { key: null, asc: true };
+let baseParticipants = participantsData;
 
-const rowsPerPage = 5; // Jumlah baris per halaman
+const rowsPerPage = 5;
 
 const totalParticipantsEl = document.getElementById("totalParticipants");
 const avgDurationEl = document.getElementById("avgDuration");
@@ -33,8 +33,6 @@ const nextPageBtn = document.getElementById("nextPageBtn");
 const currentPageSpan = document.getElementById("currentPage");
 const totalPagesSpan = document.getElementById("totalPages");
 
-
-// Fungsi untuk menghitung statistik dan update kartu ringkasan
 function updateSummaryCards(data) {
     if (totalParticipantsEl) totalParticipantsEl.textContent = data.length;
 
@@ -68,7 +66,7 @@ function updateSummaryCards(data) {
     if (mostPopularTypeEl) mostPopularTypeEl.textContent = mostPopular || "N/A";
 }
 
-// Fungsi untuk memperbarui grafik
+
 function updateCharts(data) {
     // Gender Chart
     if (genderChartCtx) {
@@ -144,7 +142,6 @@ document.querySelectorAll("th[data-sort]").forEach((th) => {
     });
 });
 
-// Fungsi untuk merender tabel peserta
 function renderTable(data, page) {
     participantsTableBody.innerHTML = "";
     const start = (page - 1) * rowsPerPage;
@@ -154,7 +151,6 @@ function renderTable(data, page) {
     paginatedData.forEach((p) => {
         const row = document.createElement("tr");
 
-        // Badge status
         const statusBadge = p.statusSelesai
             ? `<span class="px-2 py-1 text-xs font-semibold text-green-800 bg-green-200 rounded-full">Selesai</span>`
             : `<span class="px-2 py-1 text-xs font-semibold text-red-800 bg-red-200 rounded-full">Belum Selesai</span>`;
@@ -194,12 +190,10 @@ function sortData(key) {
         currentSort.asc = true;
     }
 
-    // Reset semua indikator
     document.querySelectorAll(".sort-indicator").forEach(el => {
         el.textContent = "⇅";
     });
 
-    // Set indikator untuk kolom aktif
     const activeTh = document.querySelector(`th[data-sort="${key}"] .sort-indicator`);
     if (activeTh) {
         activeTh.textContent = currentSort.asc ? "▲" : "▼";
@@ -227,7 +221,6 @@ function sortData(key) {
     renderTable(filteredParticipants, currentPage);
 }
 
-// Tampilkan modal
 function showDetail(p) {
     document.getElementById("detailNama").textContent = p.nama;
     document.getElementById("detailNipNim").textContent = p.nipNim;
@@ -242,12 +235,10 @@ function showDetail(p) {
     document.getElementById("detailLokasi").textContent = p.lokasi;
     document.getElementById("detailPeriode").textContent = `${formatIndoDate(p.tanggalMulai)} - ${formatIndoDate(p.tanggalSelesai)}`;
 
-    // FOTO
     document.getElementById("detailFoto").src = p.pasFoto
         ? `/uploads/user/pas-foto/${p.pasFoto}`
         : "/images/no-image.png";
 
-    // LINK FILE
     document.getElementById("detailSuratPengantar").href = p.suratPengantar
         ? `/uploads/user/surat-pengantar/${p.suratPengantar}`
         : "#";
@@ -256,35 +247,28 @@ function showDetail(p) {
         ? `/uploads/user/surat-sehat/${p.suratSehat}`
         : "#";
 
-    // TAMPILKAN MODAL
     document.getElementById("detailModal").classList.remove("hidden");
 }
 
-
-// Tutup modal dengan tombol X
 document.getElementById("closeModalBtn").addEventListener("click", () => {
     document.getElementById("detailModal").classList.add("hidden");
 });
 
-// Tutup modal dengan klik di luar konten
 document.getElementById("detailModal").addEventListener("click", (e) => {
-    // Cek apakah yang diklik adalah area overlay (bukan konten modal)
     if (e.target.id === "detailModal") {
         document.getElementById("detailModal").classList.add("hidden");
     }
 });
 
-
-// Fungsi utama untuk inisialisasi dan update UI
 function updateUI(data) {
-    filteredParticipants = data; // Set data awal atau data setelah filter
+    baseParticipants = Array.isArray(data) ? data.slice() : [];
+    filteredParticipants = baseParticipants.slice();
     updateSummaryCards(filteredParticipants);
     updateCharts(filteredParticipants);
-    currentPage = 1; // Reset halaman ke 1 setiap kali data berubah
+    currentPage = 1;
     renderTable(filteredParticipants, currentPage);
 }
 
-// Event Listeners
 if (applyFilterBtn) {
     applyFilterBtn.addEventListener("click", () => {
         let tempData = participantsData;
@@ -303,28 +287,36 @@ if (applyFilterBtn) {
     });
 }
 
-searchTableInput.addEventListener("keyup", () => {
-    const searchTerm = searchTableInput.value.toLowerCase();
-    const searchResults = filteredParticipants.filter(
-        (p) =>
-            p.nama.toLowerCase().includes(searchTerm) ||
-            p.nipNim.toLowerCase().includes(searchTerm) ||
-            p.jenisKelamin.toLowerCase().includes(searchTerm) ||
-            p.telepon.toLowerCase().includes(searchTerm) ||
-            p.alamat.toLowerCase().includes(searchTerm) ||
-            p.jenjang.toLowerCase().includes(searchTerm) ||
-            p.instansi.toLowerCase().includes(searchTerm) ||
-            p.prodi.toLowerCase().includes(searchTerm) ||
-            p.kegiatan.toLowerCase().includes(searchTerm) ||
-            p.lokasi.toLowerCase().includes(searchTerm) ||
-            p.tanggalMulai.toLowerCase().includes(searchTerm) ||
-            p.tanggalSelesai.toLowerCase().includes(searchTerm)
-    );
-    currentPage = 1; // Reset halaman saat pencarian
-    renderTable(searchResults, currentPage);
-    // Perluas logika ini untuk grafik juga jika diinginkan
-    updateCharts(searchResults); // Perbarui grafik dengan hasil pencarian
+searchTableInput.addEventListener("input", () => {
+    const searchTerm = searchTableInput.value.trim().toLowerCase();
+
+    if (!searchTerm) {
+        filteredParticipants = baseParticipants.slice();
+    } else {
+        filteredParticipants = baseParticipants.filter((p) => {
+            const get = (v) => (v ? String(v).toLowerCase() : "");
+            return (
+                get(p.nama).includes(searchTerm) ||
+                get(p.nipNim).includes(searchTerm) ||
+                get(p.jenisKelamin).includes(searchTerm) ||
+                get(p.telepon).includes(searchTerm) ||
+                get(p.alamat).includes(searchTerm) ||
+                get(p.jenjang).includes(searchTerm) ||
+                get(p.instansi).includes(searchTerm) ||
+                get(p.prodi).includes(searchTerm) ||
+                get(p.kegiatan).includes(searchTerm) ||
+                get(p.lokasi).includes(searchTerm) ||
+                get(p.tanggalMulai).includes(searchTerm) ||
+                get(p.tanggalSelesai).includes(searchTerm)
+            );
+        });
+    }
+
+    currentPage = 1; 
+    renderTable(filteredParticipants, currentPage);
+    updateCharts(filteredParticipants);
 });
+
 
 prevPageBtn.addEventListener("click", () => {
     if (currentPage > 1) {
@@ -378,17 +370,13 @@ document.getElementById("downloadTableDataBtn").addEventListener("click", () => 
         formatIndoDate(p.tanggalSelesai),
     ]);
 
-    // Buat worksheet dan workbook
     const worksheet = XLSX.utils.aoa_to_sheet([headers, ...rows]);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Data Peserta");
 
-    // Simpan sebagai file Excel
     XLSX.writeFile(workbook, "data_peserta_simarin.xlsx");
 });
 
-
-// Inisialisasi awal UI saat halaman dimuat
 window.onload = () => {
-    updateUI(participantsData); // Muat data peserta awal
+    updateUI(participantsData); 
 };
