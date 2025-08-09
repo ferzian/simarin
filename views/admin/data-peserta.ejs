@@ -265,192 +265,450 @@
         <h2 class="text-3xl font-bold mb-6 text-gray-800">
           Informasi Data Peserta
         </h2>
-        <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
-          <h3 class="text-xl font-semibold text-gray-700 mb-4">
-            Daftar Lengkap Peserta
-          </h3>
+        <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
           <div
-            class="mb-4 flex flex-col sm:flex-row justify-between items-center gap-4"
+            class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6"
           >
-            <input
-              type="text"
-              id="searchTable"
-              placeholder="Cari nama, institusi, atau jenis kegiatan..."
-              class="w-full sm:w-2/3 p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-800"
-            />
-            <button
-              id="downloadTableDataBtn"
-              class="w-full sm:w-auto bg-green-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-green-700 transition duration-300 font-semibold flex items-center justify-center"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5 mr-2"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+            <h3 class="text-3xl font-extrabold text-gray-900">
+              Daftar Lengkap Peserta
+            </h3>
+
+            <div class="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+              <div class="relative w-full">
+                <div
+                  class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 text-gray-400"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <input
+                  type="text"
+                  id="searchTable"
+                  placeholder="Cari nama, instansi, atau kegiatan..."
+                  class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-blue-500 focus:border-blue-500 text-gray-800 transition-all duration-200"
                 />
-              </svg>
-              Download Excel
-            </button>
+              </div>
+              <button
+                id="downloadTableDataBtn"
+                class="bg-green-600 text-white px-6 py-3 rounded-xl shadow-md hover:bg-green-700 transition duration-300 font-bold flex items-center justify-center gap-2 text-sm md:text-base flex-shrink-0"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M3 17a1 1 0 011-1h12a1 1 0 011 1v1a1 1 0 01-1 1H4a1 1 0 01-1-1v-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                Unduh Excel
+              </button>
+            </div>
           </div>
-          <div class="overflow-x-auto">
+
+          <div
+            class="overflow-x-auto rounded-xl border border-gray-200 shadow-sm"
+          >
             <table class="min-w-full divide-y divide-gray-200">
-              <thead class="bg-gray-50 text-left text-sm text-gray-600">
-                <tr>
-                  <th class="px-4 py-2">Foto</th>
-                  <th class="px-4 py-2">Nama</th>
-                  <th class="px-4 py-2">NIS/NIM</th>
-                  <th class="px-4 py-2">Instansi</th>
-                  <th class="px-4 py-2">Kegiatan</th>
-                  <th class="px-4 py-2">Lokasi Kegiatan</th>
-                  <th class="px-4 py-2">Aksi</th>
+              <thead class="bg-gray-50">
+                <tr
+                  class="text-left text-sm text-gray-500 uppercase tracking-wider"
+                >
+                  <th class="px-6 py-3">Foto</th>
+                  <th
+                    class="px-6 py-3 cursor-pointer select-none"
+                    data-sort="nama"
+                  >
+                    <div class="flex items-center gap-1">
+                      Nama <span class="sort-indicator text-gray-400">⇅</span>
+                    </div>
+                  </th>
+                  <th
+                    class="px-6 py-3 cursor-pointer select-none"
+                    data-sort="nipNim"
+                  >
+                    <div class="flex items-center gap-1">
+                      NIS/NIM
+                      <span class="sort-indicator text-gray-400">⇅</span>
+                    </div>
+                  </th>
+                  <th
+                    class="px-6 py-3 cursor-pointer select-none"
+                    data-sort="instansi"
+                  >
+                    <div class="flex items-center gap-1">
+                      Instansi
+                      <span class="sort-indicator text-gray-400">⇅</span>
+                    </div>
+                  </th>
+                  <th
+                    class="px-6 py-3 cursor-pointer select-none"
+                    data-sort="kegiatan"
+                  >
+                    <div class="flex items-center gap-1">
+                      Kegiatan
+                      <span class="sort-indicator text-gray-400">⇅</span>
+                    </div>
+                  </th>
+                  <th
+                    class="px-6 py-3 cursor-pointer select-none"
+                    data-sort="lokasi"
+                  >
+                    <div class="flex items-center gap-1">
+                      Lokasi
+                      <span class="sort-indicator text-gray-400">⇅</span>
+                    </div>
+                  </th>
+                  <th
+                    class="px-6 py-3 cursor-pointer select-none"
+                    data-sort="statusSelesai"
+                  >
+                    <div class="flex items-center gap-1">
+                      Status <span class="sort-indicator text-gray-400">⇅</span>
+                    </div>
+                  </th>
+                  <th class="px-6 py-3 text-center">Aksi</th>
                 </tr>
               </thead>
               <tbody
-                class="bg-white divide-y divide-gray-200"
+                class="bg-white divide-y divide-gray-100"
                 id="participantsTableBody"
               ></tbody>
             </table>
           </div>
 
-          <!-- Modal Detail -->
           <div
             id="detailModal"
-            class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
           >
             <div
-              class="bg-white rounded-xl shadow-lg w-full max-w-4xl overflow-hidden max-h-[90vh] flex flex-col"
+              class="bg-white rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col transform transition-transform duration-300 scale-95"
             >
-              <!-- Header -->
               <div
-                class="flex justify-between items-center border-b px-6 py-3 sticky top-0 bg-white z-10"
+                class="flex items-center justify-between p-6 border-b border-gray-200 sticky top-0 bg-white rounded-t-2xl z-10"
               >
-                <h2 class="text-2xl font-bold text-gray-800">Detail Peserta</h2>
+                <h2 class="text-3xl font-extrabold text-gray-900">
+                  Detail Peserta
+                </h2>
                 <button
                   id="closeModalBtn"
-                  class="text-gray-500 hover:text-gray-700 text-2xl"
+                  class="text-gray-400 hover:text-gray-700 transition-colors duration-200 p-2 rounded-full hover:bg-gray-100"
                 >
-                  &times;
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
                 </button>
               </div>
 
-              <!-- Isi Modal Scrollable -->
-              <div class="p-6 overflow-y-auto">
-                <!-- Foto besar -->
-                <div class="flex justify-center mb-6">
-                  <img
-                    id="detailFoto"
-                    class="w-40 h-40 object-cover rounded-xl border shadow-md"
-                  />
-                </div>
-
-                <!-- Informasi Dasar -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                  <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
-                    <p><strong>Nama:</strong> <span id="detailNama"></span></p>
-                    <p>
-                      <strong>Jenis Kelamin:</strong>
-                      <span id="detailJenisKelamin"></span>
-                    </p>
-                    <p>
-                      <strong>Email:</strong> <span id="detailEmail"></span>
-                    </p>
-                    <p>
-                      <strong>Telepon:</strong> <span id="detailTelepon"></span>
-                    </p>
-                    <p>
-                      <strong>Alamat:</strong> <span id="detailAlamat"></span>
-                    </p>
+              <div class="p-6 overflow-y-auto custom-scrollbar">
+                <div
+                  class="flex flex-col md:flex-row items-center md:items-start gap-8 mb-8"
+                >
+                  <div class="flex-shrink-0">
+                    <img
+                      id="detailFoto"
+                      class="w-48 h-48 rounded-full object-cover border-4 border-white shadow-lg ring-2 ring-blue-500"
+                    />
                   </div>
-                  <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
-                    <p>
-                      <strong>NIS/NIM:</strong> <span id="detailNipNim"></span>
-                    </p>
-                    <p>
-                      <strong>Jenjang:</strong> <span id="detailJenjang"></span>
-                    </p>
-                    <p>
-                      <strong>Jurusan:</strong> <span id="detailProdi"></span>
-                    </p>
-                    <p>
-                      <strong>Instansi:</strong>
-                      <span id="detailInstansi"></span>
-                    </p>
+
+                  <div class="flex-grow w-full">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div
+                        class="bg-gray-50 p-5 rounded-xl border border-gray-100"
+                      >
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                          Informasi Pribadi
+                        </h3>
+                        <p class="text-sm">
+                          <span class="text-gray-500 font-medium">Nama:</span>
+                          <span
+                            id="detailNama"
+                            class="block text-gray-900 font-semibold mt-1"
+                          ></span>
+                        </p>
+                        <p class="text-sm mt-3">
+                          <span class="text-gray-500 font-medium"
+                            >Jenis Kelamin:</span
+                          >
+                          <span
+                            id="detailJenisKelamin"
+                            class="block text-gray-900 font-semibold mt-1"
+                          ></span>
+                        </p>
+                        <p class="text-sm mt-3">
+                          <span class="text-gray-500 font-medium">Email:</span>
+                          <span
+                            id="detailEmail"
+                            class="block text-gray-900 font-semibold mt-1"
+                          ></span>
+                        </p>
+                        <p class="text-sm mt-3">
+                          <span class="text-gray-500 font-medium"
+                            >Telepon:</span
+                          >
+                          <span
+                            id="detailTelepon"
+                            class="block text-gray-900 font-semibold mt-1"
+                          ></span>
+                        </p>
+                        <p class="text-sm mt-3">
+                          <span class="text-gray-500 font-medium">Alamat:</span>
+                          <span
+                            id="detailAlamat"
+                            class="block text-gray-900 font-semibold mt-1"
+                          ></span>
+                        </p>
+                      </div>
+
+                      <div
+                        class="bg-gray-50 p-5 rounded-xl border border-gray-100"
+                      >
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                          Pendidikan & Instansi
+                        </h3>
+                        <p class="text-sm">
+                          <span class="text-gray-500 font-medium"
+                            >NIS/NIM:</span
+                          >
+                          <span
+                            id="detailNipNim"
+                            class="block text-gray-900 font-semibold mt-1"
+                          ></span>
+                        </p>
+                        <p class="text-sm mt-3">
+                          <span class="text-gray-500 font-medium"
+                            >Jenjang:</span
+                          >
+                          <span
+                            id="detailJenjang"
+                            class="block text-gray-900 font-semibold mt-1"
+                          ></span>
+                        </p>
+                        <p class="text-sm mt-3">
+                          <span class="text-gray-500 font-medium"
+                            >Jurusan:</span
+                          >
+                          <span
+                            id="detailProdi"
+                            class="block text-gray-900 font-semibold mt-1"
+                          ></span>
+                        </p>
+                        <p class="text-sm mt-3">
+                          <span class="text-gray-500 font-medium"
+                            >Instansi:</span
+                          >
+                          <span
+                            id="detailInstansi"
+                            class="block text-gray-900 font-semibold mt-1"
+                          ></span>
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                <!-- Kegiatan -->
-                <div class="bg-gray-50 p-4 rounded-lg shadow-sm mb-6">
-                  <p>
-                    <strong>Kegiatan:</strong> <span id="detailKegiatan"></span>
+                <div
+                  class="bg-gray-50 p-5 rounded-xl shadow-sm mb-8 border border-gray-100"
+                >
+                  <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                    Informasi Kegiatan
+                  </h3>
+                  <p class="text-sm">
+                    <span class="text-gray-500 font-medium">Kegiatan:</span>
+                    <span
+                      id="detailKegiatan"
+                      class="block text-gray-900 font-semibold mt-1"
+                    ></span>
                   </p>
-                  <p>
-                    <strong>Lokasi:</strong> <span id="detailLokasi"></span>
+                  <p class="text-sm mt-3">
+                    <span class="text-gray-500 font-medium">Lokasi Kegiatan:</span>
+                    <span
+                      id="detailLokasi"
+                      class="block text-gray-900 font-semibold mt-1"
+                    ></span>
                   </p>
-                  <p>
-                    <strong>Periode:</strong> <span id="detailPeriode"></span>
+                  <p class="text-sm mt-3">
+                    <span class="text-gray-500 font-medium">Waktu Pelaksanaan:</span>
+                    <span
+                      id="detailPeriode"
+                      class="block text-gray-900 font-semibold mt-1"
+                    ></span>
                   </p>
                 </div>
 
-                <!-- Dokumen -->
-                <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
-                  <h1 class="text-lg font-bold mb-3">Dokumen</h1>
-                  <ul class="list-disc pl-5 space-y-1">
+                <div class="bg-gray-100 p-5 rounded-xl shadow-sm">
+                  <h3 class="text-lg font-semibold text-gray-800 mb-3">
+                    Dokumen Pendukung
+                  </h3>
+                  <ul class="space-y-3">
                     <li>
-                      <strong>Surat Pengantar:</strong>
-                      <a
-                        id="detailSuratPengantar"
-                        target="_blank"
-                        download
-                        class="text-blue-500 hover:underline"
-                        >Download</a
-                      >
+                      <div class="flex items-center justify-between">
+                        <span
+                          class="font-medium text-gray-700 flex items-center"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-5 w-5 text-red-500 mr-2"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6a2 2 0 01.586 1.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 10a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1-5a1 1 0 100 2h6a1 1 0 100-2H7z"
+                              clip-rule="evenodd"
+                            />
+                          </svg>
+                          Surat Pengantar
+                        </span>
+                        <a
+                          id="detailSuratPengantar"
+                          target="_blank"
+                          download
+                          class="text-blue-500 hover:text-blue-700 font-medium transition-colors duration-200"
+                        >
+                          Download
+                        </a>
+                      </div>
                     </li>
                     <li>
-                      <strong>Surat Sehat:</strong>
-                      <a
-                        id="detailSuratSehat"
-                        target="_blank"
-                        download
-                        class="text-blue-500 hover:underline"
-                        >Download</a
-                      >
+                      <div class="flex items-center justify-between">
+                        <span
+                          class="font-medium text-gray-700 flex items-center"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-5 w-5 text-red-500 mr-2"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6a2 2 0 01.586 1.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 10a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1-5a1 1 0 100 2h6a1 1 0 100-2H7z"
+                              clip-rule="evenodd"
+                            />
+                          </svg>
+                          Surat Sehat
+                        </span>
+                        <a
+                          id="detailSuratSehat"
+                          target="_blank"
+                          download
+                          class="text-blue-500 hover:text-blue-700 font-medium transition-colors duration-200"
+                        >
+                          Download
+                        </a>
+                      </div>
                     </li>
                     <li>
-                      <strong>Laporan Kegiatan:</strong>
-                      <a
-                        id="detailLaporan"
-                        target="_blank"
-                        download
-                        class="text-blue-500 hover:underline"
-                        >Download</a
-                      >
+                      <div class="flex items-center justify-between">
+                        <span
+                          class="font-medium text-gray-700 flex items-center"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-5 w-5 text-red-500 mr-2"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6a2 2 0 01.586 1.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 10a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1-5a1 1 0 100 2h6a1 1 0 100-2H7z"
+                              clip-rule="evenodd"
+                            />
+                          </svg>
+                          Laporan Kegiatan
+                        </span>
+                        <a
+                          id="detailLaporan"
+                          target="_blank"
+                          download
+                          class="text-blue-500 hover:text-blue-700 font-medium transition-colors duration-200"
+                        >
+                          Download
+                        </a>
+                      </div>
                     </li>
                     <li>
-                      <strong>PPT Hasil:</strong>
-                      <a
-                        id="detailPpt"
-                        target="_blank"
-                        download
-                        class="text-blue-500 hover:underline"
-                        >Download</a
-                      >
+                      <div class="flex items-center justify-between">
+                        <span
+                          class="font-medium text-gray-700 flex items-center"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-5 w-5 text-red-500 mr-2"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6a2 2 0 01.586 1.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 10a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1-5a1 1 0 100 2h6a1 1 0 100-2H7z"
+                              clip-rule="evenodd"
+                            />
+                          </svg>
+                          PPT Hasil
+                        </span>
+                        <a
+                          id="detailPpt"
+                          target="_blank"
+                          download
+                          class="text-blue-500 hover:text-blue-700 font-medium transition-colors duration-200"
+                        >
+                          Download
+                        </a>
+                      </div>
                     </li>
                     <li>
-                      <strong>Sertifikat:</strong>
-                      <a
-                        id="detailSertifikat"
-                        target="_blank"
-                        download
-                        class="text-blue-500 hover:underline"
-                        >Download</a
-                      >
+                      <div class="flex items-center justify-between">
+                        <span
+                          class="font-medium text-gray-700 flex items-center"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-5 w-5 text-red-500 mr-2"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6a2 2 0 01.586 1.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 10a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1-5a1 1 0 100 2h6a1 1 0 100-2H7z"
+                              clip-rule="evenodd"
+                            />
+                          </svg>
+                          Sertifikat
+                        </span>
+                        <a
+                          id="detailSertifikat"
+                          target="_blank"
+                          download
+                          class="text-blue-500 hover:text-blue-700 font-medium transition-colors duration-200"
+                        >
+                          Download
+                        </a>
+                      </div>
                     </li>
                   </ul>
                 </div>
@@ -458,21 +716,39 @@
             </div>
           </div>
 
-          <div class="mt-4 flex justify-between items-center">
+          <style>
+            .custom-scrollbar::-webkit-scrollbar {
+              width: 8px;
+            }
+            .custom-scrollbar::-webkit-scrollbar-track {
+              background: #f1f5f9; /* gray-100 */
+              border-radius: 10px;
+            }
+            .custom-scrollbar::-webkit-scrollbar-thumb {
+              background-color: #cbd5e1; /* gray-300 */
+              border-radius: 10px;
+              border: 2px solid #f1f5f9;
+            }
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+              background-color: #94a3b8; /* gray-400 */
+            }
+          </style>
+
+          <div class="mt-6 flex justify-between items-center">
             <button
               id="prevPageBtn"
-              class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 disabled:opacity-50"
+              class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition duration-300"
               disabled
             >
               Sebelumnya
             </button>
-            <span class="text-gray-700"
+            <span class="text-gray-700 text-sm md:text-base"
               >Halaman <span id="currentPage">1</span> dari
               <span id="totalPages">1</span></span
             >
             <button
               id="nextPageBtn"
-              class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 disabled:opacity-50"
+              class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition duration-300"
               disabled
             >
               Berikutnya

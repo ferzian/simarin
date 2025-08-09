@@ -2,6 +2,11 @@
 let currentParticipants = participantsData; // Gunakan data dummy global
 let filteredParticipants = [];
 let currentPage = 1;
+let genderChart;
+let activityTypeChart;
+let majorChart;
+let currentSort = { key: null, asc: true };
+
 const rowsPerPage = 5; // Jumlah baris per halaman
 
 const totalParticipantsEl = document.getElementById("totalParticipants");
@@ -28,9 +33,6 @@ const nextPageBtn = document.getElementById("nextPageBtn");
 const currentPageSpan = document.getElementById("currentPage");
 const totalPagesSpan = document.getElementById("totalPages");
 
-let genderChart;
-let activityTypeChart;
-let majorChart;
 
 // Fungsi untuk menghitung statistik dan update kartu ringkasan
 function updateSummaryCards(data) {
@@ -136,6 +138,12 @@ function updateCharts(data) {
     }
 }
 
+document.querySelectorAll("th[data-sort]").forEach((th) => {
+    th.addEventListener("click", () => {
+        sortData(th.getAttribute("data-sort"));
+    });
+});
+
 // Fungsi untuk merender tabel peserta
 function renderTable(data, page) {
     participantsTableBody.innerHTML = "";
@@ -145,23 +153,30 @@ function renderTable(data, page) {
 
     paginatedData.forEach((p) => {
         const row = document.createElement("tr");
+
+        // Badge status
+        const statusBadge = p.statusSelesai
+            ? `<span class="px-2 py-1 text-xs font-semibold text-green-800 bg-green-200 rounded-full">Selesai</span>`
+            : `<span class="px-2 py-1 text-xs font-semibold text-red-800 bg-red-200 rounded-full">Belum Selesai</span>`;
+
         row.innerHTML = `
-  <td class="px-4 py-2">
-    <img src="${p.pasFoto ? `/uploads/user/pas-foto/${p.pasFoto}` : '/images/no-image.png'}" 
-         class="w-12 h-12 object-cover rounded-full border" />
-  </td>
-  <td class="px-4 py-2">${p.nama}</td>
-  <td class="px-4 py-2">${p.nipNim}</td>
-  <td class="px-4 py-2">${p.instansi}</td>
-  <td class="px-4 py-2">${p.kegiatan}</td>
-  <td class="px-4 py-2">${p.lokasi}</td>
-  <td class="px-4 py-2">
-    <button class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600" 
-      onclick='showDetail(${JSON.stringify(p)})'>
-      Detail
-    </button>
-  </td>
-`;
+            <td class="px-4 py-2">
+                <img src="${p.pasFoto ? `/uploads/user/pas-foto/${p.pasFoto}` : '/images/no-image.png'}" 
+                     class="w-12 h-12 object-cover rounded-full border" />
+            </td>
+            <td class="px-4 py-2">${p.nama}</td>
+            <td class="px-4 py-2">${p.nipNim}</td>
+            <td class="px-4 py-2">${p.instansi}</td>
+            <td class="px-4 py-2">${p.kegiatan}</td>
+            <td class="px-4 py-2">${p.lokasi}</td>
+            <td class="px-4 py-2">${statusBadge}</td>
+            <td class="px-4 py-2">
+                <button class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600" 
+                    onclick='showDetail(${JSON.stringify(p)})'>
+                    Detail
+                </button>
+            </td>
+        `;
         participantsTableBody.appendChild(row);
     });
 
@@ -169,6 +184,47 @@ function renderTable(data, page) {
     totalPagesSpan.textContent = Math.ceil(data.length / rowsPerPage);
     prevPageBtn.disabled = page === 1;
     nextPageBtn.disabled = page === Math.ceil(data.length / rowsPerPage);
+}
+
+function sortData(key) {
+    if (currentSort.key === key) {
+        currentSort.asc = !currentSort.asc;
+    } else {
+        currentSort.key = key;
+        currentSort.asc = true;
+    }
+
+    // Reset semua indikator
+    document.querySelectorAll(".sort-indicator").forEach(el => {
+        el.textContent = "⇅";
+    });
+
+    // Set indikator untuk kolom aktif
+    const activeTh = document.querySelector(`th[data-sort="${key}"] .sort-indicator`);
+    if (activeTh) {
+        activeTh.textContent = currentSort.asc ? "▲" : "▼";
+    }
+
+    filteredParticipants.sort((a, b) => {
+        let valA = a[key];
+        let valB = b[key];
+
+        if (key.includes('tanggal')) {
+            valA = new Date(valA);
+            valB = new Date(valB);
+        }
+
+        if (typeof valA === 'string' && typeof valB === 'string') {
+            valA = valA.toLowerCase();
+            valB = valB.toLowerCase();
+        }
+
+        if (valA < valB) return currentSort.asc ? -1 : 1;
+        if (valA > valB) return currentSort.asc ? 1 : -1;
+        return 0;
+    });
+
+    renderTable(filteredParticipants, currentPage);
 }
 
 // Tampilkan modal
