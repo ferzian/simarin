@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { Participant } = require('../../models');
 
 // Middleware: pastikan user login & role user
 function isUser(req, res, next) {
@@ -10,8 +11,22 @@ function isUser(req, res, next) {
 }
 
 // GET dashboard user
-router.get('/dashboard', isUser, (req, res) => {
+router.get('/dashboard', isUser,async (req, res) => {
+  const existing = await Participant.findOne({ where: { userId:req.session.user.id } });
+  console.log(req.session.user)
+  console.log(existing)
   res.render('user/user-dashboard', {
+    isRegistered:existing,
+    username: req.session.user.username
+  });
+});
+
+router.get('/skm', isUser,async (req, res) => {
+  const existing = await Participant.findOne({ where: { userId:req.session.user.id } });
+  console.log(req.session.user)
+  console.log(existing)
+  res.render('user/daftar-magang/skm', {
+    isRegistered:existing,
     username: req.session.user.username
   });
 });
@@ -24,11 +39,30 @@ router.get('/daftar-magang/sertifikat', isUser, (req, res) => {
 });
 
 // GET halaman SKM
-router.get('/skm', isUser, (req, res) => {
-  res.render('user/skm', {
-    username: req.session.user.username
-  });
+const { PendaftaranMagang } = require('../../models'); // sesuaikan dengan nama model kamu
+
+router.get('/skm', isUser, async (req, res) => {
+    try {
+        const pendaftaran = await PendaftaranMagang.findOne({
+            where: { userId: req.session.user.id } // sesuaikan nama kolom
+        });
+
+        if (!pendaftaran) {
+            return res.render('user/user-dashboard', {
+                username: req.session.user.username,
+                error: 'Silakan daftar magang terlebih dahulu untuk mengakses SKM'
+            });
+        }
+
+        res.render('user/skm', {
+            username: req.session.user.username
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Terjadi kesalahan server');
+    }
 });
+
 
 // POST logout (bisa juga dipindah ke routes/auth.js kalau ingin pisah total)
 router.post('/logout', (req, res) => {
