@@ -303,5 +303,5 @@ function formatIndoDate(dateStr) {
 }
 // Inisialisasi awal UI saat halaman dimuat
 window.onload = () => {
-    updateUI(participantsData); // Muat data peserta awal
+    updateUI(participantsData);
 };

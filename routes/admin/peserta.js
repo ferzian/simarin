@@ -9,7 +9,7 @@ router.get('/peserta', isAuthenticated, isAdmin, async (req, res) => {
       include: [
         {
           model: User,
-          where: { role: 'user', approved: true }, // hanya user yang approved
+          where: { role: 'user', approved: true },
         },
       ],
     });
