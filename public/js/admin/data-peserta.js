@@ -149,12 +149,20 @@ function renderTable(data, page) {
     const paginatedData = data.slice(start, end);
 
     paginatedData.forEach((p) => {
-        const row = document.createElement("tr");
+        // Cek status selesai berdasarkan tanggal
+        if (p.tanggalSelesai) {
+            const today = new Date();
+            const endDate = new Date(p.tanggalSelesai);
+            if (endDate < today) {
+                p.statusSelesai = true; // Update agar konsisten
+            }
+        }
 
         const statusBadge = p.statusSelesai
             ? `<span class="px-2 py-1 text-xs font-semibold text-green-800 bg-green-200 rounded-full whitespace-nowrap">Selesai</span>`
             : `<span class="px-2 py-1 text-xs font-semibold text-red-800 bg-red-200 rounded-full whitespace-nowrap">Belum Selesai</span>`;
 
+        const row = document.createElement("tr");
         row.innerHTML = `
             <td class="px-4 py-2">
                 <img src="${p.pasFoto ? `/uploads/user/pas-foto/${p.pasFoto}` : '/images/user.png'}" 
@@ -181,6 +189,7 @@ function renderTable(data, page) {
     prevPageBtn.disabled = page === 1;
     nextPageBtn.disabled = page === Math.ceil(data.length / rowsPerPage);
 }
+
 
 function sortData(key) {
     if (currentSort.key === key) {
