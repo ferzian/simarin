@@ -161,7 +161,7 @@ function renderTable(data, page) {
                      class="w-12 h-12 object-cover rounded-full border" />
             </td>
             <td class="px-4 py-2">${p.nama}</td>
-            <td class="px-4 py-2">${p.nipNim}</td>
+            <td class="px-4 py-2">${p.nisNpm}</td>
             <td class="px-4 py-2">${p.instansi}</td>
             <td class="px-4 py-2">${p.kegiatan}</td>
             <td class="px-4 py-2">${p.lokasi}</td>
@@ -223,7 +223,7 @@ function sortData(key) {
 
 function showDetail(p) {
     document.getElementById("detailNama").textContent = p.nama;
-    document.getElementById("detailNipNim").textContent = p.nipNim;
+    document.getElementById("detailNisNpm").textContent = p.nisNpm;
     document.getElementById("detailJenisKelamin").textContent = p.jenisKelamin;
     document.getElementById("detailTelepon").textContent = p.telepon;
     document.getElementById("detailEmail").textContent = p.email;
@@ -308,7 +308,7 @@ searchTableInput.addEventListener("input", () => {
             const get = (v) => (v ? String(v).toLowerCase() : "");
             return (
                 get(p.nama).includes(searchTerm) ||
-                get(p.nipNim).includes(searchTerm) ||
+                get(p.nisNpm).includes(searchTerm) ||
                 get(p.jenisKelamin).includes(searchTerm) ||
                 get(p.telepon).includes(searchTerm) ||
                 get(p.alamat).includes(searchTerm) ||
@@ -353,7 +353,7 @@ function formatIndoDate(dateStr) {
 document.getElementById("downloadTableDataBtn").addEventListener("click", () => {
     const headers = [
         "Nama Lengkap",
-        "NIS/NIM",
+        "NIS/NPM",
         "Jenis Kelamin",
         "No. Telepon",
         "Alamat Domisili",
@@ -368,7 +368,7 @@ document.getElementById("downloadTableDataBtn").addEventListener("click", () => 
 
     const rows = filteredParticipants.map((p) => [
         p.nama,
-        p.nipNim,
+        p.nisNpm,
         p.jenisKelamin,
         p.telepon,
         p.alamat,

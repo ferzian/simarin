@@ -25,7 +25,7 @@ router.get('/data-peserta', isAuthenticated, isAdmin, async (req, res) => {
     res.render('admin/data-peserta', {
       participants: participants.map((p) => ({
         nama: p.nama,
-        nipNim: p.nipNim,
+        nisNpm: p.nisNpm,
         jenisKelamin: p.jenisKelamin,
         telepon: p.telepon,
         email: p.User.email,
