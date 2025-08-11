@@ -154,7 +154,7 @@ function renderTable(data, page) {
             const today = new Date();
             const endDate = new Date(p.tanggalSelesai);
             if (endDate < today) {
-                p.statusSelesai = true; // Update agar konsisten
+                p.statusSelesai = true;
             }
         }
 

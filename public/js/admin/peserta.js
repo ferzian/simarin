@@ -265,7 +265,11 @@ function updateUI(data) {
 // Event Listeners
 if (applyFilterBtn) {
     applyFilterBtn.addEventListener("click", () => {
-        let tempData = participantsData;
+        let tempData = participantsData.slice();
+
+        const year = filterYearSelect.value;
+        const monthStart = document.getElementById("filterMonthStart").value;
+        const monthEnd = document.getElementById("filterMonthEnd").value;
 
         if (filterYearSelect && filterYearSelect.value) {
             tempData = tempData.filter((p) => p.tanggalMulai.startsWith(filterYearSelect.value));
@@ -275,6 +279,17 @@ if (applyFilterBtn) {
         }
         if (filterLocationSelect && filterLocationSelect.value) {
             tempData = tempData.filter((p) => p.lokasi === filterLocationSelect.value);
+        }
+
+        // Filter Bulan ke Bulan
+        if (monthStart && monthEnd) {
+            const startMonthNum = parseInt(monthStart);
+            const endMonthNum = parseInt(monthEnd);
+
+            tempData = tempData.filter(p => {
+                const monthNum = new Date(p.tanggalMulai).getMonth() + 1;
+                return monthNum >= startMonthNum && monthNum <= endMonthNum;
+            });
         }
 
         updateUI(tempData);
