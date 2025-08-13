@@ -2,6 +2,7 @@
 <html>
   <head>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Admin Dashboard SIMARIN</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
@@ -195,7 +196,6 @@
               <div class="px-4 py-2 text-gray-500 text-center">
                 Tidak ada notifikasi baru
               </div>
-              
             </div>
           </div>
 
@@ -204,7 +204,9 @@
               id="dropdownUserButton"
               class="flex items-center gap-2 text-gray-700 hover:text-gray-900 focus:outline-none p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
             >
-              <span class="font-semibold text-lg"><%= user.username %> </span>
+              <span class="font-semibold text-lg"
+                ><%= user ? user.username : 'admin' %></span
+              >
               <svg
                 class="w-5 h-5"
                 fill="none"
@@ -356,7 +358,7 @@
             </div>
           </div>
 
-          <div class="md:col-span-3 text-center mt-4">
+          <!-- <div class="md:col-span-3 text-center mt-4">
             <a
               href="/admin/download-rekap"
               class="inline-flex items-center bg-green-600 text-white px-8 py-3 rounded-full shadow-lg hover:bg-green-700 transition duration-300 text-lg font-semibold"
@@ -377,11 +379,43 @@
               </svg>
               Download Rekap Kunjungan Bulanan
             </a>
+          </div> -->
+          <div class="bg-white rounded-xl shadow-lg p-6 mt-8">
+            <h2 class="text-xl font-semibold mb-4">Peserta Aktif per Lokasi</h2>
+            <canvas id="lokasiChart" height="100"></canvas>
           </div>
         </div>
       </main>
     </div>
+    <script>
+      const lokasiLabels = ['Sempur', 'Depok', 'Cibalagung', 'Cijeruk'];
+      const lokasiCounts = [
+        <%= lokasiData.Sempur %>,
+        <%= lokasiData.Depok %>,
+        <%= lokasiData.Cibalagung %>,
+        <%= lokasiData.Cijeruk %>
+      ];
 
-    <script></script>
+      new Chart(document.getElementById('lokasiChart'), {
+        type: 'bar',
+        data: {
+          labels: lokasiLabels,
+          datasets: [{
+            label: 'Peserta Aktif',
+            data: lokasiCounts,
+            backgroundColor: ['#4CAF50', '#2196F3', '#9C27B0', '#FF9800']
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            y: { beginAtZero: true, ticks: { precision:0 } }
+          }
+        }
+      });
+    </script>
   </body>
 </html>

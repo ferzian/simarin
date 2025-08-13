@@ -52,18 +52,47 @@ function toggleSidebar() {
 }
 
 function toggleNotifDropdown() {
-        const menu = document.getElementById("notifDropdownMenu");
-        menu.classList.toggle("hidden");
-      }
+    const menu = document.getElementById("notifDropdownMenu");
+    menu.classList.toggle("hidden");
+}
 
-      // Optional: close dropdown if click outside
-      document.addEventListener("click", function (event) {
-        const dropdown = document.getElementById("notifDropdownMenu");
-        const button = document.getElementById("notifDropdownButton");
-        if (
-          !dropdown.contains(event.target) &&
-          !button.contains(event.target)
-        ) {
-          dropdown.classList.add("hidden");
+// Optional: close dropdown if click outside
+document.addEventListener("click", function (event) {
+    const dropdown = document.getElementById("notifDropdownMenu");
+    const button = document.getElementById("notifDropdownButton");
+    if (
+        !dropdown.contains(event.target) &&
+        !button.contains(event.target)
+    ) {
+        dropdown.classList.add("hidden");
+    }
+});
+
+const lokasiLabels = ['Sempur', 'Depok', 'Cibalagung', 'Cijeruk'];
+const lokasiCounts = [
+              <%= lokasiData.Sempur %>,
+              <%= lokasiData.Depok %>,
+              <%= lokasiData.Cibalagung %>,
+              <%= lokasiData.Cijeruk %>
+            ];
+
+new Chart(document.getElementById('lokasiChart'), {
+    type: 'bar',
+    data: {
+        labels: lokasiLabels,
+        datasets: [{
+            label: 'Peserta Aktif',
+            data: lokasiCounts,
+            backgroundColor: ['#4CAF50', '#2196F3', '#9C27B0', '#FF9800']
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false }
+        },
+        scales: {
+            y: { beginAtZero: true, ticks: { precision: 0 } }
         }
-      });
+    }
+});
