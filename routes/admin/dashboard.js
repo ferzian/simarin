@@ -1,23 +1,46 @@
 const express = require('express');
 const router = express.Router();
-const { Participant } = require('../../models');
+const { sequelize, Participant, Survey, Visitor } = require('../../models');
 const { Op, fn, col } = require('sequelize');
 const moment = require('moment');
 
 // GET /admin/dashboard
 router.get('/dashboard', async (req, res) => {
   try {
-    // batas awal bulan ini (untuk kartu "pendaftar baru")
+    // === Variabel waktu ===
     const monthStart = moment().startOf('month').toDate();
+    const today = moment().startOf('day').toDate();
+    const sevenDaysLater = moment().add(7, 'days').endOf('day').toDate();
 
-    // kartu-kartu atas (silakan sesuaikan definisinya)
-    const visitCount = await Participant.count(); // atau hitung dari model Visitor jika ada
+    // === Pendaftar baru bulan ini ===
     const newRegistrantsCount = await Participant.count({
       where: { createdAt: { [Op.gte]: monthStart } }
     });
 
-    const today = new Date();
+    // === Kunjungan bulan ini ===
+    const visitCount = await Visitor.count({
+      where: { createdAt: { [Op.gte]: monthStart } }
+    });
 
+    // === Rekap SKM bulan ini ===
+    const avgSkm = await Survey.findOne({
+      attributes: [
+        [sequelize.literal('(AVG((q1 + q2 + q3 + q4 + q5 + q6 + q7 + q8 + q9) / 9))'), 'avgSkor']
+      ],
+      where: { createdAt: { [Op.gte]: monthStart } },
+      raw: true
+    });
+
+    const avgSkorValue = avgSkm?.avgSkor
+      ? parseFloat(avgSkm.avgSkor).toFixed(2)
+      : 0;
+
+    // Tentukan emoticon
+    let emoticon = '😐';
+    if (avgSkorValue >= 80) emoticon = '😊';
+    else if (avgSkorValue < 60) emoticon = '😟';
+
+    // === Peserta aktif hari ini ===
     const aktifCount = await Participant.count({
       where: {
         tanggalMulai: { [Op.lte]: today },
@@ -25,12 +48,9 @@ router.get('/dashboard', async (req, res) => {
       }
     });
 
+    // === Peserta aktif per lokasi ===
     const lokasiCounts = await Participant.findAll({
-      attributes: [
-        'lokasi',
-        [fn('COUNT', col('id'))
-          , 'count']
-      ],
+      attributes: ['lokasi', [fn('COUNT', col('id')), 'count']],
       where: {
         tanggalMulai: { [Op.lte]: today },
         tanggalSelesai: { [Op.gte]: today }
@@ -38,7 +58,6 @@ router.get('/dashboard', async (req, res) => {
       group: ['lokasi']
     });
 
-    // Normalisasi ke 4 lokasi yang kamu mau
     const lokasiData = { Sempur: 0, Depok: 0, Cibalagung: 0, Cijeruk: 0 };
     lokasiCounts.forEach(row => {
       const lokasi = row.get('lokasi');
@@ -48,13 +67,28 @@ router.get('/dashboard', async (req, res) => {
       }
     });
 
+    // === Kegiatan terdekat selesai (7 hari ke depan) ===
+    const upcomingEndDate = await Participant.findAll({
+      where: {
+        tanggalSelesai: { [Op.between]: [today, sevenDaysLater] },
+        statusSelesai: false
+      },
+      order: [['tanggalSelesai', 'ASC']],
+      limit: 5
+    });
+
+    // === Render ke view ===
     res.render('admin/dashboard', {
       visitCount,
       aktifCount,
       newRegistrantsCount,
       lokasiData,
-      user: req.user
+      upcomingEndDate,
+      avgSkorValue,
+      emoticon,
+      moment
     });
+
   } catch (err) {
     console.error(err);
     res.status(500).send('Error loading dashboard');

@@ -67,32 +67,3 @@ document.addEventListener("click", function (event) {
         dropdown.classList.add("hidden");
     }
 });
-
-const lokasiLabels = ['Sempur', 'Depok', 'Cibalagung', 'Cijeruk'];
-const lokasiCounts = [
-              <%= lokasiData.Sempur %>,
-              <%= lokasiData.Depok %>,
-              <%= lokasiData.Cibalagung %>,
-              <%= lokasiData.Cijeruk %>
-            ];
-
-new Chart(document.getElementById('lokasiChart'), {
-    type: 'bar',
-    data: {
-        labels: lokasiLabels,
-        datasets: [{
-            label: 'Peserta Aktif',
-            data: lokasiCounts,
-            backgroundColor: ['#4CAF50', '#2196F3', '#9C27B0', '#FF9800']
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: { display: false }
-        },
-        scales: {
-            y: { beginAtZero: true, ticks: { precision: 0 } }
-        }
-    }
-});
