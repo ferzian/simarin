@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
+const path = require('path');
 const { Skm } = require('../../models');
+
 
 // Middleware: pastikan user login & role user
 function isUser(req, res, next) {
@@ -10,7 +13,7 @@ function isUser(req, res, next) {
   next();
 }
 
-router.get('/skm', isUser,async (req, res) => {
+router.get('user/daftar-magang/skm', isUser,async (req, res) => {
   const existing = await Skm.findOne({ where: { userId:req.session.user.id } });
   console.log(req.session.user)
   console.log(existing)
@@ -21,34 +24,54 @@ router.get('/skm', isUser,async (req, res) => {
 });
 
 // 💡 Route POST: Proses penyimpanan data magang
-router.post(
-    '/user/skm',
-    async (req, res) => {
+router.post('/skm', isUser, async (req, res) => {
       try {
         const userId = req.session.user.id;
         const {
-            JenisLayanan,
-            rating,
-            komentar,
-
+            nama,
+            jenis_kelamin,
+            usia,
+            pendidikan,
+            pekerjaan,
+            penilaian_1,
+            penilaian_2,
+            penilaian_3,
+            penilaian_4,
+            penilaian_5,
+            penilaian_6,
+            penilaian_7,
+            penilaian_8,
+            penilaian_9,
+            nilai_total,
+            kritik,
+            kesimpulan,
+            saran,
 
         } = req.body;
   
-        // 💡 Validasi nomor telepon unik
-        const existing = await Skm.findOne({ where: { telepon } });
-        if (existing) {
-          return res.render('user/daftar-magang/index', {
-            username: req.session.user?.username || 'Pengguna',
-            error: 'Nomor telepon sudah digunakan.',
-            success: false,
-          });
-        }
-  
+  console.log('Data dari form:', req.body);
+
         // 💾 Simpan data ke database
         await Skm.create({
-          JenisLayanan,
-          rating,
-          komentar,
+          userId: req.session.user.id,
+          nama,
+          jenis_kelamin,
+          usia,
+          pendidikan,
+          pekerjaan,
+          penilaian_1,
+          penilaian_2,
+          penilaian_3,
+          penilaian_4,
+          penilaian_5,
+          penilaian_6,
+          penilaian_7,
+          penilaian_8,
+          penilaian_9,
+          nilai_total,
+          kritik,
+          kesimpulan,
+          saran,
   
         });
   
@@ -58,7 +81,7 @@ router.post(
         console.error('❌ Gagal menyimpan data peserta:', err);
   
         // ❌ Render kembali halaman dengan error (✅ diperbaiki di sini)
-        return res.render('user/daftar-magang/index', {
+        return res.render('user/daftar-magang/skm', {
           username: req.session.user?.username || 'Pengguna',
           error: 'Terjadi kesalahan saat menyimpan data.',
           success: false,

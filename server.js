@@ -11,7 +11,7 @@ const profilRoutes = require('./routes/user/profil');
 const app = express();
 
 // Middleware
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.set('view engine', 'ejs');
@@ -42,7 +42,7 @@ app.use('/admin', require('./routes/admin/dashboard'));
 app.use('/admin', require('./routes/admin/peserta'));
 app.use('/admin', require('./routes/admin/skm'));
 app.use('/admin', require('./routes/admin/download-rekap'));
-
+app.use('/user', require('./routes/user/skm'));
 app.use('/user/daftar-magang', require('./routes/user/daftar-magang'));
 app.use('/user', require('./routes/user/sertifikat'));
 app.use('/user', require('./routes/user/user-dashboard'));

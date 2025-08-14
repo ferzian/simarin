@@ -1,111 +1,246 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Surat Kepuasan Masyarakat - SIMARIN</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kuesioner Penilaian Pelayanan</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
+    .star {
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .star:hover {
+      transform: scale(1.2);
+    }
+    .star.selected {
+      color: gold;
     }
   </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col">
-  <nav class="bg-white shadow p-4 flex justify-between items-center">
-    <h1 class="text-2xl font-bold text-blue-700">SIMARIN</h1>
-    <div class="flex space-x-6">
-      <a href="/auth/user/dashboard" class="text-gray-700 hover:text-blue-600">Beranda</a>
-      <a href="/layanan" class="text-gray-700 hover:text-blue-600">Layanan</a>
-      <a href="/kontak" class="text-gray-700 hover:text-blue-600">Kontak</a>
-      <form action="/auth/logout" method="POST">
-        <button type="submit" class="text-red-600 hover:underline">Logout</button>
-      </form>
-    </div>  
-  </nav>
-  <!-- Content -->
-  <main class="flex-grow container mx-auto px-6 py-10">
-    <div class="max-w-md mx-auto p-8 bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
-      <div class="text-center mb-8">
-        <h2 class="text-2xl font-bold text-gray-800 mb-2">Formulir Umpan Balik Layanan</h2>
-        <p class="text-gray-600">Bantu kami meningkatkan kualitas layanan secara anonim</p>
+<body class="bg-gray-100 min-h-screen py-10 font-sans">
+  <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-xl p-8">
+    <form action="/user/skm" method="POST" class="space-y-12">
+
+      <!-- Header Judul -->
+      <div class="max-w-4xl mx-auto bg-white shadow-md rounded-xl p-6 mb-8 text-center">
+        <h1 class="text-2xl font-bold uppercase mb-2">Survey Kepuasan Masyarakat</h1>
+        <p class="text-lg font-medium">Unit : Balai Riset Perikanan Budidaya Air Tawar Bogor</p>
+        <p class="italic text-gray-700">Surat keterangan dan/atau sertifikat</p>
       </div>
-      
-      <form id="skm" method="POST" action="/user/skm" class="space-y-6">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Layanan</label>
-          <select name="JenisLayanan" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-            <option disabled selected>Pilih layanan yang diterima...</option>
-            <option value="Pelayanan Administrasi">Pelayanan Administrasi</option>
-            <option value="Layanan Kesehatan">Layanan Kesehatan</option>
-            <option value="Pendidikan">Pendidikan</option>
-            <option value="Lainnya">Lainnya</option>
-          </select>
-        </div>
-    
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-3">Tingkat Kepuasan</label>
-          <div class="grid grid-cols-5 gap-2">
-            <label class="flex flex-col items-center cursor-pointer">
-              <input type="radio" name="rating" class="sr-only peer">
-              <div class="w-10 h-10 rounded-full border-2 border-gray-300 peer-checked:border-blue-500 peer-checked:bg-blue-500 flex items-center justify-center transition-colors">
-                <span class="text-xs">1</span>
-              </div>
-              <span class="mt-1 text-xs text-gray-600">Sangat Puas</span>
-            </label>
-            
-            <label class="flex flex-col items-center cursor-pointer">
-              <input type="radio" name="rating" class="sr-only peer">
-              <div class="w-10 h-10 rounded-full border-2 border-gray-300 peer-checked:border-blue-400 peer-checked:bg-blue-400 flex items-center justify-center transition-colors">
-                <span class="text-xs">2</span>
-              </div>
-              <span class="mt-1 text-xs text-gray-600">Puas</span>
-            </label>
-            
-            <label class="flex flex-col items-center cursor-pointer">
-              <input type="radio" name="rating" class="sr-only peer">
-              <div class="w-10 h-10 rounded-full border-2 border-gray-300 peer-checked:border-yellow-400 peer-checked:bg-yellow-400 flex items-center justify-center transition-colors">
-                <span class="text-xs">3</span>
-              </div>
-              <span class="mt-1 text-xs text-gray-600">Cukup</span>
-            </label>
-            
-            <label class="flex flex-col items-center cursor-pointer">
-              <input type="radio" name="rating" class="sr-only peer">
-              <div class="w-10 h-10 rounded-full border-2 border-gray-300 peer-checked:border-orange-400 peer-checked:bg-orange-400 flex items-center justify-center transition-colors">
-                <span class="text-xs">4</span>
-              </div>
-              <span class="mt-1 text-xs text-gray-600">Kurang</span>
-            </label>
-            
-            <label class="flex flex-col items-center cursor-pointer">
-              <input type="radio" name="rating" class="sr-only peer">
-              <div class="w-10 h-10 rounded-full border-2 border-gray-300 peer-checked:border-red-400 peer-checked:bg-red-400 flex items-center justify-center transition-colors">
-                <span class="text-xs">5</span>
-              </div>
-              <span class="mt-1 text-xs text-gray-600">Sangat Kurang</span>
-            </label>
+
+      <!-- Data Responden -->
+      <section class="p-6 bg-blue-50 rounded-lg shadow-sm">
+        <h2 class="text-xl font-semibold border-b pb-2 mb-6">🧍 Data Responden</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block font-medium mb-1">Nama</label>
+            <input type="text" name="nama" required class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label class="block font-medium mb-1">Jenis Kelamin</label>
+            <select name="jenis_kelamin" required class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
+              <option value="">-- Pilih --</option>
+              <option value="Laki-laki">Laki-laki</option>
+              <option value="Perempuan">Perempuan</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-medium mb-1">Usia</label>
+            <select name="usia" required class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
+              <option value="">-- Pilih --</option>
+              <option value="20">Kurang dari 20</option>
+              <option value="20-40">20-40</option>
+              <option value="40">Lebih dari 40</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block font-medium mb-1">Pendidikan</label>
+            <select name="pendidikan" required class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
+              <option value="">-- Pilih --</option>
+              <option value="SD">SD</option>
+              <option value="SMP">SMP</option>
+              <option value="SMA/SMK">SMA/SMK</option>
+              <option value="Diploma">D3</option>
+              <option value="Sarjana">S1</option>
+              <option value="Magister">S2</option>
+              <option value="Doctor">S3</option>
+            </select>
+          </div>
+          <div class="md:col-span-2">
+            <label class="block font-medium mb-1">Pekerjaan</label>
+            <input type="text" name="pekerjaan" required class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
           </div>
         </div>
-    
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Komentar (Opsional)</label>
-          <textarea class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"name="Komentar" rows="3" placeholder="Masukkan saran atau kritik Anda..."></textarea>
-          <p class="mt-1 text-xs text-gray-500">Umpan balik Anda bersifat anonim</p>
+      </section>
+
+      <hr class="border-gray-300">
+
+      <!-- Pertanyaan -->
+      <section class="p-6 bg-green-50 rounded-lg shadow-sm">
+        <h2 class="text-xl font-semibold border-b pb-2 mb-6">📋 Pertanyaan Penilaian</h2>
+        <div class="grid gap-6">
+          <div>
+            <label class="block mb-2">1. Bagaimana penilaian Bapak/Ibu tentang kesesuaian persyaratan pelayanan yang harus dipenuhi dengan persyaratan pelayanan yang diinformasikan?</label>
+            <select name="penilaian_1" required class="w-full border rounded-lg p-2">
+              <option value="">-- Pilih --</option>
+              <option value="1">Sangat sesuai</option>
+              <option value="2">Sesuai</option>
+              <option value="3">Kurang sesuai</option>
+              <option value="4">Tidak sesuai</option>
+            </select>
+          </div>
+          <div>
+            <label class="block mb-2">2. . Bagaimana penilaian Bapak/Ibu mengenai kemudahan prosedur yang dijalani untuk mendapatkan layanan?</label>
+            <select name="penilaian_2" required class="w-full border rounded-lg p-2">
+              <option value="">-- Pilih --</option>
+              <option value="1">Sangat mudah</option>
+              <option value="2">Mudah</option>
+              <option value="3">Kurang mudah</option>
+              <option value="4">Tidak mudah</option>
+            </select>
+          </div>
+          <div>
+            <label class="block mb-2">3. Bagaimana penilaian Bapak/Ibu mengenai kemudahan prosedur yang dijalani untuk mendapatkan layanan?</label>
+            <select name="penilaian_3" required class="w-full border rounded-lg p-2">
+              <option value="">-- Pilih --</option>
+              <option value="1">Sangat sesuai</option>
+              <option value="2">Sesuai</option>
+              <option value="3">Kurang sesuai</option>
+              <option value="4">Tidak sesuai</option>
+            </select>
+          </div>
+          <div>
+            <label class="block mb-2">4. Bagaimana penilaian Bapak/Ibu mengenai kesesuaian biaya pelayanan yang dibayarkan dengan yang diinformasikan?</label>
+            <select name="penilaian_4" required class="w-full border rounded-lg p-2">
+              <option value="">-- Pilih --</option>
+              <option value="1">Sangat sesuai</option>
+              <option value="2">Sesuai</option>
+              <option value="3">Kurang sesuai</option>
+              <option value="4">Tidak sesuai</option>
+            </select>
+          </div>
+          <div>
+            <label class="block mb-2">5. Bagaimana pendapat Saudara tentang kesesuaian produk pelayanan antara yang ada pada publikasi dengan pelayanan yang diberikan?</label>
+            <select name="penilaian_5" required class="w-full border rounded-lg p-2">
+              <option value="">-- Pilih --</option>
+              <option value="1">Sangat sesuai</option>
+              <option value="2">Sesuai</option>
+              <option value="3">Kurang sesuai</option>
+              <option value="4">Tidak sesuai</option>
+            </select>
+          </div>
+          <div>
+            <label class="block mb-2">6. Bagaimana penilaian Bapak/Ibu mengenai kesigapan petugas pelayanan?</label>
+            <select name="penilaian_6" required class="w-full border rounded-lg p-2">
+              <option value="">-- Pilih --</option>
+              <option value="1">Sangat cepat</option>
+              <option value="2">Cepat</option>
+              <option value="3">Kurang cepat</option>
+              <option value="4">Lambat</option>
+            </select>
+          </div>
+          <div>
+            <label class="block mb-2">7. Perilaku/kemampuan petugas?</label>
+            <select name="penilaian_7" required class="w-full border rounded-lg p-2">
+              <option value="">-- Pilih --</option>
+              <option value="1">Sangat baik</option>
+              <option value="2">Baik</option>
+              <option value="3">Kurang baik</option>
+              <option value="4">Tidak baik</option>
+            </select>
+          </div>
+          <div>
+            <label class="block mb-2">8.Layanan konsultasi & pengaduan?</label>
+            <select name="penilaian_8" required class="w-full border rounded-lg p-2">
+              <option value="">-- Pilih --</option>
+              <option value="1">Sangat baik</option>
+              <option value="2">Baik</option>
+              <option value="3">Kurang baik</option>
+              <option value="4">Tidak baik</option>
+            </select>
+          </div>
+          <div>
+            <label class="block mb-2">9. Kualitas sarana & prasarana?</label>
+            <select name="penilaian_9" required class="w-full border rounded-lg p-2">
+              <option value="">-- Pilih --</option>
+              <option value="1">Sangat baik</option>
+              <option value="2">Baik</option>
+              <option value="3">Kurang baik</option>
+              <option value="4">Tidak baik</option>
+            </select>
+          </div>
         </div>
-    
-        <div>
-          <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
-            Kirim Umpan Balik
-          </button>
+      </section>
+
+      <hr class="border-gray-300">
+
+      <!-- Kesimpulan -->
+      <section class="p-6 bg-yellow-50 rounded-lg shadow-sm">
+        <h2 class="text-xl font-semibold border-b pb-2 mb-6">📝 Kesimpulan & Saran</h2>
+
+        <!-- Rating Bintang -->
+        <div class="mb-4">
+          <label class="block font-medium mb-2">Nilai Total (1 - 10)</label>
+          <div id="starRating" class="flex space-x-1 text-3xl text-gray-400"></div>
+          <input type="hidden" name="nilai_total" id="nilaiTotal" required>
         </div>
-      </form>
-    
-      <div class="mt-6 flex items-center justify-center text-sm text-gray-500 bg-gray-50 p-3 rounded-lg">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-        </svg>
-        Data Anda terlindungi dan bersifat anonim
+
+        <div class="mb-4">
+          <label class="block font-medium mb-1">Kritik</label>
+          <textarea name="kritik" rows="3" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-red-500"></textarea>
+        </div>
+        <div>
+
+          <div class="mb-4">
+            <label class="block font-medium mb-1">Kesimpulan</label>
+            <textarea name="kesimpulan" rows="3" required class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-green-500"></textarea>
+          </div>
+          
+          <label class="block font-medium mb-1">Saran</label>
+          <textarea name="saran" rows="3" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500"></textarea>
+        </div>
+      </section>
+
+      <!-- Submit -->
+      <div class="text-center">
+        <button type="submit" class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition">
+          Kirim Kuesioner
+        </button>
       </div>
-    </div>
+
+    </form>
+  </div>
+
+  <script>
+    const starContainer = document.getElementById('starRating');
+    const nilaiInput = document.getElementById('nilaiTotal');
+    let selectedValue = 0;
+
+    for (let i = 1; i <= 10; i++) {
+      const star = document.createElement('span');
+      star.innerHTML = '★';
+      star.classList.add('star');
+      star.dataset.value = i;
+      star.addEventListener('click', () => {
+        selectedValue = i;
+        nilaiInput.value = i;
+        updateStars();
+      });
+      starContainer.appendChild(star);
+    }
+
+    function updateStars() {
+      document.querySelectorAll('.star').forEach(star => {
+        const value = parseInt(star.dataset.value);
+        if (value <= selectedValue) {
+          star.classList.add('selected');
+        } else {
+          star.classList.remove('selected');
+        }
+      });
+    }
+  </script>
+</body>
+</html>
