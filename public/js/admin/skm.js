@@ -1,216 +1,141 @@
-// --- Logika untuk Halaman SKM ---
+document.addEventListener("DOMContentLoaded", () => {
+  // Ambil data SKM dari EJS yang dilempar server
+  let skmData = [];
+  if (typeof window.skmDataJSON !== "undefined") {
+    skmData = JSON.parse(window.skmDataJSON);
+  }
 
-// Data dummy (akan diambil dari `skmData` global)
-let currentSKMData = skmData; // Gunakan data dummy global
-let filteredSKMData = [];
-let currentSKMPage = 1;
-const skmRowsPerPage = 5; // Jumlah baris per halaman
+  const skmTableBody = document.getElementById("skmTableBody");
+  const searchInput = document.getElementById("searchSKMTable");
+  const currentPageEl = document.getElementById("currentSKMPage");
+  const totalPagesEl = document.getElementById("totalSKMPages");
+  const prevBtn = document.getElementById("prevPageSKMBtn");
+  const nextBtn = document.getElementById("nextPageSKMBtn");
+  const ikmScoreEl = document.getElementById("ikmScore");
+  const totalResponsesEl = document.getElementById("totalSKMResponses");
 
-const ikmScoreEl = document.getElementById("ikmScore");
-const totalSKMResponsesEl = document.getElementById("totalSKMResponses");
-const satisfactionChartCtx = document
-    .getElementById("satisfactionChart")
-    .getContext("2d");
-const skmTableBody = document.getElementById("skmTableBody");
-const filterYearSKMSelect = document.getElementById("filterYearSKM");
-const filterMonthSKMSelect = document.getElementById("filterMonthSKM");
-const applyFilterSKMBtn = document.getElementById("applyFilterSKMBtn");
-const searchSKMTableInput = document.getElementById("searchSKMTable");
-const prevPageSKMBtn = document.getElementById("prevPageSKMBtn");
-const nextPageSKMBtn = document.getElementById("nextPageSKMBtn");
-const currentSKMPageSpan = document.getElementById("currentSKMPage");
-const totalSKMPagesSpan = document.getElementById("totalSKMPages");
+  const detailModal = document.getElementById("skmDetailModal");
+  const detailContent = document.getElementById("skmDetailContent");
 
-let satisfactionChart;
+  let filteredData = skmData;
+  let currentPage = 1;
+  const rowsPerPage = 5;
 
-// Fungsi untuk menghitung IKM dan update kartu ringkasan
-function updateIKMSummary(data) {
-    totalSKMResponsesEl.textContent = data.length;
+  function renderTable() {
+    skmTableBody.innerHTML = "";
 
-    if (data.length === 0) {
-        ikmScoreEl.textContent = "0.00";
-        return;
+    const start = (currentPage - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    const pageData = filteredData.slice(start, end);
+
+    pageData.forEach(row => {
+      const tr = document.createElement("tr");
+
+      tr.innerHTML = `
+        <td class="px-4 py-2">${row.date || "-"}</td>
+        <td class="px-4 py-2">${row.gender || "-"}</td>
+        <td class="px-4 py-2">${row.age || "-"}</td>
+        <td class="px-4 py-2">${row.education || "-"}</td>
+        <td class="px-4 py-2">${row.location || "-"}</td>
+        <td class="px-4 py-2">
+          <button class="text-blue-600 hover:underline" data-id="${row.id}">Detail</button>
+        </td>
+      `;
+      skmTableBody.appendChild(tr);
+    });
+
+    currentPageEl.textContent = currentPage;
+    totalPagesEl.textContent = Math.ceil(filteredData.length / rowsPerPage);
+
+    prevBtn.disabled = currentPage === 1;
+    nextBtn.disabled = currentPage >= Math.ceil(filteredData.length / rowsPerPage);
+  }
+
+  function updateIKMScore() {
+    // hitung IKM berdasarkan rata-rata jawaban q1..q9
+    if (!skmData.length) {
+      ikmScoreEl.textContent = "0.00";
+      totalResponsesEl.textContent = "0";
+      return;
     }
 
     let totalScore = 0;
-    data.forEach((response) => {
-        switch (response.rating) {
-            case "Sangat Baik":
-                totalScore += 4;
-                break;
-            case "Baik":
-                totalScore += 3;
-                break;
-            case "Cukup":
-                totalScore += 2;
-                break;
-            case "Kurang Baik":
-                totalScore += 1;
-                break;
+    skmData.forEach(row => {
+      let sum = 0;
+      let count = 0;
+      for (let i = 1; i <= 9; i++) {
+        const val = parseInt(row[`q${i}`], 10);
+        if (!isNaN(val)) {
+          sum += val;
+          count++;
         }
-    });
-    const ikm = (totalScore / (data.length * 4)) * 100; // Hitung IKM dalam skala 0-100
-    ikmScoreEl.textContent = ikm.toFixed(2);
-}
-
-// Fungsi untuk memperbarui grafik kepuasan
-function updateSatisfactionChart(data) {
-    const ratingCounts = {
-        "Kurang Baik": 0,
-        Cukup: 0,
-        Baik: 0,
-        "Sangat Baik": 0,
-    };
-    data.forEach((response) => {
-        if (ratingCounts.hasOwnProperty(response.rating)) {
-            ratingCounts[response.rating]++;
-        }
+      }
+      if (count > 0) {
+        totalScore += sum / count;
+      }
     });
 
-    if (satisfactionChart) satisfactionChart.destroy();
-    satisfactionChart = new Chart(satisfactionChartCtx, {
-        type: "doughnut", // Atau 'bar' jika ingin batang
-        data: {
-            labels: Object.keys(ratingCounts),
-            datasets: [
-                {
-                    data: Object.values(ratingCounts),
-                    backgroundColor: ["#EF4444", "#FCD34D", "#22C55E", "#3B82F6"], // Red, Yellow, Green, Blue
-                    hoverOffset: 8,
-                },
-            ],
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: "right", // Untuk doughnut chart, legend di kanan lebih baik
-                },
-                title: {
-                    display: false,
-                    text: "Distribusi Tanggapan Kepuasan",
-                },
-            },
-        },
-    });
-}
+    const ikm = (totalScore / skmData.length).toFixed(2);
+    ikmScoreEl.textContent = ikm;
+    totalResponsesEl.textContent = skmData.length;
+  }
 
-// Fungsi untuk merender tabel SKM
-function renderSKMTable(data, page) {
-    skmTableBody.innerHTML = "";
-    const start = (page - 1) * skmRowsPerPage;
-    const end = start + skmRowsPerPage;
-    const paginatedData = data.slice(start, end);
+  function openDetail(id) {
+    const data = skmData.find(d => d.id === id);
+    if (!data) return;
 
-    paginatedData.forEach((response) => {
-        const row = document.createElement("tr");
-        row.className = "table-row";
-        row.innerHTML = `
-            <td>${response.date}</td>
-            <td>${response.rating}</td>
-            <td>${response.comment}</td>
-          `;
-        skmTableBody.appendChild(row);
-    });
+    detailContent.innerHTML = `
+      <p><strong>Nama:</strong> ${data.name || "-"}</p>
+      <p><strong>Instansi/Sekolah:</strong> ${data.school || "-"}</p>
+      <p><strong>Tanggal:</strong> ${data.date || "-"}</p>
+      <p><strong>Lokasi:</strong> ${data.location || "-"}</p>
+      <p><strong>Jenis Kelamin:</strong> ${data.gender || "-"}</p>
+      <p><strong>Usia:</strong> ${data.age || "-"}</p>
+      <p><strong>Pendidikan:</strong> ${data.education || "-"}</p>
+      <p><strong>Komentar:</strong> ${data.comment || "-"}</p>
+      <hr>
+      ${[...Array(9)].map((_, i) => `<p><strong>Pertanyaan ${i+1}:</strong> ${data[`q${i+1}`] || "-"}</p>`).join("")}
+    `;
+    detailModal.classList.remove("hidden");
+  }
 
-    currentSKMPageSpan.textContent = page;
-    totalSKMPagesSpan.textContent = Math.ceil(data.length / skmRowsPerPage);
+  window.closeSKMDetail = () => {
+    detailModal.classList.add("hidden");
+  };
 
-    prevPageSKMBtn.disabled = page === 1;
-    nextPageSKMBtn.disabled =
-        page === Math.ceil(data.length / skmRowsPerPage);
-}
-
-// Fungsi utama untuk inisialisasi dan update UI
-function updateSKMUI(data) {
-    filteredSKMData = data; // Set data awal atau data setelah filter
-    updateIKMSummary(filteredSKMData);
-    updateSatisfactionChart(filteredSKMData);
-    currentSKMPage = 1; // Reset halaman ke 1 setiap kali data berubah
-    renderSKMTable(filteredSKMData, currentSKMPage);
-}
-
-// Event Listeners
-applyFilterSKMBtn.addEventListener("click", () => {
-    const year = filterYearSKMSelect.value;
-    const month = filterMonthSKMSelect.value;
-
-    let tempData = skmData;
-
-    if (year) {
-        tempData = tempData.filter((response) =>
-            response.date.startsWith(year)
-        );
-    }
-    if (month) {
-        tempData = tempData.filter(
-            (response) => response.date.substring(5, 7) === month
-        );
-    }
-    updateSKMUI(tempData);
-});
-
-searchSKMTableInput.addEventListener("keyup", () => {
-    const searchTerm = searchSKMTableInput.value.toLowerCase();
-    const searchResults = filteredSKMData.filter(
-        (response) =>
-            response.rating.toLowerCase().includes(searchTerm) ||
-            response.comment.toLowerCase().includes(searchTerm)
+  // Event search
+  searchInput.addEventListener("input", () => {
+    const term = searchInput.value.toLowerCase();
+    filteredData = skmData.filter(row =>
+      (row.comment && row.comment.toLowerCase().includes(term)) ||
+      (row.gender && row.gender.toLowerCase().includes(term))
     );
-    currentSKMPage = 1; // Reset halaman saat pencarian
-    renderSKMTable(searchResults, currentSKMPage);
-    // Anda bisa memilih untuk memperbarui grafik dengan hasil pencarian atau tidak
-    updateSatisfactionChart(searchResults);
-});
+    currentPage = 1;
+    renderTable();
+  });
 
-prevPageSKMBtn.addEventListener("click", () => {
-    if (currentSKMPage > 1) {
-        currentSKMPage--;
-        renderSKMTable(filteredSKMData, currentSKMPage);
+  // Event pagination
+  prevBtn.addEventListener("click", () => {
+    if (currentPage > 1) {
+      currentPage--;
+      renderTable();
     }
-});
-
-nextPageSKMBtn.addEventListener("click", () => {
-    if (
-        currentSKMPage < Math.ceil(filteredSKMData.length / skmRowsPerPage)
-    ) {
-        currentSKMPage++;
-        renderSKMTable(filteredSKMData, currentSKMPage);
+  });
+  nextBtn.addEventListener("click", () => {
+    if (currentPage < Math.ceil(filteredData.length / rowsPerPage)) {
+      currentPage++;
+      renderTable();
     }
+  });
+
+  // Event detail button
+  skmTableBody.addEventListener("click", (e) => {
+    if (e.target.dataset.id) {
+      openDetail(parseInt(e.target.dataset.id, 10));
+    }
+  });
+
+  // Init
+  renderTable();
+  updateIKMScore();
 });
-
-document
-    .getElementById("downloadSKMDataBtn")
-    .addEventListener("click", () => {
-        const headers = ["ID", "Tanggal", "Tanggapan", "Komentar"];
-        const rows = filteredSKMData.map((r) => [
-            r.id,
-            r.date,
-            r.rating,
-            r.comment.replace(/"/g, '""'), // Escape double quotes for CSV
-        ]);
-
-        let csvContent = headers.join(",") + "\n";
-        rows.forEach((row) => {
-            csvContent += row.map((e) => `"${e}"`).join(",") + "\n";
-        });
-
-        const blob = new Blob([csvContent], {
-            type: "text/csv;charset=utf-8;",
-        });
-        const link = document.createElement("a");
-        if (link.download !== undefined) {
-            const url = URL.createObjectURL(blob);
-            link.setAttribute("href", url);
-            link.setAttribute("download", "data_skm_simarin.csv");
-            link.style.visibility = "hidden";
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-    });
-
-// Inisialisasi awal UI saat halaman dimuat
-window.onload = () => {
-    updateSKMUI(skmData); // Muat data SKM awal
-};
