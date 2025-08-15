@@ -278,33 +278,64 @@ function updateUI(data) {
     renderTable(filteredParticipants, currentPage);
 }
 
+// Helper: parse tanggal aman untuk "YYYY-MM-DD", "DD/MM/YYYY", "YYYY/MM/DD"
+function parseDateSafe(v) {
+    if (!v) return null;
+    let d = new Date(v);
+    if (!isNaN(d)) return d;
+
+    const s = String(v).trim();
+
+    // DD/MM/YYYY atau D/M/YYYY
+    let m = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
+    if (m) {
+        let [_, dd, mm, yy] = m;
+        let y = parseInt(yy, 10);
+        if (y < 100) y += 2000;
+        return new Date(y, parseInt(mm, 10) - 1, parseInt(dd, 10));
+    }
+
+    // YYYY/MM/DD atau YYYY-M-D
+    m = s.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/);
+    if (m) {
+        let [_, y, mm, dd] = m;
+        return new Date(parseInt(y, 10), parseInt(mm, 10) - 1, parseInt(dd, 10));
+    }
+
+    return null; // format tak dikenali
+}
+
 if (applyFilterBtn) {
     applyFilterBtn.addEventListener("click", () => {
         let tempData = participantsData.slice();
 
-        const year = filterYearSelect.value;
-        const monthStart = document.getElementById("filterMonthStart").value;
-        const monthEnd = document.getElementById("filterMonthEnd").value;
+        const filterDateStart = document.getElementById("filterDateStart").value;
+        const filterDateEnd = document.getElementById("filterDateEnd").value;
 
-        // Filter Tahun
-        if (year) {
-            tempData = tempData.filter(p => p.tanggalMulai.startsWith(year));
+        if (filterTypeSelect?.value) {
+            tempData = tempData.filter(p => p.kegiatan === filterTypeSelect.value);
+        }
+        if (filterLocationSelect?.value) {
+            tempData = tempData.filter(p => p.lokasi === filterLocationSelect.value);
         }
 
-        // Filter Bulan ke Bulan
-        if (monthStart && monthEnd) {
-            const startMonthNum = parseInt(monthStart);
-            const endMonthNum = parseInt(monthEnd);
+        // Filter berdasarkan range tanggal yang dipilih
+        if (filterDateStart && filterDateEnd) {
+            const filterStart = new Date(filterDateStart);
+            const filterEnd = new Date(filterDateEnd);
 
             tempData = tempData.filter(p => {
-                const monthNum = new Date(p.tanggalMulai).getMonth() + 1;
-                return monthNum >= startMonthNum && monthNum <= endMonthNum;
+                const startDate = parseDateSafe(p.tanggalMulai);
+                const endDate = parseDateSafe(p.tanggalSelesai);
+                if (!startDate || !endDate) return false;
+
+                // Contained filter: seluruh durasi kegiatan harus berada di dalam range
+                return startDate >= filterStart && endDate <= filterEnd;
             });
         }
 
         updateUI(tempData);
     });
-
 }
 
 searchTableInput.addEventListener("input", () => {

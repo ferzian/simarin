@@ -275,64 +275,40 @@
           </div>
 
           <div
-            class="flex flex-wrap items-end justify-start gap-4 mb-2 md:mb-2"
+            class="flex items-center mb-2 rounded-lg"
           >
-            <div class="flex flex-wrap gap-2">
-              <select
-                id="filterYear"
-                class="border border-gray-300 rounded-xl px-4 py-2 text-gray-800 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+            <div class="flex flex-col mr-2">
+              <label
+                for="filterDateStart"
+                class="text-gray-700 font-medium mb-1"
+                >Dari:</label
               >
-                <option value="">Semua Tahun</option>
-                <option value="2023">2023</option>
-                <option value="2024">2024</option>
-                <option value="2025">2025</option>
-              </select>
-
-              <select
-                id="filterMonthStart"
-                class="border border-gray-300 rounded-xl px-4 py-2 text-gray-800 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
-              >
-                <option value="">Bulan Mulai</option>
-                <option value="01">Januari</option>
-                <option value="02">Februari</option>
-                <option value="03">Maret</option>
-                <option value="04">April</option>
-                <option value="05">Mei</option>
-                <option value="06">Juni</option>
-                <option value="07">Juli</option>
-                <option value="08">Agustus</option>
-                <option value="09">September</option>
-                <option value="10">Oktober</option>
-                <option value="11">November</option>
-                <option value="12">Desember</option>
-              </select>
-
-              <select
-                id="filterMonthEnd"
-                class="border border-gray-300 rounded-xl px-4 py-2 text-gray-800 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
-              >
-                <option value="">Bulan Selesai</option>
-                <option value="01">Januari</option>
-                <option value="02">Februari</option>
-                <option value="03">Maret</option>
-                <option value="04">April</option>
-                <option value="05">Mei</option>
-                <option value="06">Juni</option>
-                <option value="07">Juli</option>
-                <option value="08">Agustus</option>
-                <option value="09">September</option>
-                <option value="10">Oktober</option>
-                <option value="11">November</option>
-                <option value="12">Desember</option>
-              </select>
+              <input
+                type="date"
+                id="filterDateStart"
+                class="border-2 border-gray-300 rounded-lg px-3 py-2 text-gray-800 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 cursor-pointer w-full"
+              />
             </div>
 
-            <button
-              id="applyFilterBtn"
-              class="bg-blue-500 text-white px-4 py-2 rounded-xl shadow-md hover:bg-blue-600 transition duration-300 font-semibold"
-            >
-              Terapkan
-            </button>
+            <div class="flex flex-col mr-2">
+              <label for="filterDateEnd" class="text-gray-700 font-medium mb-1"
+                >Sampai:</label
+              >
+              <input
+                type="date"
+                id="filterDateEnd"
+                class="border-2 border-gray-300 rounded-lg px-3 py-2 text-gray-800 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 cursor-pointer w-full"
+              />
+            </div>
+
+            <div class="w-full md:w-auto mt-auto">
+              <button
+                id="applyFilterBtn"
+                class="bg-blue-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 font-semibold w-full mb-1"
+              >
+                Terapkan
+              </button>
+            </div>
           </div>
 
           <div class="flex flex-col sm:flex-row gap-4 w-full">
@@ -375,7 +351,7 @@
                   d="M3 17a1 1 0 011-1h12a1 1 0 011 1v1a1 1 0 01-1 1H4a1 1 0 01-1-1v-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
                   clip-rule="evenodd"
                 />
-              </svg>  
+              </svg>
               Unduh Excel
             </button>
           </div>

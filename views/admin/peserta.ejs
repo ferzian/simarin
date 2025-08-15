@@ -267,82 +267,37 @@
         <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
           <h3 class="text-xl font-semibold text-gray-700 mb-4">Filter Data</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-            <div>
+            <div class="flex flex-col w-full">
               <label
-                for="filterYear"
-                class="block text-gray-700 text-sm font-medium mb-2"
-                >Tahun:</label
+                for="filterDateStart"
+                class="text-gray-700 font-medium mb-1"
+                >Dari:</label
               >
-              <select
-                id="filterYear"
-                class="block w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-800"
-              >
-                <option value="">Semua Tahun</option>
-                <option value="2025">2025</option>
-                <option value="2024">2024</option>
-                <option value="2023">2023</option>
-                <option value="2022">2022</option>
-              </select>
+              <input
+                type="date"
+                id="filterDateStart"
+                class="w-full border-2 border-gray-300 rounded-lg px-3 py-2 text-gray-800 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 cursor-pointer"
+              />
             </div>
-            <div>
-              <label
-                for="filterMonthStart"
-                class="block text-gray-700 text-sm font-medium mb-2"
-                >dari Bulan:</label
+
+            <div class="flex flex-col w-full">
+              <label for="filterDateEnd" class="text-gray-700 font-medium mb-1"
+                >Sampai:</label
               >
-              <select
-                id="filterMonthStart"
-                class="block w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-800"
-              >
-                <option value="">Semua Bulan</option>
-                <option value="01">Januari</option>
-                <option value="02">Februari</option>
-                <option value="03">Maret</option>
-                <option value="04">April</option>
-                <option value="05">Mei</option>
-                <option value="06">Juni</option>
-                <option value="07">Juli</option>
-                <option value="08">Agustus</option>
-                <option value="09">September</option>
-                <option value="10">Oktober</option>
-                <option value="11">November</option>
-                <option value="12">Desember</option>
-              </select>
+              <input
+                type="date"
+                id="filterDateEnd"
+                class="w-full border-2 border-gray-300 rounded-lg px-3 py-2 text-gray-800 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 cursor-pointer"
+              />
             </div>
-            <div>
-              <label
-                for="filterMonthEnd"
-                class="block text-gray-700 text-sm font-medium mb-2"
-                >ke Bulan:</label
-              >
-              <select
-                id="filterMonthEnd"
-                class="block w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-800"
-              >
-                <option value="">Semua Bulan</option>
-                <option value="01">Januari</option>
-                <option value="02">Februari</option>
-                <option value="03">Maret</option>
-                <option value="04">April</option>
-                <option value="05">Mei</option>
-                <option value="06">Juni</option>
-                <option value="07">Juli</option>
-                <option value="08">Agustus</option>
-                <option value="09">September</option>
-                <option value="10">Oktober</option>
-                <option value="11">November</option>
-                <option value="12">Desember</option>
-              </select>
-            </div>
-            <div>
-              <label
-                for="filterType"
-                class="block text-gray-700 text-sm font-medium mb-2"
+
+            <div class="flex flex-col w-full">
+              <label for="filterType" class="text-gray-700 font-medium mb-1"
                 >Jenis Kegiatan:</label
               >
               <select
                 id="filterType"
-                class="block w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-800"
+                class="w-full border-2 border-gray-300 rounded-lg py-2 px-3 text-gray-800 focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="">Semua Jenis</option>
                 <option value="Magang">Magang</option>
@@ -353,15 +308,14 @@
                 <option value="MBKM">MBKM</option>
               </select>
             </div>
-            <div>
-              <label
-                for="filterLocation"
-                class="block text-gray-700 text-sm font-medium mb-2"
+
+            <div class="flex flex-col w-full">
+              <label for="filterLocation" class="text-gray-700 font-medium mb-1"
                 >Lokasi Kegiatan:</label
               >
               <select
                 id="filterLocation"
-                class="block w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-800"
+                class="w-full border-2 border-gray-300 rounded-lg py-2 px-3 text-gray-800 focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="">Semua Lokasi</option>
                 <option value="Depok">Depok</option>
@@ -370,14 +324,16 @@
                 <option value="Cijeruk">Cijeruk</option>
               </select>
             </div>
-          </div>
-          <div class="mt-6">
-            <button
-              id="applyFilterBtn"
-              class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 font-semibold"
-            >
-              Terapkan Filter
-            </button>
+
+            <div class="flex flex-col w-full">
+              <label class="invisible">Terapkan Filter</label>
+              <button
+                id="applyFilterBtn"
+                class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 font-semibold"
+              >
+                Terapkan Filter
+              </button>
+            </div>
           </div>
         </div>
 
