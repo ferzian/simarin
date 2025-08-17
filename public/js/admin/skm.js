@@ -3,15 +3,29 @@ const searchInput = document.getElementById("searchSKMTable");
 const filterStart = document.getElementById("filterSKMDateStart");
 const filterEnd = document.getElementById("filterSKMDateEnd");
 const applyFilterBtn = document.getElementById("applyFilterSKMBtn");
-const downloadBtn = document.getElementById("downloadSKMDataBtn");
 const prevPageBtn = document.getElementById("prevPageSKMBtn");
 const nextPageBtn = document.getElementById("nextPageSKMBtn");
 const currentPageEl = document.getElementById("currentSKMPage");
 const totalPagesEl = document.getElementById("totalSKMPages");
+const downloadBtn = document.getElementById("downloadSKMDataBtn");
 
 let filteredData = skmData;
 let currentPage = 1;
 const rowsPerPage = 5;
+
+downloadBtn.addEventListener("click", () => {
+  const startDate = filterStart.value;
+  const endDate = filterEnd.value;
+  const search = searchInput.value;
+
+  let url = `/admin/skm/export?`;
+  if (startDate) url += `startDate=${encodeURIComponent(startDate)}&`;
+  if (endDate) url += `endDate=${encodeURIComponent(endDate)}&`;
+  if (search) url += `search=${encodeURIComponent(search)}&`;
+
+  window.location.href = url;
+});
+
 
 // Render tabel
 function renderTable(data) {
@@ -69,17 +83,22 @@ nextPageBtn.addEventListener("click", () => {
   }
 });
 
-// Search
 searchInput.addEventListener("input", () => {
   const keyword = searchInput.value.toLowerCase();
-  filteredData = skmData.filter((item) =>
-    (item.comment && item.comment.toLowerCase().includes(keyword)) ||
-    (item.q1 && item.q1.toLowerCase().includes(keyword))
-  );
+
+  filteredData = skmData.filter((item) => {
+    return (
+      (item.instansi && item.instansi.toLowerCase().includes(keyword)) ||
+      (item.location && item.location.toLowerCase().includes(keyword)) ||
+      (item.gender && item.gender.toLowerCase().includes(keyword))
+    );
+  });
+
   currentPage = 1;
   renderTable(filteredData);
   updateStats(filteredData);
 });
+
 
 // Filter tanggal
 applyFilterBtn.addEventListener("click", () => {
@@ -95,38 +114,6 @@ applyFilterBtn.addEventListener("click", () => {
   currentPage = 1;
   renderTable(filteredData);
   updateStats(filteredData);
-});
-
-// Download CSV
-downloadBtn.addEventListener("click", () => {
-  const rows = [
-    ["Tanggal", "Gender", "Usia", "Pendidikan", "Lokasi", "Komentar", "Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "Q9"],
-    ...filteredData.map((item) => [
-      item.date || "",
-      item.gender || "",
-      item.age || "",
-      item.education || "",
-      item.location || "",
-      item.comment || "",
-      item.q1 || "",
-      item.q2 || "",
-      item.q3 || "",
-      item.q4 || "",
-      item.q5 || "",
-      item.q6 || "",
-      item.q7 || "",
-      item.q8 || "",
-      item.q9 || "",
-    ]),
-  ];
-
-  let csvContent = "data:text/csv;charset=utf-8," + rows.map((e) => e.join(",")).join("\n");
-  const link = document.createElement("a");
-  link.setAttribute("href", encodeURI(csvContent));
-  link.setAttribute("download", "rekap_skm.csv");
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
 });
 
 // Modal detail

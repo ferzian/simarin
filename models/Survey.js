@@ -10,15 +10,15 @@ module.exports = (sequelize, DataTypes) => {
     education: DataTypes.STRING,
     comment: DataTypes.TEXT,
 
-    q1: DataTypes.STRING,
-    q2: DataTypes.STRING,
-    q3: DataTypes.STRING,
-    q4: DataTypes.STRING,
-    q5: DataTypes.STRING,
-    q6: DataTypes.STRING,
-    q7: DataTypes.STRING,
-    q8: DataTypes.STRING,
-    q9: DataTypes.STRING,
+    q1: DataTypes.INTEGER,
+    q2: DataTypes.INTEGER,
+    q3: DataTypes.INTEGER,
+    q4: DataTypes.INTEGER,
+    q5: DataTypes.INTEGER,
+    q6: DataTypes.INTEGER,
+    q7: DataTypes.INTEGER,
+    q8: DataTypes.INTEGER,
+    q9: DataTypes.INTEGER,
   });
 
   return Survey;
