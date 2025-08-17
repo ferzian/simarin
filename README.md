@@ -1,18 +1,18 @@
 
 # 🌊 SIMARIN - Sistem Informasi Manajemen Penerimaan Peserta & Survei Kepuasan Masyarakat
 
-**SIMARIN** adalah sistem berbasis web yang digunakan untuk mengelola proses penerimaan peserta kegiatan (seperti Magang, PKL, dan Riset), serta survei kepuasan masyarakat (SKM) secara efisien dan real-time. Proyek ini dikembangkan untuk mendigitalisasi proses administratif di institusi pemerintahan terutama di Balai Riset Perikanan Budidaya Air Tawar dan Penyuluhan Perikanan.
+**SIMARIN** adalah sistem berbasis web yang digunakan untuk mengelola proses penerimaan peserta kegiatan (seperti Magang, PKL, dan Penelitian), serta survei kepuasan masyarakat (SKM) secara efisien dan real-time. Proyek ini dikembangkan untuk mendigitalisasi proses administratif di institusi pemerintahan terutama di Balai Riset Perikanan Budidaya Air Tawar dan Penyuluhan Perikanan.
 
 ---
 
-## ✨ Fitur Unggulan
+## ✨ Fitur
 
-- ✅ Registrasi akun pengguna dengan verifikasi admin
+- ✅ Registrasi akun pengguna
 - 📥 Formulir pendaftaran kegiatan
 - 📊 Dashboard rekap data peserta & SKM secara real-time
 - 📈 Visualisasi data menggunakan Chart.js
 - 📄 Download data peserta & SKM dalam format Excel
-- 🔔 Email notifikasi untuk admin dan user
+- 🔔 Email notifikasi user
 - 🔒 Autentikasi dan otorisasi berbasis peran (admin & user)
 
 ---

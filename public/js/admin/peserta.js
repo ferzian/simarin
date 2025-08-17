@@ -1,5 +1,3 @@
-// --- Logika untuk Halaman Data Peserta ---
-
 // Data dummy (akan diambil dari `participantsData` global)
 let currentParticipants = participantsData; // Gunakan data dummy global
 let filteredParticipants = [];
@@ -9,38 +7,40 @@ const rowsPerPage = 5; // Jumlah baris per halaman
 const totalParticipantsEl = document.getElementById("totalParticipants");
 const avgDurationEl = document.getElementById("avgDuration");
 const mostPopularTypeEl = document.getElementById("mostPopularType");
-const genderChartCtx = document
-    .getElementById("genderChart")
-    .getContext("2d");
-const activityTypeChartCtx = document
-    .getElementById("activityTypeChart")
-    .getContext("2d");
-const majorChartCtx = document
-    .getElementById("majorChart")
-    .getContext("2d");
+const genderChartCanvas = document.getElementById("genderChart");
+const locationChartCanvas = document.getElementById("locationChart");
+const activityTypeChartCanvas = document.getElementById("activityTypeChart");
+const majorChartCanvas = document.getElementById("majorChart");
+
+const genderChartCtx = genderChartCanvas ? genderChartCanvas.getContext("2d") : null;
+const locationChartCtx = locationChartCanvas ? locationChartCanvas.getContext("2d") : null;
+const activityTypeChartCtx = activityTypeChartCanvas ? activityTypeChartCanvas.getContext("2d") : null;
+const majorChartCtx = majorChartCanvas ? majorChartCanvas.getContext("2d") : null;
+
 const participantsTableBody = document.getElementById(
     "participantsTableBody"
 );
 const filterYearSelect = document.getElementById("filterYear");
 const filterTypeSelect = document.getElementById("filterType");
+const filterLocationSelect = document.getElementById("filterLocation");
 const applyFilterBtn = document.getElementById("applyFilterBtn");
-const searchTableInput = document.getElementById("searchTable");
 const prevPageBtn = document.getElementById("prevPageBtn");
 const nextPageBtn = document.getElementById("nextPageBtn");
 const currentPageSpan = document.getElementById("currentPage");
 const totalPagesSpan = document.getElementById("totalPages");
 
 let genderChart;
+let locationChart;
 let activityTypeChart;
 let majorChart;
 
 // Fungsi untuk menghitung statistik dan update kartu ringkasan
 function updateSummaryCards(data) {
-    totalParticipantsEl.textContent = data.length;
+    if (totalParticipantsEl) totalParticipantsEl.textContent = data.length;
 
     if (data.length === 0) {
-        avgDurationEl.textContent = "0 hari";
-        mostPopularTypeEl.textContent = "N/A";
+        if (avgDurationEl) avgDurationEl.textContent = "0 hari";
+        if (mostPopularTypeEl) mostPopularTypeEl.textContent = "N/A";
         return;
     }
 
@@ -59,145 +59,170 @@ function updateSummaryCards(data) {
         }
     });
 
-    avgDurationEl.textContent = `${Math.round(
-        totalDurationDays / data.length
-    )} hari`;
+    if (avgDurationEl) avgDurationEl.textContent = `${Math.round(totalDurationDays / data.length)} hari`;
 
     const mostPopular = Object.keys(typeCounts).reduce(
         (a, b) => (typeCounts[a] > typeCounts[b] ? a : b),
         Object.keys(typeCounts)[0] || "N/A"
     );
-    mostPopularTypeEl.textContent = mostPopular || "N/A";
+    if (mostPopularTypeEl) mostPopularTypeEl.textContent = mostPopular || "N/A";
 }
-
 
 // Fungsi untuk memperbarui grafik
 function updateCharts(data) {
-    // Data untuk Jenis Kelamin
-    const genderCounts = { "Laki-Laki": 0, Perempuan: 0 };
-    data.forEach((p) => {
-        if (p.jenisKelamin === "Laki-Laki") genderCounts["Laki-Laki"]++;
-        else if (p.jenisKelamin === "Perempuan") genderCounts["Perempuan"]++;
+    // Fungsi helper untuk filter data kosong
+    const filterZeroData = (obj) => Object.entries(obj).filter(([_, count]) => count > 0);
 
-    });
+    // Fungsi helper untuk tooltip persentase
+    const tooltipPercent = {
+        callbacks: {
+            label: (context) => {
+                let value = context.raw;
+                let total = context.chart._metasets[0].total;
+                let percentage = ((value / total) * 100).toFixed(1);
+                return `${context.label}: ${value} (${percentage}%)`;
+            }
+        }
+    };
 
-    if (genderChart) genderChart.destroy();
-    genderChart = new Chart(genderChartCtx, {
-        type: "pie",
-        data: {
-            labels: Object.keys(genderCounts),
-            datasets: [
-                {
-                    data: Object.values(genderCounts),
-                    backgroundColor: ["#6366F1", "#EC4899"], // Indigo, Pink
-                    hoverOffset: 4,
-                },
-            ],
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: "top",
-                },
-                title: {
-                    display: false,
-                    text: "Distribusi Jenis Kelamin",
-                },
+    // Gender Chart
+    if (genderChartCtx) {
+        const genderCounts = { "Laki-Laki": 0, "Perempuan": 0 };
+        data.forEach((p) => {
+            if (p.jenisKelamin === "Laki-Laki") genderCounts["Laki-Laki"]++;
+            else if (p.jenisKelamin === "Perempuan") genderCounts["Perempuan"]++;
+        });
+
+        const filtered = filterZeroData(genderCounts);
+
+        if (genderChart) genderChart.destroy();
+        genderChart = new Chart(genderChartCtx, {
+            type: "pie",
+            data: {
+                labels: filtered.map(([label]) => label),
+                datasets: [{
+                    data: filtered.map(([_, count]) => count),
+                    backgroundColor: ["#6366F1", "#EC4899"], // Biru, Pink
+                }],
             },
-        },
-    });
-
-    // Data untuk Jenis Kegiatan
-    const activityTypeCounts = {};
-    data.forEach((p) => {
-        activityTypeCounts[p.kegiatan] = (activityTypeCounts[p.kegiatan] || 0) + 1;
-    });
-
-    if (activityTypeChart) activityTypeChart.destroy();
-    activityTypeChart = new Chart(activityTypeChartCtx, {
-        type: "bar",
-        data: {
-            labels: Object.keys(activityTypeCounts),
-            datasets: [
-                {
-                    label: "Jumlah Peserta",
-                    data: Object.values(activityTypeCounts),
-                    backgroundColor: ["#22C55E", "#3B82F6", "#A855F7"], // Green, Blue, Purple
-                    borderColor: ["#16A34A", "#2563EB", "#9333EA"],
-                    borderWidth: 1,
-                },
-            ],
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    display: false,
-                },
-                title: {
-                    display: false,
-                    text: "Distribusi Jenis Kegiatan",
-                },
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 1,
+            options: {
+                aspectRatio: 1,
+                plugins: {
+                    legend: {
+                        display: filtered.length > 0,
+                        position: 'bottom',
+                        labels: { color: '#374151', font: { size: 14 } }
                     },
-                },
-            },
-        },
-    });
+                    tooltip: tooltipPercent
+                }
+            }
+        });
+    }
 
-    // Data untuk Jurusan Populer (Bar Chart Horizontal)
-    const majorCounts = {};
-    data.forEach((p) => {
-        majorCounts[p.prodi] = (majorCounts[p.prodi] || 0) + 1;
-    });
-    const sortedMajors = Object.entries(majorCounts)
-        .sort(([, a], [, b]) => b - a)
-        .slice(0, 5); // Ambil 5 teratas
+    // Location Chart
+    if (locationChartCtx) {
+        const locationCounts = { Sempur: 0, Depok: 0, Cibalagung: 0, Cijeruk: 0 };
+        data.forEach((p) => {
+            if (locationCounts.hasOwnProperty(p.lokasi)) {
+                locationCounts[p.lokasi]++;
+            }
+        });
 
-    if (majorChart) majorChart.destroy();
-    majorChart = new Chart(majorChartCtx, {
-        type: "bar",
-        data: {
-            labels: sortedMajors.map((item) => item[0]),
-            datasets: [
-                {
-                    label: "Jumlah Peserta",
-                    data: sortedMajors.map((item) => item[1]),
-                    backgroundColor: "#F97316", // Orange
-                    borderColor: "#EA580C",
-                    borderWidth: 1,
-                },
-            ],
-        },
-        options: {
-            indexAxis: "y", // Membuat bar horizontal
-            responsive: true,
-            plugins: {
-                legend: {
-                    display: false,
-                },
-                title: {
-                    display: false,
-                    text: "Distribusi Jurusan Populer",
-                },
+        const filtered = filterZeroData(locationCounts);
+
+        if (locationChart) locationChart.destroy();
+        locationChart = new Chart(locationChartCtx, {
+            type: "pie",
+            data: {
+                labels: filtered.map(([label]) => label),
+                datasets: [{
+                    data: filtered.map(([_, count]) => count),
+                    backgroundColor: ["#f87171", "#60a5fa", "#34d399", "#fbbf24"], // Merah, Biru, Hijau, Kuning
+                }],
             },
-            scales: {
-                x: {
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 1,
+            options: {
+                aspectRatio: 1,
+                plugins: {
+                    legend: {
+                        display: filtered.length > 0,
+                        position: 'bottom',
+                        labels: { color: '#374151', font: { size: 14 } }
                     },
-                },
+                    tooltip: tooltipPercent
+                }
+            }
+        });
+    }
+
+    // Activity Type Chart
+    if (activityTypeChartCtx) {
+        const activityTypeCounts = {};
+        data.forEach((p) => {
+            activityTypeCounts[p.kegiatan] = (activityTypeCounts[p.kegiatan] || 0) + 1;
+        });
+
+        const filtered = filterZeroData(activityTypeCounts);
+
+        if (activityTypeChart) activityTypeChart.destroy();
+        activityTypeChart = new Chart(activityTypeChartCtx, {
+            type: "pie",
+            data: {
+                labels: filtered.map(([label]) => label),
+                datasets: [{
+                    data: filtered.map(([_, count]) => count),
+                    backgroundColor: ["#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", "#EC4899"],
+                }],
             },
-        },
-    });
+            options: {
+                aspectRatio: 1,
+                plugins: {
+                    legend: {
+                        display: filtered.length > 0,
+                        position: 'bottom',
+                        labels: { color: '#374151', font: { size: 14 } }
+                    },
+                    tooltip: tooltipPercent
+                }
+            }
+        });
+    }
+
+    // Major Chart
+    if (majorChartCtx) {
+        const majorCounts = {};
+        data.forEach((p) => {
+            majorCounts[p.prodi] = (majorCounts[p.prodi] || 0) + 1;
+        });
+        const sortedMajors = Object.entries(majorCounts)
+            .sort(([, a], [, b]) => b - a)
+            .slice(0, 5);
+
+        if (majorChart) majorChart.destroy();
+        majorChart = new Chart(majorChartCtx, {
+            type: "bar",
+            data: {
+                labels: sortedMajors.map(([label]) => label),
+                datasets: [{
+                    label: "Jumlah Peserta",
+                    data: sortedMajors.map(([_, count]) => count),
+                    backgroundColor: "#F97316",
+                }],
+            },
+            options: {
+                indexAxis: "y",
+                plugins: {
+                    legend: { display: false },
+                    tooltip: tooltipPercent
+                },
+                scales: {
+                    x: { ticks: { color: '#374151' } },
+                    y: { ticks: { color: '#374151' } }
+                }
+            }
+        });
+    }
 }
+
 
 // Fungsi untuk merender tabel peserta
 function renderTable(data, page) {
@@ -212,9 +237,10 @@ function renderTable(data, page) {
         row.innerHTML = `
             <td class="px-4 py-2">${p.nama}</td>
             <td class="px-4 py-2">${p.jenisKelamin}</td>
+            <td class="px-4 py-2">${p.instansi}</td>
             <td class="px-4 py-2">${p.prodi}</td>
             <td class="px-4 py-2">${p.kegiatan}</td>
-            <td class="px-4 py-2">${p.instansi}</td>
+            <td class="px-4 py-2">${p.lokasi}</td>
             <td class="px-4 py-2">${formatIndoDate(p.tanggalMulai)} - ${formatIndoDate(p.tanggalSelesai)}</td>
         `;
         participantsTableBody.appendChild(row);
@@ -236,35 +262,65 @@ function updateUI(data) {
     renderTable(filteredParticipants, currentPage);
 }
 
-// Event Listeners
-applyFilterBtn.addEventListener("click", () => {
-    const year = filterYearSelect.value;
-    const type = filterTypeSelect.value;
+// Helper: parse tanggal aman untuk "YYYY-MM-DD", "DD/MM/YYYY", "YYYY/MM/DD"
+function parseDateSafe(v) {
+    if (!v) return null;
+    let d = new Date(v);
+    if (!isNaN(d)) return d;
 
-    let tempData = participantsData;
+    const s = String(v).trim();
 
-    if (year) {
-        tempData = tempData.filter((p) => p.tanggalMulai.startsWith(year));
+    // DD/MM/YYYY atau D/M/YYYY
+    let m = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
+    if (m) {
+        let [_, dd, mm, yy] = m;
+        let y = parseInt(yy, 10);
+        if (y < 100) y += 2000;
+        return new Date(y, parseInt(mm, 10) - 1, parseInt(dd, 10));
     }
-    if (type) {
-        tempData = tempData.filter((p) => p.kegiatan === type);
-    }
-    updateUI(tempData);
-});
 
-searchTableInput.addEventListener("keyup", () => {
-    const searchTerm = searchTableInput.value.toLowerCase();
-    const searchResults = filteredParticipants.filter(
-        (p) =>
-            p.nama.toLowerCase().includes(searchTerm) ||
-            p.instansi.toLowerCase().includes(searchTerm) ||
-            p.kegiatan.toLowerCase().includes(searchTerm)
-    );
-    currentPage = 1; // Reset halaman saat pencarian
-    renderTable(searchResults, currentPage);
-    // Perluas logika ini untuk grafik juga jika diinginkan
-    updateCharts(searchResults); // Perbarui grafik dengan hasil pencarian
-});
+    // YYYY/MM/DD atau YYYY-M-D
+    m = s.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/);
+    if (m) {
+        let [_, y, mm, dd] = m;
+        return new Date(parseInt(y, 10), parseInt(mm, 10) - 1, parseInt(dd, 10));
+    }
+
+    return null; // format tak dikenali
+}
+
+if (applyFilterBtn) {
+    applyFilterBtn.addEventListener("click", () => {
+        let tempData = participantsData.slice();
+
+        const filterDateStart = document.getElementById("filterDateStart").value;
+        const filterDateEnd = document.getElementById("filterDateEnd").value;
+
+        if (filterTypeSelect?.value) {
+            tempData = tempData.filter(p => p.kegiatan === filterTypeSelect.value);
+        }
+        if (filterLocationSelect?.value) {
+            tempData = tempData.filter(p => p.lokasi === filterLocationSelect.value);
+        }
+
+        // Filter berdasarkan range tanggal yang dipilih
+        if (filterDateStart && filterDateEnd) {
+            const filterStart = new Date(filterDateStart);
+            const filterEnd = new Date(filterDateEnd);
+
+            tempData = tempData.filter(p => {
+                const startDate = parseDateSafe(p.tanggalMulai);
+                const endDate = parseDateSafe(p.tanggalSelesai);
+                if (!startDate || !endDate) return false;
+
+                // Contained filter: seluruh durasi kegiatan harus berada di dalam range
+                return startDate >= filterStart && endDate <= filterEnd;
+            });
+        }
+
+        updateUI(tempData);
+    });
+}
 
 prevPageBtn.addEventListener("click", () => {
     if (currentPage > 1) {
@@ -286,49 +342,7 @@ function formatIndoDate(dateStr) {
     const options = { day: "numeric", month: "long", year: "numeric" };
     return new Date(dateStr).toLocaleDateString("id-ID", options);
 }
-
-document.getElementById("downloadTableDataBtn").addEventListener("click", () => {
-    const headers = [
-        "Nama",
-        "Jenis Kelamin",
-        "Jurusan",
-        "Jenis Kegiatan",
-        "Asal Instansi",
-        "Tanggal Mulai",
-        "Tanggal Selesai",
-    ];
-
-    const rows = filteredParticipants.map((p) => [
-        p.nama,
-        p.jenisKelamin,
-        p.prodi,
-        p.kegiatan,
-        p.instansi,
-        formatIndoDate(p.tanggalMulai),
-        formatIndoDate(p.tanggalSelesai),
-    ]);
-
-    let csvContent = headers.join(",") + "\n";
-    rows.forEach((row) => {
-        csvContent += row.map((e) => `"${e}"`).join(",") + "\n"; // Bungkus kutip biar aman
-    });
-
-    const blob = new Blob([csvContent], {
-        type: "text/csv;charset=utf-8;",
-    });
-    const link = document.createElement("a");
-    if (link.download !== undefined) {
-        const url = URL.createObjectURL(blob);
-        link.setAttribute("href", url);
-        link.setAttribute("download", "data_peserta_simarin.csv");
-        link.style.visibility = "hidden";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-});
-
 // Inisialisasi awal UI saat halaman dimuat
 window.onload = () => {
-    updateUI(participantsData); // Muat data peserta awal
+    updateUI(participantsData);
 };

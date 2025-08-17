@@ -52,18 +52,18 @@ function toggleSidebar() {
 }
 
 function toggleNotifDropdown() {
-        const menu = document.getElementById("notifDropdownMenu");
-        menu.classList.toggle("hidden");
-      }
+    const menu = document.getElementById("notifDropdownMenu");
+    menu.classList.toggle("hidden");
+}
 
-      // Optional: close dropdown if click outside
-      document.addEventListener("click", function (event) {
-        const dropdown = document.getElementById("notifDropdownMenu");
-        const button = document.getElementById("notifDropdownButton");
-        if (
-          !dropdown.contains(event.target) &&
-          !button.contains(event.target)
-        ) {
-          dropdown.classList.add("hidden");
-        }
-      });
+// Optional: close dropdown if click outside
+document.addEventListener("click", function (event) {
+    const dropdown = document.getElementById("notifDropdownMenu");
+    const button = document.getElementById("notifDropdownButton");
+    if (
+        !dropdown.contains(event.target) &&
+        !button.contains(event.target)
+    ) {
+        dropdown.classList.add("hidden");
+    }
+});

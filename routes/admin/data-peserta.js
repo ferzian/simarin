@@ -3,13 +3,13 @@ const router = express.Router();
 const { User, Participant } = require('../../models');
 const { isAuthenticated, isAdmin } = require('../../middleware/authMiddleware');
 
-router.get('/peserta', isAuthenticated, isAdmin, async (req, res) => {
+router.get('/data-peserta', isAuthenticated, isAdmin, async (req, res) => {
   try {
     const participants = await Participant.findAll({
       include: [
         {
           model: User,
-          where: { role: 'user', approved: true },
+          where: { role: 'user' }, // hanya user yang approved
         },
       ],
     });
@@ -22,19 +22,28 @@ router.get('/peserta', isAuthenticated, isAdmin, async (req, res) => {
       });
 
 
-    res.render('admin/peserta', {
+    res.render('admin/data-peserta', {
       participants: participants.map((p) => ({
         nama: p.nama,
+        nisNpm: p.nisNpm,
         jenisKelamin: p.jenisKelamin,
+        telepon: p.telepon,
+        email: p.User.email,
+        alamat: p.alamat,
+        jenjang: p.jenjang,
+        instansi: p.instansi,
         prodi: p.prodi,
         kegiatan: p.kegiatan,
-        instansi: p.instansi,
         lokasi: p.lokasi,
         tanggalMulai: p.tanggalMulai,
         tanggalSelesai: p.tanggalSelesai,
+        pasFoto: p.pasFoto,  // foto
+        suratPengantar: p.suratPengantar, // file pengantar
+        suratSehat: p.suratSehat, // file sehat
       })),
       user: req.session.user
     });
+
   } catch (err) {
     console.error('❌ Gagal ambil data peserta:', err);
     res.status(500).send('Internal Server Error');

@@ -1,50 +1,97 @@
-// routes/admin/dashboard.js
 const express = require('express');
 const router = express.Router();
-const { User, Visitor, Participant } = require('../../models');
-const { Op } = require('sequelize');
+const { sequelize, Participant, Survey, Visitor } = require('../../models');
+const { Op, fn, col } = require('sequelize');
 const moment = require('moment');
-const { isAuthenticated, isAdmin } = require('../../middleware/authMiddleware');
 
-router.get('/dashboard', isAuthenticated, isAdmin, async (req, res) => {
+// GET /admin/dashboard
+router.get('/dashboard', async (req, res) => {
   try {
-    const [pendingUsers, pendingParticipants, visitCount, newRegistrantsCount, aktifCount] = await Promise.all([
-      User.findAll({ where: { role: 'user', approved: false } }),
-      Participant.findAll({ where: { statusSelesai: false } }),
-      Visitor.count({
-        where: {
-          createdAt: {
-            [Op.between]: [moment().startOf('month').toDate(), moment().endOf('month').toDate()]
-          }
-        }
-      }),
-      User.count({
-        where: {
-          role: 'user',
-          createdAt: {
-            [Op.between]: [moment().startOf('month').toDate(), moment().endOf('month').toDate()]
-          }
-        }
-      }),
-      Participant.count({
-        where: {
-          statusSelesai: false,
-          tanggalSelesai: { [Op.gte]: moment().startOf('day').toDate() }
-        }
-      })
-    ]);
+    // === Variabel waktu ===
+    const monthStart = moment().startOf('month').toDate();
+    const today = moment().startOf('day').toDate();
+    const sevenDaysLater = moment().add(7, 'days').endOf('day').toDate();
 
+    // === Pendaftar baru bulan ini ===
+    const newRegistrantsCount = await Participant.count({
+      where: { createdAt: { [Op.gte]: monthStart } }
+    });
+
+    // === Kunjungan bulan ini ===
+    const visitCount = await Visitor.count({
+      where: { createdAt: { [Op.gte]: monthStart } }
+    });
+
+    // === Rekap SKM bulan ini ===
+    const avgSkm = await Survey.findOne({
+      attributes: [
+        [sequelize.literal('(AVG((q1 + q2 + q3 + q4 + q5 + q6 + q7 + q8 + q9) / 9))'), 'avgSkor']
+      ],
+      where: { createdAt: { [Op.gte]: monthStart } },
+      raw: true
+    });
+
+    const avgSkorValue = avgSkm?.avgSkor
+      ? parseFloat(avgSkm.avgSkor).toFixed(2)
+      : 0;
+
+    // Tentukan emoticon
+    let emoticon = '😐';
+    if (avgSkorValue >= 80) emoticon = '😊';
+    else if (avgSkorValue < 60) emoticon = '😟';
+
+    // === Peserta aktif hari ini ===
+    const aktifCount = await Participant.count({
+      where: {
+        tanggalMulai: { [Op.lte]: today },
+        tanggalSelesai: { [Op.gte]: today }
+      }
+    });
+
+    // === Peserta aktif per lokasi ===
+    const lokasiCounts = await Participant.findAll({
+      attributes: ['lokasi', [fn('COUNT', col('id')), 'count']],
+      where: {
+        tanggalMulai: { [Op.lte]: today },
+        tanggalSelesai: { [Op.gte]: today }
+      },
+      group: ['lokasi']
+    });
+
+    const lokasiData = { Sempur: 0, Depok: 0, Cibalagung: 0, Cijeruk: 0 };
+    lokasiCounts.forEach(row => {
+      const lokasi = row.get('lokasi');
+      const count = Number(row.get('count')) || 0;
+      if (lokasiData.hasOwnProperty(lokasi)) {
+        lokasiData[lokasi] = count;
+      }
+    });
+
+    // === Kegiatan terdekat selesai (7 hari ke depan) ===
+    const upcomingEndDate = await Participant.findAll({
+      where: {
+        tanggalSelesai: { [Op.between]: [today, sevenDaysLater] },
+        statusSelesai: false
+      },
+      order: [['tanggalSelesai', 'ASC']],
+      limit: 5
+    });
+
+    // === Render ke view ===
     res.render('admin/dashboard', {
-      pendingUsers,
-      pendingParticipants,
       visitCount,
       aktifCount,
       newRegistrantsCount,
-      user: req.session.user
+      lokasiData,
+      upcomingEndDate,
+      avgSkorValue,
+      emoticon,
+      moment
     });
+
   } catch (err) {
-    console.error('❌ Error dashboard:', err);
-    res.status(500).send('Internal Server Error');
+    console.error(err);
+    res.status(500).send('Error loading dashboard');
   }
 });
 

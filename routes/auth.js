@@ -1,18 +1,10 @@
-const { Op } = require('sequelize'); // Jangan lupa import Op
-const express = require('express');
-const router = express.Router();
+const { Op } = require('sequelize');
 const { User } = require('../models');
+const express = require('express');
 const bcrypt = require('bcrypt');
-const nodemailer = require('nodemailer'); // untuk kirim email
 const crypto = require('crypto');
-
-const transporter = nodemailer.createTransport({
-  service: 'gmail', // atau pakai 'smtp.mailtrap.io' buat testing
-  auth: {
-    user: 'm.ferzian09@gmail.com', // ganti dengan email kamu
-    pass: 'zvlg tunj uthw ldcg',   // GMAIL: gunakan App Password, bukan password biasa
-  },
-});
+const transporter = require('../utils/transporter');
+const router = express.Router();
 
 // GET Login
 router.get('/login', (req, res) => {
@@ -21,7 +13,7 @@ router.get('/login', (req, res) => {
 
 // POST Login
 router.post('/login', async (req, res) => {
-  const { loginId, password } = req.body; // ← pakai loginId
+  const { loginId, password } = req.body; 
 
   try {
     // Cari berdasarkan username ATAU email
@@ -104,7 +96,7 @@ router.post('/register', async (req, res) => {
       phone,
       instansi,
       role: 'user',
-      approved: true, // Langsung approved tanpa verifikasi admin
+      approved: true,
     });
 
     res.redirect('/?registered=success');
@@ -133,7 +125,7 @@ router.post('/forgot-password', async (req, res) => {
   }
 
   const token = crypto.randomBytes(20).toString('hex');
-  const expires = Date.now() + 1000 * 60 * 15; // 15 menit
+  const expires = Date.now() + 1000 * 60 * 15; 
 
   await user.update({
     resetToken: token,
@@ -234,7 +226,7 @@ router.post('/reset-password/:token', async (req, res) => {
 
   // render halaman yang sama, tapi dengan popup success + auto-redirect
   res.render('reset-password', {
-    token: null, // supaya form tidak ditampilkan lagi
+    token: null,
     error: null,
     success: 'Password berhasil direset. Kamu akan diarahkan ke halaman login...'
   });
@@ -249,10 +241,9 @@ router.post('/logout', (req, res) => {
       return res.status(500).send('Logout gagal');
     }
 
-    res.clearCookie('connect.sid'); // Hapus cookie sesi (opsional)
-    res.redirect('/login'); // Arahkan ke halaman login
+    res.clearCookie('connect.sid'); 
+    res.redirect('/login');
   });
 });
-
 
 module.exports = router;

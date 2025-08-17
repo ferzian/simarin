@@ -3,7 +3,8 @@
   <head>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <title>Survei Kepuasan Masyarakat SIMARIN</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <title>Statistik Survei Kepuasan Masyarakat SIMARIN</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
@@ -15,10 +16,6 @@
     <script src="/js/admin/skm.js" defer></script>
   </head>
   <body class="bg-gray-100 flex h-screen">
-    <script>
-      const skmData = <%- JSON.stringify(skmData || []) %>;
-    </script>
-
     <aside
       class="sidebar bg-gray-800 text-white w-64 p-5 space-y-6 flex-shrink-0"
       id="sidebar"
@@ -83,6 +80,29 @@
           </a>
         </div>
         <div>
+          <h3 class="uppercase text-gray-500 text-sm mb-2 menu-text-wrapper">
+            Participant Management
+          </h3>
+          <a
+            href="/admin/data-peserta"
+            class="menu-item-link text-white hover:text-white"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-people size-6 menu-icon"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4"
+              />
+            </svg>
+            <span class="menu-text-wrapper">Data Peserta</span>
+          </a>
+        </div>
+        <div>
           <h3
             class="uppercase text-gray-500 text-sm mt-6 mb-2 menu-text-wrapper"
           >
@@ -106,7 +126,7 @@
                 d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z"
               />
             </svg>
-            <span class="menu-text-wrapper">Data Peserta</span>
+            <span class="menu-text-wrapper">Statistik Peserta</span>
           </a>
           <a
             href="/admin/skm"
@@ -126,7 +146,7 @@
                 d="M9 17v-2m3 2v-4m3 2v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
               />
             </svg>
-            <span class="menu-text-wrapper">Data SKM</span>
+            <span class="menu-text-wrapper">Statistik SKM</span>
           </a>
         </div>
       </nav>
@@ -138,13 +158,12 @@
       >
         <div>
           <h1 class="text-2xl font-bold text-gray-800">
-            Survei Kepuasan Masyarakat
+            Statistik Survei Kepuasan Masyarakat
           </h1>
           <p class="text-sm text-gray-500">
             Balai Riset Perikanan Budidaya Air Tawar dan Penyuluhan Perikanan
           </p>
         </div>
-
         <div class="flex items-center gap-6 relative">
           <div class="relative">
             <button
@@ -154,7 +173,7 @@
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="h-7 w-7 text-gray-700 <%= (pendingUsers.length > 0 || pendingParticipants.length > 0) ? 'animate-bounce text-yellow-600' : '' %>"
+                class="h-7 w-7 text-gray-700"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -166,15 +185,6 @@
                   d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C8.67 6.165 8 7.388 8 8.75v5.408c0 .538-.214 1.055-.595 1.437L6 17h5"
                 />
               </svg>
-
-              <% if (pendingUsers.length > 0 || pendingParticipants.length > 0)
-              { %>
-              <span
-                class="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full"
-              >
-                !
-              </span>
-              <% } %>
             </button>
 
             <!-- Dropdown -->
@@ -185,57 +195,9 @@
               <div class="p-4 border-b font-semibold text-gray-700">
                 Notifikasi
               </div>
-              <% if (pendingUsers.length > 0) { %>
-              <a
-                href="/admin/approval-akun"
-                class="flex items-start gap-2 px-4 py-2 hover:bg-gray-50 text-gray-800"
-              >
-                <svg
-                  class="w-5 h-5 text-yellow-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  stroke-width="2"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M12 12a3 3 0 100-6 3 3 0 000 6z"
-                  />
-                </svg>
-                <span
-                  ><%= pendingUsers.length %> akun menunggu persetujuan</span
-                >
-              </a>
-              <% } %> <% if (pendingParticipants.length > 0) { %>
-              <a
-                href="/admin/approval-peserta"
-                class="flex items-start gap-2 px-4 py-2 hover:bg-gray-50 text-gray-800"
-              >
-                <svg
-                  class="w-5 h-5 text-blue-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  stroke-width="2"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M12 12a3 3 0 100-6 3 3 0 000 6zM7 20h10v-2a5 5 0 00-10 0v2z"
-                  />
-                </svg>
-                <span
-                  ><%= pendingParticipants.length %> peserta menunggu
-                  persetujuan</span
-                >
-              </a>
-              <% } %> <% if (pendingUsers.length === 0 &&
-              pendingParticipants.length === 0) { %>
               <div class="px-4 py-2 text-gray-500 text-center">
                 Tidak ada notifikasi baru
               </div>
-              <% } %>
             </div>
           </div>
 
@@ -302,49 +264,35 @@
           Rekap Survei Kepuasan Masyarakat
         </h2>
 
+        <!-- Filter -->
         <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
-          <h3 class="text-xl font-semibold text-gray-700 mb-4">Filter Data</h3>
+          <h3 class="text-xl font-semibold text-gray-700 mb-4">
+            Filter Data SKM
+          </h3>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
               <label
-                for="filterYearSKM"
+                for="filterSKMDateStart"
                 class="block text-gray-700 text-sm font-medium mb-2"
-                >Tahun:</label
+                >Dari:</label
               >
-              <select
-                id="filterYearSKM"
+              <input
+                type="date"
+                id="filterSKMDateStart"
                 class="block w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-800"
-              >
-                <option value="">Semua Tahun</option>
-                <option value="2024">2024</option>
-                <option value="2023">2023</option>
-                <option value="2022">2022</option>
-              </select>
+              />
             </div>
             <div>
               <label
-                for="filterMonthSKM"
+                for="filterSKMDateEnd"
                 class="block text-gray-700 text-sm font-medium mb-2"
-                >Bulan:</label
+                >Sampai:</label
               >
-              <select
-                id="filterMonthSKM"
+              <input
+                type="date"
+                id="filterSKMDateEnd"
                 class="block w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-800"
-              >
-                <option value="">Semua Bulan</option>
-                <option value="01">Januari</option>
-                <option value="02">Februari</option>
-                <option value="03">Maret</option>
-                <option value="04">April</option>
-                <option value="05">Mei</option>
-                <option value="06">Juni</option>
-                <option value="07">Juli</option>
-                <option value="08">Agustus</option>
-                <option value="09">September</option>
-                <option value="10">Oktober</option>
-                <option value="11">November</option>
-                <option value="12">Desember</option>
-              </select>
+              />
             </div>
             <div class="md:col-span-1 flex items-end">
               <button
@@ -357,30 +305,7 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          <div
-            class="bg-white rounded-xl shadow-lg p-6 text-center border-b-4 border-teal-500 lg:col-span-1"
-          >
-            <h3 class="text-lg font-semibold text-gray-700 mb-2">
-              Indeks Kepuasan Masyarakat (IKM)
-            </h3>
-            <p class="text-5xl font-bold text-teal-600 mb-2" id="ikmScore">
-              0.00
-            </p>
-            <p class="text-sm text-gray-500">
-              Dari <span id="totalSKMResponses">0</span> tanggapan
-            </p>
-          </div>
-          <div
-            class="bg-white rounded-xl shadow-lg p-6 text-center border-b-4 border-indigo-500 lg:col-span-2"
-          >
-            <h3 class="text-xl font-semibold text-gray-700 mb-4">
-              Distribusi Tanggapan Kepuasan
-            </h3>
-            <canvas id="satisfactionChart" class="max-h-64"></canvas>
-          </div>
-        </div>
-
+        <!-- Tabel -->
         <div class="bg-white p-6 rounded-xl shadow-lg">
           <h3 class="text-xl font-semibold text-gray-700 mb-4">
             Daftar Responden & Komentar Terbaru
@@ -420,11 +345,12 @@
             <table class="min-w-full divide-y divide-gray-200">
               <thead class="bg-gray-50">
                 <tr class="table-header">
-                  <th>Tanggal</th>
-                  <th>Nama</th>
-                  <th>Usia</th>
-                  <th>Pendidikan</th>
-                  <th>Lokasi</th>
+                  <th class="text-left px-4 py-2">Tanggal</th>
+                  <th class="text-left px-4 py-2">Jenis Kelamin</th>
+                  <th class="text-left px-4 py-2">Usia</th>
+                  <th class="text-left px-4 py-2">Pendidikan</th>
+                  <th class="text-left px-4 py-2">Lokasi</th>
+                  <th class="text-left px-4 py-2">Aksi</th>
                 </tr>
               </thead>
               <tbody
@@ -433,6 +359,8 @@
               ></tbody>
             </table>
           </div>
+
+          <!-- Pagination -->
           <div class="mt-4 flex justify-between items-center">
             <button
               id="prevPageSKMBtn"
@@ -441,10 +369,10 @@
             >
               Sebelumnya
             </button>
-            <span class="text-gray-700"
-              >Halaman <span id="currentSKMPage">1</span> dari
-              <span id="totalSKMPages">1</span></span
-            >
+            <span class="text-gray-700">
+              Halaman <span id="currentSKMPage">1</span> dari
+              <span id="totalSKMPages">1</span>
+            </span>
             <button
               id="nextPageSKMBtn"
               class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 disabled:opacity-50"
@@ -453,8 +381,59 @@
               Berikutnya
             </button>
           </div>
+
+          <!-- Modal Detail -->
+          <div
+            id="skmDetailModal"
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50"
+          >
+            <div
+              class="bg-white rounded-lg shadow-lg max-w-3xl w-full p-6 overflow-y-auto max-h-[90vh]"
+            >
+              <div class="flex justify-between items-center border-b pb-3">
+                <h2 class="text-lg font-bold" id="skmDetailNama">
+                  Detail Responden
+                </h2>
+                <button
+                  onclick="closeSKMDetail()"
+                  class="text-gray-500 hover:text-gray-700"
+                >
+                  &times;
+                </button>
+              </div>
+              <div class="mt-4 space-y-4" id="skmDetailContent"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Statistik -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+          <div
+            class="bg-white rounded-xl shadow-lg p-6 text-center border-b-4 border-teal-500 lg:col-span-1"
+          >
+            <h3 class="text-lg font-semibold text-gray-700 mb-2">
+              Indeks Kepuasan Masyarakat (IKM)
+            </h3>
+            <p class="text-5xl font-bold text-teal-600 mb-2" id="ikmScore">
+              0.00
+            </p>
+            <p class="text-sm text-gray-500">
+              Dari <span id="totalSKMResponses">0</span> tanggapan
+            </p>
+          </div>
+          <div
+            class="bg-white rounded-xl shadow-lg p-6 text-center border-b-4 border-indigo-500 lg:col-span-2"
+          >
+            <h3 class="text-xl font-semibold text-gray-700 mb-4">
+              Distribusi Tanggapan Kepuasan
+            </h3>
+            <canvas id="satisfactionChart" class="max-h-64"></canvas>
+          </div>
         </div>
       </main>
     </div>
+    <script>
+      const skmData = <%- skmData %>;
+    </script>
   </body>
 </html>

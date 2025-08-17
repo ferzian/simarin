@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <title>Statistik Peserta Admin SIMARIN</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Favicon -->
+    <link rel="icon" sizes="32x32" type="image/png" href="/images/logo.png" />
+    <link rel="stylesheet" href="/css/admin.css" />
+    <script src="/js/admin/index.js" defer></script>
+    <script src="/js/admin/data-peserta.js" defer></script>
+  </head>
+  <body class="bg-gray-100 flex h-screen">
+    <script>
+      const participantsData = <%- JSON.stringify(participants) %>;
+    </script>
+
+    <aside
+      class="sidebar bg-gray-800 text-white w-64 p-5 space-y-6 flex-shrink-0 transition-all duration-300"
+      id="sidebar"
+    >
+      <div class="flex justify-between items-center mb-6 px-2 relative">
+        <h2
+          class="text-2xl font-bold transition-all duration-300"
+          id="sidebarTitle"
+        >
+          SIMARIN
+        </h2>
+        <button
+          id="sidebarTitleButton"
+          class="hidden absolute top-0 left-0 w-full h-full justify-center items-center text-lg font-bold text-white bg-gray-800 rounded-lg"
+        >
+          ADM
+        </button>
+        <button
+          id="sidebarToggle"
+          class="p-1 rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 z-10"
+        >
+          <svg
+            class="w-6 h-6 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
+            ></path>
+          </svg>
+        </button>
+      </div>
+      <nav class="flex-1 space-y-4 text-lg mt-8">
+        <div>
+          <h3 class="uppercase text-gray-500 text-sm mb-2 menu-text-wrapper">
+            Core
+          </h3>
+          <a
+            href="/admin/dashboard"
+            class="menu-item-link text-white hover:text-white"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 menu-icon"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+              />
+            </svg>
+            <span class="menu-text-wrapper">Dashboard</span>
+          </a>
+        </div>
+        <div>
+          <h3 class="uppercase text-gray-500 text-sm mb-2 menu-text-wrapper">
+            Participant Management
+          </h3>
+          <a
+            href="/admin/data-peserta"
+            class="menu-item-link text-white hover:text-white relative bg-gray-700"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-people size-6 menu-icon"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4"
+              />
+            </svg>
+            <span class="menu-text-wrapper">Data Peserta</span>
+          </a>
+        </div>
+        <div>
+          <h3
+            class="uppercase text-gray-500 text-sm mt-6 mb-2 menu-text-wrapper"
+          >
+            Recap Data
+          </h3>
+          <a
+            href="/admin/peserta"
+            class="menu-item-link text-white hover:text-white"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-6 menu-icon"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z"
+              />
+            </svg>
+            <span class="menu-text-wrapper">Statistik Peserta</span>
+          </a>
+          <a
+            href="/admin/skm"
+            class="menu-item-link text-white hover:text-white mt-2"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 menu-icon"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 17v-2m3 2v-4m3 2v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+            <span class="menu-text-wrapper">Statistik SKM</span>
+          </a>
+        </div>
+      </nav>
+    </aside>
+
+    <div class="flex-1 flex flex-col overflow-hidden">
+      <header
+        class="bg-white shadow-md px-6 py-4 flex justify-between items-center border-b border-gray-200"
+      >
+        <div>
+          <h1 class="text-2xl font-bold text-gray-800">Data Peserta</h1>
+          <p class="text-sm text-gray-500">
+            Balai Riset Perikanan Budidaya Air Tawar dan Penyuluhan Perikanan
+          </p>
+        </div>
+        <div class="flex items-center gap-6 relative">
+          <div class="relative">
+            <button
+              id="notifDropdownButton"
+              class="relative p-2 rounded-full hover:bg-gray-100 transition duration-200"
+              onclick="toggleNotifDropdown()"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-7 w-7 text-gray-700"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C8.67 6.165 8 7.388 8 8.75v5.408c0 .538-.214 1.055-.595 1.437L6 17h5"
+                />
+              </svg>
+            </button>
+
+            <!-- Dropdown -->
+            <div
+              id="notifDropdownMenu"
+              class="hidden absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 z-50 overflow-hidden text-sm"
+            >
+              <div class="p-4 border-b font-semibold text-gray-700">
+                Notifikasi
+              </div>
+              <div class="px-4 py-2 text-gray-500 text-center">
+                Tidak ada notifikasi baru
+              </div>
+            </div>
+          </div>
+
+          <div class="relative">
+            <button
+              id="dropdownUserButton"
+              class="flex items-center gap-2 text-gray-700 hover:text-gray-900 focus:outline-none p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
+            >
+              <span class="font-semibold text-lg"><%= user.username %> </span>
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                ></path>
+              </svg>
+            </button>
+
+            <div
+              id="dropdownUserMenu"
+              class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 z-50 overflow-hidden"
+            >
+              <div class="px-4 py-3 text-gray-600 text-sm font-medium">
+                Administrator
+              </div>
+              <div class="border-t my-1"></div>
+              <form action="/auth/logout" method="POST">
+                <button
+                  class="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 hover:text-red-700 font-semibold transition duration-150"
+                >
+                  <div class="flex items-center gap-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                      />
+                    </svg>
+                    <span>Logout</span>
+                  </div>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-8">
+        <h2 class="text-3xl font-bold mb-6 text-gray-800">
+          Informasi Data Peserta
+        </h2>
+        <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
+          <div
+            class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6"
+          >
+            <h3 class="text-3xl font-extrabold text-gray-900">
+              Daftar Lengkap Peserta
+            </h3>
+          </div>
+
+          <div
+            class="flex items-center mb-2 rounded-lg"
+          >
+            <div class="flex flex-col mr-2">
+              <label
+                for="filterDateStart"
+                class="text-gray-700 font-medium mb-1"
+                >Dari:</label
+              >
+              <input
+                type="date"
+                id="filterDateStart"
+                class="border-2 border-gray-300 rounded-lg px-3 py-2 text-gray-800 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 cursor-pointer w-full"
+              />
+            </div>
+
+            <div class="flex flex-col mr-2">
+              <label for="filterDateEnd" class="text-gray-700 font-medium mb-1"
+                >Sampai:</label
+              >
+              <input
+                type="date"
+                id="filterDateEnd"
+                class="border-2 border-gray-300 rounded-lg px-3 py-2 text-gray-800 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 cursor-pointer w-full"
+              />
+            </div>
+
+            <div class="w-full md:w-auto mt-auto">
+              <button
+                id="applyFilterBtn"
+                class="bg-blue-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 font-semibold w-full mb-1"
+              >
+                Terapkan
+              </button>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-4 w-full">
+            <div class="relative w-full">
+              <div
+                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="size-6 text-gray-400 mb-2"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </div>
+              <input
+                type="text"
+                id="searchTable"
+                placeholder="Cari nama, nis/npm, instansi, kegiatan atau lokasi..."
+                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-blue-500 focus:border-blue-500 text-gray-800 transition-all duration-200"
+              />
+            </div>
+            <button
+              id="downloadTableDataBtn"
+              class="bg-green-600 text-white px-5 py-2 rounded-xl shadow-md hover:bg-green-700 transition duration-300 font-bold flex items-center justify-center gap-2 text-sm md:text-base flex-shrink-0 mb-3"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M3 17a1 1 0 011-1h12a1 1 0 011 1v1a1 1 0 01-1 1H4a1 1 0 01-1-1v-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              Unduh Excel
+            </button>
+          </div>
+
+          <div
+            class="overflow-x-auto rounded-xl border border-gray-200 shadow-sm"
+          >
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr
+                  class="text-left text-sm text-gray-500 uppercase tracking-wider"
+                >
+                  <th class="px-3 py-3">Foto</th>
+                  <th
+                    class="px-3 py-3 cursor-pointer select-none"
+                    data-sort="nama"
+                  >
+                    <div class="flex items-center gap-1">
+                      Nama <span class="sort-indicator text-gray-400">⇅</span>
+                    </div>
+                  </th>
+                  <th
+                    class="px-3 py-3 cursor-pointer select-none"
+                    data-sort="nisNpm"
+                  >
+                    <div class="flex items-center gap-1">
+                      NIS/NPM
+                      <span class="sort-indicator text-gray-400">⇅</span>
+                    </div>
+                  </th>
+                  <th
+                    class="px-3 py-3 cursor-pointer select-none"
+                    data-sort="instansi"
+                  >
+                    <div class="flex items-center gap-1">
+                      Instansi
+                      <span class="sort-indicator text-gray-400">⇅</span>
+                    </div>
+                  </th>
+                  <th
+                    class="px-3 py-3 cursor-pointer select-none"
+                    data-sort="kegiatan"
+                  >
+                    <div class="flex items-center gap-1">
+                      Kegiatan
+                      <span class="sort-indicator text-gray-400">⇅</span>
+                    </div>
+                  </th>
+                  <th
+                    class="px-3 py-3 cursor-pointer select-none"
+                    data-sort="lokasi"
+                  >
+                    <div class="flex items-center gap-1">
+                      Lokasi
+                      <span class="sort-indicator text-gray-400">⇅</span>
+                    </div>
+                  </th>
+                  <th
+                    class="px-3 py-3 cursor-pointer select-none min-w-[120px] whitespace-nowrap"
+                    data-sort="statusSelesai"
+                  >
+                    <div class="flex items-center gap-1">
+                      Status <span class="sort-indicator text-gray-400">⇅</span>
+                    </div>
+                  </th>
+                  <th class="px-3 py-3 text-start">Aksi</th>
+                </tr>
+              </thead>
+              <tbody
+                class="bg-white divide-y divide-gray-100"
+                id="participantsTableBody"
+              ></tbody>
+            </table>
+          </div>
+
+          <div
+            id="detailModal"
+            class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+          >
+            <div
+              class="bg-white rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col transform transition-transform duration-300 scale-95"
+            >
+              <div
+                class="flex items-center justify-between p-6 border-b border-gray-200 sticky top-0 bg-white rounded-t-2xl z-10"
+              >
+                <h2 class="text-3xl font-extrabold text-gray-900">
+                  Detail Peserta
+                </h2>
+                <button
+                  id="closeModalBtn"
+                  class="text-gray-400 hover:text-gray-700 transition-colors duration-200 p-2 rounded-full hover:bg-gray-100"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+
+              <div class="p-6 overflow-y-auto custom-scrollbar">
+                <div
+                  class="flex flex-col md:flex-row items-center md:items-start gap-8 mb-8"
+                >
+                  <div class="flex-shrink-0">
+                    <img
+                      id="detailFoto"
+                      class="w-48 h-48 rounded-full object-cover border-4 border-white shadow-lg ring-2 ring-blue-500"
+                    />
+                  </div>
+
+                  <div class="flex-grow w-full">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div
+                        class="bg-gray-50 p-5 rounded-xl border border-gray-100"
+                      >
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                          Informasi Pribadi
+                        </h3>
+                        <p class="text-sm">
+                          <span class="text-gray-500 font-medium">Nama:</span>
+                          <span
+                            id="detailNama"
+                            class="block text-gray-900 font-semibold mt-1"
+                          ></span>
+                        </p>
+                        <p class="text-sm mt-3">
+                          <span class="text-gray-500 font-medium"
+                            >Jenis Kelamin:</span
+                          >
+                          <span
+                            id="detailJenisKelamin"
+                            class="block text-gray-900 font-semibold mt-1"
+                          ></span>
+                        </p>
+                        <p class="text-sm mt-3">
+                          <span class="text-gray-500 font-medium">Email:</span>
+                          <span
+                            id="detailEmail"
+                            class="block text-gray-900 font-semibold mt-1"
+                          ></span>
+                        </p>
+                        <p class="text-sm mt-3">
+                          <span class="text-gray-500 font-medium"
+                            >Telepon:</span
+                          >
+                          <span
+                            id="detailTelepon"
+                            class="block text-gray-900 font-semibold mt-1"
+                          ></span>
+                        </p>
+                        <p class="text-sm mt-3">
+                          <span class="text-gray-500 font-medium">Alamat:</span>
+                          <span
+                            id="detailAlamat"
+                            class="block text-gray-900 font-semibold mt-1"
+                          ></span>
+                        </p>
+                      </div>
+
+                      <div
+                        class="bg-gray-50 p-5 rounded-xl border border-gray-100"
+                      >
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                          Pendidikan & Instansi
+                        </h3>
+                        <p class="text-sm">
+                          <span class="text-gray-500 font-medium"
+                            >NIS/NPM:</span
+                          >
+                          <span
+                            id="detailNisNpm"
+                            class="block text-gray-900 font-semibold mt-1"
+                          ></span>
+                        </p>
+                        <p class="text-sm mt-3">
+                          <span class="text-gray-500 font-medium"
+                            >Jenjang:</span
+                          >
+                          <span
+                            id="detailJenjang"
+                            class="block text-gray-900 font-semibold mt-1"
+                          ></span>
+                        </p>
+                        <p class="text-sm mt-3">
+                          <span class="text-gray-500 font-medium"
+                            >Jurusan:</span
+                          >
+                          <span
+                            id="detailProdi"
+                            class="block text-gray-900 font-semibold mt-1"
+                          ></span>
+                        </p>
+                        <p class="text-sm mt-3">
+                          <span class="text-gray-500 font-medium"
+                            >Instansi:</span
+                          >
+                          <span
+                            id="detailInstansi"
+                            class="block text-gray-900 font-semibold mt-1"
+                          ></span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="bg-gray-50 p-5 rounded-xl shadow-sm mb-8 border border-gray-100"
+                >
+                  <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                    Informasi Kegiatan
+                  </h3>
+                  <p class="text-sm">
+                    <span class="text-gray-500 font-medium">Kegiatan:</span>
+                    <span
+                      id="detailKegiatan"
+                      class="block text-gray-900 font-semibold mt-1"
+                    ></span>
+                  </p>
+                  <p class="text-sm mt-3">
+                    <span class="text-gray-500 font-medium"
+                      >Lokasi Kegiatan:</span
+                    >
+                    <span
+                      id="detailLokasi"
+                      class="block text-gray-900 font-semibold mt-1"
+                    ></span>
+                  </p>
+                  <p class="text-sm mt-3">
+                    <span class="text-gray-500 font-medium"
+                      >Waktu Pelaksanaan:</span
+                    >
+                    <span
+                      id="detailPeriode"
+                      class="block text-gray-900 font-semibold mt-1"
+                    ></span>
+                  </p>
+                </div>
+
+                <div class="bg-gray-100 p-5 rounded-xl shadow-sm">
+                  <h3 class="text-lg font-semibold text-gray-800 mb-3">
+                    Dokumen Pendukung
+                  </h3>
+                  <ul class="space-y-3">
+                    <li>
+                      <div class="flex items-center justify-between">
+                        <span
+                          class="font-medium text-gray-700 flex items-center"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-5 w-5 text-red-500 mr-2"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6a2 2 0 01.586 1.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 10a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1-5a1 1 0 100 2h6a1 1 0 100-2H7z"
+                              clip-rule="evenodd"
+                            />
+                          </svg>
+                          Surat Pengantar
+                        </span>
+                        <a
+                          id="detailSuratPengantar"
+                          target="_blank"
+                          download
+                          class="text-blue-500 hover:text-blue-700 font-medium transition-colors duration-200"
+                        >
+                          Download
+                        </a>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="flex items-center justify-between">
+                        <span
+                          class="font-medium text-gray-700 flex items-center"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-5 w-5 text-red-500 mr-2"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6a2 2 0 01.586 1.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 10a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1-5a1 1 0 100 2h6a1 1 0 100-2H7z"
+                              clip-rule="evenodd"
+                            />
+                          </svg>
+                          Surat Sehat
+                        </span>
+                        <a
+                          id="detailSuratSehat"
+                          target="_blank"
+                          download
+                          class="text-blue-500 hover:text-blue-700 font-medium transition-colors duration-200"
+                        >
+                          Download
+                        </a>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="flex items-center justify-between">
+                        <span
+                          class="font-medium text-gray-700 flex items-center"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-5 w-5 text-red-500 mr-2"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6a2 2 0 01.586 1.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 10a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1-5a1 1 0 100 2h6a1 1 0 100-2H7z"
+                              clip-rule="evenodd"
+                            />
+                          </svg>
+                          Laporan Kegiatan
+                        </span>
+                        <a
+                          id="detailLaporan"
+                          target="_blank"
+                          download
+                          class="text-blue-500 hover:text-blue-700 font-medium transition-colors duration-200"
+                        >
+                          Download
+                        </a>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="flex items-center justify-between">
+                        <span
+                          class="font-medium text-gray-700 flex items-center"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-5 w-5 text-red-500 mr-2"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6a2 2 0 01.586 1.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 10a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1-5a1 1 0 100 2h6a1 1 0 100-2H7z"
+                              clip-rule="evenodd"
+                            />
+                          </svg>
+                          PPT Hasil
+                        </span>
+                        <a
+                          id="detailPpt"
+                          target="_blank"
+                          download
+                          class="text-blue-500 hover:text-blue-700 font-medium transition-colors duration-200"
+                        >
+                          Download
+                        </a>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="flex items-center justify-between">
+                        <span
+                          class="font-medium text-gray-700 flex items-center"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-5 w-5 text-red-500 mr-2"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6a2 2 0 01.586 1.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 10a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1-5a1 1 0 100 2h6a1 1 0 100-2H7z"
+                              clip-rule="evenodd"
+                            />
+                          </svg>
+                          Sertifikat
+                        </span>
+                        <a
+                          id="detailSertifikat"
+                          target="_blank"
+                          download
+                          class="text-blue-500 hover:text-blue-700 font-medium transition-colors duration-200"
+                        >
+                          Download
+                        </a>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 flex justify-between items-center">
+            <button
+              id="prevPageBtn"
+              class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition duration-300"
+              disabled
+            >
+              Sebelumnya
+            </button>
+            <span class="text-gray-700 text-sm md:text-base"
+              >Halaman <span id="currentPage">1</span> dari
+              <span id="totalPages">1</span></span
+            >
+            <button
+              id="nextPageBtn"
+              class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition duration-300"
+              disabled
+            >
+              Berikutnya
+            </button>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

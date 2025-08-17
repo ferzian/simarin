@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
@@ -39,6 +40,7 @@ app.get('/register', (req, res) => res.render('register'));
 // Routes 
 app.use('/auth', authRoutes);
 app.use('/admin', require('./routes/admin/dashboard'));
+app.use('/admin', require('./routes/admin/data-peserta'));
 app.use('/admin', require('./routes/admin/peserta'));
 app.use('/admin', require('./routes/admin/skm'));
 app.use('/admin', require('./routes/admin/download-rekap'));
