@@ -44,10 +44,6 @@ module.exports = (sequelize, DataTypes) => {
       penilaian_8: { type: DataTypes.INTEGER, allowNull: false },
       penilaian_9: { type: DataTypes.INTEGER, allowNull: false },
 
-      kesimpulan: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-      },
       nilai_total: {
         type: DataTypes.INTEGER,
         allowNull: false,

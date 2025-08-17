@@ -44,78 +44,9 @@
       <!-- Kiri: Logo + SIMARIN -->
       <div class="flex items-center space-x-3">
         <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhVlnwerlS3bGvBZeB4BNCQnl1bHvwBAkKO3NY2yf0isvrN2egSPM_VT7rkEV3lJBYXaFmJvprDlU5Xr2kZTK564YnUhX_SWuPmRYiaDoYItCcFhhnBrf3QcdJ-qNn31JV5Zfgaoz7fWIViBz6KwvnGp39roEqCWOI6m8lbuBtSzYe9RHFq-8WAVA/s3000/Kementerian%20Kelautan%20dan%20Perikanan%20(KKP)%20Republik%20Indonesia.png" alt="Logo SIMARIN" class="h-12 w-auto" />
-        <span class="text-2xl text-blue-800 font-bold" style="font-family: 'Merriweather', serif;">
-          pendaftaran
-        </span>        
-      </div>
-    
-    <!-- Kanan: Menu Navigasi -->
-    <div class="flex space-x-8">
-        <a href="/user/dashboard" class="text-gray-700 font-semibold py-2 text-xl">Beranda</a>
-
-        <!-- Layanan dengan dropdown -->
-        <div x-data="{ open: false }" class="relative inline-flex items-center">
-          <button @click="open = !open" class="text-gray-700 font-semibold py-2 text-xl focus:outline-none">
-            Layanan
-          </button>
-          <div x-show="open" @click.away="open = false"
-               class="absolute top-full mt-2 w-40 bg-white rounded shadow-lg py-2 z-50"
-               x-transition>
-            <a href="/user/daftar-magang" class="flex items-center gap-2 px-4 py-2 text-gray-800 hover:bg-gray-100">
-              Daftar Magang
-           <a href="/user/SKM" class="flex items-center gap-2 px-4 py-2 text-gray-800 hover:bg-gray-100">
-               SKM
-            </a>
-          </div>
-        </div>
-  
-        <!-- Kontak dengan dropdown -->
-        <div x-data="{ open: false }" class="relative inline-flex items-center">
-          <button @click="open = !open" class="text-gray-700 font-semibold py-2 text-xl focus:outline-none">
-            Kontak
-          </button>
-          <div x-show="open" @click.away="open = false"
-               class="absolute top-full mt-2 w-40 bg-white rounded shadow-lg py-2 z-50"
-               x-transition>
-               <a href="https://www.instagram.com/bppsdm_brpbatpp_bogor" target="_blank"
-               class="flex items-center gap-2 px-4 py-2 text-gray-800 hover:bg-gray-100">
-              <!-- Ikon Instagram -->
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                   stroke-width="1.5" stroke="currentColor"
-                   class="w-5 h-5 text-pink-600">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M2.25 6.75C2.25 4.679 3.929 3 6 3h12c2.071 0 3.75 1.679 3.75 3.75v12c0 2.071-1.679 3.75-3.75 3.75H6A3.75 3.75 0 0 1 2.25 18.75v-12zM16.5 10.5a4.5 4.5 0 1 0-9 0 4.5 4.5 0 0 0 9 0zM17.25 6.75h.008v.008h-.008V6.75z"/>
-              </svg>
-              <span class="text-base font-semibold">instagram</span>
-            </a>
-            
-          </div>
-        </div>
-      
-        <div class="relative inline-block text-left" x-data="{ open: false }">
-          <!-- Tombol Hamburger -->
-          <button @click="open = !open" class="p-2 text-gray-700 hover:text-blue-600 focus:outline-none">
-            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-    
-            <!-- Dropdown Menu --> 
-          <div x-show="open" @click.outside="open = false"
-               x-transition
-               class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-               <a href="/user/profil" class="flex items-center px-4 py-2 text-base text-gray-700 hover:bg-gray-100">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A9 9 0 1112 21v-6.063a3 3 0 100-6V3a9 9 0 00-6.879 14.804z" />
-                </svg>
-                Profil
-              </a> 
-            <button onclick="confirmLogout()" class="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">
-              Logout
-            </button>
-            
-            </form>
-          </div>
+          <span class="text-2xl text-blue-800 font-bold" style="font-family: 'Merriweather', serif;">
+          Pendaftaran Magang
+         </span>        
         </div>
       </div>
    </nav>
@@ -158,15 +89,25 @@
           <input type="text" id="Nama lengkap" name="namaLengkap"
             class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm placeholder-gray-400 transition duration-300"
             placeholder="Masukkan Nama lengkap" required>
-        </div>
-<!--nis npm-->
-        <div class="mb-6">
-           <label for="nisNpm" class="block text-base font-semibold text-gray-700 mb-1">Nis/Npm</label>
-            <input type="text" id="nisNpm" name="nisNpm"
-            class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm placeholder-gray-400 transition duration-300"
-            placeholder="Masukkan nisNpm" required>
-        </div>
 
+            
+        </div>
+        <div class="mb-6">
+          <label for="nisNpm" class="block text-base font-semibold text-gray-700 mb-1">NIS/NPM</label>
+          <input 
+            type="text" 
+            id="nisNpm" 
+            name="nisNpm"
+            class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm placeholder-gray-400 transition duration-300"
+            placeholder="Masukkan NIS/NPM " 
+            pattern="\d{10}"
+            inputmode="numeric"
+            maxlength="10"
+            oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)"
+            title="Harap masukkan 10 digit angka"
+            required
+          >
+        </div>
                 <!--alamat domisili-->
            <div class="mb-6">
            <label for="Alamat Domisili" class="block text-base font-semibold text-gray-700 mb-1">Alamat Domisili</label>
@@ -177,10 +118,26 @@
 
           <!-- Nomor Telepon -->
           <div class="mb-6">
-            <label for="telepon" class="block text-base font-semibold text-gray-700 mb-1">Nomor Telepon</label>
-            <input type="text" id="telepon" name="telepon"
-              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm placeholder-gray-400 transition duration-300"
-              placeholder="Masukkan nomor telepon Anda" required>
+            <label for="noTelp" class="block text-base font-semibold text-gray-700 mb-1">Nomor Telepon</label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <span class="text-gray-500">+62</span>
+              </div>
+              <input 
+                type="text" 
+                id="noTelp" 
+                name="noTelp"
+                class="w-full pl-12 px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm placeholder-gray-400 transition duration-300"
+                placeholder="812-3456-7890" 
+                pattern="[0-9]{9,13}"
+                inputmode="numeric"
+                maxlength="13"
+                oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 13)"
+                title="Nomor harus 9-13 digit (tidak termasuk +62)"
+                required
+              >
+            </div>
+            <p class="mt-1 text-sm text-gray-500">Contoh: +6281234567890</p>
           </div>
 
 

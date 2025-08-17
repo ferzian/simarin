@@ -61,13 +61,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-
-    // Kesimpulan
-    kesimpulan: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
-    },
-
+    
     // Nilai total
     nilai_total: {
       type: DataTypes.INTEGER,

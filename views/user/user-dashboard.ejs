@@ -55,8 +55,10 @@
                  x-transition>
               <a href="/user/daftar-magang" class="flex items-center gap-2 px-4 py-2 text-gray-800 hover:bg-gray-100">
                 Daftar Magang
+                <% if (isRegistered) { %>  
              <a href="/user/SKM" class="flex items-center gap-2 px-4 py-2 text-gray-800 hover:bg-gray-100">
                  SKM
+                 <% } %>
               </a>
             </div>
           </div>
@@ -115,7 +117,28 @@
 <!-- Hero Section -->
 <div 
   class="relative w-full h-[90vh] overflow-hidden" 
-  x-data="slider()" 
+  x-data="{
+    current: 0,
+    images: [
+      'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+      'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+      'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+    ],
+    start() {
+      setInterval(() => {
+        this.next();
+      }, 5000);
+    },
+    next() {
+      this.current = (this.current + 1) % this.images.length;
+    },
+    prev() {
+      this.current = (this.current - 1 + this.images.length) % this.images.length;
+    },
+    goTo(index) {
+      this.current = index;
+    }
+  }" 
   x-init="start()"
 >
   <!-- Slides -->
@@ -144,39 +167,36 @@
       </p>
     </div>
   </div>
+
+  <!-- Tombol Sebelumnya -->
+  <button @click="prev"
+    class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white bg-black/50 p-3 rounded-full shadow-lg border border-white/20 hover:bg-black/80 hover:scale-105 transition-all duration-200 z-40">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 font-bold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+    </svg>
+  </button>
+
+  <!-- Tombol Selanjutnya -->
+  <button @click="next"
+    class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white bg-black/50 p-3 rounded-full shadow-lg border border-white/20 hover:bg-black/80 hover:scale-105 transition-all duration-200 z-40">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 font-bold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+    </svg>
+  </button>
+
+  <!-- Dot Navigasi -->
+  <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-2 z-40">
+    <template x-for="(img, index) in images" :key="index">
+      <div @click="goTo(index)"
+        class="w-3 h-3 rounded-full cursor-pointer transition-colors duration-300"
+        :class="current === index ? 'bg-white w-6' : 'bg-gray-400/50'">
+      </div>
+    </template>
+  </div>
 </div>
 
-      <!-- Tombol Sebelumnya -->
-      <button @click="prev"
-      class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white bg-black/50 p-3 rounded-full shadow-lg border border-white/20 hover:bg-black/80 hover:scale-105 transition-all duration-200 z-40">
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 font-bold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-      </svg>
-      </button>
-
-      <!-- Tombol Selanjutnya -->
-      <button @click="next"
-      class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white bg-black/50 p-3 rounded-full shadow-lg border border-white/20 hover:bg-black/80 hover:scale-105 transition-all duration-200 z-40">
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 font-bold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-      </svg>
-      </button>
-
-  
-    <!-- Dot Navigasi -->
-    <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-2 z-40">
-      <template x-for="(img, index) in images" :key="index">
-        <div @click="goTo(index)"
-          class="w-3 h-3 rounded-full cursor-pointer"
-          :class="current === index ? 'bg-white' : 'bg-gray-400/50'">
-        </div>
-      </template>
-    </div>
-  </div>
-  
 <div class="max-w-6xl mx-auto px-4 py-12">
   <div class="flex flex-col md:flex-row justify-center gap-8">
-
 <!-- Wrapper Card -->
 <div
   class="bg-white p-6 rounded-2xl shadow-md w-full md:w-1/2 flex flex-col items-center justify-center transform transition duration-300 hover:scale-105 hover:shadow-2xl text-center">
@@ -235,6 +255,7 @@ class="bg-white p-6 rounded-2xl shadow-md w-full md:w-1/2 flex flex-col justify-
         <p class="simarin-text text-2xl">SIMARIN</p>
         <p class="program-text text-sm mt-1">Sistem Informasi Magang dan Praktik Industri</p>
       </div>
+      
       <div class="flex space-x-4">
         <a href="#" class="program-text text-sm hover:text-yellow-400">Kebijakan Privasi</a>
         <a href="#" class="program-text text-sm hover:text-yellow-400">Syarat & Ketentuan</a>

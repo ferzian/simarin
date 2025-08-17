@@ -1,7 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const multer = require('multer');
-const path = require('path');
 const { Skm } = require('../../models');
 
 
@@ -44,7 +42,6 @@ router.post('/skm', isUser, async (req, res) => {
             penilaian_9,
             nilai_total,
             kritik,
-            kesimpulan,
             saran,
 
         } = req.body;
@@ -70,18 +67,17 @@ router.post('/skm', isUser, async (req, res) => {
           penilaian_9,
           nilai_total,
           kritik,
-          kesimpulan,
           saran,
   
         });
   
         // ✅ Redirect dengan query success
-        return res.redirect('/user/daftar-magang?success=true');
+        return res.redirect('/user/daftar-magang/skm/laporan');
       } catch (err) {
         console.error('❌ Gagal menyimpan data peserta:', err);
   
         // ❌ Render kembali halaman dengan error (✅ diperbaiki di sini)
-        return res.render('user/daftar-magang/skm', {
+        return res.render('/user/daftar-magang/skm/laporan', {
           username: req.session.user?.username || 'Pengguna',
           error: 'Terjadi kesalahan saat menyimpan data.',
           success: false,
