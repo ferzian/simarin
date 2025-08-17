@@ -1,141 +1,212 @@
-document.addEventListener("DOMContentLoaded", () => {
-  // Ambil data SKM dari EJS yang dilempar server
-  let skmData = [];
-  if (typeof window.skmDataJSON !== "undefined") {
-    skmData = JSON.parse(window.skmDataJSON);
+const tableBody = document.getElementById("skmTableBody");
+const searchInput = document.getElementById("searchSKMTable");
+const filterStart = document.getElementById("filterSKMDateStart");
+const filterEnd = document.getElementById("filterSKMDateEnd");
+const applyFilterBtn = document.getElementById("applyFilterSKMBtn");
+const downloadBtn = document.getElementById("downloadSKMDataBtn");
+const prevPageBtn = document.getElementById("prevPageSKMBtn");
+const nextPageBtn = document.getElementById("nextPageSKMBtn");
+const currentPageEl = document.getElementById("currentSKMPage");
+const totalPagesEl = document.getElementById("totalSKMPages");
+
+let filteredData = skmData;
+let currentPage = 1;
+const rowsPerPage = 5;
+
+// Render tabel
+function renderTable(data) {
+  tableBody.innerHTML = "";
+  if (data.length === 0) {
+    tableBody.innerHTML = `<tr><td colspan="6" class="p-3 text-center text-gray-500">Tidak ada data</td></tr>`;
+    return;
   }
 
-  const skmTableBody = document.getElementById("skmTableBody");
-  const searchInput = document.getElementById("searchSKMTable");
-  const currentPageEl = document.getElementById("currentSKMPage");
-  const totalPagesEl = document.getElementById("totalSKMPages");
-  const prevBtn = document.getElementById("prevPageSKMBtn");
-  const nextBtn = document.getElementById("nextPageSKMBtn");
-  const ikmScoreEl = document.getElementById("ikmScore");
-  const totalResponsesEl = document.getElementById("totalSKMResponses");
+  const start = (currentPage - 1) * rowsPerPage;
+  const end = start + rowsPerPage;
+  const pageData = data.slice(start, end);
 
-  const detailModal = document.getElementById("skmDetailModal");
-  const detailContent = document.getElementById("skmDetailContent");
-
-  let filteredData = skmData;
-  let currentPage = 1;
-  const rowsPerPage = 5;
-
-  function renderTable() {
-    skmTableBody.innerHTML = "";
-
-    const start = (currentPage - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-    const pageData = filteredData.slice(start, end);
-
-    pageData.forEach(row => {
-      const tr = document.createElement("tr");
-
-      tr.innerHTML = `
-        <td class="px-4 py-2">${row.date || "-"}</td>
-        <td class="px-4 py-2">${row.gender || "-"}</td>
-        <td class="px-4 py-2">${row.age || "-"}</td>
-        <td class="px-4 py-2">${row.education || "-"}</td>
-        <td class="px-4 py-2">${row.location || "-"}</td>
+  pageData.forEach((item, idx) => {
+    const row = `
+      <tr class="hover:bg-gray-50">
+        <td class="px-4 py-2">${item.date || "-"}</td>
+        <td class="px-4 py-2">${item.gender || "-"}</td>
+        <td class="px-4 py-2">${item.age || "-"}</td>
+        <td class="px-4 py-2">${item.education || "-"}</td>
+        <td class="px-4 py-2">${item.location || "-"}</td>
         <td class="px-4 py-2">
-          <button class="text-blue-600 hover:underline" data-id="${row.id}">Detail</button>
+          <button onclick='openSKMDetail(${JSON.stringify(item)})'
+            class="bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-600 text-sm">Detail</button>
         </td>
-      `;
-      skmTableBody.appendChild(tr);
-    });
-
-    currentPageEl.textContent = currentPage;
-    totalPagesEl.textContent = Math.ceil(filteredData.length / rowsPerPage);
-
-    prevBtn.disabled = currentPage === 1;
-    nextBtn.disabled = currentPage >= Math.ceil(filteredData.length / rowsPerPage);
-  }
-
-  function updateIKMScore() {
-    // hitung IKM berdasarkan rata-rata jawaban q1..q9
-    if (!skmData.length) {
-      ikmScoreEl.textContent = "0.00";
-      totalResponsesEl.textContent = "0";
-      return;
-    }
-
-    let totalScore = 0;
-    skmData.forEach(row => {
-      let sum = 0;
-      let count = 0;
-      for (let i = 1; i <= 9; i++) {
-        const val = parseInt(row[`q${i}`], 10);
-        if (!isNaN(val)) {
-          sum += val;
-          count++;
-        }
-      }
-      if (count > 0) {
-        totalScore += sum / count;
-      }
-    });
-
-    const ikm = (totalScore / skmData.length).toFixed(2);
-    ikmScoreEl.textContent = ikm;
-    totalResponsesEl.textContent = skmData.length;
-  }
-
-  function openDetail(id) {
-    const data = skmData.find(d => d.id === id);
-    if (!data) return;
-
-    detailContent.innerHTML = `
-      <p><strong>Nama:</strong> ${data.name || "-"}</p>
-      <p><strong>Instansi/Sekolah:</strong> ${data.school || "-"}</p>
-      <p><strong>Tanggal:</strong> ${data.date || "-"}</p>
-      <p><strong>Lokasi:</strong> ${data.location || "-"}</p>
-      <p><strong>Jenis Kelamin:</strong> ${data.gender || "-"}</p>
-      <p><strong>Usia:</strong> ${data.age || "-"}</p>
-      <p><strong>Pendidikan:</strong> ${data.education || "-"}</p>
-      <p><strong>Komentar:</strong> ${data.comment || "-"}</p>
-      <hr>
-      ${[...Array(9)].map((_, i) => `<p><strong>Pertanyaan ${i+1}:</strong> ${data[`q${i+1}`] || "-"}</p>`).join("")}
+      </tr>
     `;
-    detailModal.classList.remove("hidden");
+    tableBody.insertAdjacentHTML("beforeend", row);
+  });
+
+  updatePagination(data.length);
+}
+
+// Pagination
+function updatePagination(totalRows) {
+  const totalPages = Math.ceil(totalRows / rowsPerPage) || 1;
+  currentPageEl.textContent = currentPage;
+  totalPagesEl.textContent = totalPages;
+  prevPageBtn.disabled = currentPage === 1;
+  nextPageBtn.disabled = currentPage === totalPages;
+}
+
+prevPageBtn.addEventListener("click", () => {
+  if (currentPage > 1) {
+    currentPage--;
+    renderTable(filteredData);
+  }
+});
+
+nextPageBtn.addEventListener("click", () => {
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+  if (currentPage < totalPages) {
+    currentPage++;
+    renderTable(filteredData);
+  }
+});
+
+// Search
+searchInput.addEventListener("input", () => {
+  const keyword = searchInput.value.toLowerCase();
+  filteredData = skmData.filter((item) =>
+    (item.comment && item.comment.toLowerCase().includes(keyword)) ||
+    (item.q1 && item.q1.toLowerCase().includes(keyword))
+  );
+  currentPage = 1;
+  renderTable(filteredData);
+  updateStats(filteredData);
+});
+
+// Filter tanggal
+applyFilterBtn.addEventListener("click", () => {
+  const startDate = filterStart.value;
+  const endDate = filterEnd.value;
+
+  filteredData = skmData.filter((item) => {
+    if (!item.date) return false;
+    const d = new Date(item.date);
+    return (!startDate || d >= new Date(startDate)) && (!endDate || d <= new Date(endDate));
+  });
+
+  currentPage = 1;
+  renderTable(filteredData);
+  updateStats(filteredData);
+});
+
+// Download CSV
+downloadBtn.addEventListener("click", () => {
+  const rows = [
+    ["Tanggal", "Gender", "Usia", "Pendidikan", "Lokasi", "Komentar", "Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "Q9"],
+    ...filteredData.map((item) => [
+      item.date || "",
+      item.gender || "",
+      item.age || "",
+      item.education || "",
+      item.location || "",
+      item.comment || "",
+      item.q1 || "",
+      item.q2 || "",
+      item.q3 || "",
+      item.q4 || "",
+      item.q5 || "",
+      item.q6 || "",
+      item.q7 || "",
+      item.q8 || "",
+      item.q9 || "",
+    ]),
+  ];
+
+  let csvContent = "data:text/csv;charset=utf-8," + rows.map((e) => e.join(",")).join("\n");
+  const link = document.createElement("a");
+  link.setAttribute("href", encodeURI(csvContent));
+  link.setAttribute("download", "rekap_skm.csv");
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+});
+
+// Modal detail
+function openSKMDetail(item) {
+  document.getElementById("skmDetailModal").classList.remove("hidden");
+  const detailContainer = document.getElementById("skmDetailContent");
+  document.getElementById("skmDetailNama").textContent = item.name || "Detail Responden";
+
+  let html = `
+    <p><strong>Tanggal:</strong> ${item.date || "-"}</p>
+    <p><strong>Jenis Kelamin:</strong> ${item.gender || "-"}</p>
+    <p><strong>Usia:</strong> ${item.age || "-"}</p>
+    <p><strong>Pendidikan:</strong> ${item.education || "-"}</p>
+    <p><strong>Lokasi:</strong> ${item.location || "-"}</p>
+    <p><strong>Komentar:</strong> ${item.comment || "-"}</p>
+    <hr/>
+  `;
+
+  for (let i = 1; i <= 9; i++) {
+    html += `<p><strong>P${i}:</strong> ${item["q" + i] || "-"}</p>`;
   }
 
-  window.closeSKMDetail = () => {
-    detailModal.classList.add("hidden");
-  };
+  detailContainer.innerHTML = html;
+}
 
-  // Event search
-  searchInput.addEventListener("input", () => {
-    const term = searchInput.value.toLowerCase();
-    filteredData = skmData.filter(row =>
-      (row.comment && row.comment.toLowerCase().includes(term)) ||
-      (row.gender && row.gender.toLowerCase().includes(term))
-    );
-    currentPage = 1;
-    renderTable();
-  });
+function closeSKMDetail() {
+  document.getElementById("skmDetailModal").classList.add("hidden");
+}
 
-  // Event pagination
-  prevBtn.addEventListener("click", () => {
-    if (currentPage > 1) {
-      currentPage--;
-      renderTable();
+// Statistik IKM & Chart
+const ikmScoreEl = document.getElementById("ikmScore");
+const totalRespEl = document.getElementById("totalSKMResponses");
+let chart;
+
+function updateStats(data) {
+  if (!data.length) {
+    ikmScoreEl.textContent = "0.00";
+    totalRespEl.textContent = "0";
+    if (chart) chart.destroy();
+    return;
+  }
+
+  // Hitung skor rata-rata (anggap Q1–Q9 diisi angka 1–4)
+  let totalScore = 0;
+  let totalCount = 0;
+  let distribusi = { 1: 0, 2: 0, 3: 0, 4: 0 };
+
+  data.forEach((item) => {
+    for (let i = 1; i <= 9; i++) {
+      const val = parseInt(item["q" + i]);
+      if (!isNaN(val)) {
+        totalScore += val;
+        totalCount++;
+        distribusi[val] = (distribusi[val] || 0) + 1;
+      }
     }
   });
-  nextBtn.addEventListener("click", () => {
-    if (currentPage < Math.ceil(filteredData.length / rowsPerPage)) {
-      currentPage++;
-      renderTable();
-    }
-  });
 
-  // Event detail button
-  skmTableBody.addEventListener("click", (e) => {
-    if (e.target.dataset.id) {
-      openDetail(parseInt(e.target.dataset.id, 10));
-    }
-  });
+  const ikm = totalCount ? (totalScore / totalCount).toFixed(2) : "0.00";
+  ikmScoreEl.textContent = ikm;
+  totalRespEl.textContent = data.length;
 
-  // Init
-  renderTable();
-  updateIKMScore();
-});
+  // Chart
+  if (chart) chart.destroy();
+  const ctx = document.getElementById("satisfactionChart");
+  chart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: ["Sangat Tidak Puas (1)", "Tidak Puas (2)", "Puas (3)", "Sangat Puas (4)"],
+      datasets: [
+        {
+          label: "Jumlah",
+          data: [distribusi[1], distribusi[2], distribusi[3], distribusi[4]],
+          backgroundColor: ["#ef4444", "#f59e0b", "#3b82f6", "#10b981"],
+        },
+      ],
+    },
+  });
+}
+
+// Init
+renderTable(filteredData);
+updateStats(filteredData);

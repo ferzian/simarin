@@ -16,10 +16,6 @@
     <script src="/js/admin/skm.js" defer></script>
   </head>
   <body class="bg-gray-100 flex h-screen">
-    <script>
-      const skmData = <%- JSON.stringify(skmData || []) %>;
-    </script>
-
     <aside
       class="sidebar bg-gray-800 text-white w-64 p-5 space-y-6 flex-shrink-0"
       id="sidebar"
@@ -268,6 +264,7 @@
           Rekap Survei Kepuasan Masyarakat
         </h2>
 
+        <!-- Filter -->
         <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
           <h3 class="text-xl font-semibold text-gray-700 mb-4">
             Filter Data SKM
@@ -285,7 +282,6 @@
                 class="block w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-800"
               />
             </div>
-
             <div>
               <label
                 for="filterSKMDateEnd"
@@ -298,7 +294,6 @@
                 class="block w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-800"
               />
             </div>
-
             <div class="md:col-span-1 flex items-end">
               <button
                 id="applyFilterSKMBtn"
@@ -310,6 +305,7 @@
           </div>
         </div>
 
+        <!-- Tabel -->
         <div class="bg-white p-6 rounded-xl shadow-lg">
           <h3 class="text-xl font-semibold text-gray-700 mb-4">
             Daftar Responden & Komentar Terbaru
@@ -363,6 +359,8 @@
               ></tbody>
             </table>
           </div>
+
+          <!-- Pagination -->
           <div class="mt-4 flex justify-between items-center">
             <button
               id="prevPageSKMBtn"
@@ -383,7 +381,8 @@
               Berikutnya
             </button>
           </div>
-          <!-- Modal Detail SKM -->
+
+          <!-- Modal Detail -->
           <div
             id="skmDetailModal"
             class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50"
@@ -402,13 +401,12 @@
                   &times;
                 </button>
               </div>
-              <div class="mt-4 space-y-4" id="skmDetailContent">
-                <!-- Pertanyaan & Jawaban akan diisi via JS -->
-              </div>
+              <div class="mt-4 space-y-4" id="skmDetailContent"></div>
             </div>
           </div>
         </div>
 
+        <!-- Statistik -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
           <div
             class="bg-white rounded-xl shadow-lg p-6 text-center border-b-4 border-teal-500 lg:col-span-1"
@@ -434,5 +432,9 @@
         </div>
       </main>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      const skmData = <%- skmData %>;
+    </script>
   </body>
 </html>
