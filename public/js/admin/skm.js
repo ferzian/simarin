@@ -334,6 +334,11 @@ function updateStats(data) {
         },
       ],
     },
+    options: {
+      plugins: {
+        legend: { display: false },
+      },
+    },
   });
 
   /* =======================
