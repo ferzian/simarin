@@ -382,29 +382,29 @@
             </button>
           </div>
 
-          <!-- Modal Detail -->
           <div
             id="skmDetailModal"
             class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50"
           >
             <div
-              class="bg-white rounded-lg shadow-lg max-w-3xl w-full p-6 overflow-y-auto max-h-[90vh]"
+              id="skmDetailBox"
+              class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full p-6 sm:p-8 transform scale-95 opacity-0 transition-all duration-300 relative max-h-[90vh] flex flex-col"
             >
-              <div class="flex justify-between items-center border-b pb-3">
-                <h2 class="text-lg font-bold" id="skmDetailNama">
-                  Detail Responden
-                </h2>
+              <div
+                class="sticky top-0 bg-white z-10 flex justify-between items-center border-b pb-4 mb-4 -mx-6 px-6 pt-6 -mt-6 rounded-t-2xl"
+              >
+                <h2 class="text-2xl font-bold text-gray-800" id="skmDetailNama">Detail Responden</h2>
                 <button
                   onclick="closeSKMDetail()"
-                  class="text-gray-500 hover:text-gray-700"
+                  class="text-gray-400 hover:text-gray-600 text-2xl font-bold p-1"
                 >
                   &times;
                 </button>
               </div>
-              <div class="mt-4 space-y-4" id="skmDetailContent"></div>
+
+              <div class="flex-grow overflow-y-auto space-y-6 text-gray-700 leading-relaxed" id="skmDetailContent"></div>
             </div>
           </div>
-        </div>
 
         <!-- Statistik -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">

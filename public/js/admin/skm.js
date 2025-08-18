@@ -116,32 +116,128 @@ applyFilterBtn.addEventListener("click", () => {
   updateStats(filteredData);
 });
 
-// Modal detail
 function openSKMDetail(item) {
-  document.getElementById("skmDetailModal").classList.remove("hidden");
+  const modal = document.getElementById("skmDetailModal");
+  const box = document.getElementById("skmDetailBox");
   const detailContainer = document.getElementById("skmDetailContent");
-  document.getElementById("skmDetailNama").textContent = item.name || "Detail Responden";
+  const nameElement = document.getElementById("skmDetailNama");
+
+  // Daftar pertanyaan dan pilihan jawaban
+  const questions = [
+    "Bagaimana pendapat Saudara tentang kemudahan prosedur permohonan melakukan magang/PKL ?",
+    "Bagaimana pendapat Saudara tentang kecepatan waktu petugas dalam memberikan tanggapan terhadap permohonan magang/PKL ?",
+    "Bagaimana pendapat Saudara tentang kesesuaian topik/tema yang diajukan dengan pelaksanaan di lapangan ?",
+    "Bagaimana pendapat Saudara tentang kompetensi/kemampuan pembimbing/teknisi lapang ?",
+    "Bagaimana pendapat Saudara tentang respon pembimbing/teknisi lapang terhadap pelaksanaan teknis dalam proses magang/PKL ?",
+    "Bagaimana pendapat Saudara perilaku petugas dalam pelayanan dari tahap penerimaan mahasiswa sebelum ke lapangan sampai tahap seminar hasil ?",
+    "Bagaimana pendapat Saudara tentang kualitas sarana dan prasarana pendukung magang/PKL ?",
+    "Bagaimana pendapat Saudara tentang penanganan pengaduan pengguna layanan magang/PKL ?",
+    "Bagaimana pendapat Saudara tentang pelaksanaan seminar hasil magang/PKL ?"
+  ];
+
+  const answerOptions = {
+    // Pilihan untuk pertanyaan 1 dan 3
+    type1: {
+      1: "Tidak mudah",
+      2: "Kurang mudah",
+      3: "Mudah",
+      4: "Sangat mudah"
+    },
+    // Pilihan untuk pertanyaan 2, 4, 5, 6, 7, 8, 9
+    type2: {
+      1: "Tidak baik",
+      2: "Kurang baik",
+      3: "Baik",
+      4: "Sangat baik"
+    },
+    // Pilihan untuk pertanyaan 3
+    type3: {
+      1: "Tidak sesuai",
+      2: "Kurang sesuai",
+      3: "Sesuai",
+      4: "Sangat sesuai"
+    },
+    // Pilihan untuk pertanyaan 4
+    type4: {
+      1: "Tidak kompeten",
+      2: "Kurang kompeten",
+      3: "Kompeten",
+      4: "Sangat kompeten"
+    },
+  };
+
+  // Fungsi untuk mendapatkan teks jawaban berdasarkan nomor pertanyaan
+  function getAnswerText(qNumber, answer) {
+    if (!answer || answer === "-") {
+      return "-";
+    }
+    const qIndex = qNumber - 1; // Indeks array
+    if (qIndex === 0) return answerOptions.type1[answer]; // Pertanyaan 1
+    if (qIndex === 2) return answerOptions.type3[answer]; // Pertanyaan 3
+    if (qIndex === 3) return answerOptions.type4[answer]; // Pertanyaan 4
+    return answerOptions.type2[answer]; // Pertanyaan lainnya
+  }
+
+  nameElement.textContent = item.name || "Detail Responden";
 
   let html = `
-    <p><strong>Tanggal:</strong> ${item.date || "-"}</p>
-    <p><strong>Jenis Kelamin:</strong> ${item.gender || "-"}</p>
-    <p><strong>Usia:</strong> ${item.age || "-"}</p>
-    <p><strong>Pendidikan:</strong> ${item.education || "-"}</p>
-    <p><strong>Lokasi:</strong> ${item.location || "-"}</p>
-    <p><strong>Komentar:</strong> ${item.comment || "-"}</p>
-    <hr/>
+    <h3 class="text-lg font-semibold text-gray-800 mb-2">Data Responden</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <p><strong>Tanggal:</strong> ${item.date || "-"}</p>
+        <p><strong>Jenis Kelamin:</strong> ${item.gender || "-"}</p>
+        <p><strong>Usia:</strong> ${item.age || "-"}</p>
+        <p><strong>Pendidikan:</strong> ${item.education || "-"}</p>
+        <p><strong>Lokasi:</strong> ${item.location || "-"}</p>
+    </div>
+    <hr class="my-6 border-gray-200"/>
+    <h3 class="text-lg font-semibold text-gray-800 mb-2">Komentar</h3>
+    <p class="bg-gray-50 p-4 rounded-lg">${item.comment || "-"}</p>
+    <hr class="my-6 border-gray-200"/>
+    <h3 class="text-lg font-semibold text-gray-800 mb-4">Jawaban Pertanyaan</h3>
   `;
 
+  // Iterasi untuk menampilkan setiap pertanyaan dan jawaban
   for (let i = 1; i <= 9; i++) {
-    html += `<p><strong>P${i}:</strong> ${item["q" + i] || "-"}</p>`;
+    const questionText = questions[i - 1];
+    const answer = item["q" + i];
+    const answerText = getAnswerText(i, answer);
+
+    html += `
+        <div class="mb-4">
+            <p class="font-medium text-gray-800">
+              <span class="mr-2">${i}.</span>${questionText}
+            </p>
+            <p class="text-gray-600 pl-6">${answerText}</p>
+        </div>
+    `;
   }
 
   detailContainer.innerHTML = html;
+  modal.classList.remove("hidden");
+
+  setTimeout(() => {
+    box.classList.remove("scale-95", "opacity-0");
+    box.classList.add("scale-100", "opacity-100");
+  }, 10);
 }
 
 function closeSKMDetail() {
-  document.getElementById("skmDetailModal").classList.add("hidden");
+  const modal = document.getElementById("skmDetailModal");
+  const box = document.getElementById("skmDetailBox");
+
+  // Animasi keluar
+  box.classList.add("scale-95", "opacity-0");
+  setTimeout(() => {
+    modal.classList.add("hidden");
+  }, 200);
 }
+
+// Tutup modal kalau klik di luar box
+document.getElementById("skmDetailModal").addEventListener("click", (e) => {
+  if (e.target.id === "skmDetailModal") {
+    closeSKMDetail();
+  }
+});
 
 // Statistik IKM & Chart
 const ikmScoreEl = document.getElementById("ikmScore");
