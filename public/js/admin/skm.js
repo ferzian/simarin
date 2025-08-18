@@ -46,6 +46,7 @@ function renderTable(data) {
         <td class="px-4 py-2">${item.gender || "-"}</td>
         <td class="px-4 py-2">${item.age || "-"}</td>
         <td class="px-4 py-2">${item.education || "-"}</td>
+        <td class="px-4 py-2">${item.school || "-"}</td>
         <td class="px-4 py-2">${item.location || "-"}</td>
         <td class="px-4 py-2">
           <button onclick='openSKMDetail(${JSON.stringify(item)})'
@@ -187,7 +188,8 @@ function openSKMDetail(item) {
         <p><strong>Jenis Kelamin:</strong> ${item.gender || "-"}</p>
         <p><strong>Usia:</strong> ${item.age || "-"}</p>
         <p><strong>Pendidikan:</strong> ${item.education || "-"}</p>
-        <p><strong>Lokasi:</strong> ${item.location || "-"}</p>
+        <p><strong>Instansi:</strong> ${item.school || "-"}</p>
+        <p><strong>Lokasi Kegiatan:</strong> ${item.location || "-"}</p>
     </div>
     <hr class="my-6 border-gray-200"/>
     <h3 class="text-lg font-semibold text-gray-800 mb-2">Komentar</h3>
