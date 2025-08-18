@@ -9,7 +9,7 @@ const currentPageEl = document.getElementById("currentSKMPage");
 const totalPagesEl = document.getElementById("totalSKMPages");
 const downloadBtn = document.getElementById("downloadSKMDataBtn");
 
-let ageChart;
+let ageChart, genderChart, eduChart;
 let questionCharts = [];
 let filteredData = skmData;
 let currentPage = 1;
@@ -278,6 +278,8 @@ function updateStats(data) {
     ikmScoreEl.textContent = "0.00";
     totalRespEl.textContent = "0";
     if (ageChart) ageChart.destroy();
+    if (genderChart) genderChart.destroy();
+    if (eduChart) eduChart.destroy();
     questionCharts.forEach((ch) => ch.destroy());
     return;
   }
@@ -340,6 +342,76 @@ function updateStats(data) {
       },
     },
   });
+  /* =======================
+     Chart Jenis Kelamin
+  ======================= */
+  let genderGroups = { Laki: 0, Perempuan: 0 };
+
+  data.forEach((item) => {
+    const gender = (item.gender || "").toLowerCase();
+    if (gender.startsWith("l")) genderGroups.Laki++;
+    else if (gender.startsWith("p")) genderGroups.Perempuan++;
+  });
+
+  if (genderChart) genderChart.destroy();
+  const genderCtx = document.getElementById("genderChart");
+  genderChart = new Chart(genderCtx, {
+    type: "pie",
+    data: {
+      labels: ["Laki-Laki", "Perempuan"],
+      datasets: [
+        {
+          data: Object.values(genderGroups),
+          backgroundColor: ["#3b82f6", "#ec4899"],
+        },
+      ],
+    },
+  });
+
+  /* =======================
+     Chart Pendidikan
+  ======================= */
+  let eduGroups = {
+    SD: 0,
+    SMP: 0,
+    SMA: 0,
+    Diploma: 0,
+    Sarjana: 0,
+    Pascasarjana: 0,
+  };
+
+  data.forEach((item) => {
+    const edu = (item.education || "").toLowerCase();
+    // if (edu.includes("sd")) eduGroups.SD++;
+    // else if (edu.includes("smp")) eduGroups.SMP++;
+    if (edu.includes("sma")) eduGroups.SMA++;
+    else if (edu.includes("diploma") || edu.startsWith("d")) eduGroups.Diploma++;
+    else if (edu.includes("sarjana") || edu.startsWith("s1")) eduGroups.Sarjana++;
+    else if (edu.includes("pasca") || edu.startsWith("s2") || edu.startsWith("s3"))
+      eduGroups.Pascasarjana++;
+  });
+
+  if (eduChart) eduChart.destroy();
+  const eduCtx = document.getElementById("eduChart");
+  eduChart = new Chart(eduCtx, {
+    type: "bar",
+    data: {
+      labels: Object.keys(eduGroups),
+      datasets: [
+        {
+          data: Object.values(eduGroups),
+          backgroundColor: "#10b981",
+        },
+      ],
+    },
+    options: {
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, precision: 0 },
+      },
+    },
+  });
+
 
   /* =======================
      Chart per Pertanyaan

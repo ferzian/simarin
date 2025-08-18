@@ -18,6 +18,11 @@
       id="sidebar"
     >
       <div class="flex justify-between items-center mb-6 px-2 relative">
+        <img
+          src="/images/logo.png"
+          alt="Logo SIMARIN"
+          class="h-10 w-10 object-contain"
+        />
         <h2
           class="text-2xl font-bold transition-all duration-300"
           id="sidebarTitle"
@@ -376,11 +381,11 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-          <div class="bg-white rounded-lg shadow-md p-6 h-96">
+          <div class="bg-white rounded-lg shadow-md p-6 h-96 pb-14">
             <h2 class="text-xl font-semibold mb-4 text-gray-700">
               Peserta Aktif per Lokasi
             </h2>
-            <canvas id="lokasiChart"></canvas>
+            <canvas id="lokasiChart" class="h-80"></canvas>
           </div>
           <div class="bg-white rounded-lg shadow-md p-6">
             <h2 class="text-xl font-semibold mb-4 text-gray-700">
@@ -438,20 +443,53 @@
         data: {
           labels: lokasiLabels,
           datasets: [{
-            label: 'Peserta Aktif',
+            label: 'Jumlah Peserta',
             data: lokasiCounts,
-            backgroundColor: ['#10B981', '#3B82F6', '#8B5CF6', '#F59E0B']
+            backgroundColor: [
+              'rgba(16, 185, 129, 0.8)', // Sempur - Hijau
+              'rgba(59, 130, 246, 0.8)', // Depok - Biru
+              'rgba(139, 92, 246, 0.8)', // Cibalagung - Ungu
+              'rgba(245, 158, 11, 0.8)'  // Cijeruk - Oranye
+            ]
           }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: { display: false }
+            legend: {
+              display: false,
+            },
+            tooltip: {
+              backgroundColor: 'rgba(0, 0, 0, 0.7)',
+              bodyFont: {
+                size: 14
+              }
+            }
           },
           scales: {
-            y: { beginAtZero: true, ticks: { precision:0 } },
-            x: { grid: { display: false } }
+            y: {
+              beginAtZero: true,
+              grid: {
+                color: 'rgba(200, 200, 200, 0.2)' // Garis grid horizontal yang lebih halus
+              },
+              ticks: {
+                precision: 0,
+                font: {
+                  size: 12
+                }
+              }
+            },
+            x: {
+              grid: {
+                display: false
+              },
+              ticks: {
+                font: {
+                  size: 12
+                }
+              }
+            }
           }
         }
       });

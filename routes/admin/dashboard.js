@@ -37,8 +37,8 @@ router.get('/dashboard', async (req, res) => {
 
     // Tentukan emoticon
     let emoticon = '😐';
-    if (avgSkorValue >= 80) emoticon = '😊';
-    else if (avgSkorValue < 60) emoticon = '😟';
+    if (avgSkorValue >= 3) emoticon = '😊';
+    else if (avgSkorValue < 2) emoticon = '😟';
 
     // === Peserta aktif hari ini ===
     const aktifCount = await Participant.count({

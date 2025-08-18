@@ -21,6 +21,11 @@
       id="sidebar"
     >
       <div class="flex justify-between items-center mb-6 px-2 relative">
+        <img
+          src="/images/logo.png"
+          alt="Logo SIMARIN"
+          class="h-10 w-10 object-contain"
+        />
         <h2
           class="text-2xl font-bold transition-all duration-300"
           id="sidebarTitle"
@@ -409,30 +414,41 @@
 
         </div>
         <!-- Statistik -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-          <div
-            class="bg-white rounded-xl shadow-lg p-6 text-center border-b-4 border-teal-500 lg:col-span-1"
-          >
-            <h3 class="text-lg font-semibold text-gray-700 mb-2">
-              Indeks Kepuasan Masyarakat (IKM)
-            </h3>
-            <p class="text-5xl font-bold text-teal-600 mb-2" id="ikmScore">
-              0.00
-            </p>
-            <p class="text-sm text-gray-500">
-              Dari <span id="totalSKMResponses">0</span> tanggapan
-            </p>
+       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+            <div class="bg-white rounded-xl shadow-lg p-6 text-center border-b-4 border-teal-500">
+              <h3 class="text-lg font-semibold text-gray-700 mb-2">
+                Indeks Kepuasan Masyarakat <br> (IKM)
+              </h3>
+              <p class="text-8xl font-bold text-teal-600 mt-4 mb-2" id="ikmScore">
+                0.00
+              </p>
+              <p class="text-sm text-gray-500">
+                Dari <span id="totalSKMResponses">0</span> tanggapan
+              </p>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-6 text-center border-b-4 border-pink-500">
+              <h3 class="text-xl font-semibold text-gray-700 mb-4">
+                Distribusi Jenis Kelamin
+              </h3>
+              <canvas id="genderChart" class="max-h-64"></canvas>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:col-span-3">
+              <div class="bg-white rounded-xl shadow-lg p-6 text-center border-b-4 border-indigo-500">
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">
+                  Distribusi Usia Responden
+                </h3>
+                <canvas id="ageChart" class="max-h-64"></canvas>
+              </div>
+              <div class="bg-white rounded-xl shadow-lg p-6 text-center border-b-4 border-green-500">
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">
+                  Distribusi Pendidikan Responden
+                </h3>
+                <canvas id="eduChart" class="max-h-64"></canvas>
+              </div>
+            </div>
           </div>
-          <!-- Chart Usia -->
-          <div
-            class="bg-white rounded-xl shadow-lg p-6 text-center border-b-4 border-indigo-500 lg:col-span-2"
-          >
-            <h3 class="text-xl font-semibold text-gray-700 mb-4">
-              Distribusi Usia Responden
-            </h3>
-            <canvas id="ageChart" class="max-h-64"></canvas>
-          </div>
-          </div>
+
           <!-- Grid Chart per Pertanyaan -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
             <!-- Auto generate dari JS -->
