@@ -424,23 +424,23 @@
             </p>
           </div>
           <!-- Chart Usia -->
-<div
-  class="bg-white rounded-xl shadow-lg p-6 text-center border-b-4 border-indigo-500 lg:col-span-2"
->
-  <h3 class="text-xl font-semibold text-gray-700 mb-4">
-    Distribusi Usia Responden
-  </h3>
-  <canvas id="ageChart" class="max-h-64"></canvas>
-</div>
-</div>
-<!-- Grid Chart per Pertanyaan -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-  <!-- Auto generate dari JS -->
-  <div
-    id="questionsCharts"
-    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 col-span-2"
-  ></div>
-</div>
+          <div
+            class="bg-white rounded-xl shadow-lg p-6 text-center border-b-4 border-indigo-500 lg:col-span-2"
+          >
+            <h3 class="text-xl font-semibold text-gray-700 mb-4">
+              Distribusi Usia Responden
+            </h3>
+            <canvas id="ageChart" class="max-h-64"></canvas>
+          </div>
+          </div>
+          <!-- Grid Chart per Pertanyaan -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+            <!-- Auto generate dari JS -->
+            <div
+              id="questionsCharts"
+              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 col-span-2"
+            ></div>
+          </div>
       </main>
     <script>
       const skmData = <%- skmData %>;

@@ -6,6 +6,7 @@ let activityTypeChart;
 let majorChart;
 let currentSort = { key: null, asc: true };
 let baseParticipants = participantsData;
+let currentFilterPeriod = "Semua Data";
 
 const rowsPerPage = 5;
 
@@ -421,12 +422,47 @@ document.getElementById("downloadTableDataBtn").addEventListener("click", () => 
         formatIndoDate(p.tanggalSelesai),
     ]);
 
-    const worksheet = XLSX.utils.aoa_to_sheet([headers, ...rows]);
+    // 🔎 Ambil input tanggal dari filter
+    const filterDateStart = document.getElementById("filterDateStart").value;
+    const filterDateEnd = document.getElementById("filterDateEnd").value;
+
+    let periodeText = "Periode: Semua Data";
+    if (filterDateStart && filterDateEnd) {
+        periodeText = `Periode: ${formatIndoDate(filterDateStart)} s/d ${formatIndoDate(filterDateEnd)}`;
+    }
+
+    const sheetData = [
+        ["Laporan Data Peserta SIMARIN"],
+        [periodeText],
+        [],
+        headers,
+        ...rows,
+    ];
+
+    const worksheet = XLSX.utils.aoa_to_sheet(sheetData);
+
+    // Set lebar kolom
+    worksheet['!cols'] = headers.map((h) => ({ wch: Math.max(h.length + 5, 20) }));
+
+    // Set tinggi baris untuk judul
+    worksheet['!rows'] = [{ hpt: 25 }, { hpt: 20 }];
+
+    // Merge cell judul (A1 sampai L1, disesuaikan jumlah kolom)
+    worksheet['!merges'] = [
+        { s: { r: 0, c: 0 }, e: { r: 0, c: headers.length - 1 } }
+    ];
+
+
+    // Biar kolom rapih
+    const colWidths = headers.map((h) => ({ wch: h.length + 5 }));
+    worksheet['!cols'] = colWidths;
+
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Data Peserta");
 
     XLSX.writeFile(workbook, "data_peserta_simarin.xlsx");
 });
+
 
 window.onload = () => {
     updateUI(participantsData);
