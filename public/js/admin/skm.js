@@ -9,6 +9,8 @@ const currentPageEl = document.getElementById("currentSKMPage");
 const totalPagesEl = document.getElementById("totalSKMPages");
 const downloadBtn = document.getElementById("downloadSKMDataBtn");
 
+let ageChart;
+let questionCharts = [];
 let filteredData = skmData;
 let currentPage = 1;
 const rowsPerPage = 5;
@@ -246,50 +248,143 @@ const ikmScoreEl = document.getElementById("ikmScore");
 const totalRespEl = document.getElementById("totalSKMResponses");
 let chart;
 
+// Mapping label jawaban per pertanyaan
+const questionLabels = {
+  1: ["Tidak Mudah", "Kurang Mudah", "Mudah", "Sangat Mudah"],
+  2: ["Tidak Baik", "Kurang Baik", "Baik", "Sangat Baik"],
+  3: ["Tidak Sesuai", "Kurang Sesuai", "Sesuai", "Sangat Sesuai"],
+  4: ["Tidak Kompeten", "Kurang Kompeten", "Kompeten", "Sangat Kompeten"],
+  5: ["Tidak Baik", "Kurang Baik", "Baik", "Sangat Baik"],
+  6: ["Tidak Baik", "Kurang Baik", "Baik", "Sangat Baik"],
+  7: ["Tidak Baik", "Kurang Baik", "Baik", "Sangat Baik"],
+  8: ["Tidak Baik", "Kurang Baik", "Baik", "Sangat Baik"],
+  9: ["Tidak Baik", "Kurang Baik", "Baik", "Sangat Baik"],
+};
+
+const questionTexts = {
+  1: "Bagaimana pendapat Saudara tentang kemudahan prosedur permohonan melakukan magang/PKL?",
+  2: "Bagaimana pendapat Saudara tentang kecepatan waktu petugas dalam memberikan tanggapan terhadap permohonan magang/PKL?",
+  3: "Bagaimana pendapat Saudara tentang kesesuaian topik/tema yang diajukan dengan pelaksanaan di lapangan?",
+  4: "Bagaimana pendapat Saudara tentang kompetensi/kemampuan pembimbing/teknisi lapang?",
+  5: "Bagaimana pendapat Saudara tentang respon pembimbing/teknisi lapang terhadap pelaksanaan teknis dalam proses magang/PKL?",
+  6: "Bagaimana pendapat Saudara perilaku petugas dalam pelayanan dari tahap penerimaan mahasiswa sebelum ke lapangan sampai tahap seminar hasil?",
+  7: "Bagaimana pendapat Saudara tentang kualitas sarana dan prasarana pendukung magang/PKL?",
+  8: "Bagaimana pendapat Saudara tentang penanganan pengaduan pengguna layanan magang/PKL?",
+  9: "Bagaimana pendapat Saudara tentang pelaksanaan seminar hasil magang/PKL?",
+};
+
 function updateStats(data) {
   if (!data.length) {
     ikmScoreEl.textContent = "0.00";
     totalRespEl.textContent = "0";
-    if (chart) chart.destroy();
+    if (ageChart) ageChart.destroy();
+    questionCharts.forEach((ch) => ch.destroy());
     return;
   }
 
-  // Hitung skor rata-rata (anggap Q1–Q9 diisi angka 1–4)
+  // Hitung IKM
   let totalScore = 0;
   let totalCount = 0;
-  let distribusi = { 1: 0, 2: 0, 3: 0, 4: 0 };
-
   data.forEach((item) => {
     for (let i = 1; i <= 9; i++) {
       const val = parseInt(item["q" + i]);
       if (!isNaN(val)) {
         totalScore += val;
         totalCount++;
-        distribusi[val] = (distribusi[val] || 0) + 1;
       }
     }
   });
-
   const ikm = totalCount ? (totalScore / totalCount).toFixed(2) : "0.00";
   ikmScoreEl.textContent = ikm;
   totalRespEl.textContent = data.length;
 
-  // Chart
-  if (chart) chart.destroy();
-  const ctx = document.getElementById("satisfactionChart");
-  chart = new Chart(ctx, {
+  /* =======================
+     Chart Usia
+  ======================= */
+  let ageGroups = {
+    "<20": 0,
+    "20-29": 0,
+    "30-39": 0,
+    "40-49": 0,
+    "50+": 0,
+  };
+
+  data.forEach((item) => {
+    const age = parseInt(item.age);
+    if (!isNaN(age)) {
+      if (age < 20) ageGroups["<20"]++;
+      else if (age < 30) ageGroups["20-29"]++;
+      else if (age < 40) ageGroups["30-39"]++;
+      else if (age < 50) ageGroups["40-49"]++;
+      else ageGroups["50+"]++;
+    }
+  });
+
+  if (ageChart) ageChart.destroy();
+  const ageCtx = document.getElementById("ageChart");
+  ageChart = new Chart(ageCtx, {
     type: "bar",
     data: {
-      labels: ["Sangat Tidak Puas (1)", "Tidak Puas (2)", "Puas (3)", "Sangat Puas (4)"],
+      labels: Object.keys(ageGroups),
       datasets: [
         {
-          label: "Jumlah",
-          data: [distribusi[1], distribusi[2], distribusi[3], distribusi[4]],
-          backgroundColor: ["#ef4444", "#f59e0b", "#3b82f6", "#10b981"],
+          label: "Jumlah Responden",
+          data: Object.values(ageGroups),
+          backgroundColor: "#3b82f6",
         },
       ],
     },
   });
+
+  /* =======================
+     Chart per Pertanyaan
+  ======================= */
+  // Bersihkan chart lama
+  questionCharts.forEach((ch) => ch.destroy());
+  questionCharts = [];
+
+  const container = document.getElementById("questionsCharts");
+  container.innerHTML = "";
+
+  for (let i = 1; i <= 9; i++) {
+    let distribusi = { 1: 0, 2: 0, 3: 0, 4: 0 };
+    data.forEach((item) => {
+      const val = parseInt(item["q" + i]);
+      if (!isNaN(val)) distribusi[val]++;
+    });
+
+    // Buat canvas baru untuk chart ini
+    const card = document.createElement("div");
+    card.className =
+      "bg-white rounded-xl shadow-md p-4 text-center border";
+    card.innerHTML = `
+  <h2 class="font-semibold text-gray-700">Pertanyaan ${i}</h2>
+  <p class="text-xs text-gray-400 italic mb-3">${questionTexts[i]}</p>
+  <canvas id="qChart${i}" class="max-h-56"></canvas>
+`;
+
+
+    container.appendChild(card);
+
+    const ctx = document.getElementById(`qChart${i}`);
+    const chart = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: questionLabels[i], // ["Tidak Baik", "Kurang Baik", "Baik", "Sangat Baik"]
+        datasets: [{
+          data: [distribusi[1], distribusi[2], distribusi[3], distribusi[4]],
+          backgroundColor: ["#ef4444", "#f59e0b", "#3b82f6", "#10b981"],
+        }],
+      },
+      options: {
+        plugins: {
+          legend: { display: false },
+        },
+      },
+    });
+
+    questionCharts.push(chart);
+  }
 }
 
 // Init

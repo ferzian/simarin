@@ -132,25 +132,27 @@ function updateCharts(data) {
 
         if (locationChart) locationChart.destroy();
         locationChart = new Chart(locationChartCtx, {
-            type: "pie",
+            type: "bar",
             data: {
                 labels: filtered.map(([label]) => label),
                 datasets: [{
+                    label: "Jumlah Peserta",
                     data: filtered.map(([_, count]) => count),
-                    backgroundColor: ["#f87171", "#60a5fa", "#34d399", "#fbbf24"], // Merah, Biru, Hijau, Kuning
+                    backgroundColor: ["#f87171", "#60a5fa", "#34d399", "#fbbf24"],
                 }],
             },
             options: {
-                aspectRatio: 1,
+                aspectRatio: 2,
+                responsive: true,
                 plugins: {
-                    legend: {
-                        display: filtered.length > 0,
-                        position: 'bottom',
-                        labels: { color: '#374151', font: { size: 14 } }
-                    },
-                    tooltip: tooltipPercent
+                    legend: { display: false },
+                },
+                scales: {
+                    x: { beginAtZero: true },
+                    y: { beginAtZero: true }
                 }
             }
+
         });
     }
 
@@ -165,27 +167,30 @@ function updateCharts(data) {
 
         if (activityTypeChart) activityTypeChart.destroy();
         activityTypeChart = new Chart(activityTypeChartCtx, {
-            type: "pie",
+            type: "bar",
             data: {
                 labels: filtered.map(([label]) => label),
                 datasets: [{
+                    label: "Jumlah Peserta",
                     data: filtered.map(([_, count]) => count),
                     backgroundColor: ["#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", "#EC4899"],
                 }],
             },
             options: {
-                aspectRatio: 1,
+                aspectRatio: 2,
+                responsive: true,
                 plugins: {
-                    legend: {
-                        display: filtered.length > 0,
-                        position: 'bottom',
-                        labels: { color: '#374151', font: { size: 14 } }
-                    },
-                    tooltip: tooltipPercent
+                    legend: { display: false },
+                },
+                scales: {
+                    x: { beginAtZero: true },
+                    y: { beginAtZero: true }
                 }
             }
+
         });
     }
+
 
     // Major Chart
     if (majorChartCtx) {
@@ -209,6 +214,7 @@ function updateCharts(data) {
                 }],
             },
             options: {
+                aspectRatio: 2,
                 indexAxis: "y",
                 plugins: {
                     legend: { display: false },
