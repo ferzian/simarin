@@ -11,7 +11,7 @@ function isUser(req, res, next) {
   next();
 }
 
-router.get('user/daftar-magang/skm', isUser,async (req, res) => {
+router.get('/user/daftar-magang/skm', isUser,async (req, res) => {
   const existing = await Skm.findOne({ where: { userId:req.session.user.id } });
   console.log(req.session.user)
   console.log(existing)
@@ -72,12 +72,12 @@ router.post('/skm', isUser, async (req, res) => {
         });
   
         // ✅ Redirect dengan query success
-        return res.redirect('/user/daftar-magang/skm/laporan');
+        return res.redirect('/user/laporan');
       } catch (err) {
         console.error('❌ Gagal menyimpan data peserta:', err);
   
         // ❌ Render kembali halaman dengan error (✅ diperbaiki di sini)
-        return res.render('/user/daftar-magang/skm/laporan', {
+        return res.render('user/daftar-magang/skm', {
           username: req.session.user?.username || 'Pengguna',
           error: 'Terjadi kesalahan saat menyimpan data.',
           success: false,

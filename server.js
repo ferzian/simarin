@@ -10,6 +10,8 @@ const authRoutes = require('./routes/auth');
 const daftarMagangRoute = require('./routes/user/daftar-magang');
 const profilRoutes = require('./routes/user/profil');
 const app = express();
+const laporanRoutes = require('./routes/user/laporan');
+
 
 // Middleware
 app.use(express.urlencoded({ extended: false }));
@@ -44,11 +46,14 @@ app.use('/admin', require('./routes/admin/data-peserta'));
 app.use('/admin', require('./routes/admin/peserta'));
 app.use('/admin', require('./routes/admin/skm'));
 app.use('/admin', require('./routes/admin/download-rekap'));
+app.use('/admin/laporan', require('./routes/admin/laporan'));
 app.use('/user', require('./routes/user/skm'));
 app.use('/user/daftar-magang', require('./routes/user/daftar-magang'));
 app.use('/user', require('./routes/user/sertifikat'));
 app.use('/user', require('./routes/user/user-dashboard'));
 app.use('/user', profilRoutes);
+app.use('/user', laporanRoutes);
+
 
 // Visitor tracking
 app.use(async (req, res, next) => {

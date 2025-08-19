@@ -89,25 +89,15 @@
           <input type="text" id="Nama lengkap" name="namaLengkap"
             class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm placeholder-gray-400 transition duration-300"
             placeholder="Masukkan Nama lengkap" required>
-
-            
         </div>
+          <!--nis npm-->
         <div class="mb-6">
-          <label for="nisNpm" class="block text-base font-semibold text-gray-700 mb-1">NIS/NPM</label>
-          <input 
-            type="text" 
-            id="nisNpm" 
-            name="nisNpm"
+           <label for="nisNpm" class="block text-base font-semibold text-gray-700 mb-1">Nis/Npm</label>
+            <input type="text" id="nisNpm" name="nisNpm"
             class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm placeholder-gray-400 transition duration-300"
-            placeholder="Masukkan NIS/NPM " 
-            pattern="\d{10}"
-            inputmode="numeric"
-            maxlength="10"
-            oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)"
-            title="Harap masukkan 10 digit angka"
-            required
-          >
+            placeholder="Masukkan nisNpm" required>
         </div>
+
                 <!--alamat domisili-->
            <div class="mb-6">
            <label for="Alamat Domisili" class="block text-base font-semibold text-gray-700 mb-1">Alamat Domisili</label>
@@ -118,26 +108,10 @@
 
           <!-- Nomor Telepon -->
           <div class="mb-6">
-            <label for="noTelp" class="block text-base font-semibold text-gray-700 mb-1">Nomor Telepon</label>
-            <div class="relative">
-              <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <span class="text-gray-500">+62</span>
-              </div>
-              <input 
-                type="text" 
-                id="noTelp" 
-                name="noTelp"
-                class="w-full pl-12 px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm placeholder-gray-400 transition duration-300"
-                placeholder="812-3456-7890" 
-                pattern="[0-9]{9,13}"
-                inputmode="numeric"
-                maxlength="13"
-                oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 13)"
-                title="Nomor harus 9-13 digit (tidak termasuk +62)"
-                required
-              >
-            </div>
-            <p class="mt-1 text-sm text-gray-500">Contoh: +6281234567890</p>
+            <label for="telepon" class="block text-base font-semibold text-gray-700 mb-1">Nomor Telepon</label>
+            <input type="text" id="telepon" name="telepon"
+              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm placeholder-gray-400 transition duration-300"
+              placeholder="Masukkan nomor telepon Anda" required>
           </div>
 
 
@@ -209,8 +183,8 @@
               required>
               <option value="" disabled selected>-- Pilih Kegiatan --</option>
               <option>Magang</option>
-              <option>Praktik Kerja Lapang</option>
-              <option>Penelitian</option>
+              <option>PRAKTEK KERJA LAPANG</option>
+              <option>PENELITIAN</option>
               <option>MBKM</option>
             </select>
           </div>

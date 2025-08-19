@@ -12,38 +12,43 @@ function isUser(req, res, next) {
   next();
 }
 
-// Storage Multer
+// Setup multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'public/uploads/laporan/');
+    cb(null, path.join(__dirname, '../../public/uploads/user/laporan'));
   },
   filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    cb(null, req.session.user.id + '-' + uniqueSuffix + path.extname(file.originalname));
   }
 });
 const upload = multer({ storage });
 
-// GET form laporan
-router.get('/laporan', isUser, (req, res) => {
-  res.render('user/daftar-magang/skm/laporan');
+// GET form upload laporan
+router.get('/laporan', isUser, async (req, res) => {
+  const laporan = await Laporan.findOne({ where: { userId: req.session.user.id } });
+  res.render('user/daftar-magang/laporan', { laporan });
 });
 
-// POST submit laporan
-router.post('/laporan', isUser, upload.single('file_laporan'), async (req, res) => {
-  try {
+// POST upload laporan
+router.post('/laporan', isUser, upload.single('laporan'), async (req, res) => {
+  if (!req.file) return res.status(400).send('File laporan tidak ditemukan');
+
+  const existing = await Laporan.findOne({ where: { userId: req.session.user.id } });
+
+  if (existing) {
+    existing.filename = req.file.filename;
+    existing.status = 'pending';
+    await existing.save();
+  } else {
     await Laporan.create({
       userId: req.session.user.id,
-      judul: req.body.judul,
-      file: req.file.filename
+      filename: req.file.filename,
+      status: 'pending'
     });
-
-    // Halaman sukses
-    res.render('user/daftar-magang/skm/laporan-sukses');
-  } catch (err) {
-    console.log(err);
-    res.status(500).send('Terjadi kesalahan saat upload laporan.');
   }
+
+  res.redirect('/user/laporan');
 });
 
 module.exports = router;
