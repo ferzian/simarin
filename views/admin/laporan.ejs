@@ -1,0 +1,32 @@
+<div class="p-6">
+    <h1 class="text-xl font-bold mb-4">Daftar Laporan Mahasiswa</h1>
+  
+    <table class="w-full border">
+      <thead>
+        <tr class="bg-gray-200">
+          <th class="p-2 border">Nama User</th>
+          <th class="p-2 border">File</th>
+          <th class="p-2 border">Status</th>
+          <th class="p-2 border">Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% laporan.forEach(l => { %>
+          <tr class="border">
+            <td class="p-2 border"><%= l.user ? l.user.nama : 'Unknown' %></td>
+            <td class="p-2 border"><%= l.filename %></td>
+            <td class="p-2 border"><%= l.status %></td>
+            <td class="p-2 border">
+              <form action="/admin/laporan/<%= l.id %>/approve" method="POST" style="display:inline;">
+                <button class="bg-green-500 text-white px-2 py-1 rounded">Approve</button>
+              </form>
+              <form action="/admin/laporan/<%= l.id %>/reject" method="POST" style="display:inline;">
+                <button class="bg-red-500 text-white px-2 py-1 rounded">Reject</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+  
