@@ -1,5 +1,3 @@
-// Data dummy (akan diambil dari `participantsData` global)
-let currentParticipants = participantsData; // Gunakan data dummy global
 let filteredParticipants = [];
 let currentPage = 1;
 const rowsPerPage = 5; // Jumlah baris per halaman

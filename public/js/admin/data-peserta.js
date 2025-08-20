@@ -249,10 +249,6 @@ function showDetail(p) {
         ? `/uploads/user/pas-foto/${p.pasFoto}`
         : "/images/user.png";
 
-    document.getElementById("detailSuratPengantar").href = p.suratPengantar
-        ? `/uploads/user/surat-pengantar/${p.suratPengantar}`
-        : "#";
-
     document.getElementById("detailSuratSehat").href = p.suratSehat
         ? `/uploads/user/surat-sehat/${p.suratSehat}`
         : "#";

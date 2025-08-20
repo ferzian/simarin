@@ -37,9 +37,8 @@ router.get('/data-peserta', isAuthenticated, isAdmin, async (req, res) => {
         lokasi: p.lokasi,
         tanggalMulai: p.tanggalMulai,
         tanggalSelesai: p.tanggalSelesai,
-        pasFoto: p.pasFoto,  // foto
-        suratPengantar: p.suratPengantar, // file pengantar
-        suratSehat: p.suratSehat, // file sehat
+        pasFoto: p.pasFoto, 
+        suratSehat: p.suratSehat,
       })),
       user: req.session.user
     });

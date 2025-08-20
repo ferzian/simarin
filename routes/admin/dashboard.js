@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { sequelize, Participant, Survey, Visitor } = require('../../models');
+const { sequelize, Participant, Visitor } = require('../../models');
 const { Op, fn, col } = require('sequelize');
 const moment = require('moment');
 
@@ -59,6 +59,22 @@ router.get('/dashboard', async (req, res) => {
       limit: 5
     });
 
+    // === Data semua visitors untuk chart ===
+const rawVisitors = await Visitor.findAll({
+  attributes: ['id', 'createdAt'],
+  raw: true
+});
+
+// Format createdAt manual jadi YYYY-MM-DDTHH:mm:ss
+const visitors = rawVisitors.map(v => {
+  const d = new Date(v.createdAt);
+  return {
+    ...v,
+    createdAt: `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}T${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`
+  };
+});
+
+
     // === Render ke view ===
     res.render('admin/dashboard', {
       visitCount,
@@ -66,6 +82,7 @@ router.get('/dashboard', async (req, res) => {
       newRegistrantsCount,
       lokasiData,
       upcomingEndDate,
+      visitors,   // <--- ini yang dipakai di EJS
       moment
     });
 

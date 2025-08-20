@@ -15,10 +15,6 @@
     <script src="/js/admin/peserta.js" defer></script>
   </head>
   <body class="bg-gray-100 flex h-screen">
-    <script>
-      const visitorsData = <%- JSON.stringify(visitors) %>;
-    </script>
-
     <aside
       class="sidebar bg-gray-800 text-white w-64 p-5 space-y-6 flex-shrink-0"
       id="sidebar"
@@ -262,6 +258,137 @@
           </div>
         </div>
       </header>
+      <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-8">
+        <h2 class="text-3xl font-bold mb-6 text-gray-800">
+          Statistik Kunjungan
+        </h2>
+
+        <!-- Filter -->
+        <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
+          <h3 class="text-xl font-semibold text-gray-700 mb-4">
+            Filter Kunjungan
+          </h3>
+          <form id="filterForm" class="flex flex-col md:flex-row gap-4">
+            <div>
+              <label
+                for="fromDate"
+                class="block text-gray-600 text-sm font-medium mb-1"
+                >Dari Tanggal</label
+              >
+              <input
+                type="month"
+                id="fromDate"
+                name="fromDate"
+                class="border rounded-lg px-3 py-2 w-full"
+              />
+            </div>
+            <div>
+              <label
+                for="toDate"
+                class="block text-gray-600 text-sm font-medium mb-1"
+                >Sampai Tanggal</label
+              >
+              <input
+                type="month"
+                id="toDate"
+                name="toDate"
+                class="border rounded-lg px-3 py-2 w-full"
+              />
+            </div>
+            <div class="flex items-end">
+              <button
+                type="submit"
+                class="bg-blue-600 text-white px-5 py-2 rounded-lg shadow hover:bg-blue-700 transition"
+              >
+                Terapkan
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Chart -->
+        <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
+          <h3 class="text-xl font-semibold text-gray-700 mb-4">
+            Jumlah Kunjungan
+          </h3>
+          <canvas id="visitorChart" height="100"></canvas>
+        </div>
+
+        <!-- Ringkasan -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-green-100 p-6 rounded-xl shadow">
+            <p class="text-gray-600">Total Kunjungan</p>
+            <h4 class="text-2xl font-bold text-gray-800" id="totalVisitors">
+              0
+            </h4>
+          </div>
+          <div class="bg-yellow-100 p-6 rounded-xl shadow">
+            <p class="text-gray-600">Perubahan dibanding Bulan Lalu</p>
+            <h4 class="text-2xl font-bold text-gray-800" id="changePrevMonth">
+              0%
+            </h4>
+          </div>
+          <div class="bg-blue-100 p-6 rounded-xl shadow">
+            <p class="text-gray-600">Perubahan dibanding Tahun Lalu</p>
+            <h4 class="text-2xl font-bold text-gray-800" id="changePrevYear">
+              0%
+            </h4>
+          </div>
+        </div>
+      </main>
     </div>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+                              const ctx = document.getElementById("visitorChart").getContext("2d");
+                              const visitorChart = new Chart(ctx, {
+                                type: "line",
+                                data: {
+                                  labels: [],
+                                  datasets: [
+                                    {
+                                      label: "Jumlah Kunjungan",
+                                      data: [],
+                                      borderColor: "#f59e0b",
+                                      backgroundColor: "rgba(245, 158, 11, 0.2)",
+                                      tension: 0.3,
+                                      fill: true,
+                                      pointBackgroundColor: "#f59e0b",
+                                    },
+                                  ],
+                                },
+                                options: {
+                                  responsive: true,
+                                  plugins: { legend: { display: false } },
+                                  scales: { y: { beginAtZero: true } }
+                                },
+                              });
+
+                              // === ambil data dari server ===
+                              const visitorsData = <%- JSON.stringify(visitors) %>;
+
+                              const grouped = {};
+                              visitorsData.forEach(v => {
+        const date = new Date(v.createdAt); // sekarang sudah valid
+        const label = date.toLocaleString("default", { month: "short", year: "numeric" });
+        grouped[label] = (grouped[label] || 0) + 1;
+      });
+
+
+
+                              const labels = Object.keys(grouped);
+                              const data = Object.values(grouped);
+
+                              // update chart
+                              visitorChart.data.labels = labels;
+                              visitorChart.data.datasets[0].data = data;
+                              visitorChart.update();
+
+                              // update ringkasan total
+                              document.getElementById("totalVisitors").innerText = visitorsData.length;
+    </script>
+    <script>
+      console.log("visitorsData:", visitorsData);
+    </script>
   </body>
 </html>
