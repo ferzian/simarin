@@ -6,7 +6,7 @@ const { isAuthenticated, isAdmin } = require('../../middleware/authMiddleware');
 router.get('/kunjungan', isAuthenticated, isAdmin, async (req, res) => {
     try {
         const visitors = await Visitor.findAll({
-            order: [['createdAt', 'ASC']], // urutkan biar rapi
+            order: [['createdAt', 'ASC']], 
             raw: true
         });
 
@@ -21,8 +21,8 @@ router.get('/kunjungan', isAuthenticated, isAdmin, async (req, res) => {
             visitors: visitors.map((v) => ({
                 id: v.id,
                 ip: v.ip,
-                createdAt: v.createdAt,         // 👉 penting buat chart
-                visitedAt: formatDate(v.createdAt), // 👉 buat tabel
+                createdAt: v.createdAt,         
+                visitedAt: formatDate(v.createdAt), 
             })),
             user: req.session.user
         });

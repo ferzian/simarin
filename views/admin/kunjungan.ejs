@@ -338,52 +338,97 @@
       </main>
     </div>
     <script>
+      // === ambil data dari server ===
+      const visitorsData = <%- JSON.stringify(visitors) %>;
+
+      // --- Group data pakai key YYYY-MM ---
+      const grouped = {};
+      visitorsData.forEach(v => {
+        const date = new Date(v.createdAt);
+        if (!isNaN(date)) {
+          const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+          grouped[key] = (grouped[key] || 0) + 1;
+        }
+      });
+
+      // simpan key & label chart
+      const keys = Object.keys(grouped).sort();
+      const labels = keys.map(key => {
+        const [y, m] = key.split("-");
+        return new Date(y, m - 1).toLocaleString("id-ID", { month: "long", year: "numeric" });
+      });
+      const data = Object.values(grouped);
+
+      // --- render chart ---
       const ctx = document.getElementById("visitorChart").getContext("2d");
       const visitorChart = new Chart(ctx, {
         type: "line",
         data: {
-          labels: [],
-          datasets: [
-            {
-              label: "Jumlah Kunjungan",
-              data: [],
-              borderColor: "#f59e0b",
-              backgroundColor: "rgba(245, 158, 11, 0.2)",
-              tension: 0.3,
-              fill: true,
-              pointBackgroundColor: "#f59e0b",
-            },
-          ],
+          labels,
+          datasets: [{
+            data,
+            label: "Jumlah Kunjungan",
+            borderColor: "#f59e0b"
+          }]
         },
-        options: {
-          responsive: true,
-          plugins: { legend: { display: false } },
-          scales: { y: { beginAtZero: true } }
-        },
+        options: { responsive: true }
       });
-
-      // === ambil data dari server ===
-      const visitorsData = <%- JSON.stringify(visitors) %>;
-
-      const grouped = {};
-      visitorsData.forEach(v => {
-        const date = new Date(v.createdAt);   // 👉 pakai createdAt asli
-        if (!isNaN(date)) {
-          const label = date.toLocaleString("id-ID", { month: "long", year: "numeric" });
-          grouped[label] = (grouped[label] || 0) + 1;
-        }
-      });
-
-      const labels = Object.keys(grouped);
-      const data = Object.values(grouped);
-
-      // update chart
-      visitorChart.data.labels = labels;
-      visitorChart.data.datasets[0].data = data;
-      visitorChart.update();
 
       // update ringkasan total
       document.getElementById("totalVisitors").innerText = visitorsData.length;
+
+      // --- ambil bulan & tahun saat ini ---
+      const now = new Date();
+      const thisMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+      const thisMonthLabel = now.toLocaleString("id-ID", { month: "long", year: "numeric" });
+
+      // cari index bulan sekarang di chart
+      const currentIndex = keys.indexOf(thisMonthKey);
+
+      // nilai bulan ini
+      const currentValue = currentIndex !== -1 ? data[currentIndex] : 0;
+
+      // nilai bulan lalu
+      const prevMonthValue = currentIndex > 0 ? data[currentIndex - 1] : 0;
+
+      // nilai tahun lalu (bulan sama, tahun beda)
+      const prevYearKey = `${now.getFullYear() - 1}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+      const prevYearIndex = keys.indexOf(prevYearKey);
+      const prevYearValue = prevYearIndex !== -1 ? data[prevYearIndex] : 0;
+
+      // hitung persentase perubahan
+      const calcChange = (curr, prev) => {
+        if (!prev || prev === 0) return "0%";
+        const change = ((curr - prev) / prev) * 100;
+        return `${change.toFixed(1)}%`;
+      };
+
+      // update DOM
+      document.getElementById("changePrevMonth").innerText = calcChange(currentValue, prevMonthValue);
+      document.getElementById("changePrevYear").innerText = calcChange(currentValue, prevYearValue);
+
+      // === FILTER HANDLER ===
+      document.getElementById("filterForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const from = document.getElementById("fromDate").value; // YYYY-MM
+        const to = document.getElementById("toDate").value;     // YYYY-MM
+
+        // filter berdasarkan key
+        const filteredKeys = keys.filter(k => {
+          return (!from || k >= from) && (!to || k <= to);
+        });
+
+        const filteredLabels = filteredKeys.map(key => {
+          const [y, m] = key.split("-");
+          return new Date(y, m - 1).toLocaleString("id-ID", { month: "long", year: "numeric" });
+        });
+        const filteredData = filteredKeys.map(k => grouped[k]);
+
+        // update chart
+        visitorChart.data.labels = filteredLabels;
+        visitorChart.data.datasets[0].data = filteredData;
+        visitorChart.update();
+      });
     </script>
   </body>
 </html>
