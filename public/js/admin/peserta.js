@@ -20,6 +20,7 @@ const participantsTableBody = document.getElementById(
 );
 const filterYearSelect = document.getElementById("filterYear");
 const filterTypeSelect = document.getElementById("filterType");
+const filterDurationSelect = document.getElementById("filterDuration");
 const filterLocationSelect = document.getElementById("filterLocation");
 const applyFilterBtn = document.getElementById("applyFilterBtn");
 const prevPageBtn = document.getElementById("prevPageBtn");
@@ -266,6 +267,14 @@ function updateUI(data) {
     renderTable(filteredParticipants, currentPage);
 }
 
+function getDurationInDays(start, end) {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    const diffTime = endDate - startDate;
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // hari
+}
+
+
 // Helper: parse tanggal aman untuk "YYYY-MM-DD", "DD/MM/YYYY", "YYYY/MM/DD"
 function parseDateSafe(v) {
     if (!v) return null;
@@ -295,35 +304,59 @@ function parseDateSafe(v) {
 
 if (applyFilterBtn) {
     applyFilterBtn.addEventListener("click", () => {
-        let tempData = participantsData.slice();
+        let filteredData = participantsData.slice(); // cuma pakai ini
 
         const filterDateStart = document.getElementById("filterDateStart").value;
         const filterDateEnd = document.getElementById("filterDateEnd").value;
+        const selectedDuration = filterDurationSelect.value;
 
         if (filterTypeSelect?.value) {
-            tempData = tempData.filter(p => p.kegiatan === filterTypeSelect.value);
+            filteredData = filteredData.filter(p => p.kegiatan === filterTypeSelect.value);
         }
         if (filterLocationSelect?.value) {
-            tempData = tempData.filter(p => p.lokasi === filterLocationSelect.value);
+            filteredData = filteredData.filter(p => p.lokasi === filterLocationSelect.value);
         }
 
-        // Filter berdasarkan range tanggal yang dipilih
+        // Filter range tanggal
         if (filterDateStart && filterDateEnd) {
             const filterStart = new Date(filterDateStart);
             const filterEnd = new Date(filterDateEnd);
 
-            tempData = tempData.filter(p => {
+            filteredData = filteredData.filter(p => {
                 const startDate = parseDateSafe(p.tanggalMulai);
                 const endDate = parseDateSafe(p.tanggalSelesai);
                 if (!startDate || !endDate) return false;
 
-                // Overlap filter: tampil jika ada irisan antara kegiatan dan rentang filter
+                // Overlap filter
                 return startDate <= filterEnd && endDate >= filterStart;
             });
         }
-        updateUI(tempData);
+
+        // Filter durasi
+        if (selectedDuration) {
+            filteredData = filteredData.filter(p => {
+                const days = getDurationInDays(p.tanggalMulai, p.tanggalSelesai);
+
+                switch (selectedDuration) {
+                    case "under30":
+                        return days < 30;
+                    case "1to3":
+                        return days >= 30 && days <= 90;
+                    case "3to6":
+                        return days > 90 && days <= 180;
+                    case "above6":
+                        return days > 180;
+                    default:
+                        return true;
+                }
+            });
+        }
+
+        // Update semua pakai hasil yang sama
+        updateUI(filteredData);
     });
 }
+
 
 prevPageBtn.addEventListener("click", () => {
     if (currentPage > 1) {
