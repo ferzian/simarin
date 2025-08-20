@@ -42,6 +42,7 @@ app.use('/auth', authRoutes);
 app.use('/admin', require('./routes/admin/dashboard'));
 app.use('/admin', require('./routes/admin/data-peserta'));
 app.use('/admin', require('./routes/admin/peserta'));
+app.use('/admin', require('./routes/admin/kunjungan'));
 app.use('/admin', require('./routes/admin/download-rekap'));
 app.use('/user/daftar-magang', require('./routes/user/daftar-magang'));
 app.use('/user', require('./routes/user/sertifikat'));
