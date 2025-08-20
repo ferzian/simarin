@@ -3,7 +3,7 @@ let currentPage = 1;
 const rowsPerPage = 5; // Jumlah baris per halaman
 
 const totalParticipantsEl = document.getElementById("totalParticipants");
-const avgDurationEl = document.getElementById("avgDuration");
+const popularDurationEl = document.getElementById("avgDuration");
 const mostPopularTypeEl = document.getElementById("mostPopularType");
 const genderChartCanvas = document.getElementById("genderChart");
 const locationChartCanvas = document.getElementById("locationChart");
@@ -38,19 +38,36 @@ function updateSummaryCards(data) {
     if (totalParticipantsEl) totalParticipantsEl.textContent = data.length;
 
     if (data.length === 0) {
-        if (avgDurationEl) avgDurationEl.textContent = "0 hari";
+        if (popularDurationEl) popularDurationEl.textContent = "N/A";
         if (mostPopularTypeEl) mostPopularTypeEl.textContent = "N/A";
         return;
     }
 
-    let totalDurationDays = 0;
+    let durationBuckets = {
+        "< 30 hari": 0,
+        "1 - 3 bulan": 0,
+        "3 - 6 bulan": 0,
+        "> 6 bulan": 0
+    };
+
     let typeCounts = {};
 
     data.forEach((p) => {
         const start = new Date(p.tanggalMulai);
         const end = new Date(p.tanggalSelesai);
+
         if (!isNaN(start) && !isNaN(end)) {
-            totalDurationDays += (end - start) / (1000 * 60 * 60 * 24);
+            const diffDays = (end - start) / (1000 * 60 * 60 * 24);
+
+            if (diffDays < 30) {
+                durationBuckets["< 30 hari"]++;
+            } else if (diffDays < 90) {
+                durationBuckets["1 - 3 bulan"]++;
+            } else if (diffDays < 180) {
+                durationBuckets["3 - 6 bulan"]++;
+            } else {
+                durationBuckets["> 6 bulan"]++;
+            }
         }
 
         if (p.kegiatan) {
@@ -58,8 +75,15 @@ function updateSummaryCards(data) {
         }
     });
 
-    if (avgDurationEl) avgDurationEl.textContent = `${Math.round(totalDurationDays / data.length)} hari`;
+    // cari durasi terpopuler
+    const mostPopularDuration = Object.keys(durationBuckets).reduce(
+        (a, b) => (durationBuckets[a] > durationBuckets[b] ? a : b),
+        Object.keys(durationBuckets)[0] || "N/A"
+    );
 
+    if (popularDurationEl) popularDurationEl.textContent = mostPopularDuration || "N/A";
+
+    // cari kegiatan terpopuler (tetap)
     const mostPopular = Object.keys(typeCounts).reduce(
         (a, b) => (typeCounts[a] > typeCounts[b] ? a : b),
         Object.keys(typeCounts)[0] || "N/A"
