@@ -317,11 +317,10 @@ if (applyFilterBtn) {
                 const endDate = parseDateSafe(p.tanggalSelesai);
                 if (!startDate || !endDate) return false;
 
-                // Contained filter: seluruh durasi kegiatan harus berada di dalam range
-                return startDate >= filterStart && endDate <= filterEnd;
+                // Overlap filter: tampil jika ada irisan antara kegiatan dan rentang filter
+                return startDate <= filterEnd && endDate >= filterStart;
             });
         }
-
         updateUI(tempData);
     });
 }

@@ -326,11 +326,10 @@ if (applyFilterBtn) {
                 const endDate = parseDateSafe(p.tanggalSelesai);
                 if (!startDate || !endDate) return false;
 
-                // Contained filter: seluruh durasi kegiatan harus berada di dalam range
-                return startDate >= filterStart && endDate <= filterEnd;
+                // Overlap filter: tampil jika ada irisan antara kegiatan dan rentang filter
+                return startDate <= filterEnd && endDate >= filterStart;
             });
         }
-
         updateUI(tempData);
     });
 }
@@ -343,6 +342,17 @@ searchTableInput.addEventListener("input", () => {
     } else {
         filteredParticipants = baseParticipants.filter((p) => {
             const get = (v) => (v ? String(v).toLowerCase() : "");
+
+            // cek status selesai
+            let statusText = "belum selesai";
+            if (p.tanggalSelesai) {
+                const today = new Date();
+                const endDate = new Date(p.tanggalSelesai);
+                if (endDate < today) {
+                    statusText = "selesai";
+                }
+            }
+
             return (
                 get(p.nama).includes(searchTerm) ||
                 get(p.nisNpm).includes(searchTerm) ||
@@ -355,7 +365,8 @@ searchTableInput.addEventListener("input", () => {
                 get(p.kegiatan).includes(searchTerm) ||
                 get(p.lokasi).includes(searchTerm) ||
                 get(p.tanggalMulai).includes(searchTerm) ||
-                get(p.tanggalSelesai).includes(searchTerm)
+                get(p.tanggalSelesai).includes(searchTerm) ||
+                statusText.includes(searchTerm) // tambahin ini
             );
         });
     }
@@ -364,6 +375,7 @@ searchTableInput.addEventListener("input", () => {
     renderTable(filteredParticipants, currentPage);
     updateCharts(filteredParticipants);
 });
+
 
 
 prevPageBtn.addEventListener("click", () => {
