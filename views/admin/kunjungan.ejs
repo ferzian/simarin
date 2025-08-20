@@ -337,58 +337,53 @@
         </div>
       </main>
     </div>
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-                              const ctx = document.getElementById("visitorChart").getContext("2d");
-                              const visitorChart = new Chart(ctx, {
-                                type: "line",
-                                data: {
-                                  labels: [],
-                                  datasets: [
-                                    {
-                                      label: "Jumlah Kunjungan",
-                                      data: [],
-                                      borderColor: "#f59e0b",
-                                      backgroundColor: "rgba(245, 158, 11, 0.2)",
-                                      tension: 0.3,
-                                      fill: true,
-                                      pointBackgroundColor: "#f59e0b",
-                                    },
-                                  ],
-                                },
-                                options: {
-                                  responsive: true,
-                                  plugins: { legend: { display: false } },
-                                  scales: { y: { beginAtZero: true } }
-                                },
-                              });
-
-                              // === ambil data dari server ===
-                              const visitorsData = <%- JSON.stringify(visitors) %>;
-
-                              const grouped = {};
-                              visitorsData.forEach(v => {
-        const date = new Date(v.createdAt); // sekarang sudah valid
-        const label = date.toLocaleString("default", { month: "short", year: "numeric" });
-        grouped[label] = (grouped[label] || 0) + 1;
+      const ctx = document.getElementById("visitorChart").getContext("2d");
+      const visitorChart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: [],
+          datasets: [
+            {
+              label: "Jumlah Kunjungan",
+              data: [],
+              borderColor: "#f59e0b",
+              backgroundColor: "rgba(245, 158, 11, 0.2)",
+              tension: 0.3,
+              fill: true,
+              pointBackgroundColor: "#f59e0b",
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true } }
+        },
       });
 
+      // === ambil data dari server ===
+      const visitorsData = <%- JSON.stringify(visitors) %>;
 
+      const grouped = {};
+      visitorsData.forEach(v => {
+        const date = new Date(v.createdAt);   // 👉 pakai createdAt asli
+        if (!isNaN(date)) {
+          const label = date.toLocaleString("id-ID", { month: "long", year: "numeric" });
+          grouped[label] = (grouped[label] || 0) + 1;
+        }
+      });
 
-                              const labels = Object.keys(grouped);
-                              const data = Object.values(grouped);
+      const labels = Object.keys(grouped);
+      const data = Object.values(grouped);
 
-                              // update chart
-                              visitorChart.data.labels = labels;
-                              visitorChart.data.datasets[0].data = data;
-                              visitorChart.update();
+      // update chart
+      visitorChart.data.labels = labels;
+      visitorChart.data.datasets[0].data = data;
+      visitorChart.update();
 
-                              // update ringkasan total
-                              document.getElementById("totalVisitors").innerText = visitorsData.length;
-    </script>
-    <script>
-      console.log("visitorsData:", visitorsData);
+      // update ringkasan total
+      document.getElementById("totalVisitors").innerText = visitorsData.length;
     </script>
   </body>
 </html>

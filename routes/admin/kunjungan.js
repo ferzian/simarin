@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const { User, Visitor } = require('../../models');
+const { Visitor } = require('../../models');
 const { isAuthenticated, isAdmin } = require('../../middleware/authMiddleware');
 
 router.get('/kunjungan', isAuthenticated, isAdmin, async (req, res) => {
     try {
         const visitors = await Visitor.findAll({
+            order: [['createdAt', 'ASC']], // urutkan biar rapi
+            raw: true
         });
 
         const formatDate = (dateStr) =>
@@ -15,11 +17,12 @@ router.get('/kunjungan', isAuthenticated, isAdmin, async (req, res) => {
                 year: 'numeric',
             });
 
-
         res.render('admin/kunjungan', {
             visitors: visitors.map((v) => ({
+                id: v.id,
                 ip: v.ip,
-                visitedAt: formatDate(v.visitedAt),
+                createdAt: v.createdAt,         // 👉 penting buat chart
+                visitedAt: formatDate(v.createdAt), // 👉 buat tabel
             })),
             user: req.session.user
         });
