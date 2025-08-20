@@ -10,6 +10,7 @@ const authRoutes = require('./routes/auth');
 const daftarMagangRoute = require('./routes/user/daftar-magang');
 const profilRoutes = require('./routes/user/profil');
 const app = express();
+const visitorLogger = require('./middleware/visitorLogger');
 
 // Middleware
 app.use(express.urlencoded({ extended: false }));
@@ -17,6 +18,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+app.use(visitorLogger);
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
