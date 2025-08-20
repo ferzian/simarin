@@ -22,24 +22,6 @@ router.get('/dashboard', async (req, res) => {
       where: { createdAt: { [Op.gte]: monthStart } }
     });
 
-    // === Rekap SKM bulan ini ===
-    const avgSkm = await Survey.findOne({
-      attributes: [
-        [sequelize.literal('(AVG((q1 + q2 + q3 + q4 + q5 + q6 + q7 + q8 + q9) / 9))'), 'avgSkor']
-      ],
-      where: { createdAt: { [Op.gte]: monthStart } },
-      raw: true
-    });
-
-    const avgSkorValue = avgSkm?.avgSkor
-      ? parseFloat(avgSkm.avgSkor).toFixed(2)
-      : 0;
-
-    // Tentukan emoticon
-    let emoticon = '😐';
-    if (avgSkorValue >= 3) emoticon = '😊';
-    else if (avgSkorValue < 2) emoticon = '😟';
-
     // === Peserta aktif hari ini ===
     const aktifCount = await Participant.count({
       where: {
@@ -84,8 +66,6 @@ router.get('/dashboard', async (req, res) => {
       newRegistrantsCount,
       lokasiData,
       upcomingEndDate,
-      avgSkorValue,
-      emoticon,
       moment
     });
 

@@ -131,26 +131,6 @@
 
             <span class="menu-text-wrapper">Statistik Peserta</span>
           </a>
-          <a
-            href="/admin/skm"
-            class="menu-item-link text-white hover:text-white mt-2"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6 menu-icon"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M9 17v-2m3 2v-4m3 2v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              />
-            </svg>
-            <span class="menu-text-wrapper">Statistik SKM</span>
-          </a>
         </div>
       </nav>
     </aside>
@@ -262,20 +242,6 @@
       </header>
 
       <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-8">
-        <div
-          class="bg-white rounded-lg shadow-md p-6 flex items-center justify-between transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg"
-        >
-          <div>
-            <h2 class="text-xl font-semibold mb-2 text-gray-700">
-              IKM (Bulan Ini)
-            </h2>
-            <p class="text-gray-600 text-lg">
-              Skor:
-              <span class="font-bold text-gray-800"><%= avgSkorValue %></span>
-            </p>
-          </div>
-          <div class="text-5xl"><%= emoticon %></div>
-        </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
           <div
@@ -446,10 +412,10 @@
             label: 'Jumlah Peserta',
             data: lokasiCounts,
             backgroundColor: [
-              'rgba(16, 185, 129, 0.8)', // Sempur - Hijau
-              'rgba(59, 130, 246, 0.8)', // Depok - Biru
-              'rgba(139, 92, 246, 0.8)', // Cibalagung - Ungu
-              'rgba(245, 158, 11, 0.8)'  // Cijeruk - Oranye
+              'rgba(16, 185, 129, 0.8)', 
+              'rgba(59, 130, 246, 0.8)', 
+              'rgba(139, 92, 246, 0.8)', 
+              'rgba(245, 158, 11, 0.8)'  
             ]
           }]
         },
