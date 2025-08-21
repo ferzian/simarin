@@ -79,7 +79,7 @@ router.post(
       });
 
       // ✅ Redirect dengan query success
-      return res.redirect('/user/daftar-magang?success=true');
+      return res.redirect('/user/user-dashboard?success=true');
     } catch (err) {
       console.error('❌ Gagal menyimpan data peserta:', err);
 

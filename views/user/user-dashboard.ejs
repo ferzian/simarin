@@ -120,7 +120,7 @@
   x-data="{
     current: 0,
     images: [
-      'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+      '/images/BRPBATPP_Depan[1].jpg',
       'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
       'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
     ],
@@ -248,24 +248,58 @@ class="bg-white p-6 rounded-2xl shadow-md w-full md:w-1/2 flex flex-col justify-
 
 </div>
 
-<footer class="bg-gray-800 text-white py-8">
-  <div class="max-w-6xl mx-auto px-4">
-    <div class="flex flex-col md:flex-row justify-between items-center">
-      <div class="mb-4 md:mb-0">
-        <p class="simarin-text text-2xl">SIMARIN</p>
-        <p class="program-text text-sm mt-1">Sistem Informasi Magang dan Praktik Industri</p>
+<!-- Tambahkan link Font Awesome di <head> -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-10">
+      <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Kolom 1: Logo dan Deskripsi -->
+          <div class="flex flex-col items-center md:items-start space-y-4">
+              <div class="text-center md:text-left">
+                  <p class="text-2xl font-bold">SIMARIN</p>
+                  <p class="text-sm text-gray-400 mt-1">Sistem Informasi Magang dan Praktik Industri</p>
+              </div>
+          </div>
+          
+          <!-- Kolom 2: Maps -->
+          <div class="flex flex-col items-center space-y-4">
+              <a href="https://maps.app.goo.gl/EQdDmdumvvUJmPXV8" target="_blank" class="block">
+                  <img 
+                      src="https://static-maps.yandex.ru/1.x/?lang=en-US&ll=106.7993,-6.5945&z=16&size=450,200&l=map&pt=106.7993,-6.5945,pm2rdm" 
+                      alt="Lokasi Jl. Sempur No.1, Bogor"
+                      class="rounded-lg shadow-lg mx-auto hover:opacity-90 transition"
+                  >
+              </a>
+          </div>
+          
+          <!-- Kolom 3: Sosial Media -->
+          <div class="flex flex-col items-center space-y-4">
+              <h2 class="text-lg font-semibold mb-4">🌐 Sosial Media</h2>
+              <ul class="space-y-3">
+                  <li>
+                      <a href="https://facebook.com" target="_blank" class="flex items-center gap-3 hover:text-blue-400 transition">
+                          <i class="fab fa-facebook text-xl"></i> Facebook
+                      </a>
+                  </li>
+                  <li>
+                      <a href="https://instagram.com" target="_blank" class="flex items-center gap-3 hover:text-pink-400 transition">
+                          <i class="fab fa-instagram text-xl"></i> Instagram
+                      </a>
+                  </li>
+                  <li>
+                      <a href="https://youtube.com" target="_blank" class="flex items-center gap-3 hover:text-red-500 transition">
+                          <i class="fab fa-youtube text-xl"></i> YouTube
+                      </a>
+                  </li>
+              </ul>
+          </div>
       </div>
       
-      <div class="flex space-x-4">
-        <a href="#" class="program-text text-sm hover:text-yellow-400">Kebijakan Privasi</a>
-        <a href="#" class="program-text text-sm hover:text-yellow-400">Syarat & Ketentuan</a>
-        <a href="#" class="program-text text-sm hover:text-yellow-400">Kontak Kami</a>
+      <!-- Copyright -->
+      <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400 text-sm">
+          © 2025 SIMARIN. Seluruh hak cipta dilindungi.
       </div>
-    </div>
-    <div class="border-t border-gray-700 mt-6 pt-6 text-center">
-      <p class="program-text text-sm text-gray-400">© 2025 SIMARIN. Seluruh hak cipta dilindungi.</p>
-        </div>
-      </div>
-    </footer>
+  </footer>
   </body>
 </html>
