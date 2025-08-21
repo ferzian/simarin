@@ -10,8 +10,12 @@ const authRoutes = require('./routes/auth');
 const daftarMagangRoute = require('./routes/user/daftar-magang');
 const profilRoutes = require('./routes/user/profil');
 const app = express();
+<<<<<<< HEAD
 const laporanRoutes = require('./routes/user/laporan');
 
+=======
+const visitorLogger = require('./middleware/visitorLogger');
+>>>>>>> 5d63ff06c917ec7576911f7be370b6a12c67a791
 
 // Middleware
 app.use(express.urlencoded({ extended: false }));
@@ -19,6 +23,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+app.use(visitorLogger);
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
@@ -44,10 +49,13 @@ app.use('/auth', authRoutes);
 app.use('/admin', require('./routes/admin/dashboard'));
 app.use('/admin', require('./routes/admin/data-peserta'));
 app.use('/admin', require('./routes/admin/peserta'));
-app.use('/admin', require('./routes/admin/skm'));
+app.use('/admin', require('./routes/admin/kunjungan'));
 app.use('/admin', require('./routes/admin/download-rekap'));
+<<<<<<< HEAD
 app.use('/admin/laporan', require('./routes/admin/laporan'));
 app.use('/user', require('./routes/user/skm'));
+=======
+>>>>>>> 5d63ff06c917ec7576911f7be370b6a12c67a791
 app.use('/user/daftar-magang', require('./routes/user/daftar-magang'));
 app.use('/user', require('./routes/user/sertifikat'));
 app.use('/user', require('./routes/user/user-dashboard'));

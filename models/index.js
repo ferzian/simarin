@@ -13,10 +13,8 @@ const Skm = require('./Skm')(sequelize, DataTypes);
 const Laporan = require('./laporan')(sequelize, Sequelize.DataTypes);
 
 // Jalankan relasi antar model
-User.associate?.({ Participant,Skm });
+User.associate?.({ Participant });
 Participant.associate?.({ User });
-Survey.associate?.({ Participant });
-Skm.associate?.({ User });
 
 // Export semua model + instance sequelize-nya
 module.exports = {
@@ -27,5 +25,5 @@ module.exports = {
   Survey,
   Skm,
   Laporan,
-};
-
+  Participant,
+}

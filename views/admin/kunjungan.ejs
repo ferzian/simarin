@@ -3,14 +3,16 @@
   <head>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <title>Admin Dashboard SIMARIN</title>
+    <title>Statistik Peserta Admin SIMARIN</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <!-- Favicon -->
     <link rel="icon" sizes="32x32" type="image/png" href="/images/logo.png" />
     <link rel="stylesheet" href="/css/admin.css" />
     <script src="/js/admin/index.js" defer></script>
+    <script src="/js/admin/peserta.js" defer></script>
   </head>
   <body class="bg-gray-100 flex h-screen">
     <aside
@@ -62,7 +64,7 @@
           </h3>
           <a
             href="/admin/dashboard"
-            class="menu-item-link text-white hover:text-white relative bg-gray-700"
+            class="menu-item-link text-white hover:text-white"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -128,12 +130,11 @@
                 d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z"
               />
             </svg>
-
             <span class="menu-text-wrapper">Statistik Peserta</span>
           </a>
           <a
             href="/admin/kunjungan"
-            class="menu-item-link text-white hover:text-white"
+            class="menu-item-link text-white hover:text-white relative bg-gray-700"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -158,12 +159,11 @@
         class="bg-white shadow-md px-6 py-4 flex justify-between items-center border-b border-gray-200"
       >
         <div>
-          <h1 class="text-2xl font-bold text-gray-800">Dashboard Admin</h1>
+          <h1 class="text-2xl font-bold text-gray-800">Statistik Kunjungan</h1>
           <p class="text-sm text-gray-500">
             Balai Riset Perikanan Budidaya Air Tawar dan Penyuluhan Perikanan
           </p>
         </div>
-
         <div class="flex items-center gap-6 relative">
           <div class="relative">
             <button
@@ -186,6 +186,8 @@
                 />
               </svg>
             </button>
+
+            <!-- Dropdown -->
             <div
               id="notifDropdownMenu"
               class="hidden absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 z-50 overflow-hidden text-sm"
@@ -204,9 +206,7 @@
               id="dropdownUserButton"
               class="flex items-center gap-2 text-gray-700 hover:text-gray-900 focus:outline-none p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
             >
-              <span class="font-semibold text-lg"
-                ><%= user ? user.username : 'admin' %></span
-              >
+              <span class="font-semibold text-lg"><%= user.username %> </span>
               <svg
                 class="w-5 h-5"
                 fill="none"
@@ -258,224 +258,253 @@
           </div>
         </div>
       </header>
-
       <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-          <div
-            class="bg-white rounded-lg shadow-md p-6 flex items-center justify-between transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg border-l-4 border-green-500"
-          >
-            <div>
-              <h2 class="text-lg text-gray-600 font-semibold mb-1">
-                Total Kunjungan (Bulan Ini)
-              </h2>
-              <p class="text-4xl font-bold text-green-600">
-                <%= visitCount %>
-                <span class="text-xl font-normal text-gray-400">orang</span>
-              </p>
-            </div>
-            <div
-              class="flex items-center justify-center bg-green-100 text-green-600 rounded-full w-14 h-14"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="size-8"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
-                />
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                />
-              </svg>
-            </div>
-          </div>
+        <h2 class="text-3xl font-bold mb-6 text-gray-800">
+          Statistik Kunjungan
+        </h2>
 
-          <div
-            class="bg-white rounded-lg shadow-md p-6 flex items-center justify-between transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg border-l-4 border-blue-500"
-          >
+        <!-- Filter -->
+        <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
+          <h3 class="text-xl font-semibold text-gray-700 mb-4">
+            Filter Kunjungan
+          </h3>
+          <form id="filterForm" class="flex flex-col md:flex-row gap-4">
             <div>
-              <h2 class="text-lg text-gray-600 font-semibold mb-1">
-                Peserta Aktif (Saat Ini)
-              </h2>
-              <p class="text-4xl font-bold text-blue-600">
-                <%= aktifCount %>
-                <span class="text-xl font-normal text-gray-400">orang</span>
-              </p>
-            </div>
-            <div
-              class="flex items-center justify-center bg-blue-100 text-blue-600 rounded-full w-14 h-14"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-8 w-8"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="1.5"
+              <label
+                for="fromDate"
+                class="block text-gray-600 text-sm font-medium mb-1"
+                >Dari Tanggal</label
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-                />
-              </svg>
+              <input
+                type="month"
+                id="fromDate"
+                name="fromDate"
+                class="border rounded-lg px-3 py-2 w-full"
+              />
             </div>
-          </div>
-
-          <div
-            class="bg-white rounded-lg shadow-md p-6 flex items-center justify-between transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg border-l-4 border-purple-500"
-          >
             <div>
-              <h2 class="text-lg text-gray-600 font-semibold mb-1">
-                Pendaftar Baru (Bulan Ini)
-              </h2>
-              <p class="text-4xl font-bold text-purple-600">
-                <%= newRegistrantsCount %>
-                <span class="text-xl font-normal text-gray-400">orang</span>
-              </p>
-            </div>
-            <div
-              class="flex items-center justify-center bg-purple-100 text-purple-600 rounded-full w-14 h-14"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="size-8"
+              <label
+                for="toDate"
+                class="block text-gray-600 text-sm font-medium mb-1"
+                >Sampai Tanggal</label
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z"
-                />
-              </svg>
+              <input
+                type="month"
+                id="toDate"
+                name="toDate"
+                class="border rounded-lg px-3 py-2 w-full"
+              />
             </div>
-          </div>
+            <div class="flex items-end">
+              <button
+                type="submit"
+                class="bg-blue-600 text-white px-5 py-2 rounded-lg shadow hover:bg-blue-700 transition"
+              >
+                Terapkan
+              </button>
+            </div>
+          </form>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-          <div class="bg-white rounded-lg shadow-md p-6 h-96 pb-14">
-            <h2 class="text-xl font-semibold mb-4 text-gray-700">
-              Peserta Aktif per Lokasi
-            </h2>
-            <canvas id="lokasiChart" class="h-80"></canvas>
+        <!-- Chart -->
+        <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
+          <h3 class="text-xl font-semibold text-gray-700 mb-4">
+            Jumlah Kunjungan
+          </h3>
+          <canvas id="visitorChart" height="100"></canvas>
+        </div>
+
+        <!-- Ringkasan -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-green-100 p-6 rounded-xl shadow">
+            <p class="text-gray-600">Total Kunjungan</p>
+            <h4 class="text-2xl font-bold text-gray-800" id="totalVisitors">
+              0
+            </h4>
           </div>
-          <div class="bg-white rounded-lg shadow-md p-6">
-            <h2 class="text-xl font-semibold mb-4 text-gray-700">
-              Kegiatan Terdekat yang Akan Selesai
-            </h2>
-            <% if (upcomingEndDate.length > 0) { %>
-            <div class="overflow-x-auto">
-              <table class="w-full text-sm">
-                <thead>
-                  <tr class="border-b bg-gray-50">
-                    <th class="py-3 px-4 text-left font-medium text-gray-600">
-                      Nama
-                    </th>
-                    <th class="py-3 px-4 text-left font-medium text-gray-600">
-                      Lokasi
-                    </th>
-                    <th class="py-3 px-4 text-left font-medium text-gray-600">
-                      Tanggal Selesai
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% upcomingEndDate.forEach(p => { %>
-                  <tr class="border-b hover:bg-gray-50 transition-colors">
-                    <td class="py-3 px-4 text-gray-800"><%= p.nama %></td>
-                    <td class="py-3 px-4 text-gray-800"><%= p.lokasi %></td>
-                    <td class="py-3 px-4 text-gray-800">
-                      <%= moment(p.tanggalSelesai).format('DD MMM YYYY') %>
-                    </td>
-                  </tr>
-                  <% }) %>
-                </tbody>
-              </table>
-            </div>
-            <% } else { %>
-            <p class="text-gray-500">
-              Tidak ada kegiatan yang akan selesai dalam 7 hari ke depan.
-            </p>
-            <% } %>
+          <div class="bg-yellow-100 p-6 rounded-xl shadow">
+            <p class="text-gray-600">Perubahan dibanding Bulan Lalu</p>
+            <h4 class="text-2xl font-bold text-gray-800" id="changePrevMonth">
+              0%
+            </h4>
+          </div>
+          <div class="bg-blue-100 p-6 rounded-xl shadow">
+            <p class="text-gray-600">Perubahan dibanding Tahun Lalu</p>
+            <h4 class="text-2xl font-bold text-gray-800" id="changePrevYear">
+              0%
+            </h4>
           </div>
         </div>
       </main>
     </div>
     <script>
-      const lokasiLabels = ['Sempur', 'Depok', 'Cibalagung', 'Cijeruk'];
-      const lokasiCounts = [
-        <%= lokasiData.Sempur %>,
-        <%= lokasiData.Depok %>,
-        <%= lokasiData.Cibalagung %>,
-        <%= lokasiData.Cijeruk %>
-      ];
+                        // === ambil data dari server ===
+                        const visitorsData = <%- JSON.stringify(visitors) %>;
 
-      new Chart(document.getElementById('lokasiChart'), {
-        type: 'bar',
+                        // --- Group data pakai key YYYY-MM ---
+                        const grouped = {};
+                        visitorsData.forEach(v => {
+                          const date = new Date(v.createdAt);
+                          if (!isNaN(date)) {
+                            const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+                            grouped[key] = (grouped[key] || 0) + 1;
+                          }
+                        });
+
+                        // simpan key & label chart
+                        const keys = Object.keys(grouped).sort();
+                        const labels = keys.map(key => {
+                          const [y, m] = key.split("-");
+                          return new Date(y, m - 1).toLocaleString("id-ID", { month: "long", year: "numeric" });
+                        });
+                        const data = Object.values(grouped);
+
+                        // --- render chart ---
+                        const ctx = document.getElementById("visitorChart").getContext("2d");
+                        const lastIndex = data.length - 1;
+
+      const visitorChart = new Chart(ctx, {
+        type: "line",
         data: {
-          labels: lokasiLabels,
-          datasets: [{
-            label: 'Jumlah Peserta',
-            data: lokasiCounts,
-            backgroundColor: [
-              'rgba(16, 185, 129, 0.8)',
-              'rgba(59, 130, 246, 0.8)',
-              'rgba(139, 92, 246, 0.8)',
-              'rgba(245, 158, 11, 0.8)'
-            ]
-          }]
+          labels,
+          datasets: [
+            {
+              label: "Jumlah Kunjungan",
+              data,
+              borderColor: "#f59e0b",
+              backgroundColor: "rgba(245,158,11,0.2)",
+              fill: true,
+              tension: 0.3,
+              borderWidth: 3,
+              pointRadius: 5,
+              pointBackgroundColor: "#f59e0b",
+              pointHoverRadius: 7,
+              pointHoverBackgroundColor: "#d97706",
+            },
+            {
+              label: "Titik Terakhir",
+              data: labels.map((_, i) => (i === lastIndex ? data[i] : null)),
+              borderColor: "transparent",   // ga ada garis
+              backgroundColor: "#ef4444",   // merah untuk titik terakhir
+              pointRadius: 8,
+              pointHoverRadius: 10,
+              type: "line",                 // tetap line tapi cuma 1 titik
+            }
+          ]
         },
         options: {
           responsive: true,
-          maintainAspectRatio: false,
           plugins: {
-            legend: {
-              display: false,
-            },
+            legend: { display: false },
             tooltip: {
-              backgroundColor: 'rgba(0, 0, 0, 0.7)',
-              bodyFont: {
-                size: 14
+              callbacks: {
+                label: (ctx) => ` ${ctx.formattedValue} kunjungan`
               }
             }
           },
           scales: {
+            x: {
+              grid: { display: true, drawOnChartArea: false },
+            },
             y: {
               beginAtZero: true,
-              grid: {
-                color: 'rgba(200, 200, 200, 0.2)' // Garis grid horizontal yang lebih halus
-              },
-              ticks: {
-                precision: 0,
-                font: {
-                  size: 12
-                }
-              }
-            },
-            x: {
-              grid: {
-                display: false
-              },
-              ticks: {
-                font: {
-                  size: 12
-                }
-              }
+              grid: { color: "rgba(0,0,0,0.05)" },
+              ticks: { stepSize: 5 }
             }
           }
         }
       });
+
+
+
+                        // update ringkasan total
+                        document.getElementById("totalVisitors").innerText = visitorsData.length;
+
+                        // --- ambil bulan & tahun saat ini ---
+                        const now = new Date();
+                        const thisMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+                        const thisMonthLabel = now.toLocaleString("id-ID", { month: "long", year: "numeric" });
+
+                        // cari index bulan sekarang di chart
+                        const currentIndex = keys.indexOf(thisMonthKey);
+
+                        // nilai bulan ini
+                        const currentValue = currentIndex !== -1 ? data[currentIndex] : 0;
+
+                        // nilai bulan lalu
+                        const prevMonthValue = currentIndex > 0 ? data[currentIndex - 1] : 0;
+
+                        // nilai tahun lalu (bulan sama, tahun beda)
+                        const prevYearKey = `${now.getFullYear() - 1}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+                        const prevYearIndex = keys.indexOf(prevYearKey);
+                        const prevYearValue = prevYearIndex !== -1 ? data[prevYearIndex] : 0;
+
+                        // hitung persentase perubahan
+                        const calcChange = (curr, prev) => {
+                          if (!prev || prev === 0) return "0%";
+                          const change = ((curr - prev) / prev) * 100;
+                          return `${change.toFixed(1)}%`;
+                        };
+
+                        // update DOM
+                        document.getElementById("changePrevMonth").innerText = calcChange(currentValue, prevMonthValue);
+                        document.getElementById("changePrevYear").innerText = calcChange(currentValue, prevYearValue);
+
+                        // === FILTER HANDLER ===
+                  document.getElementById("filterForm").addEventListener("submit", (e) => {
+                    e.preventDefault();
+                    const from = document.getElementById("fromDate").value; // YYYY-MM
+                    const to = document.getElementById("toDate").value;     // YYYY-MM
+
+                    // filter berdasarkan key
+                    const filteredKeys = keys.filter(k => {
+                      return (!from || k >= from) && (!to || k <= to);
+                    });
+
+                    const filteredLabels = filteredKeys.map(key => {
+                      const [y, m] = key.split("-");
+                      return new Date(y, m - 1).toLocaleString("id-ID", { month: "long", year: "numeric" });
+                    });
+                    const filteredData = filteredKeys.map(k => grouped[k]);
+
+                    // update chart
+                    visitorChart.data.labels = filteredLabels;
+                    visitorChart.data.datasets[0].data = filteredData;
+                    visitorChart.update();
+
+                    // --- update ringkasan berdasarkan filter ---
+                    const total = filteredData.reduce((a, b) => a + b, 0);
+                    document.getElementById("totalVisitors").innerText = total;
+
+                    // kalau range kosong, kosongkan perubahan
+                    if (filteredKeys.length === 0) {
+                      document.getElementById("changePrevMonth").innerText = "-";
+                      document.getElementById("changePrevYear").innerText = "-";
+                      return;
+                    }
+
+                    // ambil bulan terakhir dalam filter (anggap current month)
+                    const currentIndex = filteredKeys.length - 1;
+                    const currentValue = filteredData[currentIndex];
+
+                    // bulan sebelumnya
+                    const prevMonthValue = currentIndex > 0 ? filteredData[currentIndex - 1] : 0;
+
+                    // cari tahun lalu (bulan sama, tahun beda) dalam filter
+                    const [currYear, currMonth] = filteredKeys[currentIndex].split("-");
+                    const prevYearKey = `${parseInt(currYear) - 1}-${currMonth}`;
+                    const prevYearIndex = filteredKeys.indexOf(prevYearKey);
+                    const prevYearValue = prevYearIndex !== -1 ? filteredData[prevYearIndex] : 0;
+
+                    const calcChange = (curr, prev) => {
+                      if (!prev || prev === 0) return "0%";
+                      const change = ((curr - prev) / prev) * 100;
+                      return `${change.toFixed(1)}%`;
+                    };
+
+                    document.getElementById("changePrevMonth").innerText = calcChange(currentValue, prevMonthValue);
+                    document.getElementById("changePrevYear").innerText = calcChange(currentValue, prevYearValue);
+                  });
     </script>
   </body>
 </html>

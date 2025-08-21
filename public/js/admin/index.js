@@ -15,7 +15,7 @@ window.addEventListener("click", function (e) {
 const sidebar = document.getElementById("sidebar");
 const sidebarToggle = document.getElementById("sidebarToggle");
 const sidebarTitle = document.getElementById("sidebarTitle");
-const sidebarTitleButton = document.getElementById("sidebarTitleButton"); // New element
+const sidebarTitleButton = document.getElementById("sidebarTitleButton");
 const menuTextWrappers = document.querySelectorAll(".menu-text-wrapper");
 
 sidebarToggle.addEventListener("click", () => {

@@ -15,7 +15,7 @@ module.exports = (sequelize) => {
     }, {
         sequelize,
         modelName: 'Visitor',
-        timestamps: true, // ⬅️ ini wajib biar ada createdAt & updatedAt
+        timestamps: true, 
     }
     );
 

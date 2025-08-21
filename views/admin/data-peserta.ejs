@@ -25,6 +25,11 @@
       id="sidebar"
     >
       <div class="flex justify-between items-center mb-6 px-2 relative">
+        <img
+          src="/images/logo.png"
+          alt="Logo SIMARIN"
+          class="h-10 w-10 object-contain"
+        />
         <h2
           class="text-2xl font-bold transition-all duration-300"
           id="sidebarTitle"
@@ -133,24 +138,22 @@
             <span class="menu-text-wrapper">Statistik Peserta</span>
           </a>
           <a
-            href="/admin/skm"
-            class="menu-item-link text-white hover:text-white mt-2"
+            href="/admin/kunjungan"
+            class="menu-item-link text-white hover:text-white"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6 menu-icon"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-bar-chart-line size-6 menu-icon"
+              viewBox="0 0 16 16"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M9 17v-2m3 2v-4m3 2v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                d="M11 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h1V7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7h1zm1 12h2V2h-2zm-3 0V7H7v7zm-5 0v-3H2v3z"
               />
             </svg>
-            <span class="menu-text-wrapper">Statistik SKM</span>
+            <span class="menu-text-wrapper">Statistik Kunjungan</span>
           </a>
         </div>
       </nav>
@@ -274,9 +277,7 @@
             </h3>
           </div>
 
-          <div
-            class="flex items-center mb-2 rounded-lg"
-          >
+          <div class="flex items-center mb-2 rounded-lg">
             <div class="flex flex-col mr-2">
               <label
                 for="filterDateStart"
@@ -332,7 +333,7 @@
               <input
                 type="text"
                 id="searchTable"
-                placeholder="Cari nama, nis/npm, instansi, kegiatan atau lokasi..."
+                placeholder="Cari nama, nomor induk, instansi, kegiatan atau lokasi..."
                 class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-blue-500 focus:border-blue-500 text-gray-800 transition-all duration-200"
               />
             </div>
@@ -378,7 +379,7 @@
                     data-sort="nisNpm"
                   >
                     <div class="flex items-center gap-1">
-                      NIS/NPM
+                      Nomor Induk Siswa/Mahasiswa
                       <span class="sort-indicator text-gray-400">⇅</span>
                     </div>
                   </th>
@@ -529,7 +530,7 @@
                         </h3>
                         <p class="text-sm">
                           <span class="text-gray-500 font-medium"
-                            >NIS/NPM:</span
+                            >Nomor Induk Siswa/Mahasiswa:</span
                           >
                           <span
                             id="detailNisNpm"
@@ -547,7 +548,7 @@
                         </p>
                         <p class="text-sm mt-3">
                           <span class="text-gray-500 font-medium"
-                            >Jurusan:</span
+                            >Program Studi:</span
                           >
                           <span
                             id="detailProdi"
@@ -606,35 +607,6 @@
                     Dokumen Pendukung
                   </h3>
                   <ul class="space-y-3">
-                    <li>
-                      <div class="flex items-center justify-between">
-                        <span
-                          class="font-medium text-gray-700 flex items-center"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="h-5 w-5 text-red-500 mr-2"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
-                            <path
-                              fill-rule="evenodd"
-                              d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6a2 2 0 01.586 1.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 10a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1-5a1 1 0 100 2h6a1 1 0 100-2H7z"
-                              clip-rule="evenodd"
-                            />
-                          </svg>
-                          Surat Pengantar
-                        </span>
-                        <a
-                          id="detailSuratPengantar"
-                          target="_blank"
-                          download
-                          class="text-blue-500 hover:text-blue-700 font-medium transition-colors duration-200"
-                        >
-                          Download
-                        </a>
-                      </div>
-                    </li>
                     <li>
                       <div class="flex items-center justify-between">
                         <span

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { sequelize, Participant, Survey, Visitor } = require('../../models');
+const { sequelize, Participant, Visitor } = require('../../models');
 const { Op, fn, col } = require('sequelize');
 const moment = require('moment');
 
@@ -21,24 +21,6 @@ router.get('/dashboard', async (req, res) => {
     const visitCount = await Visitor.count({
       where: { createdAt: { [Op.gte]: monthStart } }
     });
-
-    // === Rekap SKM bulan ini ===
-    const avgSkm = await Survey.findOne({
-      attributes: [
-        [sequelize.literal('(AVG((q1 + q2 + q3 + q4 + q5 + q6 + q7 + q8 + q9) / 9))'), 'avgSkor']
-      ],
-      where: { createdAt: { [Op.gte]: monthStart } },
-      raw: true
-    });
-
-    const avgSkorValue = avgSkm?.avgSkor
-      ? parseFloat(avgSkm.avgSkor).toFixed(2)
-      : 0;
-
-    // Tentukan emoticon
-    let emoticon = '😐';
-    if (avgSkorValue >= 80) emoticon = '😊';
-    else if (avgSkorValue < 60) emoticon = '😟';
 
     // === Peserta aktif hari ini ===
     const aktifCount = await Participant.count({
@@ -77,6 +59,22 @@ router.get('/dashboard', async (req, res) => {
       limit: 5
     });
 
+    // === Data semua visitors untuk chart ===
+const rawVisitors = await Visitor.findAll({
+  attributes: ['id', 'createdAt'],
+  raw: true
+});
+
+// Format createdAt manual jadi YYYY-MM-DDTHH:mm:ss
+const visitors = rawVisitors.map(v => {
+  const d = new Date(v.createdAt);
+  return {
+    ...v,
+    createdAt: `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}T${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`
+  };
+});
+
+
     // === Render ke view ===
     res.render('admin/dashboard', {
       visitCount,
@@ -84,8 +82,7 @@ router.get('/dashboard', async (req, res) => {
       newRegistrantsCount,
       lokasiData,
       upcomingEndDate,
-      avgSkorValue,
-      emoticon,
+      visitors,   // <--- ini yang dipakai di EJS
       moment
     });
 

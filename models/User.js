@@ -5,11 +5,6 @@ module.exports = (sequelize) => {
     static associate(models) {
       User.hasMany(models.Participant, { foreignKey: 'userId' });
     }
-    static associate(models) {
-      this.hasMany(models.Skm, { foreignKey: 'userId' });
-      // association lain kalau ada
-    }
-    
   }
 
   User.init({

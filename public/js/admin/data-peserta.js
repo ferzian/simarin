@@ -6,6 +6,7 @@ let activityTypeChart;
 let majorChart;
 let currentSort = { key: null, asc: true };
 let baseParticipants = participantsData;
+let currentFilterPeriod = "Semua Data";
 
 const rowsPerPage = 5;
 
@@ -248,10 +249,6 @@ function showDetail(p) {
         ? `/uploads/user/pas-foto/${p.pasFoto}`
         : "/images/user.png";
 
-    document.getElementById("detailSuratPengantar").href = p.suratPengantar
-        ? `/uploads/user/surat-pengantar/${p.suratPengantar}`
-        : "#";
-
     document.getElementById("detailSuratSehat").href = p.suratSehat
         ? `/uploads/user/surat-sehat/${p.suratSehat}`
         : "#";
@@ -329,11 +326,10 @@ if (applyFilterBtn) {
                 const endDate = parseDateSafe(p.tanggalSelesai);
                 if (!startDate || !endDate) return false;
 
-                // Contained filter: seluruh durasi kegiatan harus berada di dalam range
-                return startDate >= filterStart && endDate <= filterEnd;
+                // Overlap filter: tampil jika ada irisan antara kegiatan dan rentang filter
+                return startDate <= filterEnd && endDate >= filterStart;
             });
         }
-
         updateUI(tempData);
     });
 }
@@ -346,6 +342,17 @@ searchTableInput.addEventListener("input", () => {
     } else {
         filteredParticipants = baseParticipants.filter((p) => {
             const get = (v) => (v ? String(v).toLowerCase() : "");
+
+            // cek status selesai
+            let statusText = "belum selesai";
+            if (p.tanggalSelesai) {
+                const today = new Date();
+                const endDate = new Date(p.tanggalSelesai);
+                if (endDate < today) {
+                    statusText = "selesai";
+                }
+            }
+
             return (
                 get(p.nama).includes(searchTerm) ||
                 get(p.nisNpm).includes(searchTerm) ||
@@ -358,7 +365,8 @@ searchTableInput.addEventListener("input", () => {
                 get(p.kegiatan).includes(searchTerm) ||
                 get(p.lokasi).includes(searchTerm) ||
                 get(p.tanggalMulai).includes(searchTerm) ||
-                get(p.tanggalSelesai).includes(searchTerm)
+                get(p.tanggalSelesai).includes(searchTerm) ||
+                statusText.includes(searchTerm) // tambahin ini
             );
         });
     }
@@ -367,6 +375,7 @@ searchTableInput.addEventListener("input", () => {
     renderTable(filteredParticipants, currentPage);
     updateCharts(filteredParticipants);
 });
+
 
 
 prevPageBtn.addEventListener("click", () => {
@@ -421,12 +430,47 @@ document.getElementById("downloadTableDataBtn").addEventListener("click", () => 
         formatIndoDate(p.tanggalSelesai),
     ]);
 
-    const worksheet = XLSX.utils.aoa_to_sheet([headers, ...rows]);
+    // 🔎 Ambil input tanggal dari filter
+    const filterDateStart = document.getElementById("filterDateStart").value;
+    const filterDateEnd = document.getElementById("filterDateEnd").value;
+
+    let periodeText = "Periode: Semua Data";
+    if (filterDateStart && filterDateEnd) {
+        periodeText = `Periode: ${formatIndoDate(filterDateStart)} s/d ${formatIndoDate(filterDateEnd)}`;
+    }
+
+    const sheetData = [
+        ["Laporan Data Peserta SIMARIN"],
+        [periodeText],
+        [],
+        headers,
+        ...rows,
+    ];
+
+    const worksheet = XLSX.utils.aoa_to_sheet(sheetData);
+
+    // Set lebar kolom
+    worksheet['!cols'] = headers.map((h) => ({ wch: Math.max(h.length + 5, 20) }));
+
+    // Set tinggi baris untuk judul
+    worksheet['!rows'] = [{ hpt: 25 }, { hpt: 20 }];
+
+    // Merge cell judul (A1 sampai L1, disesuaikan jumlah kolom)
+    worksheet['!merges'] = [
+        { s: { r: 0, c: 0 }, e: { r: 0, c: headers.length - 1 } }
+    ];
+
+
+    // Biar kolom rapih
+    const colWidths = headers.map((h) => ({ wch: h.length + 5 }));
+    worksheet['!cols'] = colWidths;
+
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Data Peserta");
 
     XLSX.writeFile(workbook, "data_peserta_simarin.xlsx");
 });
+
 
 window.onload = () => {
     updateUI(participantsData);
