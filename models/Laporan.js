@@ -9,28 +9,16 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   Laporan.init({
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    judul: {
+    userId: DataTypes.INTEGER,
+    judul: DataTypes.STRING,
+    fileLaporan: DataTypes.STRING,
+    status: {
       type: DataTypes.STRING,
-      allowNull: false
-    },
-    fileLaporan: {
-      type: DataTypes.STRING,
-      allowNull: true
-    },
-    fileSertifikat: {
-      type: DataTypes.STRING,
-      allowNull: true
-    },
-
+      defaultValue: 'pending' // default kalau user baru upload
+    }
   }, {
     sequelize,
     modelName: 'Laporan',
-    tableName: 'laporans',
-    timestamps: true
   });
 
   return Laporan;

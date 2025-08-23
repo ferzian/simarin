@@ -37,22 +37,32 @@
 
 
   // POST upload laporan
-  router.post('/laporan', isUser, upload.single('laporan'), async (req, res) => {
-    if (!req.file) return res.status(400).send('File laporan tidak ditemukan');
+// POST upload laporan via fetch
+router.post('/submit-laporan', isUser, upload.single('laporan'), async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ error: 'File laporan tidak ditemukan' });
 
-    const existing = await Laporan.findOne({ where: { userId: req.session.user.id } });
+    let laporan = await Laporan.findOne({ where: { userId: req.session.user.id } });
 
-    if (existing) {
-      existing.fileLaporan = req.file.filename;  // update laporan
-      await existing.save();
+    if (laporan) {
+      laporan.judul = req.body.judul;
+      laporan.fileLaporan = req.file.filename;
+      laporan.status = 'pending'; // reset status
+      await laporan.save();
     } else {
-      await Laporan.create({
+      laporan = await Laporan.create({
         userId: req.session.user.id,
-        fileLaporan: req.file.filename  // create laporan baru
+        judul: req.body.judul,
+        fileLaporan: req.file.filename,
+        status: 'pending'
       });
     }
 
-    res.redirect('/user/laporan');
-  });
+    res.json({ success: true, laporan });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Terjadi kesalahan server' });
+  }
+});
 
   module.exports = router;
