@@ -1,18 +1,27 @@
+'use strict';
+
+require('dotenv').config();
 const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
-  host: process.env.DB_HOST || 'localhost',
-  dialect: 'mysql',
-});
+
+const sequelize = new Sequelize(
+  process.env.DB_NAME || 'simarin',
+  process.env.DB_USER || 'root',
+  process.env.DB_PASS || '',
+  {
+    host: process.env.DB_HOST || 'localhost',
+    dialect: 'mysql',
+  }
+);
 
 const db = {};
 
-// Import model
+// Import models
 db.User = require('./User')(sequelize, DataTypes);
 db.Participant = require('./Participant')(sequelize, DataTypes);
 db.Laporan = require('./Laporan')(sequelize, DataTypes);
 db.Visitor = require('./Visitor')(sequelize, DataTypes); // opsional
 
-// Panggil associate setelah SEMUA model diimport
+// Jalankan associate kalau ada
 Object.values(db).forEach((model) => {
   if (model.associate) {
     model.associate(db);
