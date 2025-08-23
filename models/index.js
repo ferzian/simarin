@@ -1,26 +1,25 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = new Sequelize('simarin', 'root', '', {
-  host: 'localhost',
+const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
+  host: process.env.DB_HOST || 'localhost',
   dialect: 'mysql',
 });
 
-// Import semua model
-const User = require('./User')(sequelize, DataTypes);
-const Visitor = require('./Visitor')(sequelize, DataTypes);
-const Participant = require('./Participant')(sequelize, DataTypes);
-//const Skm = require('./Skm')(sequelize, DataTypes);
-const Laporan = require('./Laporan')(sequelize, Sequelize.DataTypes);
+const db = {};
 
-// Jalankan relasi antar model
-User.associate?.({ Participant, Laporan });
-Participant.associate?.({ User });
-Laporan.associate?.({ User });
+// Import model
+db.User = require('./User')(sequelize, DataTypes);
+db.Participant = require('./Participant')(sequelize, DataTypes);
+db.Laporan = require('./Laporan')(sequelize, DataTypes);
+db.Visitor = require('./Visitor')(sequelize, DataTypes); // opsional
 
-// Export semua model + instance sequelize-nya
-module.exports = {
-  sequelize,
-  User,
-  Visitor,
-  Participant,
-  Laporan,
-}
+// Panggil associate setelah SEMUA model diimport
+Object.values(db).forEach((model) => {
+  if (model.associate) {
+    model.associate(db);
+  }
+});
+
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
+
+module.exports = db;

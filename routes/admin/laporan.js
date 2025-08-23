@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Laporan, User } = require('../../models');
+const { Laporan, Participant } = require('../../models');
 
 // Middleware: cek login role admin
 function isAdmin(req, res, next) {
@@ -12,7 +12,12 @@ function isAdmin(req, res, next) {
 
 // GET semua laporan
 router.get('/', isAdmin, async (req, res) => {
-  const laporan = await Laporan.findAll({ include: [{ model: User, as: 'user' }] });
+  const laporan = await Laporan.findAll({
+    include: [
+      { model: Participant, attributes: ['nama'] }
+    ],
+    order: [['createdAt', 'DESC']]
+  });
   res.render('admin/laporan', { laporan });
 });
 
