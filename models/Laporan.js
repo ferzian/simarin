@@ -4,7 +4,7 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Laporan extends Model {
     static associate(models) {
-      Laporan.belongsTo(models.User, { foreignKey: 'userId' });
+      Laporan.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
     }
   }
 
@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     fileLaporan: DataTypes.STRING,
     status: {
       type: DataTypes.STRING,
-      defaultValue: 'pending' // default kalau user baru upload
+      defaultValue: 'pending'
     }
   }, {
     sequelize,

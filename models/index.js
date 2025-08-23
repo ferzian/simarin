@@ -12,8 +12,9 @@ const Participant = require('./Participant')(sequelize, DataTypes);
 const Laporan = require('./Laporan')(sequelize, Sequelize.DataTypes);
 
 // Jalankan relasi antar model
-User.associate?.({ Participant });
+User.associate?.({ Participant, Laporan });
 Participant.associate?.({ User });
+Laporan.associate?.({ User });
 
 // Export semua model + instance sequelize-nya
 module.exports = {
@@ -21,7 +22,5 @@ module.exports = {
   User,
   Visitor,
   Participant,
-  //Survey,
-  //Skm,
   Laporan,
 }
