@@ -1,271 +1,113 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Kuesioner Penilaian Pelayanan</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alur Selesai Magang</title>
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <style>
-    .star {
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-    .star:hover {
-      transform: scale(1.2);
-    }
-    .star.selected {
-      color: gold;
-    }
-  </style>
 </head>
-<body class="bg-gray-100 min-h-screen py-10 font-sans">
-  <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-xl p-8">
-    <form action="/user/skm" method="POST" class="space-y-12">
+<body class="bg-gradient-to-br from-gray-100 to-gray-200 min-h-screen font-sans">
 
-      <!-- Header Judul -->
-      <div class="max-w-4xl mx-auto bg-white shadow-md rounded-xl p-6 mb-8 text-center">
-        <h1 class="text-2xl font-bold uppercase mb-2">Survey Kepuasan Masyarakat</h1>
-        <p class="text-lg font-medium">Unit : Balai Riset Perikanan Budidaya Air Tawar Bogor</p>
-        <p class="italic text-gray-700">Surat keterangan dan/atau sertifikat</p>
+  <div class="max-w-6xl mx-auto py-12 px-6">
+    <h1 class="text-4xl font-extrabold mb-12 text-center text-gray-800 tracking-wide">
+      🚀 Alur Selesai Kegiatan Magang
+    </h1>
+
+    <div class="grid md:grid-cols-3 gap-10">
+      <!-- Step 1 -->
+      <div 
+        onclick="openStep('Survey Kepuasan', 'https://ptsp.kkp.go.id/skm/s/3327')"
+        class="bg-gradient-to-br from-green-400 to-green-500 p-8 rounded-2xl shadow-xl hover:scale-105 transform transition duration-300 cursor-pointer text-white text-center relative">
+        <div class="flex justify-center mb-4">
+          ✅
+        </div>
+        <h2 class="text-2xl font-bold mb-2">1. Isi Survey Kepuasan</h2>
+        <p class="opacity-90">Peserta wajib mengisi survei kepuasan pada link resmi KKP.</p>
       </div>
 
-      <!-- Data Responden -->
-      <section class="p-6 bg-blue-50 rounded-lg shadow-sm">
-        <h2 class="text-xl font-semibold border-b pb-2 mb-6">🧍 Data Responden</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label class="block font-medium mb-1">Nama</label>
-            <input type="text" name="nama" required class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
-          </div>
-          <div>
-            <label class="block font-medium mb-1">Jenis Kelamin</label>
-            <select name="jenis_kelamin" required class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
-              <option value="">-- Pilih --</option>
-              <option value="Laki-laki">Laki-laki</option>
-              <option value="Perempuan">Perempuan</option>
-            </select>
-          </div>
-
-        
-          <div>
-            <label class="block font-medium mb-1">Usia</label>
-            <select name="usia" required class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
-              <option value="">-- Pilih --</option>
-              <option value="19">Kurang dari 20</option>
-              <option value="21">20-40</option>
-              <option value="41">Lebih dari 40</option>
-            </select>
-          </div>
-          
-          <div>
-            <label class="block font-medium mb-1">Pendidikan</label>
-            <select name="pendidikan" required class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
-              <option value="">-- Pilih --</option>
-              <option value="SD">SD</option>
-              <option value="SMP">SMP</option>
-              <option value="SMA/SMK">SMA/SMK</option>
-              <option value="Diploma">D3</option>
-              <option value="Sarjana">S1</option>
-              <option value="Magister">S2</option>
-              <option value="Doctor">S3</option>
-            </select>
-          </div>
-          <div class="md:col-span-2">
-            <label class="block font-medium mb-1">Pekerjaan</label>
-            <input type="text" name="pekerjaan" required class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500">
-          </div>
+      <!-- Step 2 -->
+      <div 
+        onclick="openStep('Upload Laporan', '/user/laporan')"
+        class="bg-gradient-to-br from-yellow-400 to-yellow-500 p-8 rounded-2xl shadow-xl hover:scale-105 transform transition duration-300 cursor-pointer text-white text-center relative">
+        <div class="flex justify-center mb-4">
+          📑
         </div>
-      </section>
-
-      <hr class="border-gray-300">
-
-      <!-- Pertanyaan -->
-      <section class="p-6 bg-green-50 rounded-lg shadow-sm">
-        <h2 class="text-xl font-semibold border-b pb-2 mb-6">📋 Pertanyaan Penilaian</h2>
-        <div class="grid gap-6">
-          <div>
-            <label class="block mb-2">1. Bagaimana pendapat Saudara tentang kemudahan prosedur permohonan melakukan magang/PKL ?</label>
-            <select name="penilaian_1" required class="w-full border rounded-lg p-2">
-              <option value="">-- Pilih --</option>
-              <option value="1">Sangat sesuai</option>
-              <option value="2">Sesuai</option>
-              <option value="3">Kurang sesuai</option>
-              <option value="4">Tidak sesuai</option>
-            </select>
-          </div>
-          <div>
-            <label class="block mb-2">2. Bagaimana pendapat Saudara tentang kecepatan waktu petugas dalam memberikan tanggapan terhadap permohonan magang/PKL ? </label>
-            <select name="penilaian_2" required class="w-full border rounded-lg p-2">
-              <option value="">-- Pilih --</option>
-              <option value="1">Sangat mudah</option>
-              <option value="2">Mudah</option>
-              <option value="3">Kurang mudah</option>
-              <option value="4">Tidak mudah</option>
-            </select>
-          </div>
-          <div>
-            <label class="block mb-2">3.  Bagaimana pendapat Saudara tentang kesesuaian topik/tema yang diajukan dengan pelaksanaan di lapangan ?</label>
-            <select name="penilaian_3" required class="w-full border rounded-lg p-2">
-              <option value="">-- Pilih --</option>
-              <option value="1">Sangat sesuai</option>
-              <option value="2">Sesuai</option>
-              <option value="3">Kurang sesuai</option>
-              <option value="4">Tidak sesuai</option>
-            </select>
-          </div>
-          <div>
-            <label class="block mb-2">4. Bagaimana pendapat Saudara tentang kompetensi/kemampuan pembimbing/teknisi lapang ?</label>
-            <select name="penilaian_4" required class="w-full border rounded-lg p-2">
-              <option value="">-- Pilih --</option>
-              <option value="1">Sangat sesuai</option>
-              <option value="2">Sesuai</option>
-              <option value="3">Kurang sesuai</option>
-              <option value="4">Tidak sesuai</option>
-            </select>
-          </div>
-          <div>
-            <label class="block mb-2">5. Bagaimana pendapat Saudara tentang respon pembimbing/teknisi lapang terhadap pelaksanaan teknis dalam proses magang/PKL ?</label>
-            <select name="penilaian_5" required class="w-full border rounded-lg p-2">
-              <option value="">-- Pilih --</option>
-              <option value="1">Sangat sesuai</option>
-              <option value="2">Sesuai</option>
-              <option value="3">Kurang sesuai</option>
-              <option value="4">Tidak sesuai</option>
-            </select>
-          </div>
-          <div>
-            <label class="block mb-2">6.  Bagaimana pendapat Saudara perilaku petugas dalam pelayanan dari tahap penerimaan mahasiswa sebelum ke lapangan sampai tahap seminar hasil ?</label>
-            <select name="penilaian_6" required class="w-full border rounded-lg p-2">
-              <option value="">-- Pilih --</option>
-              <option value="1">Sangat cepat</option>
-              <option value="2">Cepat</option>
-              <option value="3">Kurang cepat</option>
-              <option value="4">Lambat</option>
-            </select>
-          </div>
-          <div>
-            <label class="block mb-2">7. Bagaimana pendapat Saudara tentang kualitas sarana dan prasarana pendukung magang/PKL ?</label>
-            <select name="penilaian_7" required class="w-full border rounded-lg p-2">
-              <option value="">-- Pilih --</option>
-              <option value="1">Sangat baik</option>
-              <option value="2">Baik</option>
-              <option value="3">Kurang baik</option>
-              <option value="4">Tidak baik</option>
-            </select>
-          </div>
-          <div>
-            <label class="block mb-2">8.  Bagaimana pendapat Saudara tentang penanganan pengaduan pengguna layanan magang/PKL ?</label>
-            <select name="penilaian_8" required class="w-full border rounded-lg p-2">
-              <option value="">-- Pilih --</option>
-              <option value="1">Sangat baik</option>
-              <option value="2">Baik</option>
-              <option value="3">Kurang baik</option>
-              <option value="4">Tidak baik</option>
-            </select>
-          </div>
-          <div>
-            <label class="block mb-2">9.  Bagaimana pendapat Saudara tentang pelaksanaan seminar hasil magang/PKL ?</label>
-            <select name="penilaian_9" required class="w-full border rounded-lg p-2">
-              <option value="">-- Pilih --</option>
-              <option value="1">Sangat baik</option>
-              <option value="2">Baik</option>
-              <option value="3">Kurang baik</option>
-              <option value="4">Tidak baik</option>
-            </select>
-          </div>
-        </div>
-      </section>
-
-      <hr class="border-gray-300">
-
-      <!-- Kesimpulan -->
-      <section class="p-6 bg-yellow-50 rounded-lg shadow-sm">
-        <h2 class="text-xl font-semibold border-b pb-2 mb-6">📝 Kesimpulan & Saran</h2>
-
-        <!-- Rating Bintang -->
-        <div class="mb-4">
-          <label class="block font-medium mb-2">Nilai Total (1 - 10)</label>
-          <div id="starRating" class="flex space-x-1 text-3xl text-gray-400"></div>
-          <input type="hidden" name="nilai_total" id="nilaiTotal" required>
-        </div>
-
-        <div class="mb-4">
-          <label class="block font-medium mb-1">Kritik</label>
-          <textarea name="kritik" rows="3" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-red-500"></textarea>
-        </div>
-        <div>
-          
-          <label class="block font-medium mb-1">Saran</label>
-          <textarea name="saran" rows="3" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-500"></textarea>
-        </div>
-      </section>
-
-      <!-- Submit -->
-      <div class="text-center">
-        <button type="submit" class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition">
-          Kirim Kuesioner
-        </button>
+        <h2 class="text-2xl font-bold mb-2">2. Upload Laporan</h2>
+        <p class="opacity-90">Kumpulkan laporan magang maksimal 1 bulan setelah kegiatan.</p>
       </div>
 
-    </form>
+      <!-- Step 3 pakai if else -->
+      <% if (typeof statusLaporan !== "undefined" && statusLaporan === "approved") { %>
+        <!-- Aktif kalau laporan disetujui -->
+        <div 
+          onclick="openStep('Unduh Sertifikat', '/user/sertifikat')"
+          class="bg-gradient-to-br from-purple-400 to-purple-600 p-8 rounded-2xl shadow-xl hover:scale-105 transform transition duration-300 cursor-pointer text-white text-center relative">
+          <div class="flex justify-center mb-4">
+            🎓
+          </div>
+          <h2 class="text-2xl font-bold mb-2">3. Unduh Sertifikat</h2>
+          <p class="opacity-90">Sertifikat dapat diunduh setelah laporan disetujui admin.</p>
+        </div>
+      <% } else { %>
+        <!-- Terkunci kalau belum approve -->
+        <div 
+          class="bg-gradient-to-br from-gray-300 to-gray-400 p-8 rounded-2xl shadow-xl text-white text-center relative opacity-60 cursor-not-allowed">
+          <div class="flex justify-center mb-4">
+            🔒
+          </div>
+          <h2 class="text-2xl font-bold mb-2">3. Unduh Sertifikat</h2>
+          <p class="opacity-90">Menunggu persetujuan laporan dari admin.</p>
+        </div>
+      <% } %>
+    </div>
   </div>
 
   <script>
-    const starContainer = document.getElementById('starRating');
-    const nilaiInput = document.getElementById('nilaiTotal');
-    let selectedValue = 0;
-
-    for (let i = 1; i <= 10; i++) {
-      const star = document.createElement('span');
-      star.innerHTML = '★';
-      star.classList.add('star');
-      star.dataset.value = i;
-      star.addEventListener('click', () => {
-        selectedValue = i;
-        nilaiInput.value = i;
-        updateStars();
-      });
-      starContainer.appendChild(star);
-    }
-
-    function updateStars() {
-      document.querySelectorAll('.star').forEach(star => {
-        const value = parseInt(star.dataset.value);
-        if (value <= selectedValue) {
-          star.classList.add('selected');
-        } else {
-          star.classList.remove('selected');
+    function openStep(step, url) {
+      Swal.fire({
+        title: step,
+        text: `Apakah Anda ingin melanjutkan ke bagian ${step}?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#2563eb',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, lanjut!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.open(url, "_blank"); 
         }
       });
     }
-
-    // ✅ Tambahan: Notifikasi submit
-    const form = document.querySelector("form");
-    form.addEventListener("submit", function(e) {
-      e.preventDefault(); // cegah submit dulu
-
-      // contoh simulasi, bisa diganti logika dari backend (flash message)
-      const success = true; // ubah false kalau mau coba gagal
-
-      if (success) {
-        Swal.fire({
-          icon: 'success',
-          title: 'Terima Kasih!',
-          text: 'Kuesioner berhasil dikirim 🎉',
-          confirmButtonColor: '#2563eb'
-        }).then(() => {
-          form.submit(); // baru submit ke server
-        });
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Gagal!',
-          text: 'Terjadi kesalahan, silakan coba lagi.',
-          confirmButtonColor: '#dc2626'
-        });
-      }
-    });
   </script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const container = document.getElementById('laporan-container');
+    const form = document.getElementById('upload-form');
+
+    // Hanya pasang listener sekali
+    if (!form.dataset.listener) {
+      form.dataset.listener = true; // tandai listener sudah dipasang
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault(); // cegah reload halaman
+        container.innerHTML = ''; // bersihkan DOM sebelumnya
+
+        const file = form.laporan.files[0];
+        if(file){
+          const div = document.createElement('div');
+          div.textContent = file.name + ' (akan diupload...)';
+          div.className = 'p-4 bg-gray-200 rounded shadow';
+          container.appendChild(div);
+        }
+
+        // Kalau mau lanjut ke server, panggil fetch/ajax di sini
+      });
+    }
+  });
+</script>
+
 </body>
 </html>

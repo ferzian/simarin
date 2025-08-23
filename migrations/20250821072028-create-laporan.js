@@ -1,37 +1,48 @@
 'use strict';
-/** @type {import('sequelize-cli').Migration} */
+
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Laporans', {
+    await queryInterface.createTable('laporans', {
       id: {
+        type: Sequelize.INTEGER,
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
-      },
-      judul: {
-        type: Sequelize.STRING
-      },
-      fileLaporan: {
-        type: Sequelize.STRING
-      },
-      fileSertifikat: {
-        type: Sequelize.STRING
+        autoIncrement: true
       },
       userId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: { model: 'Users', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL'
+      },
+      judul: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      fileLaporan: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      fileSertifikat: {
+        type: Sequelize.STRING,
+        allowNull: true
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.fn('NOW')
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.fn('NOW')
       }
+      // note: kita sengaja **tidak menambahkan kolom status**, karena itu bisa di-handle di model
     });
   },
+
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Laporans');
+    await queryInterface.dropTable('laporans');
   }
 };

@@ -48,7 +48,7 @@ app.use('/admin', require('./routes/admin/peserta'));
 app.use('/admin', require('./routes/admin/kunjungan'));
 app.use('/admin', require('./routes/admin/download-rekap'));
 app.use('/admin/laporan', require('./routes/admin/laporan'));
-app.use('/user', require('./routes/user/skm'));
+//app.use('/user', require('./routes/user/skm'));
 app.use('/user/daftar-magang', require('./routes/user/daftar-magang'));
 app.use('/user', require('./routes/user/sertifikat'));
 app.use('/user', require('./routes/user/user-dashboard'));

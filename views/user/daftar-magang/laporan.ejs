@@ -1,90 +1,99 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Upload Laporan Magang</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen font-sans">
-
-  <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md transform transition hover:scale-[1.01] duration-300">
-    <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">📑 Upload Laporan Magang</h1>
-    
-    <form action="/user/laporan" method="POST" enctype="multipart/form-data" id="uploadForm" class="space-y-5">
-       <!-- Input Judul -->
-       <div>
-        <label for="judul" class="block text-gray-700 font-medium mb-2">Judul Laporan</label>
-        <input type="text" id="judul" name="judul" 
-          placeholder="Masukkan judul laporan magang"
-          class="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
-          required>
-      </div> 
-      <!-- Drag & Drop Zone -->
-      <div id="dropZone" class="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl p-6 bg-gray-50 cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition">
-        <svg class="w-12 h-12 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6h.1a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-        </svg>
-        <p class="text-gray-600 text-center">Seret & letakkan file di sini<br><span class="text-sm text-gray-400">atau klik untuk memilih</span></p>
-        <input type="file" name="laporan" id="fileInput" accept=".pdf,.doc,.docx" class="hidden" required>
+<body class="bg-gray-100 font-sans">
+  <div class="max-w-3xl mx-auto py-12 px-6">
+    <h1 class="text-4xl font-bold text-center mb-8 text-gray-800">📑 Upload Laporan Magang</h1>
+  
+    <!-- Daftar Laporan -->
+    <div id="laporan-container" class="space-y-4 mb-8">
+      <% if(laporan && laporan.length > 0){ %>
+        <% laporan.forEach(l => { %>
+          <div class="p-4 bg-white shadow rounded-xl flex justify-between items-center border border-gray-200 hover:shadow-lg transition duration-300">
+            <span class="font-medium text-gray-700"><%= l.judul %></span>
+            <span class="px-3 py-1 rounded-full text-sm font-semibold <%= l.status==='approved'?'bg-green-200 text-green-800':'bg-yellow-200 text-yellow-800' %>">
+              <%= l.status %>
+            </span>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p class="text-gray-400 italic text-center">Belum ada laporan diupload.</p>
+      <% } %>
+    </div>
+  
+    <!-- Form Upload -->
+    <form id="upload-form" class="bg-white p-6 rounded-2xl shadow-xl space-y-4 border border-gray-200" enctype="multipart/form-data">
+      <input type="text" name="judul" placeholder="Judul Laporan"
+        class="w-full border p-3 rounded-xl focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition font-medium text-gray-800" required>
+  
+      <div class="flex items-center space-x-4">
+        <input type="file" name="laporan" id="laporan-file" class="border p-2 rounded-lg w-full" required>
+        <!-- Elegant delete icon -->
+        <button type="button" id="hapus-file" class="text-red-500 hover:text-red-700 transition" title="Hapus file">
+          🗑️
+        </button>
       </div>
-
-      <!-- File Preview -->
-      <p id="fileName" class="text-sm text-gray-500 text-center mt-2"></p>
-
-      <!-- Submit Button -->
-      <button type="submit"
-        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-xl transition duration-300 shadow-md hover:shadow-lg">
-        Upload Laporan
-      </button>
+  
+      <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden hidden" id="progress-container">
+        <div class="bg-yellow-400 h-3 w-0 transition-all" id="progress-bar"></div>
+      </div>
+  
+      <button type="submit" class="w-full bg-yellow-500 text-white p-3 rounded-xl font-semibold hover:bg-yellow-600 shadow-md hover:shadow-lg transition">Upload Laporan</button>
     </form>
   </div>
-
+  
   <script>
-    const dropZone = document.getElementById('dropZone');
-    const fileInput = document.getElementById('fileInput');
-    const fileName = document.getElementById('fileName');
-    const form = document.getElementById('uploadForm');
-
-    // Klik area -> trigger input file
-    dropZone.addEventListener('click', () => fileInput.click());
-
-    // Tampilkan nama file
-    fileInput.addEventListener('change', () => {
-      fileName.textContent = fileInput.files.length ? `📄 ${fileInput.files[0].name}` : "";
-    });
-
-    // Drag & Drop
-    dropZone.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      dropZone.classList.add('border-blue-500', 'bg-blue-50');
-    });
-
-    dropZone.addEventListener('dragleave', () => {
-      dropZone.classList.remove('border-blue-500', 'bg-blue-50');
-    });
-
-    dropZone.addEventListener('drop', (e) => {
-      e.preventDefault();
-      fileInput.files = e.dataTransfer.files;
-      fileName.textContent = `📄 ${fileInput.files[0].name}`;
-      dropZone.classList.remove('border-blue-500', 'bg-blue-50');
-    });
-
-    // Notifikasi sukses
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      Swal.fire({
-        icon: 'success',
-        title: 'Berhasil!',
-        text: 'Laporan berhasil diupload 🎉',
-        confirmButtonColor: '#2563eb'
-      }).then(() => {
-        form.submit();
+  const form = document.getElementById('upload-form');
+  const fileInput = document.getElementById('laporan-file');
+  const hapusBtn = document.getElementById('hapus-file');
+  const progressContainer = document.getElementById('progress-container');
+  const progressBar = document.getElementById('progress-bar');
+  const laporanContainer = document.getElementById('laporan-container');
+  
+  hapusBtn.addEventListener('click', ()=> {
+    fileInput.value = '';
+  });
+  
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    if(!fileInput.files[0]) return alert('Pilih file terlebih dahulu!');
+    
+    progressContainer.classList.remove('hidden');
+    progressBar.style.width='0%';
+  
+    const formData = new FormData();
+    formData.append('laporan', fileInput.files[0]);
+    formData.append('judul', form.judul.value);
+  
+    fetch('/user/submit-laporan', {
+      method:'POST',
+      body: formData
+    }).then(res=>res.json())
+      .then(data=>{
+        progressBar.style.width='100%';
+        progressContainer.classList.add('hidden');
+        fileInput.value = '';
+        form.judul.value = '';
+  
+        // Tambah ke daftar laporan
+        const div = document.createElement('div');
+        div.className = 'p-4 bg-white shadow rounded-xl flex justify-between items-center border border-gray-200 hover:shadow-lg transition duration-300 mt-2';
+        div.innerHTML = `<span class="font-medium text-gray-700">${data.laporan.judul}</span>
+                         <span class="px-3 py-1 rounded-full text-sm font-semibold bg-yellow-200 text-yellow-800">${data.laporan.status}</span>`;
+        laporanContainer.appendChild(div);
+      }).catch(err=>{
+        alert('Upload gagal, coba lagi.');
+        progressContainer.classList.add('hidden');
       });
-    });
+  });
   </script>
-</body>
-</html>
+  
+  
+    
+  
+  
