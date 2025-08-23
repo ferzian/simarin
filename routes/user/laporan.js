@@ -36,7 +36,6 @@
   });
 
 
-  // POST upload laporan
 // POST upload laporan via fetch
 router.post('/submit-laporan', isUser, upload.single('laporan'), async (req, res) => {
   try {
