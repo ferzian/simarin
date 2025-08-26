@@ -3,6 +3,7 @@ const router = express.Router();
 const { User, Participant } = require('../../models');
 const { isAuthenticated, isAdmin } = require('../../middleware/authMiddleware');
 const ExcelJS = require('exceljs');
+const { Op } = require("sequelize");
 
 router.get('/data-peserta', isAuthenticated, isAdmin, async (req, res) => {
   try {
@@ -38,7 +39,7 @@ router.get('/data-peserta', isAuthenticated, isAdmin, async (req, res) => {
         lokasi: p.lokasi,
         tanggalMulai: p.tanggalMulai,
         tanggalSelesai: p.tanggalSelesai,
-        pasFoto: p.pasFoto, 
+        pasFoto: p.pasFoto,
         suratSehat: p.suratSehat,
       })),
       user: req.session.user
@@ -52,7 +53,22 @@ router.get('/data-peserta', isAuthenticated, isAdmin, async (req, res) => {
 
 router.get('/data-peserta/download', isAuthenticated, isAdmin, async (req, res) => {
   try {
+    const { start, end, type, lokasi } = req.query;
+    const whereClause = {};
+
+    // Filter tanggal dengan overlap
+    if (start && end) {
+      whereClause[Op.and] = [
+        { tanggalMulai: { [Op.lte]: end } },
+        { tanggalSelesai: { [Op.gte]: start } }
+      ];
+    }
+
+    if (type) whereClause.kegiatan = type;
+    if (lokasi) whereClause.lokasi = lokasi;
+
     const participants = await Participant.findAll({
+      where: whereClause,
       include: [{ model: User, where: { role: 'user' } }],
     });
 
