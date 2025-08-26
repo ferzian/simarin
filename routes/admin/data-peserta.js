@@ -75,34 +75,49 @@ router.get('/data-peserta/download', isAuthenticated, isAdmin, async (req, res) 
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Data Peserta');
 
-    // Judul
-    worksheet.mergeCells('A1:L1');
+    // Hitung total kolom header
+    const headers = [
+      "Nama Lengkap", "Nomor Induk Siswa/Mahasiswa", "Jenis Kelamin", "No. Telepon", "Alamat Domisili",
+      "Jenjang Pendidikan", "Asal Instansi", "Jurusan", "Jenis Kegiatan",
+      "Lokasi Kegiatan", "Tanggal Mulai", "Tanggal Selesai"
+    ];
+
+    const totalColumns = headers.length;
+    const lastColLetter = worksheet.getColumn(totalColumns).letter;
+
+    // === Judul ===
+    worksheet.mergeCells(`A1:${lastColLetter}1`);
     const titleCell = worksheet.getCell('A1');
     titleCell.value = 'Laporan Data Peserta SIMARIN';
     titleCell.font = { bold: true, size: 16 };
     titleCell.alignment = { vertical: 'middle', horizontal: 'center' };
 
-    // Periode (kalau mau ambil dari query filter)
-    worksheet.mergeCells('A2:L2');
+    // === Periode ===
+    worksheet.mergeCells(`A2:${lastColLetter}2`);
     const periodeCell = worksheet.getCell('A2');
-    periodeCell.value = 'Periode: Semua Data';
+
+    const formatDateIndo = (dateStr) =>
+      new Date(dateStr).toLocaleDateString('id-ID', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+
+    if (start && end) {
+      periodeCell.value = `Periode: ${formatDateIndo(start)} s/d ${formatDateIndo(end)}`;
+    } else if (start) {
+      periodeCell.value = `Periode: sejak ${formatDateIndo(start)}`;
+    } else if (end) {
+      periodeCell.value = `Periode: sampai ${formatDateIndo(end)}`;
+    } else {
+      periodeCell.value = 'Periode: Semua Data';
+    }
+
+    periodeCell.font = { italic: true, size: 12 };
     periodeCell.alignment = { vertical: 'middle', horizontal: 'center' };
 
-    // Header
-    const headers = [
-      "Nama Lengkap",
-      "NIS/NPM",
-      "Jenis Kelamin",
-      "No. Telepon",
-      "Alamat Domisili",
-      "Jenjang Pendidikan",
-      "Asal Instansi",
-      "Jurusan",
-      "Jenis Kegiatan",
-      "Lokasi Kegiatan",
-      "Tanggal Mulai",
-      "Tanggal Selesai",
-    ];
+
+    // === Kosongkan 1 row sebelum header ===
     worksheet.addRow([]);
     worksheet.addRow(headers);
 
