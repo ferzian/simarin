@@ -325,3 +325,47 @@ class="bg-white p-6 rounded-2xl shadow-md w-full md:w-1/2 flex flex-col justify-
   </footer>
   </body>
 </html>
+<body>
+<!-- Popup sukses pendaftaran -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const success = urlParams.get('success');
+
+    if (success === 'true') {
+      Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        text: 'Form pendaftaran berhasil disimpan.',
+        confirmButtonText: 'OK'
+      }).then(() => {
+        // Hapus query string agar popup tidak muncul lagi saat refresh
+        window.history.replaceState({}, document.title, "/user/dashboard");
+      });
+    }
+  });
+</script>
+</body>
+<!-- Popup Error Generik -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const urlParams = new URLSearchParams(window.location.search);
+
+  // Ambil error dari query string
+  const error = urlParams.get('error');
+  if (error) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Gagal!',
+      text: decodeURIComponent(error), // menampilkan pesan apapun dari backend
+      confirmButtonText: 'OK'
+    }).then(() => {
+      // Hapus query string agar popup tidak muncul lagi saat refresh
+      window.history.replaceState({}, document.title, "/user/dashboard");
+    });
+  }
+});
+</script>
+
