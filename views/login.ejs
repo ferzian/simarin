@@ -1,99 +1,73 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
   <head>
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Login</title>
+    <title>Login - SIMARIN</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="/css/home.css">
     <link rel="icon" sizes="32x32" type="image/png" href="/images/logo.png" />
-    <script src="/js/home.js" defer></script>
     <style>
       body {
         font-family: "Poppins", sans-serif;
       }
     </style>
   </head>
-  <body
-    class="bg-gradient-to-br from-blue-100 to-purple-100 min-h-screen flex flex-col"
-  >
-    <nav class="bg-white shadow-lg p-4 flex justify-between items-center z-10">
+  <body class="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 to-blue-100">
+    
+    <!-- Navbar -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 bg-transparent px-6 py-4 flex justify-between items-center z-50 transition duration-300">
       <div class="flex items-center space-x-3">
-        <img
-          src="/images/logo.png"
-          alt="Logo SIMARIN"
-          class="h-10 w-10 object-contain"
-        />
-        <h1 class="text-3xl font-bold text-blue-700 tracking-wide">SIMARIN</h1>
+        <img src="/images/logo.png" alt="Logo SIMARIN" class="h-10 w-10 object-contain" />
+        <h1 id="navTitle" class="text-2xl md:text-3xl font-bold text-white tracking-wide">SIMARIN</h1>
       </div>
-      <div class="flex items-center space-x-6">
-        <a
-          href="/"
-          class="text-gray-700 hover:text-blue-600 transition duration-300 ease-in-out text-lg"
-          >Beranda</a
-        >
-        <a
-          href="/login"
-          class="bg-blue-600 text-white px-6 py-2 rounded-full shadow-md hover:bg-blue-700 transition duration-300 ease-in-out text-lg"
-          >Login</a
-        >
-        <a
-          href="/register"
-          class="text-gray-700 hover:text-blue-600 transition duration-300 ease-in-out text-lg"
-          >Register</a
-        >
+      <div class="flex items-center space-x-6 font-medium">
+        <a href="/" class="nav-link text-white hover:text-blue-400 transition">Beranda</a>
+        <a href="/register" class="nav-link text-white hover:text-blue-400 transition">Daftar</a>
+        <a href="/login" class="px-5 py-2 rounded-full bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow hover:opacity-90 transition">Login</a>
       </div>
     </nav>
 
-    <div class="flex-grow flex items-center justify-center p-6">
-      <div
-        class="bg-white p-10 rounded-xl shadow-2xl space-y-7 max-w-md w-full transform transition-all duration-500 hover:scale-105"
-      >
-        <h1 class="text-3xl font-bold text-center text-gray-800">
-          Hai, Selamat Datang! 👋
-        </h1>
-        <p class="text-center text-gray-600 text-lg">
-          Silakan masuk dengan akun Anda.
-        </p>
+    <!-- Background Hero -->
+    <header class="relative flex-grow flex items-center justify-center text-center bg-cover bg-center"
+      style="background-image: url('/images/BRPBATPP_Depan%5B1%5D.jpg');">
+      <div class="absolute inset-0 bg-black/40"></div>
+
+      <!-- Card Login -->
+      <div class="relative z-10 w-full max-w-md bg-white/80 backdrop-blur-sm p-10 rounded-2xl shadow-2xl">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-2">Hai, Selamat Datang! 👋</h1>
+        <p class="text-center text-gray-600 mb-6">Silakan masuk dengan akun Anda.</p>
+
         <% if (typeof error !== 'undefined') { %>
-        <div
-          class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4"
-        >
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-center">
           <strong><%= error %></strong>
         </div>
         <% } %>
 
         <form action="/auth/login" method="POST" class="space-y-6">
           <div>
-            <label
-              for="loginId"
-              class="block text-gray-700 font-medium mb-2 text-lg"
-              >Username atau Email <span class="text-red-500">*</span></label
-            >
+            <label for="loginId" class="block text-gray-700 font-medium mb-2">Username atau Email <span class="text-red-500">*</span></label>
             <input
               type="text"
               name="loginId"
               id="loginId"
               placeholder="Masukkan username atau email Anda"
-              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-lg"
+              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
               required
             />
           </div>
 
           <div>
-            <label
-              for="password"
-              class="block text-gray-700 font-medium mb-2 text-lg"
-              >Password <span class="text-red-500">*</span></label
-            >
+            <label for="password" class="block text-gray-700 font-medium mb-2">Password <span class="text-red-500">*</span></label>
             <div class="relative">
               <input
                 type="password"
                 name="password"
                 id="password"
                 placeholder="Masukkan password Anda"
-                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-lg"
+                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                 required
               />
               <button
@@ -101,54 +75,70 @@
                 onclick="togglePasswordVisibility('password', this)"
                 class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-6 w-6 eye-icon"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                  />
+                <!-- Icon mata -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 eye-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                 </svg>
               </button>
             </div>
             <div class="flex justify-end mt-2">
-              <a
-                href="/auth/forgot-password"
-                class="text-blue-500 text-sm hover:underline"
-                >Lupa password?</a
-              >
+              <a href="/auth/forgot-password" class="text-blue-500 text-sm hover:underline">Lupa password?</a>
             </div>
           </div>
 
-          <button
-            type="submit"
-            class="bg-blue-600 text-white w-full py-3 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 ease-in-out font-semibold text-xl transform hover:scale-100"
-          >
+          <button type="submit"
+            class="w-full py-3 rounded-lg bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold text-lg shadow hover:opacity-90 transition">
             Login
           </button>
         </form>
 
-        <p class="text-center text-gray-600 text-md mt-6">
+        <p class="text-center text-gray-600 mt-6">
           Belum punya akun?
-          <a
-            href="/register"
-            class="text-blue-600 hover:text-blue-800 font-semibold transition duration-300 ease-in-out"
-            >Daftar sekarang</a
-          >
+          <a href="/register" class="text-blue-600 hover:text-blue-800 font-semibold">Daftar sekarang</a>
         </p>
       </div>
-    </div>
+    </header>
+
+    <script>
+      // Navbar scroll effect
+      const navbar = document.getElementById("navbar");
+      const navTitle = document.getElementById("navTitle");
+      const navLinks = document.querySelectorAll(".nav-link");
+
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 50) {
+          navbar.classList.add("bg-white", "shadow");
+          navTitle.classList.remove("text-white");
+          navTitle.classList.add("text-blue-700");
+          navLinks.forEach((link) => {
+            link.classList.remove("text-white");
+            link.classList.add("text-gray-700");
+          });
+        } else {
+          navbar.classList.remove("bg-white", "shadow");
+          navTitle.classList.remove("text-blue-700");
+          navTitle.classList.add("text-white");
+          navLinks.forEach((link) => {
+            link.classList.remove("text-gray-700");
+            link.classList.add("text-white");
+          });
+        }
+      });
+
+      // Toggle password visibility
+      function togglePasswordVisibility(inputId, btn) {
+        const input = document.getElementById(inputId);
+        if (input.type === "password") {
+          input.type = "text";
+          btn.querySelector("svg").classList.add("text-blue-500");
+        } else {
+          input.type = "password";
+          btn.querySelector("svg").classList.remove("text-blue-500");
+        }
+      }
+    </script>
   </body>
 </html>

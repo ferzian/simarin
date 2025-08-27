@@ -1,65 +1,77 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
   <head>
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Register</title>
+    <title>Register - SIMARIN</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <!-- Favicon -->
+    <link rel="stylesheet" href="/css/home.css">
     <link rel="icon" sizes="32x32" type="image/png" href="/images/logo.png" />
-    <script src="/js/home.js" defer></script>
     <style>
       body {
         font-family: "Poppins", sans-serif;
       }
     </style>
   </head>
-  <body
-    class="bg-gradient-to-br from-blue-100 to-purple-100 min-h-screen flex flex-col"
-  >
-    <nav class="bg-white shadow-lg p-4 flex justify-between items-center z-10">
+  <body class="min-h-screen flex flex-col">
+    <!-- Navbar -->
+    <nav
+      id="navbar"
+      class="fixed top-0 left-0 right-0 bg-transparent px-6 py-4 flex justify-between items-center z-50 transition duration-300"
+    >
       <div class="flex items-center space-x-3">
         <img
           src="/images/logo.png"
           alt="Logo SIMARIN"
           class="h-10 w-10 object-contain"
         />
-        <h1 class="text-3xl font-bold text-blue-700 tracking-wide">SIMARIN</h1>
+        <h1
+          id="navTitle"
+          class="text-2xl md:text-3xl font-bold text-white tracking-wide"
+        >
+          SIMARIN
+        </h1>
       </div>
-      <div class="flex items-center space-x-6">
-        <a
-          href="/"
-          class="text-gray-700 hover:text-blue-600 transition duration-300 ease-in-out text-lg"
+      <div class="flex items-center space-x-6 font-medium">
+        <a href="/" class="nav-link text-white hover:text-blue-400 transition"
           >Beranda</a
         >
         <a
-          href="/login"
-          class="bg-blue-600 text-white px-6 py-2 rounded-full shadow-md hover:bg-blue-700 transition duration-300 ease-in-out text-lg"
-          >Login</a
+          href="/register"
+          class="px-5 py-2 rounded-full bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow hover:opacity-90 transition"
+          >Daftar</a
         >
         <a
-          href="/register"
-          class="text-gray-700 hover:text-blue-600 transition duration-300 ease-in-out text-lg"
-          >Register</a
+          href="/login"
+          class="nav-link text-white hover:text-blue-400 transition"
+          >Login</a
         >
       </div>
     </nav>
 
-    <div class="flex-grow flex items-center justify-center p-6">
+    <!-- Background Hero -->
+    <header
+      class="relative flex-grow flex items-center justify-center bg-cover bg-center"
+      style="background-image: url('/images/BRPBATPP_Depan%5B1%5D.jpg')"
+    >
+      <div class="absolute inset-0 bg-black/40"></div>
+
+      <!-- Card Register -->
       <div
-        class="bg-white p-10 rounded-xl shadow-2xl space-y-7 max-w-lg w-full transform transition-all duration-500 hover:scale-105"
+        class="relative z-10 w-full max-w-3xl bg-white/80 backdrop-blur-sm p-10 rounded-2xl shadow-2xl"
       >
         <h1 class="text-3xl font-bold text-center text-gray-800">
           Yuk, Buat Akun Baru! ✨
         </h1>
-        <p class="text-center text-gray-600 text-lg">
+        <p class="text-center text-gray-600 mb-6">
           Silakan daftar untuk membuat akun Anda.
         </p>
+
         <% if (typeof error !== 'undefined' && error) { %>
         <div
-          class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4"
+          class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-center"
         >
           <strong><%= error %></strong>
         </div>
@@ -73,32 +85,24 @@
         >
           <!-- KIRI -->
           <div class="space-y-6">
-            <!-- Username -->
             <div>
-              <label
-                for="username"
-                class="block text-gray-700 font-medium mb-2 text-lg"
+              <label for="username" class="block text-gray-700 font-medium mb-2"
+                >Username <span class="text-red-500">*</span></label
               >
-                Username <span class="text-red-500">*</span>
-              </label>
               <input
                 type="text"
                 name="username"
                 id="username"
                 placeholder="Pilih username Anda"
-                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-lg"
                 required
               />
             </div>
 
-            <!-- Password -->
             <div>
-              <label
-                for="password"
-                class="block text-gray-700 font-medium mb-2 text-lg"
+              <label for="password" class="block text-gray-700 font-medium mb-2"
+                >Password <span class="text-red-500">*</span></label
               >
-                Password <span class="text-red-500">*</span>
-              </label>
               <div class="relative">
                 <input
                   type="password"
@@ -114,7 +118,6 @@
                   onclick="togglePasswordVisibility('password', this)"
                   class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700"
                 >
-                  <!-- Icon mata -->
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     class="h-6 w-6 eye-icon"
@@ -139,14 +142,12 @@
               </div>
             </div>
 
-            <!-- Konfirmasi Password -->
             <div>
               <label
                 for="confirmPassword"
-                class="block text-gray-700 font-medium mb-2 text-lg"
+                class="block text-gray-700 font-medium mb-2"
+                >Konfirmasi Password <span class="text-red-500">*</span></label
               >
-                Konfirmasi Password <span class="text-red-500">*</span>
-              </label>
               <div class="relative">
                 <input
                   type="password"
@@ -161,7 +162,6 @@
                   onclick="togglePasswordVisibility('confirmPassword', this)"
                   class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700"
                 >
-                  <!-- Icon mata -->
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     class="h-6 w-6 eye-icon"
@@ -189,11 +189,8 @@
 
           <!-- KANAN -->
           <div class="space-y-6">
-            <!-- Email -->
             <div>
-              <label
-                for="email"
-                class="block text-gray-700 font-medium mb-2 text-lg"
+              <label for="email" class="block text-gray-700 font-medium mb-2"
                 >Email</label
               >
               <input
@@ -205,11 +202,8 @@
               />
             </div>
 
-            <!-- No HP -->
             <div>
-              <label
-                for="phone"
-                class="block text-gray-700 font-medium mb-2 text-lg"
+              <label for="phone" class="block text-gray-700 font-medium mb-2"
                 >No HP</label
               >
               <input
@@ -222,14 +216,10 @@
               />
             </div>
 
-            <!-- Tanggal Lahir -->
             <div>
-              <label
-                for="instansi"
-                class="block text-gray-700 font-medium mb-2 text-lg"
+              <label for="instansi" class="block text-gray-700 font-medium mb-2"
                 >Asal Instansi</label
               >
-              <!-- sekarang -->
               <input
                 type="text"
                 name="instansi"
@@ -240,26 +230,65 @@
             </div>
           </div>
 
-          <!-- Tombol submit full width -->
+          <!-- Tombol submit -->
           <div class="md:col-span-2">
             <button
               type="submit"
-              class="bg-blue-600 text-white w-full py-3 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 ease-in-out font-semibold text-xl"
+              class="w-full py-3 rounded-lg bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold text-lg shadow hover:opacity-90 transition"
             >
               Daftar Akun
             </button>
           </div>
         </form>
 
-        <p class="text-center text-gray-600 text-md mt-6">
+        <p class="text-center text-gray-600 mt-6">
           Sudah punya akun?
           <a
             href="/login"
-            class="text-blue-600 hover:text-blue-800 font-semibold transition duration-300 ease-in-out"
+            class="text-blue-600 hover:text-blue-800 font-semibold"
             >Login di sini</a
           >
         </p>
       </div>
-    </div>
+    </header>
+
+    <script>
+      // Navbar scroll effect
+      const navbar = document.getElementById("navbar");
+      const navTitle = document.getElementById("navTitle");
+      const navLinks = document.querySelectorAll(".nav-link");
+
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 50) {
+          navbar.classList.add("bg-white", "shadow");
+          navTitle.classList.remove("text-white");
+          navTitle.classList.add("text-blue-700");
+          navLinks.forEach((link) => {
+            link.classList.remove("text-white");
+            link.classList.add("text-gray-700");
+          });
+        } else {
+          navbar.classList.remove("bg-white", "shadow");
+          navTitle.classList.remove("text-blue-700");
+          navTitle.classList.add("text-white");
+          navLinks.forEach((link) => {
+            link.classList.remove("text-gray-700");
+            link.classList.add("text-white");
+          });
+        }
+      });
+
+      // Toggle password visibility
+      function togglePasswordVisibility(inputId, btn) {
+        const input = document.getElementById(inputId);
+        if (input.type === "password") {
+          input.type = "text";
+          btn.querySelector("svg").classList.add("text-blue-500");
+        } else {
+          input.type = "password";
+          btn.querySelector("svg").classList.remove("text-blue-500");
+        }
+      }
+    </script>
   </body>
 </html>
