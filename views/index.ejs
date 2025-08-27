@@ -1,48 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.tailwindcss.com"></script>
     <title>SIMARIN - Sistem Magang</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <!-- SweetAlert2 CDN -->
+    <link rel="stylesheet" href="/css/home.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <!-- Favicon -->
     <link rel="icon" sizes="32x32" type="image/png" href="/images/logo.png" />
-    <script src="/js/home.js" defer></script>
 
-    <!-- Metadata untuk preview -->
-    <meta
-      property="og:title"
-      content="SIMARIN - Sistem Informasi Magang Perikanan"
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
-    <meta
-      property="og:description"
-      content="Platform magang, PKL, dan penelitian di Balai Riset Perikanan Budidaya Air Tawar dan Penyuluhan Perikanan."
-    />
-    <meta property="og:image" content="/images/logo.png" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://simarin.com" />
 
     <style>
       body {
         font-family: "Poppins", sans-serif;
       }
       .hero-bg {
-        background-image: url("https://source.unsplash.com/1600x900/?research,internship,fisheries"); /* Gambar latar belakang relevan */
+        background-image: url("https://source.unsplash.com/1600x900/?fisheries,students,teamwork");
         background-size: cover;
         background-position: center;
       }
+      .nav-scroll {
+        background-color: white !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+      }
     </style>
   </head>
-  <body class="bg-gray-100 min-h-screen flex flex-col">
+  <body id="top" class="min-h-screen flex flex-col">
+    <!-- Navbar -->
     <nav
-      class="fixed top-0 left-0 right-0 bg-white shadow-lg p-4 flex justify-between items-center z-50"
+      id="navbar"
+      class="fixed top-0 left-0 right-0 bg-transparent p-5 flex justify-between items-center z-50 transition duration-300"
     >
       <div class="flex items-center space-x-3">
         <img
@@ -50,87 +46,116 @@
           alt="Logo SIMARIN"
           class="h-10 w-10 object-contain"
         />
-        <h1 class="text-3xl font-bold text-blue-700 tracking-wide">SIMARIN</h1>
+        <h1
+          id="navTitle"
+          class="text-2xl md:text-3xl font-bold text-white tracking-wide"
+        >
+          SIMARIN
+        </h1>
       </div>
-      <div class="flex items-center space-x-6">
+      <div class="flex items-center space-x-6 font-medium">
         <a
-          href="/"
-          class="text-gray-700 hover:text-blue-600 transition duration-300 ease-in-out text-lg"
+          href="#top"
+          class="nav-link text-white hover:text-blue-400 transition"
           >Beranda</a
         >
         <a
-          href="/login"
-          class="bg-blue-600 text-white px-6 py-2 rounded-full shadow-md hover:bg-blue-700 transition duration-300 ease-in-out text-lg"
-          >Login</a
-        >
-
-        <a
           href="/register"
-          class="text-gray-700 hover:text-blue-600 transition duration-300 ease-in-out text-lg"
-          >Register</a
+          class="px-5 py-2 rounded-full bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow hover:opacity-90 transition"
+          >Daftar</a
+        >
+        <a
+          href="/login"
+          class="nav-link text-white hover:text-blue-400 transition"
+          >Login</a
         >
       </div>
     </nav>
 
+    <!-- Overlay agar teks terbaca -->
+    <div class="absolute inset-0 bg-black/50"></div>
+
+    <!-- Hero dengan background image -->
     <header
-      class="hero-bg flex-grow flex items-center justify-center text-center py-20 px-4 relative"
+      class="relative h-screen flex items-center justify-center text-center bg-cover bg-center"
+      style="background-image: url('/images/BRPBATPP_Depan[1].jpg')"
     >
-      <div class="absolute inset-0 bg-black opacity-50"></div>
-      <div class="relative z-10 text-white mt-10">
-        <h2 class="text-5xl font-bold mb-4 leading-tight">
+      <!-- overlay -->
+      <div class="absolute inset-0 bg-black/40"></div>
+
+      <!-- konten -->
+      <div class="relative z-10 text-white px-6">
+        <h2 class="text-5xl md:text-6xl font-extrabold mb-6 leading-tight">
           Wujudkan Potensimu bersama <span class="text-blue-400">SIMARIN</span>
         </h2>
-        <p class="text-xl max-w-2xl mx-auto mb-8">
-          Sistem Informasi Magang untuk program magang di Balai Riset Perikanan
-          Budidaya Air Tawar dan Penyuluhan Perikanan.
+        <p class="text-lg md:text-xl max-w-2xl mx-auto mb-8 opacity-90">
+          Sistem Informasi untuk mendukung program Magang, Praktik Kegiatan
+          Lapang, dan Penelitian.
         </p>
         <div class="space-x-4">
           <a
             href="/register"
-            class="bg-blue-600 text-white text-xl font-semibold px-8 py-3 rounded-full shadow-lg hover:bg-blue-700 transition duration-300 ease-in-out"
-            >Daftar Sekarang</a
+            class="bg-gradient-to-r from-blue-600 to-blue-500 text-white text-lg font-semibold px-8 py-3 rounded-full shadow-lg hover:opacity-90 transition"
           >
+            Daftar Sekarang
+          </a>
           <a
             href="#tentang"
-            class="bg-white text-blue-600 text-xl font-semibold px-8 py-3 rounded-full shadow-lg hover:bg-gray-200 transition duration-300 ease-in-out"
-            >Pelajari Lebih Lanjut</a
+            class="bg-white text-blue-700 text-lg font-semibold px-8 py-3 rounded-full shadow-md hover:bg-gray-100 transition"
           >
+            Pelajari Lebih Lanjut
+          </a>
         </div>
       </div>
     </header>
 
-    <section id="tentang" class="bg-white py-16 px-4">
-      <div class="max-w-4xl mx-auto text-center">
+    <!-- Tentang -->
+    <section id="tentang" class="bg-white py-20 px-6">
+      <div class="max-w-6xl mx-auto text-center">
         <h3 class="text-4xl font-bold text-gray-800 mb-6">Tentang SIMARIN</h3>
-        <p class="text-gray-700 leading-relaxed text-lg mb-8">
-          Website ini dirancang khusus untuk memudahkan proses pendaftaran dan
-          pengelolaan program magang di Balai Riset Perikanan Budidaya Air Tawar
-          dan Penyuluhan Perikanan. Kami berkomitmen untuk menyediakan
-          pengalaman magang yang berharga bagi Anda.
+        <p
+          class="text-gray-600 max-w-3xl mx-auto mb-12 text-lg leading-relaxed"
+        >
+          SIMARIN dirancang khusus untuk memudahkan proses pendaftaran dan
+          pengelolaan program magang. Kami hadir untuk memberikan pengalaman
+          berharga yang mempersiapkan Anda menghadapi dunia kerja.
         </p>
-        <div class="grid md:grid-cols-3 gap-8 text-left">
-          <div class="p-6 bg-gray-50 rounded-lg shadow-md">
-            <h4 class="text-2xl font-semibold text-blue-700 mb-3">
-              Pendaftaran Mudah
-            </h4>
+        <div class="grid md:grid-cols-3 gap-8">
+          <div
+            class="p-6 bg-gray-50 rounded-xl shadow hover:shadow-lg transition"
+          >
+            <div
+              class="w-12 h-12 flex items-center justify-center rounded-full bg-blue-100 text-blue-600 mb-4"
+            >
+              <i class="fas fa-file-alt text-2xl"></i>
+            </div>
+            <h4 class="text-xl font-semibold mb-2">Pendaftaran Mudah</h4>
             <p class="text-gray-600">
-              Daftar akun dengan cepat dan mulai proses seleksi magang Anda
-              tanpa ribet.
+              Daftar akun dengan cepat dan mulai proses seleksi tanpa ribet.
             </p>
           </div>
-          <div class="p-6 bg-gray-50 rounded-lg shadow-md">
-            <h4 class="text-2xl font-semibold text-blue-700 mb-3">
-              Akses Dashboard
-            </h4>
+          <div
+            class="p-6 bg-gray-50 rounded-xl shadow hover:shadow-lg transition"
+          >
+            <div
+              class="w-12 h-12 flex items-center justify-center rounded-full bg-blue-100 text-blue-600 mb-4"
+            >
+              <i class="fas fa-chart-line text-2xl"></i>
+            </div>
+            <h4 class="text-xl font-semibold mb-2">Dashboard Interaktif</h4>
             <p class="text-gray-600">
-              Setelah disetujui, akses dashboard pribadi Anda untuk mengelola
-              informasi magang.
+              Kelola informasi magang dan pantau progres Anda melalui dashboard.
             </p>
           </div>
-          <div class="p-6 bg-gray-50 rounded-lg shadow-md">
-            <h4 class="text-2xl font-semibold text-blue-700 mb-3">
-              Program Magang Berkualitas
-            </h4>
+          <div
+            class="p-6 bg-gray-50 rounded-xl shadow hover:shadow-lg transition"
+          >
+            <div
+              class="w-12 h-12 flex items-center justify-center rounded-full bg-blue-100 text-blue-600 mb-4"
+            >
+              <i class="fas fa-graduation-cap text-2xl"></i>
+            </div>
+            <h4 class="text-xl font-semibold mb-2">Program Berkualitas</h4>
             <p class="text-gray-600">
               Dapatkan pengalaman praktis di bidang perikanan budidaya air tawar
               dan penyuluhan.
@@ -140,26 +165,293 @@
       </div>
     </section>
 
-    <section class="bg-blue-700 py-16 px-4 text-white text-center">
-      <div class="max-w-3xl mx-auto">
-        <h3 class="text-4xl font-bold mb-6">Siap Bergabung dengan SIMARIN?</h3>
-        <p class="text-xl mb-8">
-          Jangan lewatkan kesempatan untuk mengembangkan keahlian Anda. Daftar
-          sekarang dan mulai perjalanan magang Anda!
-        </p>
-        <a
-          href="/register"
-          class="bg-white text-blue-700 text-xl font-semibold px-10 py-4 rounded-full shadow-lg hover:bg-gray-200 transition duration-300 ease-in-out"
-          >Daftar Akun Baru</a
+    <!-- Alur Kegiatan -->
+    <section id="alur" class="bg-gray-50 py-20 px-6">
+      <div class="max-w-6xl mx-auto text-center">
+        <h3 class="text-4xl font-bold text-gray-800 mb-6">
+          Alur Kegiatan Magang/Praktik
+        </h3>
+        <p
+          class="text-gray-600 max-w-3xl mx-auto mb-12 text-lg leading-relaxed"
         >
+          Berikut adalah alur permohonan kegiatan serta alur yang harus
+          dilaksanakan setelah kegiatan selesai.
+        </p>
+
+        <div class="grid grid-cols-1 gap-10">
+          <!-- Alur Permohonan -->
+          <div
+            class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition flex flex-col items-center"
+          >
+            <h4 class="text-2xl font-semibold text-blue-700 mb-4">
+              Alur Permohonan
+            </h4>
+            <img
+              src="/images/alurMulai.png"
+              alt="Alur Permohonan Magang/Praktik"
+              class="rounded-lg shadow-md hover:scale-105 transition duration-300 w-full max-w-5xl"
+            />
+          </div>
+
+          <!-- Alur Selesai -->
+          <div
+            class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition flex flex-col items-center"
+          >
+            <h4 class="text-2xl font-semibold text-blue-700 mb-4">
+              Alur Setelah Kegiatan
+            </h4>
+            <img
+              src="/images/alurSelesai.png"
+              alt="Alur Selesai Kegiatan Magang/Praktik"
+              class="rounded-lg shadow-md hover:scale-105 transition duration-300 w-full max-w-5xl"
+            />
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- Tambahkan link Font Awesome di <head> -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    />
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 py-12">
+      <div
+        class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-10"
+      >
+        <!-- Alamat -->
+        <div>
+          <h4 class="text-white font-semibold text-lg mb-4">Alamat</h4>
+          <p class="leading-relaxed">
+            Jl. Sempur No.1, RT.01/RW.01, Sempur,<br />
+            Kecamatan Bogor Tengah, Kota Bogor,<br />
+            Jawa Barat 16129
+          </p>
+        </div>
+
+        <!-- Maps -->
+        <div>
+          <h4 class="text-white font-semibold text-lg mb-4">Lokasi</h4>
+          <a href="https://maps.app.goo.gl/EQdDmdumvvUJmPXV8" target="_blank">
+            <img
+              src="https://static-maps.yandex.ru/1.x/?lang=en-US&ll=106.7993,-6.5945&z=16&size=450,200&l=map&pt=106.7993,-6.5945,pm2rdm"
+              alt="Lokasi Jl. Sempur No.1, Bogor"
+              class="rounded-lg shadow-lg hover:opacity-90 transition"
+            />
+          </a>
+        </div>
+
+        <!-- Sosial Media -->
+        <div>
+          <h4 class="text-white font-semibold text-lg mb-4">Ikuti Kami</h4>
+          <ul class="space-y-3">
+            <li>
+              <a
+                href="https://www.facebook.com/share/1BHFuy2pmN/"
+                target="_blank"
+                class="flex items-center gap-3 hover:text-white transition"
+              >
+                <i class="fab fa-facebook text-xl"></i> Facebook
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://www.instagram.com/bppsdm_brpbatpp_bogor"
+                target="_blank"
+                class="flex items-center gap-3 hover:text-white transition"
+              >
+                <i class="fab fa-instagram text-xl"></i> Instagram
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://youtube.com/@sobatpenyuluhanbogor"
+                target="_blank"
+                class="flex items-center gap-3 hover:text-white transition"
+              >
+                <i class="fab fa-youtube text-xl"></i> YouTube
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://www.tiktok.com/@bppsdm_brpbatpp_bogor"
+                target="_blank"
+                class="flex items-center gap-3 hover:text-white transition"
+              >
+                <i class="fab fa-tiktok text-xl"></i> TikTok
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="text-center border-t border-gray-700 mt-10 pt-6 text-sm">
+        © 2025 SIMARIN. Seluruh hak cipta dilindungi.
+      </div>
     </footer>
+
+    <!-- Floating Chatbot Button (BESAR) -->
+    <button
+      id="chatbotToggle"
+      class="fixed bottom-6 right-6 w-14 h-14 md:w-16 md:h-16 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-lg flex items-center justify-center transition z-50"
+      aria-label="Buka Chatbot"
+    >
+      <i class="fa-solid fa-comments text-2xl md:text-3xl"></i>
+    </button>
+
+    <!-- Chatbot Box -->
+    <div
+      id="chatbotBox"
+      class="hidden fixed bottom-24 right-6 w-80 sm:w-96 bg-white shadow-2xl rounded-2xl overflow-hidden flex flex-col z-50"
+    >
+      <!-- Header -->
+      <div
+        class="bg-blue-600 text-white px-4 py-3 flex items-center justify-between"
+      >
+        <span class="font-semibold">Chatbot SIMARIN</span>
+        <button
+          id="closeChatbot"
+          class="hover:text-gray-200"
+          aria-label="Tutup"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Chat Area -->
+      <div
+        id="chatArea"
+        class="flex-1 p-4 space-y-3 overflow-y-auto overflow-x-hidden max-h-[28rem] text-sm break-words"
+      >
+        <div class="text-gray-500 text-center">Mulai percakapan 👋</div>
+      </div>
+
+      <!-- Input -->
+      <div class="border-t p-3 flex gap-2">
+        <input
+          id="chatInput"
+          type="text"
+          placeholder="Tulis pesan..."
+          class="flex-1 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-blue-300"
+        />
+        <button
+          id="sendBtn"
+          class="bg-blue-600 text-white px-4 rounded-lg hover:bg-blue-700"
+        >
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Navbar Scroll Effect -->
+    <script>
+      const navbar = document.getElementById("navbar");
+      const navTitle = document.getElementById("navTitle");
+      const navLinks = document.querySelectorAll(".nav-link");
+
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 50) {
+          navbar.classList.add("bg-white", "shadow");
+          navTitle.classList.remove("text-white");
+          navTitle.classList.add("text-blue-700");
+          navLinks.forEach((link) => {
+            link.classList.remove("text-white");
+            link.classList.add("text-gray-700");
+          });
+        } else {
+          navbar.classList.remove("bg-white", "shadow");
+          navTitle.classList.remove("text-blue-700");
+          navTitle.classList.add("text-white");
+          navLinks.forEach((link) => {
+            link.classList.remove("text-gray-700");
+            link.classList.add("text-white");
+          });
+        }
+      });
+    </script>
+
+    <script>
+      const chatbotToggle = document.getElementById("chatbotToggle");
+      const chatbotBox = document.getElementById("chatbotBox");
+      const closeChatbot = document.getElementById("closeChatbot");
+      const sendBtn = document.getElementById("sendBtn");
+      const chatInput = document.getElementById("chatInput");
+      const chatArea = document.getElementById("chatArea");
+
+      // 🔗 Ganti ini dengan URL chatbot temanmu
+      const API_URL = "https://your-chatbot-api-url.com/chat";
+
+      // Toggle
+      chatbotToggle.addEventListener("click", () => {
+        chatbotBox.classList.toggle("hidden");
+        if (!chatbotBox.classList.contains("hidden")) {
+          setTimeout(() => chatInput.focus(), 50);
+        }
+      });
+      closeChatbot.addEventListener("click", () =>
+        chatbotBox.classList.add("hidden")
+      );
+
+      // Utility: tambah pesan (dengan auto-wrap & max width)
+      function addMessage(text, sender = "user") {
+        const wrap = document.createElement("div");
+        wrap.className =
+          sender === "user" ? "flex justify-end" : "flex justify-start";
+
+        const bubble = document.createElement("div");
+        bubble.className = `
+      px-3 py-2 rounded-2xl text-sm sm:text-[0.95rem]
+      whitespace-pre-wrap break-words [overflow-wrap:anywhere]
+      max-w-[85%]
+      ${
+        sender === "user"
+          ? "bg-blue-600 text-white"
+          : "bg-gray-200 text-gray-800"
+      }
+    `;
+        bubble.textContent = text;
+
+        wrap.appendChild(bubble);
+        chatArea.appendChild(wrap);
+        chatArea.scrollTop = chatArea.scrollHeight;
+      }
+
+      // Kirim pesan ke API
+      async function sendMessage() {
+        const message = chatInput.value.trim();
+        if (!message) return;
+
+        addMessage(message, "user");
+        chatInput.value = "";
+
+        // indikator simple
+        const loading = document.createElement("div");
+        loading.className = "flex justify-start";
+        loading.innerHTML = `<div class="bg-gray-200 text-gray-800 px-3 py-2 rounded-2xl text-sm max-w-[85%]">Mengetik…</div>`;
+        chatArea.appendChild(loading);
+        chatArea.scrollTop = chatArea.scrollHeight;
+
+        try {
+          const res = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text: message }),
+          });
+          const data = await res.json();
+          loading.remove();
+          addMessage(
+            data.reply || data.answer || "Maaf, ada kesalahan.",
+            "bot"
+          );
+        } catch (err) {
+          console.error(err);
+          loading.remove();
+          addMessage("⚠️ Tidak bisa terhubung ke server.", "bot");
+        }
+      }
+
+      sendBtn.addEventListener("click", sendMessage);
+      chatInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          sendMessage();
+        }
+      });
+    </script>
   </body>
 </html>

@@ -359,21 +359,9 @@
               />
             </div>
             <button
-              id="downloadTableDataBtn"
-              class="bg-green-600 text-white px-5 py-2 rounded-xl shadow-md hover:bg-green-700 transition duration-300 font-bold flex items-center justify-center gap-2 text-sm md:text-base flex-shrink-0 mb-3"
+              id="downloadExcelBtn"
+              class="bg-green-600 text-white px-5 py-2 rounded-xl shadow-md hover:bg-green-700 transition duration-300 font-bold flex items-center justify-center gap-2 text-sm md:text-base flex-shrink-0 mb-3 inline-flex"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M3 17a1 1 0 011-1h12a1 1 0 011 1v1a1 1 0 01-1 1H4a1 1 0 01-1-1v-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
-                  clip-rule="evenodd"
-                />
-              </svg>
               Unduh Excel
             </button>
           </div>
@@ -773,5 +761,27 @@
         </div>
       </main>
     </div>
+    <script>
+      document
+        .getElementById("downloadExcelBtn")
+        .addEventListener("click", () => {
+          const filterDateStart =
+            document.getElementById("filterDateStart")?.value || "";
+          const filterDateEnd =
+            document.getElementById("filterDateEnd")?.value || "";
+          const filterType = document.getElementById("filterType")?.value || "";
+          const filterLocation =
+            document.getElementById("filterLocation")?.value || "";
+
+          const query = new URLSearchParams({
+            start: filterDateStart,
+            end: filterDateEnd,
+            type: filterType,
+            lokasi: filterLocation,
+          });
+
+          window.location.href = `/admin/data-peserta/download?${query.toString()}`;
+        });
+    </script>
   </body>
 </html>
