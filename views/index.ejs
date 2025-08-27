@@ -210,44 +210,6 @@
       </div>
     </section>
 
-    <!-- Floating Chatbot Button -->
-    <button
-      id="chatbotBtn"
-      class="fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg transition z-50"
-    >
-      <i class="fas fa-comments text-2xl"></i>
-    </button>
-
-    <!-- Chatbot Box (hidden by default) -->
-    <div
-      id="chatbotBox"
-      class="hidden fixed bottom-20 right-6 w-80 bg-white rounded-2xl shadow-2xl border border-gray-200 z-50"
-    >
-      <div
-        class="flex items-center justify-between bg-blue-600 text-white px-4 py-3 rounded-t-2xl"
-      >
-        <h4 class="font-semibold">Chatbot SIMARIN</h4>
-        <button id="closeChatbot" class="text-white hover:text-gray-200">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-      <div class="p-4 h-64 overflow-y-auto text-sm text-gray-700">
-        <p><b>Bot:</b> Halo! Ada yang bisa saya bantu?</p>
-      </div>
-      <div class="p-3 border-t flex items-center gap-2">
-        <input
-          type="text"
-          placeholder="Ketik pesan..."
-          class="flex-1 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-        <button
-          class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
-        >
-          <i class="fas fa-paper-plane"></i>
-        </button>
-      </div>
-    </div>
-
     <!-- Footer -->
     <footer class="bg-gray-900 text-gray-300 py-12">
       <div
@@ -323,6 +285,59 @@
       </div>
     </footer>
 
+    <!-- Floating Chatbot Button (BESAR) -->
+    <button
+      id="chatbotToggle"
+      class="fixed bottom-6 right-6 w-14 h-14 md:w-16 md:h-16 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-lg flex items-center justify-center transition z-50"
+      aria-label="Buka Chatbot"
+    >
+      <i class="fa-solid fa-comments text-2xl md:text-3xl"></i>
+    </button>
+
+    <!-- Chatbot Box -->
+    <div
+      id="chatbotBox"
+      class="hidden fixed bottom-24 right-6 w-80 sm:w-96 bg-white shadow-2xl rounded-2xl overflow-hidden flex flex-col z-50"
+    >
+      <!-- Header -->
+      <div
+        class="bg-blue-600 text-white px-4 py-3 flex items-center justify-between"
+      >
+        <span class="font-semibold">Chatbot SIMARIN</span>
+        <button
+          id="closeChatbot"
+          class="hover:text-gray-200"
+          aria-label="Tutup"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Chat Area -->
+      <div
+        id="chatArea"
+        class="flex-1 p-4 space-y-3 overflow-y-auto overflow-x-hidden max-h-[28rem] text-sm break-words"
+      >
+        <div class="text-gray-500 text-center">Mulai percakapan 👋</div>
+      </div>
+
+      <!-- Input -->
+      <div class="border-t p-3 flex gap-2">
+        <input
+          id="chatInput"
+          type="text"
+          placeholder="Tulis pesan..."
+          class="flex-1 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-blue-300"
+        />
+        <button
+          id="sendBtn"
+          class="bg-blue-600 text-white px-4 rounded-lg hover:bg-blue-700"
+        >
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+
     <!-- Navbar Scroll Effect -->
     <script>
       const navbar = document.getElementById("navbar");
@@ -351,16 +366,91 @@
     </script>
 
     <script>
-      const chatbotBtn = document.getElementById("chatbotBtn");
+      const chatbotToggle = document.getElementById("chatbotToggle");
       const chatbotBox = document.getElementById("chatbotBox");
       const closeChatbot = document.getElementById("closeChatbot");
+      const sendBtn = document.getElementById("sendBtn");
+      const chatInput = document.getElementById("chatInput");
+      const chatArea = document.getElementById("chatArea");
 
-      chatbotBtn.addEventListener("click", () => {
+      // 🔗 Ganti ini dengan URL chatbot temanmu
+      const API_URL = "https://your-chatbot-api-url.com/chat";
+
+      // Toggle
+      chatbotToggle.addEventListener("click", () => {
         chatbotBox.classList.toggle("hidden");
+        if (!chatbotBox.classList.contains("hidden")) {
+          setTimeout(() => chatInput.focus(), 50);
+        }
       });
+      closeChatbot.addEventListener("click", () =>
+        chatbotBox.classList.add("hidden")
+      );
 
-      closeChatbot.addEventListener("click", () => {
-        chatbotBox.classList.add("hidden");
+      // Utility: tambah pesan (dengan auto-wrap & max width)
+      function addMessage(text, sender = "user") {
+        const wrap = document.createElement("div");
+        wrap.className =
+          sender === "user" ? "flex justify-end" : "flex justify-start";
+
+        const bubble = document.createElement("div");
+        bubble.className = `
+      px-3 py-2 rounded-2xl text-sm sm:text-[0.95rem]
+      whitespace-pre-wrap break-words [overflow-wrap:anywhere]
+      max-w-[85%]
+      ${
+        sender === "user"
+          ? "bg-blue-600 text-white"
+          : "bg-gray-200 text-gray-800"
+      }
+    `;
+        bubble.textContent = text;
+
+        wrap.appendChild(bubble);
+        chatArea.appendChild(wrap);
+        chatArea.scrollTop = chatArea.scrollHeight;
+      }
+
+      // Kirim pesan ke API
+      async function sendMessage() {
+        const message = chatInput.value.trim();
+        if (!message) return;
+
+        addMessage(message, "user");
+        chatInput.value = "";
+
+        // indikator simple
+        const loading = document.createElement("div");
+        loading.className = "flex justify-start";
+        loading.innerHTML = `<div class="bg-gray-200 text-gray-800 px-3 py-2 rounded-2xl text-sm max-w-[85%]">Mengetik…</div>`;
+        chatArea.appendChild(loading);
+        chatArea.scrollTop = chatArea.scrollHeight;
+
+        try {
+          const res = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text: message }),
+          });
+          const data = await res.json();
+          loading.remove();
+          addMessage(
+            data.reply || data.answer || "Maaf, ada kesalahan.",
+            "bot"
+          );
+        } catch (err) {
+          console.error(err);
+          loading.remove();
+          addMessage("⚠️ Tidak bisa terhubung ke server.", "bot");
+        }
+      }
+
+      sendBtn.addEventListener("click", sendMessage);
+      chatInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          sendMessage();
+        }
       });
     </script>
   </body>
