@@ -210,6 +210,44 @@
       </div>
     </section>
 
+    <!-- Floating Chatbot Button -->
+    <button
+      id="chatbotBtn"
+      class="fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg transition z-50"
+    >
+      <i class="fas fa-comments text-2xl"></i>
+    </button>
+
+    <!-- Chatbot Box (hidden by default) -->
+    <div
+      id="chatbotBox"
+      class="hidden fixed bottom-20 right-6 w-80 bg-white rounded-2xl shadow-2xl border border-gray-200 z-50"
+    >
+      <div
+        class="flex items-center justify-between bg-blue-600 text-white px-4 py-3 rounded-t-2xl"
+      >
+        <h4 class="font-semibold">Chatbot SIMARIN</h4>
+        <button id="closeChatbot" class="text-white hover:text-gray-200">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="p-4 h-64 overflow-y-auto text-sm text-gray-700">
+        <p><b>Bot:</b> Halo! Ada yang bisa saya bantu?</p>
+      </div>
+      <div class="p-3 border-t flex items-center gap-2">
+        <input
+          type="text"
+          placeholder="Ketik pesan..."
+          class="flex-1 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        <button
+          class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+        >
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+
     <!-- Footer -->
     <footer class="bg-gray-900 text-gray-300 py-12">
       <div
@@ -309,6 +347,20 @@
             link.classList.add("text-white");
           });
         }
+      });
+    </script>
+
+    <script>
+      const chatbotBtn = document.getElementById("chatbotBtn");
+      const chatbotBox = document.getElementById("chatbotBox");
+      const closeChatbot = document.getElementById("closeChatbot");
+
+      chatbotBtn.addEventListener("click", () => {
+        chatbotBox.classList.toggle("hidden");
+      });
+
+      closeChatbot.addEventListener("click", () => {
+        chatbotBox.classList.add("hidden");
       });
     </script>
   </body>
