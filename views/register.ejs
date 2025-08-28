@@ -14,6 +14,8 @@
         font-family: "Poppins", sans-serif;
       }
     </style>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
   <body class="min-h-screen flex flex-col">
     <!-- Navbar -->
@@ -81,7 +83,6 @@
           action="/auth/register"
           method="POST"
           class="grid grid-cols-1 md:grid-cols-2 gap-6"
-          onsubmit="return validateForm()"
         >
           <!-- KIRI -->
           <div class="space-y-6">
@@ -288,6 +289,19 @@
           input.type = "password";
           btn.querySelector("svg").classList.remove("text-blue-500");
         }
+      }
+
+      // SweetAlert untuk registrasi berhasil
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("registered") === "success") {
+        Swal.fire({
+          title: "Registrasi Berhasil!",
+          text: "Silakan login untuk melanjutkan.",
+          icon: "success",
+          confirmButtonText: "OK"
+        }).then(() => {
+          window.location.href = "/login";
+        });
       }
     </script>
   </body>
