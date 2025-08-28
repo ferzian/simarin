@@ -1,16 +1,14 @@
-<div class="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow mt-10 text-center">
-  <h2 class="text-2xl font-bold text-purple-600 mb-4">Sertifikat Magang</h2>
-  <p class="text-gray-600 mb-6">
-    Terima kasih telah menyelesaikan kegiatan magang. Berikut sertifikat Anda.
-  </p>
-
-  <!-- Judul laporan ditampilkan -->
-  <% if (laporan) { %>
-    <p class="text-lg font-semibold mb-4">Judul Laporan: <%= laporan.judul %></p>
-  <% } %>
-
-  <a href="/download/sertifikat/<%= laporan.id %>"
-     class="bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition">
-    Download Sertifikat
+<!-- Step 3 -->
+<div id="certificate-card" class="card bg-gradient-to-br from-gray-300 to-gray-400 p-6 rounded-2xl text-white text-center relative locked">
+  <div class="flex justify-center mb-4">
+    <div class="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-2xl">🔒</div>
+  </div>
+  <h2 class="text-2xl font-bold mb-2">3. Unduh Sertifikat</h2>
+  <p id="certificate-text" class="opacity-90 mb-4">Anda belum mengunggah laporan magang.</p>
+  <a id="certificate-btn" 
+     href="/user/skm/download-sertifikat" 
+     class="bg-gray-200 text-gray-600 font-semibold py-2 px-6 rounded-full cursor-not-allowed pointer-events-none"
+     download>
+     Terkunci
   </a>
 </div>

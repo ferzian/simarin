@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Participant } = require('../../models');
+const { Participant,Laporan } = require('../../models');
 
 // Middleware: pastikan user login & role user
 function isUser(req, res, next) {
@@ -25,8 +25,25 @@ router.get('/skm', isUser,async (req, res) => {
   const existing = await Participant.findOne({ where: { userId:req.session.user.id } });
   console.log(req.session.user)
   console.log(existing)
+  const laporan = await Laporan.findOne({ 
+    userId: req.session.user.id 
+  });
+
+  // Tentukan status yang akan dikirim ke frontend
+  let statusLaporan = 'belum_upload';
+  
+  if (laporan) {
+    if (laporan.status === 'approved') {
+      statusLaporan = 'approved';
+    } else if (laporan.status === 'rejected') {
+      statusLaporan = 'rejected';
+    } else {
+      statusLaporan = 'menunggu_approval';
+    }
+  }
   res.render('user/daftar-magang/skm', {
     isRegistered:existing,
+    statusLaporan : statusLaporan,
     username: req.session.user.username
   });
 });

@@ -57,17 +57,26 @@ body { font-family:'Poppins',sans-serif; background:linear-gradient(135deg,#f5f7
       <button id="uploadBtn" class="bg-white text-yellow-600 font-semibold py-2 px-6 rounded-full hover:bg-opacity-90 transition">Upload Laporan</button>
       <div id="upload-status" class="mt-4 p-2 bg-white bg-opacity-20 rounded-lg"><p class="text-sm">Status: <span class="font-semibold">Menunggu upload</span></p></div>
     </div>
-
+    <% if (statusLaporan == 'approved') { %>
    <!-- Step 3 -->
-<div id="certificate-card" class="card bg-gradient-to-br from-gray-300 to-gray-400 p-6 rounded-2xl text-white text-center relative locked">
+<div id="certificate-card" class="card bg-gradient-to-br from-gray-300 to-gray-400 p-6 rounded-2xl text-white text-center relative">
   <div class="flex justify-center mb-4">
-    <div class="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-2xl">🔒</div>
+    <div class="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-2xl"></div>
   </div>
   <h2 class="text-2xl font-bold mb-2">3. Unduh Sertifikat</h2>
-  <p id="certificate-text" class="opacity-90 mb-4">Anda belum mengunggah laporan magang.</p>
-  <button id="certificate-btn" class="bg-gray-200 text-gray-600 font-semibold py-2 px-6 rounded-full cursor-not-allowed" disabled>Terkunci</button>
+  <p id="certificate-text" class="opacity-90 mb-4"></p>
+  <button id="certificate-btn" class="bg-gray-200 text-gray-600 font-semibold py-2 px-6 rounded-full">Download</button>
 </div>
-
+<% } else { %>
+  <div id="certificate-card" class="card bg-gradient-to-br from-gray-300 to-gray-400 p-6 rounded-2xl text-white text-center relative locked">
+    <div class="flex justify-center mb-4">
+      <div class="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-2xl">🔒</div>
+    </div>
+    <h2 class="text-2xl font-bold mb-2">3. Unduh Sertifikat</h2>
+    <p id="certificate-text" class="opacity-90 mb-4">Anda belum mengunggah laporan magang.</p>
+    <button id="certificate-btn" class="bg-gray-200 text-gray-600 font-semibold py-2 px-6 rounded-full cursor-not-allowed" disabled>Terkunci</button>
+  </div>
+<% }  %>
   </div>
 
 </div>
