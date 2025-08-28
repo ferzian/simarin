@@ -46,7 +46,12 @@ router.post('/submit-laporan', isUser, upload.single('laporan'), async (req, res
     if (laporan) {
       laporan.judul = req.body.judul;
       laporan.fileLaporan = req.file.filename;
-      laporan.status = 'pending'; // reset status
+    
+      // Hanya reset status kalau belum di-approve
+      if (laporan.status !== 'approved') {
+        laporan.status = 'pending';
+      }
+    
       await laporan.save();
     } else {
       laporan = await Laporan.create({
@@ -56,6 +61,7 @@ router.post('/submit-laporan', isUser, upload.single('laporan'), async (req, res
         status: 'pending'
       });
     }
+    
 
     res.json({ success: true, laporan });
   } catch (err) {

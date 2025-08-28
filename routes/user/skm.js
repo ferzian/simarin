@@ -1,36 +1,120 @@
 const express = require('express');
 const router = express.Router();
-const { Laporan } = require('../../models'); // ✅ ambil model laporan
+const multer = require('multer');
+const path = require('path');
+const Laporan = require('../../models/Laporan'); // Sesuaikan path model Anda
 
-// Middleware: pastikan user login & role user
-function isUser(req, res, next) {
-  if (!req.session.user || req.session.user.role !== 'user') {
-    return res.redirect('/auth/login');
+// Konfigurasi multer untuk upload file
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/laporan/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
   }
-  next();
-}
+});
 
-// 📌 GET halaman SKM (alur setelah magang)
-router.get('/skm', isUser, async (req, res) => {
+const upload = multer({ storage: storage });
+
+// Middleware untuk cek auth
+const isAuthenticated = (req, res, next) => {
+  if (req.isAuthenticated()) return next();
+  res.redirect('/login');
+};
+
+// GET - Halaman SKM
+router.get('/', isAuthenticated, async (req, res) => {
   try {
-    // cek apakah user sudah upload laporan
-    const laporan = await Laporan.findOne({
-      where: { userId: req.session.user.id }
-    });
+    // Ambil data laporan dari database
+    const laporan = await Laporan.findOne({ 
+      userId: req.user.id 
+    }).sort({ tanggalUpload: -1 });
 
-    // default status
-    let statusLaporan = laporan ? laporan.status : 'belum_upload';
+    // Tentukan status yang akan dikirim ke frontend
+    let statusLaporan = 'belum_upload';
+    
+    if (laporan) {
+      if (laporan.status === 'approved') {
+        statusLaporan = 'approved';
+      } else if (laporan.status === 'rejected') {
+        statusLaporan = 'rejected';
+      } else {
+        statusLaporan = 'menunggu_approval';
+      }
+    }
+
+    console.log('Status laporan yang dikirim:', statusLaporan); // Debug
 
     res.render('user/daftar-magang/skm', {
-      username: req.session.user.username,
-      statusLaporan
+      title: 'Alur Selesai Magang - SKM',
+      statusLaporan: statusLaporan, // VARIABLE YANG DIPAKAI DI FRONTEND
+      user: req.user
     });
-  } catch (err) {
-    console.error('❌ Error load SKM:', err);
-    res.render('user/daftar-magang/skm', {
-      username: req.session.user.username,
-      statusLaporan: 'error'
+
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).send('Server Error');
+  }
+});
+
+// POST - Upload laporan
+router.post('/upload', isAuthenticated, upload.single('laporan'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'File tidak ditemukan' });
+    }
+
+    // Simpan data ke database
+    const newLaporan = new Laporan({
+      userId: req.user.id,
+      filePath: req.file.path,
+      status: 'pending'
     });
+
+    await newLaporan.save();
+    
+    res.json({ 
+      success: true, 
+      message: 'Laporan berhasil diupload, menunggu approval admin' 
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Gagal upload laporan' });
+  }
+});
+
+// Route untuk check status (auto-refresh)
+router.get('/check-status', isAuthenticated, async (req, res) => {
+  try {
+    const laporan = await Laporan.findOne({ 
+      userId: req.user.id 
+    }).sort({ tanggalUpload: -1 });
+
+    let status = 'belum_upload';
+    if (laporan) {
+      status = laporan.status === 'approved' ? 'approved' : 
+              laporan.status === 'rejected' ? 'rejected' : 'menunggu_approval';
+    }
+
+    res.json({ status: status });
+  } catch (error) {
+    res.json({ status: 'belum_upload' });
+  }
+});
+
+// Route untuk admin approve (biasanya di routes/admin.js)
+router.post('/approve/:laporanId', async (req, res) => {
+  try {
+    // Update status di database menjadi 'approved'
+    await Laporan.findByIdAndUpdate(
+      req.params.laporanId, 
+      { status: 'approved', tanggalApproval: new Date() }
+    );
+    
+    res.json({ success: true, message: 'Laporan disetujui' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Gagal approve laporan' });
   }
 });
 

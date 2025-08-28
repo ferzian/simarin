@@ -12,6 +12,8 @@ const profilRoutes = require('./routes/user/profil');
 const app = express();
 const laporanRoutes = require('./routes/user/laporan');
 const visitorLogger = require('./middleware/visitorLogger');
+const sertifikatRoutes = require('./routes/user/sertifikat');
+app.use('/user/sertifikat', sertifikatRoutes);
 
 // Middleware
 app.use(express.urlencoded({ extended: false }));

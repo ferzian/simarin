@@ -2,13 +2,13 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.addColumn('Laporans', 'status', {
+    await queryInterface.addColumn('laporans', 'status', {
       type: Sequelize.STRING,
       defaultValue: 'pending'
     });
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeColumn('Laporans', 'status');
+    await queryInterface.removeColumn('laporans', 'status');
   }
 };

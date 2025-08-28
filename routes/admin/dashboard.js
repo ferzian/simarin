@@ -3,9 +3,10 @@ const router = express.Router();
 const { sequelize, Participant, Visitor } = require('../../models');
 const { Op, fn, col } = require('sequelize');
 const moment = require('moment');
+const { isAdmin } = require('../../middleware/authMiddleware');
 
 // GET /admin/dashboard
-router.get('/dashboard', async (req, res) => {
+router.get('/dashboard',isAdmin, async (req, res) => {
   try {
     // === Variabel waktu ===
     const monthStart = moment().startOf('month').toDate();

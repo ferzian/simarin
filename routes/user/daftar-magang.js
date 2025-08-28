@@ -47,6 +47,33 @@ router.post(
         lokasi,
       } = req.body;
 
+      // 💡 Validasi nomor telepon: hanya angka dan maksimal 14 digit
+      if (!/^\d{1,14}$/.test(telepon)) {
+        return res.render('user/daftar-magang/index', {
+          username: req.session.user?.username || 'Pengguna',
+          error: 'Nomor telepon harus berupa angka dan maksimal 14 digit.',
+          success: false,
+        });
+      }
+      // 💡 Cek apakah user sudah pernah daftar
+      const sudahDaftar = await Participant.findOne({ where: { userId } });
+      if (sudahDaftar) {
+        return res.render('user/daftar-magang/index', {
+          username: req.session.user?.username || 'Pengguna',
+          error: 'Anda sudah pernah mendaftar magang. Tidak bisa daftar 2 kali.',
+          success: false,
+        });
+      }
+// 💡 Cek apakah NIS/NPM sudah pernah digunakan
+const existingNis = await Participant.findOne({ where: { nisNpm } });
+if (existingNis) {
+  return res.render('user/daftar-magang/index', {
+    username: req.session.user?.username || 'Pengguna',
+    error: 'NIS/NPM sudah pernah terdaftar.',
+    success: false,
+  });
+}
+
       // 💡 Validasi nomor telepon unik
       const existing = await Participant.findOne({ where: { telepon } });
       if (existing) {
@@ -79,7 +106,7 @@ router.post(
       });
 
       // ✅ Redirect dengan query success
-      return res.redirect('/user/user-dashboard?success=true');
+      return res.redirect('/user/dashboard?success=true');
     } catch (err) {
       console.error('❌ Gagal menyimpan data peserta:', err);
 

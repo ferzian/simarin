@@ -37,13 +37,12 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <!-- Navigation -->
-<nav class="bg-white shadow-sm">
+<nav class="bg-gray-800 shadow-sm">
   <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
 
       <!-- Kiri: Logo + SIMARIN -->
       <div class="flex items-center space-x-3">
-        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhVlnwerlS3bGvBZeB4BNCQnl1bHvwBAkKO3NY2yf0isvrN2egSPM_VT7rkEV3lJBYXaFmJvprDlU5Xr2kZTK564YnUhX_SWuPmRYiaDoYItCcFhhnBrf3QcdJ-qNn31JV5Zfgaoz7fWIViBz6KwvnGp39roEqCWOI6m8lbuBtSzYe9RHFq-8WAVA/s3000/Kementerian%20Kelautan%20dan%20Perikanan%20(KKP)%20Republik%20Indonesia.png" alt="Logo SIMARIN" class="h-12 w-auto" />
-          <span class="text-2xl text-blue-800 font-bold" style="font-family: 'Merriweather', serif;">
+          <span class="text-2xl text-white font-bold" style="font-family: 'Merriweather', serif;">
           Pendaftaran Magang
          </span>        
         </div>
@@ -89,13 +88,22 @@
             class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm placeholder-gray-400 transition duration-300"
             placeholder="Masukkan Nama lengkap" required>
         </div>
-          <!--nis npm-->
-        <div class="mb-6">
-           <label for="nisNpm" class="block text-base font-semibold text-gray-700 mb-1">Nomor induk peserta</label>
-            <input type="text" id="nisNpm" name="nisNpm"
-            class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm placeholder-gray-400 transition duration-300"
-            placeholder="Masukkan Nomor induk peserta" required>
-        </div>
+          <!-- NIS/NPM -->
+          <div class="mb-6">
+            <label for="nisNpm" class="block text-base font-semibold text-gray-700 mb-1">Nomor Induk Peserta</label>
+            <input 
+              type="text" 
+              id="nisNpm" 
+              name="nisNpm"
+              inputmode="numeric" 
+              pattern="[0-9]{1,20}" 
+              maxlength="20"
+              oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm placeholder-gray-400 transition duration-300"
+              placeholder="Masukkan Nomor Induk Peserta"
+              required
+            >
+          </div>
 
                 <!--alamat domisili-->
            <div class="mb-6">
@@ -105,13 +113,24 @@
             placeholder="Masukkan Alamat Domisili" required>
              </div>
 
-          <!-- Nomor Telepon -->
-          <div class="mb-6">
-            <label for="telepon" class="block text-base font-semibold text-gray-700 mb-1">Nomor Telepon</label>
-            <input type="text" id="telepon" name="telepon"
-              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm placeholder-gray-400 transition duration-300"
-              placeholder="Masukkan nomor telepon Anda" required>
-          </div>
+
+        <!-- Nomor Telepon -->
+        <div class="mb-6">
+          <label for="telepon" class="block text-base font-semibold text-gray-700 mb-1">Nomor Telepon</label>
+          <input 
+            type="text"
+            id="telepon"
+            name="telepon"
+            inputmode="numeric" 
+            pattern="[0-9]{1,14}" 
+            maxlength="14"
+            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+            class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm placeholder-gray-400 transition duration-300"
+            placeholder="Masukkan nomor telepon"
+            title="Hanya angka, maksimal 14 digit"
+            required
+          >
+        </div>
 
 
           <!--Sekolah/PT/Instansi-->
@@ -119,7 +138,7 @@
             <label for="Sekolah/PT/Instansi" class="block text-base font-semibold text-gray-700 mb-1">Sekolah/PT/Instansi</label>
             <input type="text" id="Sekolah/PT/Instansi" name="institusi"
               class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm placeholder-gray-400 transition duration-300"
-              placeholder="Masukkan program studi Anda" required>
+              placeholder="Masukkan Sekolah/PT/Instansi " required>
           </div>
           
 
@@ -128,7 +147,7 @@
             <label for="prodi" class="block text-base font-semibold text-gray-700 mb-1">Program Studi</label>
             <input type="text" id="prodi" name="prodi"
               class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm placeholder-gray-400 transition duration-300"
-              placeholder="Masukkan program studi Anda" required>
+              placeholder="Masukkan program studi" required>
           </div>
 
           <!-- Jenjang Pendidikan -->
@@ -214,9 +233,13 @@
               required
             />
           </div>
-
+          <p class="text-sm text-gray-500 mt-1">
+            Hanya file dengan format <span class="font-medium">.png</span> atau 
+            <span class="font-medium">.jpg/.jpeg</span> yang diperbolehkan.
+          </p>
+          
           <!-- Upload Surat Keterangan Sehat -->
-          <div class="mb-6">
+          <div class="mb-4">
             <label for="uploadSehat" class="block text-base font-semibold text-gray-700 mb-1">Upload Surat Keterangan Sehat</label>
             <input
               type="file"
@@ -227,11 +250,14 @@
               required
             />
           </div>
-
+          <p class="text-sm text-gray-500 mt-1">
+            Hanya file dengan format <span class="font-medium">.png</span> atau 
+            <span class="font-medium">.jpg/.jpeg</span> yang diperbolehkan.
+          </p>
 
       <div class="mt-6">
         <button type="submit"
-          class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1">
+          class="w-full bg-gradient-to-r from-gray-800 to-indigo-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1">
           <span class="flex items-center justify-center space-x-2">
             <svg class="w-5 h-5 animate-pulse" fill="none" stroke="currentColor" stroke-width="2"
               viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -245,24 +271,36 @@
         </form>
       </main>
     </div>
-    <% if (success) { %>
-  <script>
-    Swal.fire({
-      icon: 'success',
-      title: 'Pendaftaran Berhasil!',
-      text: 'Data kamu sudah berhasil dikirim.',
-      confirmButtonText: 'OK'
-    });
-  </script>
-<% } %>
-<% if (error) { %>
-  Swal.fire({
-    icon: "error",
-    title: "Gagal!",
-    text: "<%= error %>"
-  });
-<% } %>
-
-    <script src="/js/user/alert-handler.js"></script>
-  </body>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        // ✅ Ambil query string success
+        const urlParams = new URLSearchParams(window.location.search);
+        const success = urlParams.get('success');
+    
+        if (success === 'true') {
+          Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: 'Form pendaftaran berhasil disimpan.',
+            confirmButtonText: 'OK'
+          }).then(() => {
+            // Hapus query string agar popup tidak muncul lagi saat refresh
+            window.history.replaceState({}, document.title, "/user/dashboard");
+          });
+        }
+    
+        // ❌ Ambil error dari backend
+        const errorMessage = "<%= typeof error !== 'undefined' ? error : '' %>";
+        if (errorMessage) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: errorMessage,
+            confirmButtonText: 'OK'
+          });
+        }
+      });
+    </script>
+    
+  
 </html>

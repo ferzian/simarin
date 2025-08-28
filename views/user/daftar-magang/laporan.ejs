@@ -12,15 +12,13 @@
   
     <!-- Daftar Laporan -->
     <div id="laporan-container" class="space-y-4 mb-8">
-      <% if(laporan && laporan.length > 0){ %>
-        <% laporan.forEach(l => { %>
-          <div class="p-4 bg-white shadow rounded-xl flex justify-between items-center border border-gray-200 hover:shadow-lg transition duration-300">
-            <span class="font-medium text-gray-700"><%= l.judul %></span>
-            <span class="px-3 py-1 rounded-full text-sm font-semibold <%= l.status==='approved'?'bg-green-200 text-green-800':'bg-yellow-200 text-yellow-800' %>">
-              <%= l.status %>
-            </span>
-          </div>
-        <% }) %>
+      <% if(laporan){ %>
+        <div class="p-4 bg-white shadow rounded-xl flex justify-between items-center border border-gray-200 hover:shadow-lg transition duration-300">
+          <span class="font-medium text-gray-700"><%= laporan.judul %></span>
+          <span class="px-3 py-1 rounded-full text-sm font-semibold <%= laporan.status==='approved'?'bg-green-200 text-green-800':'bg-yellow-200 text-yellow-800' %>">
+            <%= laporan.status %>
+          </span>
+        </div>
       <% } else { %>
         <p class="text-gray-400 italic text-center">Belum ada laporan diupload.</p>
       <% } %>
@@ -33,7 +31,6 @@
   
       <div class="flex items-center space-x-4">
         <input type="file" name="laporan" id="laporan-file" class="border p-2 rounded-lg w-full" required>
-        <!-- Elegant delete icon -->
         <button type="button" id="hapus-file" class="text-red-500 hover:text-red-700 transition" title="Hapus file">
           🗑️
         </button>
@@ -54,22 +51,21 @@
   const progressContainer = document.getElementById('progress-container');
   const progressBar = document.getElementById('progress-bar');
   const laporanContainer = document.getElementById('laporan-container');
-  
-  hapusBtn.addEventListener('click', ()=> {
-    fileInput.value = '';
-  });
-  
+  const btnSertifikat = document.getElementById('btn-sertifikat');
+
+  hapusBtn.addEventListener('click', ()=> fileInput.value = '');
+
   form.addEventListener('submit', e => {
     e.preventDefault();
     if(!fileInput.files[0]) return alert('Pilih file terlebih dahulu!');
-    
+
     progressContainer.classList.remove('hidden');
     progressBar.style.width='0%';
-  
+
     const formData = new FormData();
     formData.append('laporan', fileInput.files[0]);
     formData.append('judul', form.judul.value);
-  
+
     fetch('/user/submit-laporan', {
       method:'POST',
       body: formData
@@ -79,21 +75,40 @@
         progressContainer.classList.add('hidden');
         fileInput.value = '';
         form.judul.value = '';
-  
-        // Tambah ke daftar laporan
-        const div = document.createElement('div');
-        div.className = 'p-4 bg-white shadow rounded-xl flex justify-between items-center border border-gray-200 hover:shadow-lg transition duration-300 mt-2';
-        div.innerHTML = `<span class="font-medium text-gray-700">${data.laporan.judul}</span>
-                         <span class="px-3 py-1 rounded-full text-sm font-semibold bg-yellow-200 text-yellow-800">${data.laporan.status}</span>`;
-        laporanContainer.appendChild(div);
+
+        // Update atau tambah laporan di UI
+        laporanContainer.innerHTML = `
+          <div class="p-4 bg-white shadow rounded-xl flex justify-between items-center border border-gray-200 hover:shadow-lg transition duration-300">
+            <span class="font-medium text-gray-700">${data.laporan.judul}</span>
+            <span class="px-3 py-1 rounded-full text-sm font-semibold ${data.laporan.status==='approved'?'bg-green-200 text-green-800':'bg-yellow-200 text-yellow-800'}">
+              ${data.laporan.status}
+            </span>
+          </div>
+        `;
+
+        // Update card sertifikat
+        if(data.laporan.status==='approved'){
+          btnSertifikat.classList.remove('bg-gray-300','text-gray-600','cursor-not-allowed');
+          btnSertifikat.classList.add('bg-green-500','text-white','hover:bg-green-600','cursor-pointer');
+          btnSertifikat.disabled = false;
+        } else {
+          btnSertifikat.classList.add('bg-gray-300','text-gray-600','cursor-not-allowed');
+          btnSertifikat.classList.remove('bg-green-500','text-white','hover:bg-green-600','cursor-pointer');
+          btnSertifikat.disabled = true;
+        }
+
       }).catch(err=>{
         alert('Upload gagal, coba lagi.');
         progressContainer.classList.add('hidden');
       });
   });
+
+  // Klik sertifikat
+  btnSertifikat.addEventListener('click', () => {
+    if(btnSertifikat.disabled) return;
+    // redirect ke endpoint download sertifikat (harus dibuat di backend)
+    window.location.href = '/user/sertifikat/download';
+  });
   </script>
-  
-  
-    
-  
-  
+</body>
+</html>
