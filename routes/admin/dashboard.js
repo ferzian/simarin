@@ -1,13 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const { sequelize, Participant, Visitor } = require('../../models');
+const { Laporan, Participant, Visitor } = require('../../models');
 const { Op, fn, col } = require('sequelize');
 const moment = require('moment');
 const { isAdmin } = require('../../middleware/authMiddleware');
 
 // GET /admin/dashboard
-router.get('/dashboard',isAdmin, async (req, res) => {
+router.get('/dashboard', isAdmin, async (req, res) => {
   try {
+    const pendingCount = await Laporan.count({ where: { status: 'pending' } });
     // === Variabel waktu ===
     const monthStart = moment().startOf('month').toDate();
     const today = moment().startOf('day').toDate();
@@ -61,19 +62,19 @@ router.get('/dashboard',isAdmin, async (req, res) => {
     });
 
     // === Data semua visitors untuk chart ===
-const rawVisitors = await Visitor.findAll({
-  attributes: ['id', 'createdAt'],
-  raw: true
-});
+    const rawVisitors = await Visitor.findAll({
+      attributes: ['id', 'createdAt'],
+      raw: true
+    });
 
-// Format createdAt manual jadi YYYY-MM-DDTHH:mm:ss
-const visitors = rawVisitors.map(v => {
-  const d = new Date(v.createdAt);
-  return {
-    ...v,
-    createdAt: `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}T${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`
-  };
-});
+    // Format createdAt manual jadi YYYY-MM-DDTHH:mm:ss
+    const visitors = rawVisitors.map(v => {
+      const d = new Date(v.createdAt);
+      return {
+        ...v,
+        createdAt: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}T${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}`
+      };
+    });
 
 
     // === Render ke view ===
@@ -83,8 +84,9 @@ const visitors = rawVisitors.map(v => {
       newRegistrantsCount,
       lokasiData,
       upcomingEndDate,
-      visitors,   // <--- ini yang dipakai di EJS
-      moment
+      visitors, 
+      moment,
+      pendingCount
     });
 
   } catch (err) {

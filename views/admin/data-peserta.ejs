@@ -211,19 +211,56 @@
                   d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C8.67 6.165 8 7.388 8 8.75v5.408c0 .538-.214 1.055-.595 1.437L6 17h5"
                 />
               </svg>
+
+              <% if (pendingCount > 0) { %>
+              <span
+                class="absolute top-1 right-1 bg-red-600 text-white text-xs font-bold px-1.5 py-0.5 rounded-full"
+              >
+                <%= pendingCount %>
+              </span>
+              <% } %>
             </button>
 
-            <!-- Dropdown -->
             <div
               id="notifDropdownMenu"
-              class="hidden absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 z-50 overflow-hidden text-sm"
+              class="hidden absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-xl border border-gray-200 z-50 overflow-hidden"
             >
-              <div class="p-4 border-b font-semibold text-gray-700">
+              <div
+                class="px-5 py-3 border-b border-gray-200 font-semibold text-gray-800"
+              >
                 Notifikasi
               </div>
-              <div class="px-4 py-2 text-gray-500 text-center">
+
+              <% if (pendingCount > 0) { %>
+              <a
+                href="/admin/laporan"
+                class="block px-5 py-3 hover:bg-gray-50 transition-colors duration-200"
+              >
+                <div class="flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 text-blue-500 mr-3"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M10 2a8 8 0 100 16 8 8 0 000-16zM8.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4a1 1 0 00-1.414-1.414L10 10.586 8.707 9.293z"
+                    />
+                  </svg>
+                  <div class="text-sm text-gray-800">
+                    Ada
+                    <span class="font-bold text-blue-600"
+                      ><%= pendingCount %></span
+                    >
+                    laporan yang perlu di-approve.
+                  </div>
+                </div>
+              </a>
+              <% } else { %>
+              <div class="px-5 py-4 text-center text-gray-500">
                 Tidak ada notifikasi baru
               </div>
+              <% } %>
             </div>
           </div>
 
@@ -232,7 +269,9 @@
               id="dropdownUserButton"
               class="flex items-center gap-2 text-gray-700 hover:text-gray-900 focus:outline-none p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
             >
-              <span class="font-semibold text-lg"><%= user.username %> </span>
+              <span class="font-semibold text-lg"
+                ><%= user ? user.username : 'admin' %></span
+              >
               <svg
                 class="w-5 h-5"
                 fill="none"

@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const { User, Participant } = require('../../models');
+const { User, Participant, Laporan } = require('../../models');
 const { isAuthenticated, isAdmin } = require('../../middleware/authMiddleware');
 const ExcelJS = require('exceljs');
 const { Op } = require("sequelize");
 
 router.get('/data-peserta', isAuthenticated, isAdmin, async (req, res) => {
   try {
+    const pendingCount = await Laporan.count({ where: { status: 'pending' } });
     const participants = await Participant.findAll({
       include: [
         {
@@ -42,7 +43,8 @@ router.get('/data-peserta', isAuthenticated, isAdmin, async (req, res) => {
         pasFoto: p.pasFoto,
         suratSehat: p.suratSehat,
       })),
-      user: req.session.user
+      user: req.session.user,
+      pendingCount
     });
 
   } catch (err) {

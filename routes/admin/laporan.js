@@ -13,13 +13,15 @@ function isAdmin(req, res, next) {
 // GET semua laporan
 router.get('/', isAdmin, async (req, res) => {
   const laporan = await Laporan.findAll({
-    include: [
-      { model: Participant, attributes: ['nama'] }
-    ],
+    include: [{ model: Participant, attributes: ['nama'] }],
     order: [['createdAt', 'DESC']]
   });
-  res.render('admin/laporan', { laporan });
+
+  const pendingCount = await Laporan.count({ where: { status: 'pending' } });
+
+  res.render('admin/laporan', { laporan, pendingCount });
 });
+
 
 // POST approve
 router.post('/:id/approve', isAdmin, async (req, res) => {

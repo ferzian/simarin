@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { Visitor } = require('../../models');
+const { Visitor, Laporan } = require('../../models');
 const { isAuthenticated, isAdmin } = require('../../middleware/authMiddleware');
 
 router.get('/kunjungan', isAuthenticated, isAdmin, async (req, res) => {
     try {
+        const pendingCount = await Laporan.count({ where: { status: 'pending' } });
         const visitors = await Visitor.findAll({
             order: [['createdAt', 'ASC']], 
             raw: true
@@ -24,7 +25,8 @@ router.get('/kunjungan', isAuthenticated, isAdmin, async (req, res) => {
                 createdAt: v.createdAt,         
                 visitedAt: formatDate(v.createdAt), 
             })),
-            user: req.session.user
+            user: req.session.user,
+            pendingCount
         });
     } catch (err) {
         console.error('❌ Gagal ambil data pengunjung:', err);

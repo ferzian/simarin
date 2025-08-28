@@ -13,7 +13,7 @@ router.get('/login', (req, res) => {
 
 // POST Login
 router.post('/login', async (req, res) => {
-  const { loginId, password } = req.body; 
+  const { loginId, password } = req.body;
 
   try {
     // Cari berdasarkan username ATAU email
@@ -62,7 +62,7 @@ router.get('/register', (req, res) => {
 // POST Register
 router.post('/register', async (req, res) => {
   const { username, password, confirmPassword, email, phone, instansi } = req.body;
-  const hashedPassword = await bcrypt.hash(password, 10); // tambahkan ini
+  const hashedPassword = await bcrypt.hash(password, 10);
 
   if (password !== confirmPassword) {
     return res.render('register', { error: 'Password tidak sama.' });
@@ -99,7 +99,7 @@ router.post('/register', async (req, res) => {
       approved: true,
     });
 
-    res.redirect('/?registered=success');
+    res.redirect('/register?registered=success');
   } catch (err) {
     console.error(err);
     // Beri pesan error yang lebih spesifik
@@ -125,7 +125,7 @@ router.post('/forgot-password', async (req, res) => {
   }
 
   const token = crypto.randomBytes(20).toString('hex');
-  const expires = Date.now() + 1000 * 60 * 15; 
+  const expires = Date.now() + 1000 * 60 * 15;
 
   await user.update({
     resetToken: token,
@@ -241,7 +241,7 @@ router.post('/logout', (req, res) => {
       return res.status(500).send('Logout gagal');
     }
 
-    res.clearCookie('connect.sid'); 
+    res.clearCookie('connect.sid');
     res.redirect('/login');
   });
 });
