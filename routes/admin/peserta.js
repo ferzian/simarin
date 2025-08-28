@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { User, Participant } = require('../../models');
+const { User, Participant, Laporan } = require('../../models');
 const { isAuthenticated, isAdmin } = require('../../middleware/authMiddleware');
 
 router.get('/peserta', isAuthenticated, isAdmin, async (req, res) => {
   try {
+    const pendingCount = await Laporan.count({ where: { status: 'pending' } });
     const participants = await Participant.findAll({
       include: [
         {
@@ -33,7 +34,8 @@ router.get('/peserta', isAuthenticated, isAdmin, async (req, res) => {
         tanggalMulai: p.tanggalMulai,
         tanggalSelesai: p.tanggalSelesai,
       })),
-      user: req.session.user
+      user: req.session.user,
+      pendingCount
     });
   } catch (err) {
     console.error('❌ Gagal ambil data peserta:', err);
