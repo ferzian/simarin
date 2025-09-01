@@ -27,7 +27,8 @@ module.exports = (sequelize, DataTypes) => {
 
   Participant.associate = function (models) {
     Participant.belongsTo(models.User, { foreignKey: 'userId' });
+    Participant.hasOne(models.Laporan, { foreignKey: 'userId', sourceKey: 'userId' });
   };
-    
+
   return Participant;
 };

@@ -252,6 +252,10 @@ function showDetail(p) {
     document.getElementById("detailSuratSehat").href = p.suratSehat
         ? `/uploads/user/surat-sehat/${p.suratSehat}`
         : "#";
+        
+    document.getElementById("detailLaporan").href = p.laporan
+        ? `/uploads/user/laporan/${p.laporan}`
+        : "#";
 
     document.getElementById("detailModal").classList.remove("hidden");
 }

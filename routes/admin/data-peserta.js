@@ -12,10 +12,15 @@ router.get('/data-peserta', isAuthenticated, isAdmin, async (req, res) => {
       include: [
         {
           model: User,
-          where: { role: 'user' }, // hanya user yang approved
+          where: { role: 'user' },
         },
+        {
+          model: Laporan,
+          attributes: ['fileLaporan'], // ambil nama file laporan
+        }
       ],
     });
+
 
     const formatDate = (dateStr) =>
       new Date(dateStr).toLocaleDateString('id-ID', {
@@ -42,6 +47,7 @@ router.get('/data-peserta', isAuthenticated, isAdmin, async (req, res) => {
         tanggalSelesai: p.tanggalSelesai,
         pasFoto: p.pasFoto,
         suratSehat: p.suratSehat,
+        laporan: p.Laporan ? p.Laporan.fileLaporan : null,
       })),
       user: req.session.user,
       pendingCount

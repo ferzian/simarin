@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { Laporan, Participant } = require('../../models');
+const path = require('path');
+const fs = require('fs');
 
 // Middleware: cek login role admin
 function isAdmin(req, res, next) {
@@ -21,7 +23,6 @@ router.get('/', isAdmin, async (req, res) => {
 
   res.render('admin/laporan', { laporan, pendingCount });
 });
-
 
 // POST approve
 router.post('/:id/approve', isAdmin, async (req, res) => {
