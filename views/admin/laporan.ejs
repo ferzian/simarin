@@ -329,13 +329,13 @@
             >
               Daftar Laporan Mahasiswa
             </h1>
- 
+
             <div
               class="overflow-x-auto rounded-xl border border-gray-200 shadow-md"
             >
               <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-blue-900">
-                  <tr class="text-white uppercase text-sm tracking-wider">
+                  <tr class="text-white uppercase text-md tracking-wider">
                     <th class="py-3 px-6 text-left font-semibold">
                       Nama Lengkap
                     </th>
@@ -359,16 +359,20 @@
                     <td class="py-3 px-6 text-left whitespace-nowrap">
                       <%= l.Participant ? l.Participant.nama : 'Unknown' %>
                     </td>
-                    <td class="py-3 px-6 text-left"><%= l.judul %></td>
+                    <td class="py-3 px-6 text-left max-w-2xl">
+                      <p class="line-clamp-2"><%= l.judul %></p>
+                    </td>
+
                     <td class="py-3 px-6 text-left">
                       <a
                         href="/uploads/user/laporan/<%= l.fileLaporan %>"
-                        target="_blank"
-                        class="text-blue-500 hover:text-blue-700 hover:underline transition-colors duration-200 font-medium"
+                        download
+                        class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition duration-200 font-semibold text-sm"
                       >
-                        <%= l.fileLaporan %>
+                        Download
                       </a>
                     </td>
+
                     <td class="py-3 px-6 text-left">
                       <% if (l.status === 'approved') { %>
                       <span
@@ -387,7 +391,7 @@
                       >
                       <% } %>
                     </td>
-                    <td class="py-3 px-6 text-center">
+                    <td class="py-3 px-6 text-left">
                       <% if (l.status === 'pending') { %>
                       <div class="flex items-center justify-center space-x-2">
                         <form
