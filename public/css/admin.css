@@ -1,6 +1,10 @@
 body {
   font-family: "Poppins", sans-serif;
 }
+
+th {
+  text-align: left !important;
+}
 /* Transisi untuk sidebar */
 /* Transisi untuk sidebar */
 .sidebar {
