@@ -374,7 +374,7 @@
       const chatArea = document.getElementById("chatArea");
 
       // 🔗 Ganti ini dengan URL chatbot temanmu
-      const API_URL = "https://your-chatbot-api-url.com/chat";
+      const API_URL = "http://0.0.0.0:5000/api/chat";
 
       // Toggle
       chatbotToggle.addEventListener("click", () => {
@@ -430,14 +430,11 @@
           const res = await fetch(API_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ text: message }),
+            body: JSON.stringify({ message: message }),
           });
           const data = await res.json();
           loading.remove();
-          addMessage(
-            data.reply || data.answer || "Maaf, ada kesalahan.",
-            "bot"
-          );
+          addMessage(data.data?.responses || "Maaf, ada kesalahan.", "bot");
         } catch (err) {
           console.error(err);
           loading.remove();
