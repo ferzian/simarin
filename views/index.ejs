@@ -13,29 +13,12 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="icon" sizes="32x32" type="image/png" href="/images/logo.png" />
 
-    <!-- Font Awesome -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
-
-    <style>
-      body {
-        font-family: "Poppins", sans-serif;
-      }
-      .hero-bg {
-        background-image: url("https://source.unsplash.com/1600x900/?fisheries,students,teamwork");
-        background-size: cover;
-        background-position: center;
-      }
-      .nav-scroll {
-        background-color: white !important;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-      }
-    </style>
   </head>
   <body id="top" class="min-h-screen flex flex-col">
-    <!-- Navbar -->
     <nav
       id="navbar"
       class="fixed top-0 left-0 right-0 bg-transparent p-5 flex justify-between items-center z-50 transition duration-300"
@@ -374,7 +357,7 @@
       const chatArea = document.getElementById("chatArea");
 
       // 🔗 Ganti ini dengan URL chatbot temanmu
-      const API_URL = "https://your-chatbot-api-url.com/chat";
+      const API_URL = "http://localhost:5000/api/chat";
 
       // Toggle
       chatbotToggle.addEventListener("click", () => {
@@ -430,14 +413,11 @@
           const res = await fetch(API_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ text: message }),
+            body: JSON.stringify({ message: message }),
           });
           const data = await res.json();
           loading.remove();
-          addMessage(
-            data.reply || data.answer || "Maaf, ada kesalahan.",
-            "bot"
-          );
+          addMessage(data.data?.response || "Maaf, ada kesalahan.", "bot");
         } catch (err) {
           console.error(err);
           loading.remove();
