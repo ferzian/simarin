@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Participant,Laporan } = require('../../models');
+const { Participant, Laporan } = require('../../models');
 
 // Middleware: pastikan user login & role user
 function isUser(req, res, next) {
@@ -11,39 +11,39 @@ function isUser(req, res, next) {
 }
 
 // GET dashboard user
-router.get('/dashboard', isUser,async (req, res) => {
-  const existing = await Participant.findOne({ where: { userId:req.session.user.id } });
+router.get('/dashboard', isUser, async (req, res) => {
+  const existing = await Participant.findOne({ where: { userId: req.session.user.id } });
   console.log(req.session.user)
   console.log(existing)
   res.render('user/user-dashboard', {
-    isRegistered:existing,
+    isRegistered: existing,
     username: req.session.user.username
   });
 });
 
-router.get('/skm', isUser,async (req, res) => {
-  const existing = await Participant.findOne({ where: { userId:req.session.user.id } });
+router.get('/skm', isUser, async (req, res) => {
+  const existing = await Participant.findOne({ where: { userId: req.session.user.id } });
   console.log(req.session.user)
   console.log(existing)
-  const laporan = await Laporan.findOne({ 
-    userId: req.session.user.id 
+  const laporan = await Laporan.findOne({
+      where: { userId: req.session.user.id }, include: [{ model: Participant, as: "participant" }]
   });
 
   // Tentukan status yang akan dikirim ke frontend
   let statusLaporan = 'belum_upload';
-  
+
   if (laporan) {
-    if (laporan.status === 'approved') {
+    if (laporan.status == 'approved') {
       statusLaporan = 'approved';
-    } else if (laporan.status === 'rejected') {
+    } else if (laporan.status == 'rejected') {
       statusLaporan = 'rejected';
     } else {
       statusLaporan = 'menunggu_approval';
     }
   }
   res.render('user/daftar-magang/skm', {
-    isRegistered:existing,
-    statusLaporan : statusLaporan,
+    isRegistered: existing,
+    statusLaporan: statusLaporan,
     username: req.session.user.username
   });
 });
@@ -59,25 +59,25 @@ router.get('/daftar-magang/sertifikat', isUser, (req, res) => {
 const { PendaftaranMagang } = require('../../models'); // sesuaikan dengan nama model kamu
 
 router.get('/skm', isUser, async (req, res) => {
-    try {
-        const pendaftaran = await PendaftaranMagang.findOne({
-            where: { userId: req.session.user.id } // sesuaikan nama kolom
-        });
+  try {
+    const pendaftaran = await PendaftaranMagang.findOne({
+      where: { userId: req.session.user.id } // sesuaikan nama kolom
+    });
 
-        if (!pendaftaran) {
-            return res.render('user/user-dashboard', {
-                username: req.session.user.username,
-                error: 'Silakan daftar magang terlebih dahulu untuk mengakses SKM'
-            });
-        }
-
-        res.render('user/skm', {
-            username: req.session.user.username
-        });
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Terjadi kesalahan server');
+    if (!pendaftaran) {
+      return res.render('user/user-dashboard', {
+        username: req.session.user.username,
+        error: 'Silakan daftar magang terlebih dahulu untuk mengakses SKM'
+      });
     }
+
+    res.render('user/skm', {
+      username: req.session.user.username
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Terjadi kesalahan server');
+  }
 });
 
 

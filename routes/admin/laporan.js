@@ -13,7 +13,8 @@ function isAdmin(req, res, next) {
 // GET semua laporan
 router.get('/', isAdmin, async (req, res) => {
   const laporan = await Laporan.findAll({
-    include: [{ model: Participant, attributes: ['nama'] }],
+    
+    include: [{model: Participant, as: "participant", attributes: ['nama'] }],
     order: [['createdAt', 'DESC']]
   });
 

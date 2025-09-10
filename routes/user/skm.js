@@ -26,21 +26,25 @@ const isAuthenticated = (req, res, next) => {
 router.get('/', isAuthenticated, async (req, res) => {
   try {
     // Ambil data laporan dari database
-    const laporan = await Laporan.findOne({ 
-      userId: req.user.id 
-    }).sort({ tanggalUpload: -1 });
+
+    const laporan = await Laporan.findOne({
+      where: { userId: req.session.user.id }, include: [{ model: Participant, as: "participant" }]
+
+    });
 
     // Tentukan status yang akan dikirim ke frontend
     let statusLaporan = 'belum_upload';
-    
+
     if (laporan) {
-      if (laporan.status === 'approved') {
+      if (laporan.status == 'approved') {
         statusLaporan = 'approved';
-      } else if (laporan.status === 'rejected') {
+      } else if (laporan.status == 'rejected') {
         statusLaporan = 'rejected';
       } else {
         statusLaporan = 'menunggu_approval';
       }
+    } else {
+      statusLaporan = 'belum_upload';
     }
 
     console.log('Status laporan yang dikirim:', statusLaporan); // Debug
@@ -72,10 +76,10 @@ router.post('/upload', isAuthenticated, upload.single('laporan'), async (req, re
     });
 
     await newLaporan.save();
-    
-    res.json({ 
-      success: true, 
-      message: 'Laporan berhasil diupload, menunggu approval admin' 
+
+    res.json({
+      success: true,
+      message: 'Laporan berhasil diupload, menunggu approval admin'
     });
   } catch (error) {
     console.error(error);
@@ -86,14 +90,15 @@ router.post('/upload', isAuthenticated, upload.single('laporan'), async (req, re
 // Route untuk check status (auto-refresh)
 router.get('/check-status', isAuthenticated, async (req, res) => {
   try {
-    const laporan = await Laporan.findOne({ 
-      userId: req.user.id 
+
+    const laporan = await Laporan.findOne({
+      where: { userId: req.session.user.id }, include: [{ model: Participant, as: "participant" }]
     }).sort({ tanggalUpload: -1 });
 
     let status = 'belum_upload';
     if (laporan) {
-      status = laporan.status === 'approved' ? 'approved' : 
-              laporan.status === 'rejected' ? 'rejected' : 'menunggu_approval';
+      status = laporan.status === 'approved' ? 'approved' :
+        laporan.status === 'rejected' ? 'rejected' : 'menunggu_approval';
     }
 
     res.json({ status: status });
@@ -102,15 +107,13 @@ router.get('/check-status', isAuthenticated, async (req, res) => {
   }
 });
 
-// Route untuk admin approve (biasanya di routes/admin.js)
+// Route untuk admin approve
 router.post('/approve/:laporanId', async (req, res) => {
   try {
-    // Update status di database menjadi 'approved'
-    await Laporan.findByIdAndUpdate(
-      req.params.laporanId, 
-      { status: 'approved', tanggalApproval: new Date() }
+    await Laporan.update(
+      { status: 'approved', tanggalApproval: new Date() },
+      { where: { id: req.params.laporanId } }
     );
-    
     res.json({ success: true, message: 'Laporan disetujui' });
   } catch (error) {
     console.error(error);
@@ -118,4 +121,44 @@ router.post('/approve/:laporanId', async (req, res) => {
   }
 });
 
-module.exports = router;
+// Route untuk download sertifikat
+router.get('/download-sertifikat', isAuthenticated, async (req, res) => {
+  try {
+    const filePath = path.join(
+      __dirname,
+      '../../uploads/sertifikat',
+      `sertifikat-${req.user.id}.pdf`
+    );
+
+    res.download(filePath, `sertifikat-${req.user.id}.pdf`, (err) => {
+      if (err) {
+        console.error("Gagal download:", err);
+        return res.status(500).send("Sertifikat belum tersedia.");
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Terjadi kesalahan saat mendownload sertifikat.');
+  }
+});
+
+// Route untuk check status
+router.get('/check-status', isAuthenticated, async (req, res) => {
+  try {
+
+    const laporan = await Laporan.findOne({
+      where: { userId: req.session.user.id }, include: [{ model: Participant, as: "participant" }]
+    });
+
+    let status = 'belum_upload';
+    if (laporan) {
+      status = laporan.status === 'approved' ? 'approved' :
+        laporan.status === 'rejected' ? 'rejected' : 'menunggu_approval';
+    }
+
+    res.json({ status: status });
+  } catch (error) {
+    console.error(error);
+    res.json({ status: 'belum_upload' });
+  }
+});

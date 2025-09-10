@@ -1,68 +1,95 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const PDFDocument = require('pdfkit');
-const path = require('path');
-const { Laporan, User } = require('../../models');
+const { createCanvas, loadImage } = require("canvas");
+const path = require("path");
+const fs = require("fs");
+const PDFDocument = require("pdfkit");
+const { Participant, Laporan } = require("../../models/"); // sesuaikan model Sequelize
 
-// Generate Sertifikat PDF
-router.get('/', async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
-    if (!req.session.user) {
-      return res.redirect('/login');
-    }
+    const id = req.params.id;
 
-    // Ambil user & laporan dari DB
-    const user = await User.findByPk(req.session.user.id);
+    // Ambil data laporan + participant dari DB
     const laporan = await Laporan.findOne({
-      where: { userId: req.session.user.id }
+      where: { userId: id },
+      include: [{ model: Participant, as: "participant" }]
     });
 
-    if (!laporan || laporan.status !== 'approved') {
-      return res.status(403).send('Sertifikat belum bisa diunduh (laporan belum diapprove)');
+    if (!laporan) {
+      return res.status(404).send('Data tidak ditemukan');
     }
 
-    // Buat PDF
-    const doc = new PDFDocument({
-      size: 'A4',
-      layout: 'landscape'
+    const namaPeserta = laporan.participant.nama;
+    // ✅ ambil nama file tanpa ekstensi
+    // Ambil judul laporan
+let judulLaporan = "Judul Laporan Tidak Ada";
+if (laporan.judul) {
+  judulLaporan = laporan.judul;
+} else if (laporan.fileLaporan) {
+  judulLaporan = path.parse(laporan.fileLaporan).name;
+}
+
+
+    // Ukuran template sertifikat (sesuaikan)
+    const width = 1123;
+    const height = 794; 
+    const canvas = createCanvas(width, height);
+    const ctx = canvas.getContext("2d");
+
+    // Load template
+    const templatePath = path.join(__dirname, "../../public/images/sertifikat.png");
+    const template = await loadImage(templatePath);
+
+    // Gambar template ke canvas
+    ctx.drawImage(template, 0, 0, width, height);
+
+    // Tambahkan teks (nama peserta)
+    ctx.font = "bold 40px Arial";
+    ctx.fillStyle = "#000";
+    ctx.textAlign = "center";
+    ctx.fillText(namaPeserta, width / 2, 370);
+
+    // Tambahkan teks (judul laporan)
+    ctx.font = "italic 28px Arial";
+    ctx.fillText(judulLaporan, width / 2, 430);
+
+    // Tambahkan tanggal sekarang
+    const tanggal = new Date().toLocaleDateString("id-ID", {
+      day: "numeric", month: "long", year: "numeric"
+    });
+    ctx.font = "20px Arial";
+    ctx.textAlign = "left";
+    ctx.fillText(tanggal, 310, 593); // ✅ geser supaya sejajar titik dua
+
+    // -------------------------------
+    // Generate PDF dari canvas
+    // -------------------------------
+    const outPath = path.join(__dirname, `../../public/certificates/${judulLaporan}-${id}.pdf`);
+    
+    const pdfDoc = new PDFDocument({
+      size: [width, height] // samain ukuran canvas
     });
 
-    // Nama file download
-    res.setHeader('Content-Disposition', 'attachment; filename="sertifikat.pdf"');
-    res.setHeader('Content-Type', 'application/pdf');
-    doc.pipe(res);
+    const out = fs.createWriteStream(outPath);
+    pdfDoc.pipe(out);
 
-    // Tambahkan background sertifikat
-    const bgPath = path.join(__dirname, '../../public/images/sertifikat.png');
-    doc.image(bgPath, 0, 0, { width: doc.page.width, height: doc.page.height });
+    // Convert canvas ke buffer PNG
+    const buffer = canvas.toBuffer("image/png");
 
-    // Tulis Nama Peserta
-    doc.fontSize(36)
-      .fillColor('#000000')
-      .font('Times-Bold')
-      .text(user.nama, 0, 300, {
-        align: 'center'
-      });
+    // Masukkan PNG ke halaman PDF
+    pdfDoc.image(buffer, 0, 0, { width: width, height: height });
 
-    // Tulis Judul Laporan
-    doc.fontSize(20)
-      .fillColor('#333333')
-      .font('Times-Roman')
-      .text(`"${laporan.judul}"`, 0, 370, {
-        align: 'center'
-      });
+    // Finalize PDF
+    pdfDoc.end();
 
-    // Tulis Tanggal
-    const tanggal = new Date().toLocaleDateString('id-ID', { 
-      day: 'numeric', month: 'long', year: 'numeric' 
+    out.on("finish", () => {
+      res.download(outPath); // download PDF
     });
-    doc.fontSize(16)
-      .text(`Dikeluarkan pada: ${tanggal}`, 0, 450, { align: 'center' });
 
-    doc.end();
   } catch (err) {
     console.error(err);
-    res.status(500).send('Gagal generate sertifikat');
+    res.status(500).send(err);
   }
 });
 

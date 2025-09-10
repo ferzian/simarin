@@ -13,7 +13,7 @@ const app = express();
 const laporanRoutes = require('./routes/user/laporan');
 const visitorLogger = require('./middleware/visitorLogger');
 const sertifikatRoutes = require('./routes/user/sertifikat');
-app.use('/user/sertifikat', sertifikatRoutes);
+
 
 // Middleware
 app.use(express.urlencoded({ extended: false }));
@@ -52,11 +52,10 @@ app.use('/admin', require('./routes/admin/download-rekap'));
 app.use('/admin/laporan', require('./routes/admin/laporan'));
 //app.use('/user', require('./routes/user/skm'));
 app.use('/user/daftar-magang', require('./routes/user/daftar-magang'));
-app.use('/user', require('./routes/user/sertifikat'));
 app.use('/user', require('./routes/user/user-dashboard'));
 app.use('/user', profilRoutes);
 app.use('/user', laporanRoutes);
-
+app.use('/sertifikat', sertifikatRoutes);
 
 // Visitor tracking
 app.use(async (req, res, next) => {

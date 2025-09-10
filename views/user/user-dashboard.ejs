@@ -145,7 +145,7 @@
   <template x-for="(img, index) in images" :key="index">
     <div 
       class="absolute top-0 left-0 w-full h-full bg-center bg-cover transition-opacity duration-1000"
-      :style="`background-image: linear-gradient(rgba(30, 58, 138, 0.6), rgba(0, 0, 0, 0.3)), url('${img}')`"
+      :style="`background-image:url('${img}')`"
       :class="{ 'opacity-100 z-20': current === index, 'opacity-0 z-10': current !== index }"
     ></div>
   </template>
