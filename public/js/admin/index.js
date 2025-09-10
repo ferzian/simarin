@@ -5,7 +5,6 @@ userBtn.addEventListener("click", () => {
     userMenu.classList.toggle("hidden");
 });
 
-// Tutup dropdown kalau klik di luar
 window.addEventListener("click", function (e) {
     if (!userBtn.contains(e.target) && !userMenu.contains(e.target)) {
         userMenu.classList.add("hidden");
@@ -22,10 +21,8 @@ sidebarToggle.addEventListener("click", () => {
     toggleSidebar();
 });
 
-// Event listener for the new ADM button
 sidebarTitleButton.addEventListener("click", () => {
     if (sidebar.classList.contains("w-20")) {
-        // Only toggle if sidebar is collapsed
         toggleSidebar();
     }
 });
