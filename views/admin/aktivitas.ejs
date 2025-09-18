@@ -3,16 +3,14 @@
   <head>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <title>Statistik Kunjungan SIMARIN</title>
+    <title>Laporan Kegiatan Peserta SIMARIN</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <!-- Favicon -->
     <link rel="icon" sizes="32x32" type="image/png" href="/images/logo.png" />
     <link rel="stylesheet" href="/css/admin.css" />
     <script src="/js/admin/index.js" defer></script>
-    <script src="/js/admin/peserta.js" defer></script>
   </head>
   <body class="bg-gray-100 flex h-screen">
     <aside
@@ -107,7 +105,7 @@
           </a>
           <a
             href="/admin/aktivitas"
-            class="menu-item-link text-white hover:text-white"
+            class="menu-item-link text-white hover:text-white relative bg-gray-700"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -179,11 +177,12 @@
                 d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z"
               />
             </svg>
+
             <span class="menu-text-wrapper">Statistik Peserta</span>
           </a>
           <a
             href="/admin/kunjungan"
-            class="menu-item-link text-white hover:text-white relative bg-gray-700"
+            class="menu-item-link text-white hover:text-white"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -208,11 +207,14 @@
         class="bg-white shadow-md px-6 py-4 flex justify-between items-center border-b border-gray-200"
       >
         <div>
-          <h1 class="text-2xl font-bold text-gray-800">Statistik Kunjungan</h1>
+          <h1 class="text-2xl font-bold text-gray-800">
+            Aktivitas Kegiatan Peserta
+          </h1>
           <p class="text-sm text-gray-500">
             Balai Riset Perikanan Budidaya Air Tawar dan Penyuluhan Perikanan
           </p>
         </div>
+
         <div class="flex items-center gap-6 relative">
           <div class="relative">
             <button
@@ -346,253 +348,103 @@
           </div>
         </div>
       </header>
+
       <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-8">
-        <h2 class="text-3xl font-bold mb-6 text-gray-800">
-          Statistik Kunjungan
-        </h2>
-
-        <!-- Filter -->
-        <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
-          <h3 class="text-xl font-semibold text-gray-700 mb-4">
-            Filter Kunjungan
-          </h3>
-          <form id="filterForm" class="flex flex-col md:flex-row gap-4">
-            <div>
-              <label
-                for="fromDate"
-                class="block text-gray-600 text-sm font-medium mb-1"
-                >Dari Tanggal</label
-              >
-              <input
-                type="month"
-                id="fromDate"
-                name="fromDate"
-                class="border rounded-lg px-3 py-2 w-full"
-              />
-            </div>
-            <div>
-              <label
-                for="toDate"
-                class="block text-gray-600 text-sm font-medium mb-1"
-                >Sampai Tanggal</label
-              >
-              <input
-                type="month"
-                id="toDate"
-                name="toDate"
-                class="border rounded-lg px-3 py-2 w-full"
-              />
-            </div>
-            <div class="flex items-end">
-              <button
-                type="submit"
-                class="bg-blue-600 text-white px-5 py-2 rounded-lg shadow hover:bg-blue-700 transition"
-              >
-                Terapkan
-              </button>
-            </div>
-          </form>
-        </div>
-
-        <!-- Chart -->
-        <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
-          <h3 class="text-xl font-semibold text-gray-700 mb-4">
-            Jumlah Kunjungan
-          </h3>
-          <canvas id="visitorChart" height="100"></canvas>
-        </div>
-
-        <!-- Ringkasan -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="bg-green-100 p-6 rounded-xl shadow">
-            <p class="text-gray-600">Total Kunjungan</p>
-            <h4 class="text-2xl font-bold text-gray-800" id="totalVisitors">
-              0
-            </h4>
-          </div>
-          <div class="bg-yellow-100 p-6 rounded-xl shadow">
-            <p class="text-gray-600">Perubahan dibanding Bulan Lalu</p>
-            <h4 class="text-2xl font-bold text-gray-800" id="changePrevMonth">
-              0%
-            </h4>
-          </div>
-          <div class="bg-blue-100 p-6 rounded-xl shadow">
-            <p class="text-gray-600">Perubahan dibanding Tahun Lalu</p>
-            <h4 class="text-2xl font-bold text-gray-800" id="changePrevYear">
-              0%
-            </h4>
+        <!-- Table Peserta -->
+        <div class="bg-white rounded-xl shadow p-6">
+          <h2 class="text-xl font-semibold mb-4">Daftar Peserta</h2>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-gray-100 text-gray-700 uppercase text-sm">
+                  <th class="py-3 px-4">Nama Peserta</th>
+                  <th class="py-3 px-4">Prodi</th>
+                  <th class="py-3 px-4">Kegiatan</th>
+                  <th class="py-3 px-4">Instansi</th>
+                  <th class="py-3 px-4">Tanggal</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (participants.length > 0) { %> <% participants.forEach((p,
+                index) => { %>
+                <tr class="border-b hover:bg-gray-50">
+                  <td
+                    class="py-3 px-4 text-blue-600 font-semibold cursor-pointer hover:underline"
+                    onclick="openModal(<%= index %>)"
+                  >
+                    <%= p.nama %>
+                  </td>
+                  <td class="py-3 px-4"><%= p.prodi %></td>
+                  <td class="py-3 px-4"><%= p.kegiatan %></td>
+                  <td class="py-3 px-4"><%= p.instansi %></td>
+                  <td class="py-3 px-4">
+                    <%= p.tanggalMulai %> - <%= p.tanggalSelesai %>
+                  </td>
+                </tr>
+                <% }) %> <% } else { %>
+                <tr>
+                  <td colspan="5" class="text-center py-6 text-gray-500">
+                    Belum ada data peserta
+                  </td>
+                </tr>
+                <% } %>
+              </tbody>
+            </table>
           </div>
         </div>
       </main>
-    </div>
-    <script>
-                        // === ambil data dari server ===
-                        const visitorsData = <%- JSON.stringify(visitors) %>;
 
-                        // --- Group data pakai key YYYY-MM ---
-                        const grouped = {};
-                        visitorsData.forEach(v => {
-                          const date = new Date(v.createdAt);
-                          if (!isNaN(date)) {
-                            const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
-                            grouped[key] = (grouped[key] || 0) + 1;
-                          }
-                        });
+      <!-- Modal Detail Aktivitas -->
+      <div
+        id="aktivitasModal"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+      >
+        <div
+          class="bg-white rounded-xl shadow-lg w-full max-w-2xl p-6 relative"
+        >
+          <button
+            onclick="closeModal()"
+            class="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+          >
+            ✕
+          </button>
+          <h3 class="text-xl font-semibold mb-4">Aktivitas Harian Peserta</h3>
+          <div id="modalContent" class="space-y-3">
+            <!-- nanti isi aktivitas via JS -->
+            <p class="text-gray-500 text-sm">Belum ada data aktivitas</p>
+          </div>
+        </div>
+      </div>
 
-                        // simpan key & label chart
-                        const keys = Object.keys(grouped).sort();
-                        const labels = keys.map(key => {
-                          const [y, m] = key.split("-");
-                          return new Date(y, m - 1).toLocaleString("id-ID", { month: "long", year: "numeric" });
-                        });
-                        const data = Object.values(grouped);
+      <script>
+        const participants = <%- JSON.stringify(participants) %>;
 
-                        // --- render chart ---
-                        const ctx = document.getElementById("visitorChart").getContext("2d");
-                        const lastIndex = data.length - 1;
+        function openModal(index) {
+          const peserta = participants[index];
+          const modal = document.getElementById('aktivitasModal');
+          const modalContent = document.getElementById('modalContent');
 
-      const visitorChart = new Chart(ctx, {
-        type: "line",
-        data: {
-          labels,
-          datasets: [
-            {
-              label: "Jumlah Kunjungan",
-              data,
-              borderColor: "#f59e0b",
-              backgroundColor: "rgba(245,158,11,0.2)",
-              fill: true,
-              tension: 0.3,
-              borderWidth: 3,
-              pointRadius: 5,
-              pointBackgroundColor: "#f59e0b",
-              pointHoverRadius: 7,
-              pointHoverBackgroundColor: "#d97706",
-            },
-            {
-              label: "Titik Terakhir",
-              data: labels.map((_, i) => (i === lastIndex ? data[i] : null)),
-              borderColor: "transparent",   // ga ada garis
-              backgroundColor: "#ef4444",   // merah untuk titik terakhir
-              pointRadius: 8,
-              pointHoverRadius: 10,
-              type: "line",                 // tetap line tapi cuma 1 titik
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              callbacks: {
-                label: (ctx) => ` ${ctx.formattedValue} kunjungan`
-              }
-            }
-          },
-          scales: {
-            x: {
-              grid: { display: true, drawOnChartArea: false },
-            },
-            y: {
-              beginAtZero: true,
-              grid: { color: "rgba(0,0,0,0.05)" },
-              ticks: { stepSize: 5 }
-            }
-          }
+          // sementara kosongan, nanti bisa isi dengan data aktivitas dari DB
+          modalContent.innerHTML = `
+            <div class="space-y-2">
+              <p><span class="font-semibold">Nama:</span> ${peserta.nama}</p>
+              <p><span class="font-semibold">Prodi:</span> ${peserta.prodi}</p>
+              <p><span class="font-semibold">Kegiatan:</span> ${peserta.kegiatan}</p>
+              <hr class="my-3">
+              <h4 class="font-semibold">Log Aktivitas:</h4>
+              <ul class="list-disc pl-6 text-gray-700">
+                <li>Belum ada aktivitas yang tercatat</li>
+              </ul>
+            </div>
+          `;
+
+          modal.classList.remove('hidden');
         }
-      });
 
-
-
-                        // update ringkasan total
-                        document.getElementById("totalVisitors").innerText = visitorsData.length;
-
-                        // --- ambil bulan & tahun saat ini ---
-                        const now = new Date();
-                        const thisMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
-                        const thisMonthLabel = now.toLocaleString("id-ID", { month: "long", year: "numeric" });
-
-                        // cari index bulan sekarang di chart
-                        const currentIndex = keys.indexOf(thisMonthKey);
-
-                        // nilai bulan ini
-                        const currentValue = currentIndex !== -1 ? data[currentIndex] : 0;
-
-                        // nilai bulan lalu
-                        const prevMonthValue = currentIndex > 0 ? data[currentIndex - 1] : 0;
-
-                        // nilai tahun lalu (bulan sama, tahun beda)
-                        const prevYearKey = `${now.getFullYear() - 1}-${String(now.getMonth() + 1).padStart(2, "0")}`;
-                        const prevYearIndex = keys.indexOf(prevYearKey);
-                        const prevYearValue = prevYearIndex !== -1 ? data[prevYearIndex] : 0;
-
-                        // hitung persentase perubahan
-                        const calcChange = (curr, prev) => {
-                          if (!prev || prev === 0) return "0%";
-                          const change = ((curr - prev) / prev) * 100;
-                          return `${change.toFixed(1)}%`;
-                        };
-
-                        // update DOM
-                        document.getElementById("changePrevMonth").innerText = calcChange(currentValue, prevMonthValue);
-                        document.getElementById("changePrevYear").innerText = calcChange(currentValue, prevYearValue);
-
-                        // === FILTER HANDLER ===
-                  document.getElementById("filterForm").addEventListener("submit", (e) => {
-                    e.preventDefault();
-                    const from = document.getElementById("fromDate").value; // YYYY-MM
-                    const to = document.getElementById("toDate").value;     // YYYY-MM
-
-                    // filter berdasarkan key
-                    const filteredKeys = keys.filter(k => {
-                      return (!from || k >= from) && (!to || k <= to);
-                    });
-
-                    const filteredLabels = filteredKeys.map(key => {
-                      const [y, m] = key.split("-");
-                      return new Date(y, m - 1).toLocaleString("id-ID", { month: "long", year: "numeric" });
-                    });
-                    const filteredData = filteredKeys.map(k => grouped[k]);
-
-                    // update chart
-                    visitorChart.data.labels = filteredLabels;
-                    visitorChart.data.datasets[0].data = filteredData;
-                    visitorChart.update();
-
-                    // --- update ringkasan berdasarkan filter ---
-                    const total = filteredData.reduce((a, b) => a + b, 0);
-                    document.getElementById("totalVisitors").innerText = total;
-
-                    // kalau range kosong, kosongkan perubahan
-                    if (filteredKeys.length === 0) {
-                      document.getElementById("changePrevMonth").innerText = "-";
-                      document.getElementById("changePrevYear").innerText = "-";
-                      return;
-                    }
-
-                    // ambil bulan terakhir dalam filter (anggap current month)
-                    const currentIndex = filteredKeys.length - 1;
-                    const currentValue = filteredData[currentIndex];
-
-                    // bulan sebelumnya
-                    const prevMonthValue = currentIndex > 0 ? filteredData[currentIndex - 1] : 0;
-
-                    // cari tahun lalu (bulan sama, tahun beda) dalam filter
-                    const [currYear, currMonth] = filteredKeys[currentIndex].split("-");
-                    const prevYearKey = `${parseInt(currYear) - 1}-${currMonth}`;
-                    const prevYearIndex = filteredKeys.indexOf(prevYearKey);
-                    const prevYearValue = prevYearIndex !== -1 ? filteredData[prevYearIndex] : 0;
-
-                    const calcChange = (curr, prev) => {
-                      if (!prev || prev === 0) return "0%";
-                      const change = ((curr - prev) / prev) * 100;
-                      return `${change.toFixed(1)}%`;
-                    };
-
-                    document.getElementById("changePrevMonth").innerText = calcChange(currentValue, prevMonthValue);
-                    document.getElementById("changePrevYear").innerText = calcChange(currentValue, prevYearValue);
-                  });
-    </script>
+        function closeModal() {
+          document.getElementById('aktivitasModal').classList.add('hidden');
+        }
+      </script>
+    </div>
   </body>
 </html>
