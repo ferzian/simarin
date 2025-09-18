@@ -16,7 +16,7 @@ router.get('/data-peserta', isAuthenticated, isAdmin, async (req, res) => {
         },
         {
           model: Laporan,
-          attributes: ['fileLaporan'], // ambil nama file laporan
+          attributes: ['fileLaporan'],
         }
       ],
     });
@@ -32,6 +32,7 @@ router.get('/data-peserta', isAuthenticated, isAdmin, async (req, res) => {
 
     res.render('admin/data-peserta', {
       participants: participants.map((p) => ({
+        id: p.id,
         nama: p.nama,
         nisNpm: p.nisNpm,
         jenisKelamin: p.jenisKelamin,
@@ -48,6 +49,7 @@ router.get('/data-peserta', isAuthenticated, isAdmin, async (req, res) => {
         pasFoto: p.pasFoto,
         suratSehat: p.suratSehat,
         laporan: p.Laporan ? p.Laporan.fileLaporan : null,
+        laporanUserId: p.Laporan ? p.Laporan.userId : null
       })),
       user: req.session.user,
       pendingCount

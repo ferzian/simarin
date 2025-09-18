@@ -232,6 +232,7 @@ function sortData(key) {
 }
 
 function showDetail(p) {
+    console.log("Data peserta di modal:", p.laporanUserId);
     document.getElementById("detailNama").textContent = p.nama;
     document.getElementById("detailNisNpm").textContent = p.nisNpm;
     document.getElementById("detailJenisKelamin").textContent = p.jenisKelamin;
@@ -252,10 +253,13 @@ function showDetail(p) {
     document.getElementById("detailSuratSehat").href = p.suratSehat
         ? `/uploads/user/surat-sehat/${p.suratSehat}`
         : "#";
-        
+
     document.getElementById("detailLaporan").href = p.laporan
         ? `/uploads/user/laporan/${p.laporan}`
         : "#";
+
+    document.getElementById("detailSertifikat").href = `/admin/sertifikat/${p.id}`;
+
 
     document.getElementById("detailModal").classList.remove("hidden");
 }

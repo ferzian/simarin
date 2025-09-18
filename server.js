@@ -13,6 +13,7 @@ const app = express();
 const laporanRoutes = require('./routes/user/laporan');
 const visitorLogger = require('./middleware/visitorLogger');
 const sertifikatRoutes = require('./routes/user/sertifikat');
+const sertifikatAdminRoutes = require("./routes/admin/sertifikat");
 
 
 // Middleware
@@ -56,6 +57,7 @@ app.use('/user', require('./routes/user/user-dashboard'));
 app.use('/user', profilRoutes);
 app.use('/user', laporanRoutes);
 app.use('/sertifikat', sertifikatRoutes);
+app.use("/admin/sertifikat", sertifikatAdminRoutes);
 
 // Visitor tracking
 app.use(async (req, res, next) => {
