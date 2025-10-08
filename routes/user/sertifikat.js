@@ -49,6 +49,7 @@ if (laporan.judul) {
     ctx.fillStyle = "#000";
     ctx.textAlign = "center";
     ctx.fillText(namaPeserta, width / 2, 370);
+    
 
     // Tambahkan teks (judul laporan)
     ctx.font = "italic 28px Arial";
