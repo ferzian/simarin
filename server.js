@@ -5,6 +5,7 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const path = require('path');
 const { Op } = require('sequelize');
+const fetch = require('node-fetch'); // ⬅️ Menambahkan call Flask API by Daud
 const { User, Visitor, sequelize } = require('./models');
 const authRoutes = require('./routes/auth');
 const daftarMagangRoute = require('./routes/user/daftar-magang');
@@ -13,6 +14,7 @@ const app = express();
 const laporanRoutes = require('./routes/user/laporan');
 const visitorLogger = require('./middleware/visitorLogger');
 const sertifikatRoutes = require('./routes/user/sertifikat');
+const sertifikatAdminRoutes = require("./routes/admin/sertifikat");
 
 
 // Middleware
@@ -46,6 +48,7 @@ app.get('/register', (req, res) => res.render('register'));
 app.use('/auth', authRoutes);
 app.use('/admin', require('./routes/admin/dashboard'));
 app.use('/admin', require('./routes/admin/data-peserta'));
+app.use('/admin', require('./routes/admin/aktivitas'));
 app.use('/admin', require('./routes/admin/peserta'));
 app.use('/admin', require('./routes/admin/kunjungan'));
 app.use('/admin', require('./routes/admin/download-rekap'));
@@ -56,6 +59,7 @@ app.use('/user', require('./routes/user/user-dashboard'));
 app.use('/user', profilRoutes);
 app.use('/user', laporanRoutes);
 app.use('/sertifikat', sertifikatRoutes);
+app.use("/admin/sertifikat", sertifikatAdminRoutes);
 
 // Visitor tracking
 app.use(async (req, res, next) => {
@@ -72,6 +76,23 @@ app.use(async (req, res, next) => {
 
   next();
 });
+
+app.post('/chat', async (req, res) => {
+  try {
+    const response = await fetch("https://bluishly-chronogrammatic-britany.ngrok-free.dev/api/chat", { // ⬅️ Ganti URL ngrok by Daud
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(req.body)
+    });
+
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    console.error("❌ Gagal menghubungi Flask API:", err);
+    res.status(500).json({ error: "Gagal menghubungi Flask API" });
+  }
+});
+
 
 sequelize.authenticate().then(async () => {
   const admin = await User.findOne({ where: { role: 'admin' } });
