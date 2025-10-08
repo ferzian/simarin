@@ -5,6 +5,7 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const path = require('path');
 const { Op } = require('sequelize');
+const fetch = require('node-fetch'); // ⬅️ Menambahkan call Flask API by Daud
 const { User, Visitor, sequelize } = require('./models');
 const authRoutes = require('./routes/auth');
 const daftarMagangRoute = require('./routes/user/daftar-magang');
@@ -75,6 +76,23 @@ app.use(async (req, res, next) => {
 
   next();
 });
+
+app.post('/chat', async (req, res) => {
+  try {
+    const response = await fetch("https://bluishly-chronogrammatic-britany.ngrok-free.dev/api/chat", { // ⬅️ Ganti URL ngrok by Daud
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(req.body)
+    });
+
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    console.error("❌ Gagal menghubungi Flask API:", err);
+    res.status(500).json({ error: "Gagal menghubungi Flask API" });
+  }
+});
+
 
 sequelize.authenticate().then(async () => {
   const admin = await User.findOne({ where: { role: 'admin' } });
