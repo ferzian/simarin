@@ -13,6 +13,17 @@ router.get('/dashboard', isAdmin, async (req, res) => {
     const monthStart = moment().startOf('month').toDate();
     const today = moment().startOf('day').toDate();
     const sevenDaysLater = moment().add(7, 'days').endOf('day').toDate();
+    // === Pendaftar hari ini ===
+    const todayStart = moment().startOf('day').toDate();
+    const todayEnd = moment().endOf('day').toDate();
+
+    const todayRegistrants = await Participant.findAll({
+      where: {
+        createdAt: { [Op.between]: [todayStart, todayEnd] }
+      },
+      attributes: ['nama', 'jenisKelamin', 'instansi', 'kegiatan', 'lokasi'],
+      order: [['createdAt', 'DESC']]
+    });
 
     // === Pendaftar baru bulan ini ===
     const newRegistrantsCount = await Participant.count({
@@ -84,9 +95,10 @@ router.get('/dashboard', isAdmin, async (req, res) => {
       newRegistrantsCount,
       lokasiData,
       upcomingEndDate,
-      visitors, 
+      visitors,
       moment,
-      pendingCount
+      pendingCount,
+      todayRegistrants
     });
 
   } catch (err) {

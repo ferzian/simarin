@@ -19,7 +19,9 @@ router.get('/data-peserta', isAuthenticated, isAdmin, async (req, res) => {
           attributes: ['fileLaporan'],
         }
       ],
+      order: [['createdAt', 'DESC']] // ✅ urutkan dari yang terbaru
     });
+
 
 
     const formatDate = (dateStr) =>
