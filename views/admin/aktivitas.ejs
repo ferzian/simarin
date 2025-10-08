@@ -352,32 +352,40 @@
       <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-8">
         <!-- Table Peserta -->
         <div class="bg-white rounded-xl shadow p-6">
-          <h2 class="text-xl font-semibold mb-4">Daftar Peserta</h2>
-          <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-              <thead>
-                <tr class="bg-gray-100 text-gray-700 uppercase text-sm">
-                  <th class="py-3 px-4">Nama Peserta</th>
-                  <th class="py-3 px-4">Prodi</th>
-                  <th class="py-3 px-4">Kegiatan</th>
-                  <th class="py-3 px-4">Instansi</th>
-                  <th class="py-3 px-4">Tanggal</th>
+          <h1
+              class="text-2xl sm:text-3xl font-bold text-gray-800 mb-6 border-b pb-4"
+            >
+              Daftar Kegiatan Peserta
+            </h1>
+          <div
+            class="overflow-x-auto rounded-xl border border-gray-200 shadow-md"
+          >
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-blue-900">
+                <tr class="text-white uppercase tracking-wider">
+                  <th class="px-4 py-3 font-semibold">Nama Peserta</th>
+                  <th class="px-3 py-3 font-semibold text-left">Prodi</th>
+                  <th class="px-3 py-3 font-semibold text-left">Kegiatan</th>
+                  <th class="px-3 py-3 font-semibold text-left">Instansi</th>
+                  <th class="px-3 py-3 font-semibold text-left min-w-[140px]">
+                    Tanggal
+                  </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody class="bg-white divide-y divide-gray-100">
                 <% if (participants.length > 0) { %> <% participants.forEach((p,
                 index) => { %>
-                <tr class="border-b hover:bg-gray-50">
+                <tr class="hover:bg-gray-50">
                   <td
-                    class="py-3 px-4 text-blue-600 font-semibold cursor-pointer hover:underline"
+                    class="px-4 py-3 text-blue-600 font-semibold cursor-pointer hover:underline"
                     onclick="openModal(<%= index %>)"
                   >
                     <%= p.nama %>
                   </td>
-                  <td class="py-3 px-4"><%= p.prodi %></td>
-                  <td class="py-3 px-4"><%= p.kegiatan %></td>
-                  <td class="py-3 px-4"><%= p.instansi %></td>
-                  <td class="py-3 px-4">
+                  <td class="px-3 py-3"><%= p.prodi %></td>
+                  <td class="px-3 py-3"><%= p.kegiatan %></td>
+                  <td class="px-3 py-3"><%= p.instansi %></td>
+                  <td class="px-3 py-3">
                     <%= p.tanggalMulai %> - <%= p.tanggalSelesai %>
                   </td>
                 </tr>
@@ -430,6 +438,7 @@
               <p><span class="font-semibold">Nama:</span> ${peserta.nama}</p>
               <p><span class="font-semibold">Prodi:</span> ${peserta.prodi}</p>
               <p><span class="font-semibold">Kegiatan:</span> ${peserta.kegiatan}</p>
+              <p><span class="font-semibold">Lokasi:</span> ${peserta.lokasi}</p>
               <hr class="my-3">
               <h4 class="font-semibold">Log Aktivitas:</h4>
               <ul class="list-disc pl-6 text-gray-700">

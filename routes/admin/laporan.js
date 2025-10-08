@@ -14,15 +14,29 @@ function isAdmin(req, res, next) {
 
 // GET semua laporan
 router.get('/', isAdmin, async (req, res) => {
-  const laporan = await Laporan.findAll({
-    
-    include: [{model: Participant, as: "participant", attributes: ['nama'] }],
-    order: [['createdAt', 'DESC']]
+  const limit = 10; // maksimal 10 data per halaman
+  const page = parseInt(req.query.page) || 1; // halaman aktif
+  const offset = (page - 1) * limit;
+
+  // Ambil data laporan + total count
+  const { count, rows: laporan } = await Laporan.findAndCountAll({
+    include: [{ model: Participant, as: "participant", attributes: ['nama'] }],
+    order: [['createdAt', 'DESC']],
+    limit,
+    offset,
   });
 
   const pendingCount = await Laporan.count({ where: { status: 'pending' } });
 
-  res.render('admin/laporan', { laporan, pendingCount });
+  // Hitung total halaman
+  const totalPages = Math.ceil(count / limit);
+
+  res.render('admin/laporan', {
+    laporan,
+    pendingCount,
+    currentPage: page,
+    totalPages
+  });
 });
 
 // POST approve

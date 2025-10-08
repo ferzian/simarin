@@ -451,6 +451,67 @@
           </div>
         </div>
 
+        <div class="bg-white rounded-lg shadow-md p-6 mt-6">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-xl font-semibold text-gray-700">
+              Pendaftar Hari Ini
+            </h2>
+          </div>
+
+          <% if (todayRegistrants.length > 0) { %>
+          <div
+            class="overflow-x-auto rounded-xl border border-gray-200 shadow-md"
+          >
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-blue-900">
+                <tr class="border-b bg-gray-50">
+                  <th
+                    class="py-3 px-4 text-left font-large font-bold text-gray-600"
+                  >
+                    Nama
+                  </th>
+                  <th
+                    class="py-3 px-4 text-left font-large font-bold text-gray-600"
+                  >
+                    Jenis Kelamin
+                  </th>
+                  <th
+                    class="py-3 px-4 text-left font-large font-bold text-gray-600"
+                  >
+                    Asal Instansi
+                  </th>
+                  <th
+                    class="py-3 px-4 text-left font-large font-bold text-gray-600"
+                  >
+                    Kegiatan
+                  </th>
+                  <th
+                    class="py-3 px-4 text-left font-large font-bold text-gray-600"
+                  >
+                    Lokasi Kegiatan
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <% todayRegistrants.forEach(r => { %>
+                <tr class="border-b hover:bg-gray-50 transition-colors">
+                  <td class="py-3 px-4 text-gray-800"><%= r.nama %></td>
+                  <td class="py-3 px-4 text-gray-800"><%= r.jenisKelamin %></td>
+                  <td class="py-3 px-4 text-gray-800"><%= r.instansi %></td>
+                  <td class="py-3 px-4 text-gray-800"><%= r.kegiatan %></td>
+                  <td class="py-3 px-4 text-gray-800"><%= r.lokasi %></td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+          <% } else { %>
+          <p class="text-gray-500">
+            Tidak ada pendaftar yang mengisi data diri hari ini.
+          </p>
+          <% } %>
+        </div>
+
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
           <div class="bg-white rounded-lg shadow-md p-6 h-96 pb-14">
             <h2 class="text-xl font-semibold mb-4 text-gray-700">
@@ -471,7 +532,10 @@
                       Nama
                     </th>
                     <th class="py-3 px-4 text-left font-medium text-gray-600">
-                      Lokasi
+                      Kegiatan
+                    </th>
+                    <th class="py-3 px-4 text-left font-medium text-gray-600">
+                      Lokasi Kegiatan
                     </th>
                     <th class="py-3 px-4 text-left font-medium text-gray-600">
                       Tanggal Selesai
@@ -482,6 +546,7 @@
                   <% upcomingEndDate.forEach(p => { %>
                   <tr class="border-b hover:bg-gray-50 transition-colors">
                     <td class="py-3 px-4 text-gray-800"><%= p.nama %></td>
+                    <td class="py-3 px-4 text-gray-800"><%= p.kegiatan %></td>
                     <td class="py-3 px-4 text-gray-800"><%= p.lokasi %></td>
                     <td class="py-3 px-4 text-gray-800">
                       <%= moment(p.tanggalSelesai).format('DD MMM YYYY') %>
