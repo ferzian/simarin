@@ -77,7 +77,8 @@
 
     <!-- Cards -->
     <div class="grid md:grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-
+      
+  
       <!-- Step 1 -->
       <div class="card bg-gradient-to-br from-green-400 to-green-500 p-6 rounded-2xl text-white text-center relative">
         <div class="flex justify-center mb-4">
@@ -87,7 +88,7 @@
          <p class="text-sm">
     Status: <span class="font-semibold"><%= user.id %></span>
   </p>
-        <p class="opacity-90 mb-4">Peserta wajib mengisi survei kepuasan pada link resmi KKP.</p>
+        <p class="opacity-90 mb-4"></p>
         <button onclick="openStep('Survey Kepuasan','https://ptsp.kkp.go.id/skm/s/3327')"
           class="bg-white text-green-600 font-semibold py-2 px-6 rounded-full hover:bg-opacity-90 transition">Isi
           Survey</button>
@@ -99,7 +100,7 @@
           <div class="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-2xl">📑</div>
         </div>
         <h2 class="text-2xl font-bold mb-2">2. Upload Laporan</h2>
-        <p class="opacity-90 mb-4">Kumpulkan laporan magang maksimal 1 bulan setelah kegiatan.</p>
+        <p class="opacity-90 mb-4">Kumpulkan laporan </p>
         <button id="uploadBtn"
           class="bg-white text-yellow-600 font-semibold py-2 px-6 rounded-full hover:bg-opacity-90 transition">Upload
           Laporan</button>
@@ -164,13 +165,24 @@
       });
     }
 
-    function updateUI(status) {
-      let progressWidth = '33%', progressText = '33%';
-      if (status === 'menunggu_approval') { progressWidth = '66%'; progressText = '66%'; }
-      if (status === 'approved') { progressWidth = '100%'; progressText = '100%'; }
-      progressBar.style.width = progressWidth;
-      progressPercentage.textContent = progressText;
+          function updateUI(status) {
+        let progressWidth = '25%', progressText = '25%';
 
+        if (status === 'laporan_harian_done') { 
+          progressWidth = '50%'; 
+          progressText = '50%'; 
+        }
+        if (status === 'menunggu_approval') { 
+          progressWidth = '75%'; 
+          progressText = '75%'; 
+        }
+        if (status === 'approved') { 
+          progressWidth = '100%'; 
+          progressText = '100%'; 
+        }
+
+        progressBar.style.width = progressWidth;
+        progressPercentage.textContent = progressText;
       uploadStatus.innerHTML = status === 'belum_upload' ?
         '<p class="text-sm">Status: <span class="font-semibold">Menunggu upload</span></p>' :
         '<p class="text-sm">Status: <span class="font-semibold">Laporan terkirim</span></p>';
