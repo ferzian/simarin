@@ -40,7 +40,7 @@ app.use((req, res, next) => {
 });
 
 // Halaman umum
-app.get('/', (req, res) => res.render('index')); 
+app.get('/', (req, res) => res.render('index'));
 app.get('/login', (req, res) => res.render('login'));
 app.get('/register', (req, res) => res.render('register'));
 
@@ -72,7 +72,7 @@ app.use(async (req, res, next) => {
 
   if (!exists) {
     await Visitor.create({ ip });
-  }   
+  }
 
   next();
 });
@@ -95,20 +95,32 @@ app.post('/chat', async (req, res) => {
 
 
 sequelize.authenticate().then(async () => {
-  const admin = await User.findOne({ where: { role: 'admin' } });
-  if (!admin) {
-    const hashedPassword = await bcrypt.hash('admin123', 10); 
+  const hashedPassword = await bcrypt.hash('admin123', 10);
 
-    await User.create({
-      username: 'admin',
-      password: hashedPassword, 
-      email: 'admin@gmail.com',
-      phone: '(0251) 8313200',
-      instansi: 'BRPBATPP',
-      role: 'admin',
-      approved: true,
-    });
+  const adminList = [
+    { username: 'Admin Sempur', email: 'admin.sempur@gmail.com', instansi: 'BRPBATPP Sempur' },
+    { username: 'Admin Cibalagung', email: 'admin.cibalagung@gmail.com', instansi: 'BRPBATPP Cibalagung' },
+    { username: 'Admin Depok', email: 'admin.depok@gmail.com', instansi: 'BRPBATPP Depok' },
+    { username: 'Admin Cijeruk', email: 'admin.cijeruk@gmail.com', instansi: 'BRPBATPP Cijeruk' },
+  ];
+
+  for (const adminData of adminList) {
+    const existing = await User.findOne({ where: { username: adminData.username } });
+    if (!existing) {
+      await User.create({
+        username: adminData.username,
+        password: hashedPassword,
+        email: adminData.email,
+        phone: '(0251) 8313200',
+        instansi: adminData.instansi,
+        role: 'admin',
+        approved: true,
+      });
+      console.log(`✅ Admin dibuat: ${adminData.namaLengkap}`);
+    }
   }
 
   app.listen(3000, () => console.log('✅ Server jalan di http://localhost:3000'));
 });
+
+
