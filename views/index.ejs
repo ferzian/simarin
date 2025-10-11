@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SIMARIN - Sistem Magang</title>
+    <title>KA-MARI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
@@ -12,11 +12,11 @@
     <link rel="stylesheet" href="/css/home.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="icon" sizes="32x32" type="image/png" href="/images/logo.png" />
-
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    />
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+      }
+    </style>
   </head>
   <body id="top" class="min-h-screen flex flex-col">
     <nav
@@ -26,14 +26,14 @@
       <div class="flex items-center space-x-3">
         <img
           src="/images/logo.png"
-          alt="Logo SIMARIN"
+          alt="Logo KA-MARI"
           class="h-10 w-10 object-contain"
         />
         <h1
           id="navTitle"
           class="text-2xl md:text-3xl font-bold text-white tracking-wide"
         >
-          SIMARIN
+          KA-MARI
         </h1>
       </div>
       <div class="flex items-center space-x-6 font-medium">
@@ -69,7 +69,7 @@
       <!-- konten -->
       <div class="relative z-10 text-white px-6">
         <h2 class="text-5xl md:text-6xl font-extrabold mb-6 leading-tight">
-          Wujudkan Potensimu bersama <span class="text-blue-400">SIMARIN</span>
+          Wujudkan Potensimu bersama <span class="text-blue-400">KA-MARI</span>
         </h2>
         <p class="text-lg md:text-xl max-w-2xl mx-auto mb-8 opacity-90">
           Sistem Informasi untuk mendukung program Magang, Praktik Kegiatan
@@ -95,11 +95,11 @@
     <!-- Tentang -->
     <section id="tentang" class="bg-white py-20 px-6">
       <div class="max-w-6xl mx-auto text-center">
-        <h3 class="text-4xl font-bold text-gray-800 mb-6">Tentang SIMARIN</h3>
+        <h3 class="text-4xl font-bold text-gray-800 mb-6">Tentang KA-MARI</h3>
         <p
           class="text-gray-600 max-w-3xl mx-auto mb-12 text-lg leading-relaxed"
         >
-          SIMARIN dirancang khusus untuk memudahkan proses pendaftaran dan
+          KA-MARI dirancang khusus untuk memudahkan proses pendaftaran dan
           pengelolaan program magang. Kami hadir untuk memberikan pengalaman
           berharga yang mempersiapkan Anda menghadapi dunia kerja.
         </p>
@@ -194,76 +194,107 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-gray-300 py-12">
-      <div
-        class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-10"
-      >
-        <!-- Alamat -->
-        <div>
-          <h4 class="text-white font-semibold text-lg mb-4">Alamat</h4>
-          <p class="leading-relaxed">
-            Jl. Sempur No.1, RT.01/RW.01, Sempur,<br />
-            Kecamatan Bogor Tengah, Kota Bogor,<br />
-            Jawa Barat 16129
-          </p>
+    <footer class="bg-gray-800 text-white py-10">
+      <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Kolom 1: Logo dan Deskripsi -->
+        <div class="flex flex-col items-center md:items-start space-y-3">
+          <div class="text-center md:text-left">
+            <!-- alamat dengan icon -->
+            <div class="flex flex-col items-center justify-center mt-4">
+              <!-- icon lokasi -->
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-8 h-8 text-blue-500 mb-3"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 11c1.657 0 3-1.343 3-3S13.657 5 12 5 
+                           9 6.343 9 8s1.343 3 3 3z"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19.5 8c0 7.5-7.5 13.5-7.5 13.5S4.5 15.5 4.5 8a7.5 7.5 0 1115 0z"
+                />
+              </svg>
+              <p class="text-base font-semibold leading-relaxed">
+                Jl. Sempur No.1, RT.01/RW.01, Sempur,<br />
+                Kecamatan Bogor Tengah, Kota Bogor,<br />
+                Jawa Barat 16129
+              </p>
+            </div>
+          </div>
         </div>
 
-        <!-- Maps -->
-        <div>
-          <h4 class="text-white font-semibold text-lg mb-4">Lokasi</h4>
-          <a href="https://maps.app.goo.gl/EQdDmdumvvUJmPXV8" target="_blank">
+        <!-- Kolom 2: Maps -->
+        <div class="flex flex-col items-center space-y-4">
+          <a
+            href="https://maps.app.goo.gl/EQdDmdumvvUJmPXV8"
+            target="_blank"
+            class="block"
+          >
             <img
               src="https://static-maps.yandex.ru/1.x/?lang=en-US&ll=106.7993,-6.5945&z=16&size=450,200&l=map&pt=106.7993,-6.5945,pm2rdm"
               alt="Lokasi Jl. Sempur No.1, Bogor"
-              class="rounded-lg shadow-lg hover:opacity-90 transition"
+              class="rounded-lg shadow-lg mx-auto hover:opacity-90 transition"
             />
           </a>
         </div>
 
-        <!-- Sosial Media -->
-        <div>
-          <h4 class="text-white font-semibold text-lg mb-4">Ikuti Kami</h4>
+        <!-- Kolom 3: Sosial Media -->
+        <div class="flex flex-col items-center space-y-4">
+          <h2 class="text-lg font-semibold mb-4">🌐 Sosial Media</h2>
           <ul class="space-y-3">
             <li>
               <a
                 href="https://www.facebook.com/share/1BHFuy2pmN/"
                 target="_blank"
-                class="flex items-center gap-3 hover:text-white transition"
+                class="flex items-center gap-3 hover:text-blue-400 transition"
               >
                 <i class="fab fa-facebook text-xl"></i> Facebook
               </a>
             </li>
             <li>
               <a
-                href="https://www.instagram.com/bppsdm_brpbatpp_bogor"
+                href="https://www.instagram.com/bppsdm_brpbatpp_bogor?utm_source=ig_web_button_share_sheet&igsh=MWljM2Z2Njkwc3F6Yw=="
                 target="_blank"
-                class="flex items-center gap-3 hover:text-white transition"
+                class="flex items-center gap-3 hover:text-pink-400 transition"
               >
                 <i class="fab fa-instagram text-xl"></i> Instagram
               </a>
             </li>
             <li>
               <a
-                href="https://youtube.com/@sobatpenyuluhanbogor"
+                href="https://youtube.com/@sobatpenyuluhanbogor?si=IereKOliqRdeyZbH"
                 target="_blank"
-                class="flex items-center gap-3 hover:text-white transition"
+                class="flex items-center gap-3 hover:text-red-500 transition"
               >
                 <i class="fab fa-youtube text-xl"></i> YouTube
               </a>
             </li>
             <li>
               <a
-                href="https://www.tiktok.com/@bppsdm_brpbatpp_bogor"
+                href="https://www.tiktok.com/@bppsdm_brpbatpp_bogor?_t=ZS-8z6vfVjSQeW&_r=1"
                 target="_blank"
-                class="flex items-center gap-3 hover:text-white transition"
+                class="flex items-center gap-3 hover:text-red-500 transition"
               >
-                <i class="fab fa-tiktok text-xl"></i> TikTok
+                <i class="fab fa-tiktok text-xl"></i> Tiktok
               </a>
             </li>
           </ul>
         </div>
       </div>
-      <div class="text-center border-t border-gray-700 mt-10 pt-6 text-sm">
+
+      <!-- Copyright -->
+      <div
+        class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400 text-sm"
+      >
         © 2025 SIMARIN. Seluruh hak cipta dilindungi.
       </div>
     </footer>
@@ -301,7 +332,9 @@
         id="chatArea"
         class="flex-1 p-4 space-y-3 overflow-y-auto overflow-x-hidden max-h-[28rem] text-sm break-words"
       >
-        <div class="text-gray-500 text-center">Hallo! nama saya Jerabats 👋</div>
+        <div class="text-gray-500 text-center">
+          Hallo! nama saya Jerabats 👋
+        </div>
       </div>
 
       <!-- Input -->

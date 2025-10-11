@@ -19,8 +19,7 @@ const db = {};
 db.User = require('./User')(sequelize, DataTypes);
 db.Participant = require('./Participant')(sequelize, DataTypes);
 db.Laporan = require('./Laporan')(sequelize, DataTypes);
-db.Visitor = require('./Visitor')(sequelize, DataTypes); // opsional
-// Jalankan associate kalau ada
+db.Visitor = require('./Visitor')(sequelize, DataTypes); 
 Object.values(db).forEach((model) => {
   if (model.associate) {
     model.associate(db);
