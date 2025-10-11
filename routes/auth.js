@@ -62,20 +62,16 @@ router.get('/register', (req, res) => {
 // POST Register
 router.post('/register', async (req, res) => {
   const { username, password, confirmPassword, email, phone, instansi } = req.body;
-  const hashedPassword = await bcrypt.hash(password, 10);
 
   if (password !== confirmPassword) {
     return res.render('register', { error: 'Password tidak sama.' });
   }
 
   try {
-    // Cek apakah username ATAU email sudah ada (OR condition)
+    // Cek apakah username ATAU email sudah ada
     const existingUser = await User.findOne({
       where: {
-        [Op.or]: [
-          { username },
-          { email }
-        ]
+        [Op.or]: [{ username }, { email }]
       }
     });
 
@@ -88,8 +84,23 @@ router.post('/register', async (req, res) => {
       }
     }
 
-    // Buat user baru
-    const newUser = await User.create({
+    // Hitung berapa user yang daftar hari ini
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const countToday = await User.count({
+      where: {
+        createdAt: { [Op.gte]: startOfDay },
+      },
+    });
+
+    // Nomor antrian = jumlah user hari ini + 1
+    const queueNumber = countToday + 1;
+    const formattedQueue = queueNumber.toString().padStart(3, '0');
+
+    // Hash password dan buat user baru
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await User.create({
       username,
       password: hashedPassword,
       email,
@@ -99,16 +110,18 @@ router.post('/register', async (req, res) => {
       approved: true,
     });
 
-    res.redirect('/register?registered=success');
+    // Kirim nomor antrian lewat query parameter (tanpa disimpan di DB)
+    res.redirect(`/register?registered=success&queue=${formattedQueue}`);
+
   } catch (err) {
     console.error(err);
-    // Beri pesan error yang lebih spesifik
     if (err.name === 'SequelizeUniqueConstraintError') {
       return res.render('register', { error: 'Username atau email sudah terdaftar.' });
     }
     res.render('register', { error: 'Terjadi kesalahan saat register.' });
   }
 });
+
 
 // GET - Form lupa password
 router.get('/forgot-password', (req, res) => {

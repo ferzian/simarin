@@ -7,7 +7,7 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/home.css" />
     <link rel="icon" sizes="32x32" type="image/png" href="/images/logo.png" />
     <style>
       body {
@@ -291,14 +291,16 @@
         }
       }
 
-      // SweetAlert untuk registrasi berhasil
       const params = new URLSearchParams(window.location.search);
-      if (params.get("registered") === "success") {
+      const isSuccess = params.get("registered") === "success";
+      const queue = params.get("queue");
+
+      if (isSuccess && queue) {
         Swal.fire({
-          title: "Registrasi Berhasil!",
-          text: "Silakan login untuk melanjutkan.",
+          title: "Registrasi Berhasil! 🎉",
+          html: `Selamat, akun Anda berhasil dibuat.<br>Nomor antrian Anda hari ini: <b>${queue}</b>`,
           icon: "success",
-          confirmButtonText: "OK"
+          confirmButtonText: "OK",
         }).then(() => {
           window.location.href = "/login";
         });
