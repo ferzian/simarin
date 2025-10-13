@@ -74,15 +74,6 @@ if (existingNis) {
   });
 }
 
-      // 💡 Validasi nomor telepon unik
-      const existing = await Participant.findOne({ where: { telepon } });
-      if (existing) {
-        return res.render('user/daftar-magang/index', {
-          username: req.session.user?.username || 'Pengguna',
-          error: 'Nomor telepon sudah digunakan.',
-          success: false,
-        });
-      }
 
       // 💾 Simpan data ke database
       await Participant.create({

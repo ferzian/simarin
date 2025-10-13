@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SIMARIN - Pendaftaran Layanan</title>
+  <title>KA'MARI - Pendaftaran Layanan</title>
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.tailwindcss.com"></script>
@@ -32,13 +32,13 @@
 <body class="bg-gray-50">
 
 <!-- Navigation -->
-<nav class="bg-gray-800 shadow-sm">
+<nav class="bg-gradient-to-r from-[#003FA7] via-[#0055D4] to-[#002F6C] shadow-lg text-white">
     <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
       
       <!-- Kiri: Logo + SIMARIN -->
       <div class="flex items-center space-x-3">
         <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhVlnwerlS3bGvBZeB4BNCQnl1bHvwBAkKO3NY2yf0isvrN2egSPM_VT7rkEV3lJBYXaFmJvprDlU5Xr2kZTK564YnUhX_SWuPmRYiaDoYItCcFhhnBrf3QcdJ-qNn31JV5Zfgaoz7fWIViBz6KwvnGp39roEqCWOI6m8lbuBtSzYe9RHFq-8WAVA/s3000/Kementerian%20Kelautan%20dan%20Perikanan%20(KKP)%20Republik%20Indonesia.png" alt="Logo SIMARIN" class="h-12 w-auto" />
-        <span class="simarin-text text-4xl text-white">SIMARIN</span>
+        <span class="simarin-text text-4xl text-white">KA'MARI</span>
       </div>
       
       <!-- Kanan: Menu Navigasi -->
@@ -196,54 +196,70 @@
 </div>
 
 <div class="max-w-6xl mx-auto px-4 py-12">
-  <div class="flex flex-col md:flex-row justify-center gap-8">
-<!-- Wrapper Card -->
-<div
-  class="bg-white p-6 rounded-2xl shadow-md w-full md:w-1/2 flex flex-col items-center justify-center transform transition duration-300 hover:scale-105 hover:shadow-2xl text-center">
+ <!-- ✅ Flex wrapper untuk dua card utama -->
+ <div class="flex flex-col md:flex-row justify-center items-start gap-8">
 
-  <!-- Icon -->
-  <div class="mb-3">
-    <svg class="w-16 h-16 text-blue-600" fill="none" stroke="currentColor" stroke-width="2"
+<!-- 🟦 Card Upload Surat Permohonan -->
+<div
+  class="bg-white shadow-md rounded-2xl p-8 flex flex-col items-center justify-between w-full md:w-1/2 transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
+  <div class="flex flex-col items-center">
+    <svg class="w-12 h-12 text--600 mb-4" fill="none" stroke="currentColor" stroke-width="2"
       viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round"
-        d="M12 11c0 1.105-.895 2-2 2s-2-.895-2-2 .895-2 2-2 2 .895 2 2zM6 20h12M6 4h12m-2 4H8m0 0h8" />
+        d="M3 8l9 6 9-6M21 8v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8" />
     </svg>
+    <h3 class="text-xl font-bold mb-3 text-center text-gray-800">Upload Surat Permohonan</h3>
   </div>
 
-  <!-- Judul -->
-  <h2 class="text-2xl font-bold text-gray-800 mb-6">Pendaftaran</h2>
+  <form id="uploadForm" action="/user/upload" method="POST" enctype="multipart/form-data" class="flex flex-col gap-3 w-full">
+    <input type="file" name="surat_permohonan" accept=".pdf" required
+      class="border rounded-lg p-2 w-full focus:ring-2 focus:ring-blue-500 outline-none">
+    <button type="submit"
+      class="bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700 shadow-lg hover:shadow-2xl hover:scale-[1.03] transition w-full">Upload</button>
+  </form>
+  
+</div>
 
-  <!-- Tombol -->
+<!-- 🟩 Card Pendaftaran Magang -->
+<div
+  class="bg-white shadow-md rounded-2xl p-8 flex flex-col items-center justify-between w-full md:w-1/2 transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
+  <div class="flex flex-col items-center">
+    <svg class="w-12 h-12 text-yellow-500 mb-4" fill="none" stroke="currentColor" stroke-width="2"
+      viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+        d="M12 11c0 1.105-.895 2-2 2s-2-.895-2-2 .895-2 2-2 2 .895 2 2zM6 20h12M6 4h12m-2 4H8" />
+    </svg>
+    <h2 class="text-xl font-bold text-gray-800 mb-3 text-center">Pendaftaran Magang</h2>
+  </div>
+
   <a href="/user/daftar-magang"
-    class="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition text-sm font-medium shadow">
-    Daftar Sekarang
-  </a>
+    class="bg-yellow-500 text-white rounded-lg px-4 py-2 hover:bg-yellow-700 transition w-full text-center">Daftar
+    Sekarang</a>
 </div>
 
 <% if (isRegistered) { %>
-    <!-- Card 2 (Fix agar rapi seperti Pendaftaran) -->
+<!-- 🟢 Card Form Alur Kegiatan -->
 <div
-class="bg-white p-6 rounded-2xl shadow-md w-full md:w-1/2 flex flex-col justify-between transform transition duration-300 hover:scale-105 hover:shadow-2xl">
-<div>
-  <!-- Icon -->
-  <div class="flex justify-center mb-4">
-    <svg class="w-14 h-14 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round"
-        d="M9 12l2 2 4-4M7 12c0-2.21 1.79-4 4-4s4 1.79 4 4-1.79 4-4 4-4-1.79-4-4zM5 20h14" />
-    </svg>
+  class="bg-white p-6 rounded-2xl shadow-md mt-8 w-full md:w-1/2 mx-auto flex flex-col justify-between transform transition duration-300 hover:scale-105 hover:shadow-2xl">
+  <div>
+    <div class="flex justify-center mb-4">
+      <svg class="w-14 h-14 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M9 12l2 2 4-4M7 12c0-2.21 1.79-4 4-4s4 1.79 4 4-1.79 4-4 4-4-1.79-4-4zM5 20h14" />
+      </svg>
+    </div>
+    <h2 class="text-xl font-bold text-center text-gray-800">
+      Form Alur Kegiatan
+    </h2>
   </div>
-  <h2 class="text-2xl font-bold text-center text-gray-800">
-    Form <br>(SKM, Laporan, Sertifikat)
-  </h2>
-  <p class="text-center text-gray-500 mt-2"></p>
-</div>
-<div class="mt-6 flex justify-center">
-  <a href="/user/skm"
-    class="bg-green-600 text-white px-10 py-2 rounded-full hover:bg-green-700 transition">Silahkan isi</a>
-</div>
+  <div class="mt-6 flex justify-center">
+    <a href="/user/skm"
+      class="bg-green-600 text-white px-10 py-2 rounded-full hover:bg-green-700 transition">Silahkan isi</a>
+  </div>
 </div>
 <% } %>
-  </div>
+
+</div>
 </div>
 
 </div>
@@ -252,7 +268,7 @@ class="bg-white p-6 rounded-2xl shadow-md w-full md:w-1/2 flex flex-col justify-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-10">
+    <footer class="bg-gradient-to-r from-[#003FA7] via-[#0055D4] to-[#002F6C] shadow-lg text-white py-10">
       <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
           <!-- Kolom 1: Logo dan Deskripsi -->
           <div class="flex flex-col items-center md:items-start space-y-3">
@@ -319,7 +335,7 @@ class="bg-white p-6 rounded-2xl shadow-md w-full md:w-1/2 flex flex-col justify-
       </div>
       
       <!-- Copyright -->
-      <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400 text-sm">
+      <div class="border-t border-gray-700 mt-8 pt-6 text-center text-white-400 text-sm">
           © 2025 SIMARIN. Seluruh hak cipta dilindungi.
       </div>
   </footer>
@@ -369,3 +385,37 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const formData = new FormData(this);
+
+  const res = await fetch('/user/upload', {
+    method: 'POST',
+    body: formData
+  });
+
+  const data = await res.json();
+  console.log(data);
+
+  if (data.success) {
+    Swal.fire({
+      icon: 'success',
+      title: 'Berhasil!',
+      text: data.message,
+      showConfirmButton: false,
+      timer: 2000
+    }).then(() => {
+      window.location.href = '/user/user-dashboard'; // arahkan ke halaman lain
+    });
+  } else {
+    Swal.fire({
+      icon: 'error',
+      title: 'Gagal!',
+      text: data.message,
+    });
+  }
+});
+</script>

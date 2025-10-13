@@ -88,9 +88,12 @@
             class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm placeholder-gray-400 transition duration-300"
             placeholder="Masukkan Nama lengkap" required>
         </div>
+        <p class="text-sm text-gray-500 mt-1">
+          Isi Nama dengan benar untuk nama di sertifikat
+        </p>
           <!-- NIS/NPM -->
           <div class="mb-6">
-            <label for="nisNpm" class="block text-base font-semibold text-gray-700 mb-1">Nomor Induk Peserta</label>
+            <label for="nisNpm" class="block text-base font-semibold text-gray-700 mb-1">Nomor Induk Siswa/Mahasiswa</label>
             <input 
               type="text" 
               id="nisNpm" 
@@ -157,6 +160,8 @@
               class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm transition duration-300"
               required>
               <option value="" disabled selected>-- Pilih Jenjang --</option>
+              <option>SD/Sederajat</option>
+              <option>SLTP/Sederajat</option>
               <option>SLTA/Sederajat</option>
               <option>D3/D4</option>
               <option>S1</option>
@@ -201,8 +206,8 @@
               required>
               <option value="" disabled selected>-- Pilih Kegiatan --</option>
               <option>Magang</option>
-              <option>PRAKTEK KERJA LAPANG</option>
-              <option>PENELITIAN</option>
+              <option>Praktik Kerja Lapang</option>
+              <option>Penelitian/Praktik Akhir</option>
               <option>MBKM</option>
             </select>
           </div>

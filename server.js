@@ -15,6 +15,7 @@ const laporanRoutes = require('./routes/user/laporan');
 const visitorLogger = require('./middleware/visitorLogger');
 const sertifikatRoutes = require('./routes/user/sertifikat');
 const sertifikatAdminRoutes = require("./routes/admin/sertifikat");
+const suratPermohonanRoutes = require('./routes/user/surat-permohonan');
 
 
 // Middleware
@@ -60,6 +61,7 @@ app.use('/user', profilRoutes);
 app.use('/user', laporanRoutes);
 app.use('/sertifikat', sertifikatRoutes);
 app.use("/admin/sertifikat", sertifikatAdminRoutes);
+app.use('/user', require('./routes/user/surat-permohonan'));
 
 // Visitor tracking
 app.use(async (req, res, next) => {

@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = (sequelize, DataTypes) => {
   const Participant = sequelize.define('Participant', {
     userId: {
@@ -23,6 +25,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+    // ✅ kolom baru dari migration
+    isUploaded: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    }
+  }, {
+    tableName: 'Participants'
   });
 
   Participant.associate = function (models) {

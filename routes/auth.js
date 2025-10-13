@@ -257,6 +257,16 @@ router.post('/logout', (req, res) => {
     res.clearCookie('connect.sid');
     res.redirect('/login');
   });
+   // Di sinilah kamu tambahkan session user:
+   req.session.user = {
+    id: user.id,
+    username: user.username,
+    role: user.role,
+    surat_pengantar: user.surat_pengantar,
+    isUploaded: !!user.surat_pengantar // <-- bagian pentingnya disini
+  };
+
+  res.redirect('/user/user-dashboard');
 });
 
 module.exports = router;
