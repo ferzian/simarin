@@ -11,7 +11,13 @@ module.exports = {
       },
       userId: {
         type: Sequelize.INTEGER,
-        allowNull: false, // untuk relasi ke user
+        allowNull: false,
+        references: {
+          model: 'Users', // sesuaikan nama tabel user
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
       suratPermohonan: {
         type: Sequelize.STRING,

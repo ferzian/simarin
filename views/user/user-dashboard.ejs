@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>KA'MARI - Pendaftaran Layanan</title>
+  <title>KA-MARI</title>
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.tailwindcss.com"></script>
@@ -32,13 +32,13 @@
 <body class="bg-gray-50">
 
 <!-- Navigation -->
-<nav class="bg-gradient-to-r from-[#003FA7] via-[#0055D4] to-[#002F6C] shadow-lg text-white">
+<nav id="mainNav"class="bg-transparent text-white fixed w-full z-50">
     <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
       
       <!-- Kiri: Logo + SIMARIN -->
       <div class="flex items-center space-x-3">
         <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhVlnwerlS3bGvBZeB4BNCQnl1bHvwBAkKO3NY2yf0isvrN2egSPM_VT7rkEV3lJBYXaFmJvprDlU5Xr2kZTK564YnUhX_SWuPmRYiaDoYItCcFhhnBrf3QcdJ-qNn31JV5Zfgaoz7fWIViBz6KwvnGp39roEqCWOI6m8lbuBtSzYe9RHFq-8WAVA/s3000/Kementerian%20Kelautan%20dan%20Perikanan%20(KKP)%20Republik%20Indonesia.png" alt="Logo SIMARIN" class="h-12 w-auto" />
-        <span class="simarin-text text-4xl text-white">KA'MARI</span>
+        <span class="simarin-text text-4xl text-white">KA-MARI</span>
       </div>
       
       <!-- Kanan: Menu Navigasi -->
@@ -113,16 +113,75 @@
           </div>
         </div>
      </nav>
-  
+<!-- ===== Popup Speaker Toa Sederhana ===== -->
+<div x-data="popupSpeaker(<%= showPopup %>)"
+  x-init="init()"
+  x-show="open"
+  class="fixed bottom-6 right-6 z-50 flex items-center space-x-4 bg-yellow-200/90 backdrop-blur-md p-4 rounded-2xl shadow-2xl max-w-sm transition-all duration-500"
+  x-transition:enter="transform transition ease-out duration-500"
+  x-transition:enter-start="opacity-0 translate-y-10 scale-90"
+  x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+  x-transition:leave="transform transition ease-in duration-300"
+  x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+  x-transition:leave-end="opacity-0 translate-y-10 scale-90">
+
+  <!-- Icon Speaker Toa -->
+  <svg class="w-10 h-10 text-yellow-600 animate-pulse" fill="none" stroke="currentColor" stroke-width="2"
+    viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round"
+      d="M15 8a3 3 0 013 3v2a3 3 0 01-3 3M19 8l3-3M19 16l3 3M5 10v4H2l5 4V6l-5 4h3z" />
+  </svg>
+
+  <div class="flex-1">
+    <h4 class="font-bold text-gray-800">Upload Surat Permohonan</h4>
+    <p class="text-gray-700 text-sm">
+     hallo friend 👋 Setiap langkah kecil penting. Upload surat permohonanmu sekarang, dan mari mulai petualangan magangmu!”
+    </p>
+    <button @click="suratPermohonanCard"
+      class="mt-2 bg-yellow-600 hover:bg-yellow-700 text-white font-semibold px-4 py-2 rounded shadow-md transition-all">
+      Ke Form Upload
+    </button>
+  </div>
+
+  <button @click="close()"
+    class="text-gray-600 hover:text-gray-800 font-bold text-xl">&times;</button>
+</div>
+
+<!-- ===== Alpine.js Script ===== -->
+<script>
+  function popupSpeaker(show) {
+    return {
+      open: show,
+      init() {
+        // Popup akan muncul otomatis jika show = true
+        if (this.open) {
+          setTimeout(() => {
+            this.open = true;
+          }, 500); // delay muncul popup
+        }
+      },
+      close() {
+        this.open = false;
+      },
+      suratPermohonanCard() {
+        document.getElementById("suratPermohonanCard").scrollIntoView({ behavior: 'smooth', block: 'center' });
+        this.close();
+      }
+    }
+  }
+</script>
 <!-- Hero Section -->
 <div 
   class="relative w-full h-[90vh] overflow-hidden" 
   x-data="{
     current: 0,
     images: [
-      '/images/BRPBATPP_Depan[1].jpg',
-      'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-      'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+      '/images/ikan.jpg',
+      '/images/kita.jpg',
+      '/images/barudak.jpg',
+      '/images/barudak-balai.jpg',
+      '/images/ngala.jpg',
+      '/images/pemandangan.jpg'
     ],
     start() {
       setInterval(() => {
@@ -154,16 +213,16 @@
   <div class="relative z-30 flex items-center justify-center h-full text-white text-center px-4">
     <div class="max-w-4xl">
       <h1 class="simarin-text text-5xl md:text-7xl mb-4">
-        Sistem Informasi Magang dan Praktik Industri
+ 
       </h1>
       <h2 class="program-text text-xl md:text-3xl font-bold uppercase tracking-wider mb-6">
-        PENDAFTARAN LAYANAN
+
       </h2>
       <p class="program-text text-2xl md:text-3xl font-bold italic mb-6">
-        MAGANG / PRAKTIK LAPANG / PENELITIAN
+
       </p>
       <p class="program-text text-lg font-bold">
-        #SIMARIN
+
       </p>
     </div>
   </div>
@@ -200,45 +259,58 @@
  <div class="flex flex-col md:flex-row justify-center items-start gap-8">
 
 <!-- 🟦 Card Upload Surat Permohonan -->
-<div
-  class="bg-white shadow-md rounded-2xl p-8 flex flex-col items-center justify-between w-full md:w-1/2 transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
+<% if (!suratUploaded) { %>
+  <div
+  id="suratPermohonanCard"
+  class="bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 
+         shadow-lg rounded-2xl p-8 flex flex-col items-center justify-between 
+         w-full md:w-1/2 transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
+  
   <div class="flex flex-col items-center">
-    <svg class="w-12 h-12 text--600 mb-4" fill="none" stroke="currentColor" stroke-width="2"
+    <svg class="w-12 h-12 text-white mb-4" fill="none" stroke="currentColor" stroke-width="2"
       viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round"
         d="M3 8l9 6 9-6M21 8v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8" />
     </svg>
-    <h3 class="text-xl font-bold mb-3 text-center text-gray-800">Upload Surat Permohonan</h3>
+    <h3 class="text-xl font-bold mb-3 text-center text-white">Upload Surat Permohonan</h3>
+    <p class="text-white text-center">Langkah pertama untuk bisa daftar magang!</p>
   </div>
 
-  <form id="uploadForm" action="/user/upload" method="POST" enctype="multipart/form-data" class="flex flex-col gap-3 w-full">
-    <input type="file" name="surat_permohonan" accept=".pdf" required
-      class="border rounded-lg p-2 w-full focus:ring-2 focus:ring-blue-500 outline-none">
-    <button type="submit"
-      class="bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700 shadow-lg hover:shadow-2xl hover:scale-[1.03] transition w-full">Upload</button>
+  <form id="uploadForm" action="/user/surat-permohonan/upload" method="POST" enctype="multipart/form-data" class="mt-6 w-full">
+    <input type="file" name="suratPermohonan" accept="application/pdf"
+           class="border border-white p-2 rounded w-full mb-4 bg-yellow-100 text-gray-800" required>
+    <button type="submit" class="bg-white text-yellow-600 font-bold px-4 py-2 rounded w-full hover:bg-yellow-50 transition">
+      Upload Sekarang
+    </button>
   </form>
-  
 </div>
-
+<% } %>
 <!-- 🟩 Card Pendaftaran Magang -->
+<% if (suratUploaded && !isRegistered) { %>
 <div
-  class="bg-white shadow-md rounded-2xl p-8 flex flex-col items-center justify-between w-full md:w-1/2 transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
+  class="bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 
+         shadow-lg rounded-2xl p-8 flex flex-col items-center justify-between 
+         w-full md:w-1/2 transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
+  
   <div class="flex flex-col items-center">
-    <svg class="w-12 h-12 text-yellow-500 mb-4" fill="none" stroke="currentColor" stroke-width="2"
+    <svg class="w-12 h-12 text-white mb-4" fill="none" stroke="currentColor" stroke-width="2"
       viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round"
         d="M12 11c0 1.105-.895 2-2 2s-2-.895-2-2 .895-2 2-2 2 .895 2 2zM6 20h12M6 4h12m-2 4H8" />
     </svg>
-    <h2 class="text-xl font-bold text-gray-800 mb-3 text-center">Pendaftaran Magang</h2>
+    <h2 class="text-xl font-bold text-white mb-3 text-center">Pendaftaran Magang</h2>
   </div>
 
   <a href="/user/daftar-magang"
-    class="bg-yellow-500 text-white rounded-lg px-4 py-2 hover:bg-yellow-700 transition w-full text-center">Daftar
-    Sekarang</a>
+    class="bg-white text-yellow-600 font-bold rounded-lg px-4 py-2 hover:bg-yellow-50 transition w-full text-center">
+    Daftar Sekarang
+  </a>
 </div>
 
-<% if (isRegistered) { %>
+<% } %>
+
 <!-- 🟢 Card Form Alur Kegiatan -->
+<% if (isRegistered) { %>
 <div
   class="bg-white p-6 rounded-2xl shadow-md mt-8 w-full md:w-1/2 mx-auto flex flex-col justify-between transform transition duration-300 hover:scale-105 hover:shadow-2xl">
   <div>
@@ -278,7 +350,7 @@
               <div class="flex flex-col items-center justify-center mt-4">
                 <!-- icon lokasi -->
                 <svg xmlns="http://www.w3.org/2000/svg" 
-                class="w-8 h-8 text-blue-500 mb-3"  
+                class="w-8 h-8 text-green-500 mb-3"  
                      fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                         d="M12 11c1.657 0 3-1.343 3-3S13.657 5 12 5 
@@ -392,30 +464,62 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
 
   const formData = new FormData(this);
 
-  const res = await fetch('/user/upload', {
-    method: 'POST',
-    body: formData
-  });
+  try {
+    const res = await fetch('/user/surat/upload', {
+  method: 'POST',
+  body: formData
+});
 
-  const data = await res.json();
-  console.log(data);
 
-  if (data.success) {
-    Swal.fire({
-      icon: 'success',
-      title: 'Berhasil!',
-      text: data.message,
-      showConfirmButton: false,
-      timer: 2000
-    }).then(() => {
-      window.location.href = '/user/user-dashboard'; // arahkan ke halaman lain
-    });
-  } else {
+    const data = await res.json();
+    console.log(data);
+
+    if (res.ok && data.success) {
+      Swal.fire({
+  icon: 'success',
+  title: 'Berhasil!',
+  text: data.message || 'Surat permohonan berhasil diupload.',
+  showConfirmButton: false,
+  timer: 2000
+}).then(() => {
+  // 🔁 Reload atau redirect ke dashboard agar status terbaru muncul
+  window.location.href = '/user/dashboard?success=true';
+});
+
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal!',
+        text: data.message || 'Terjadi kesalahan saat upload.',
+      });
+    }
+
+  } catch (error) {
+    console.error(error);
     Swal.fire({
       icon: 'error',
-      title: 'Gagal!',
-      text: data.message,
+      title: 'Kesalahan!',
+      text: 'Terjadi error saat mengirim data ke server.',
     });
   }
 });
+let lastScrollTop = 0;
+const nav = document.getElementById('mainNav');
+
+window.addEventListener('scroll', () => {
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+  if (scrollTop > lastScrollTop && scrollTop > 100) {
+    // Scroll ke bawah → sembunyikan navbar
+    nav.style.transform = 'translateY(-100%)';
+    nav.style.transition = 'transform 0.3s ease-in-out';
+  } else {
+    // Scroll ke atas → tampilkan navbar
+    nav.style.transform = 'translateY(0)';
+    nav.style.transition = 'transform 0.3s ease-in-out';
+  }
+
+  lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // untuk mobile
+});
+
 </script>

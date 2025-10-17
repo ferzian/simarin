@@ -61,7 +61,7 @@ app.use('/user', profilRoutes);
 app.use('/user', laporanRoutes);
 app.use('/sertifikat', sertifikatRoutes);
 app.use("/admin/sertifikat", sertifikatAdminRoutes);
-app.use('/user', require('./routes/user/surat-permohonan'));
+app.use("/user/surat", suratPermohonanRoutes);
 
 // Visitor tracking
 app.use(async (req, res, next) => {

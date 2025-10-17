@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Participant, Laporan } = require('../../models');
+const { Participant, Laporan, SuratPermohonan, PendaftaranMagang } = require('../../models');
 
 // Middleware: pastikan user login & role user
 function isUser(req, res, next) {
@@ -12,40 +12,60 @@ function isUser(req, res, next) {
 
 // GET dashboard user
 router.get('/dashboard', isUser, async (req, res) => {
-  const existing = await Participant.findOne({ where: { userId: req.session.user.id } });
-  console.log(req.session.user)
-  console.log(existing)
-  res.render('user/user-dashboard', {
-    isRegistered: existing,
-    username: req.session.user.username
-  });
+  try {
+    // cek participant
+    const participant = await Participant.findOne({ where: { userId: req.session.user.id } });
+
+    // cek surat permohonan
+    const surat = await SuratPermohonan.findOne({ where: { userId: req.session.user.id } });
+    const showPopup = !surat || surat.status !== 'approved'; // true jika belum upload atau belum approved
+    const suratUploaded = surat && surat.status === 'approved'; // true jika sudah upload & approved
+
+    res.render('user/user-dashboard', {
+      isRegistered: participant,
+      suratUploaded,   // <-- kirim ke EJS
+      username: req.session.user.username,
+      showPopup // untuk popup speaker
+    });
+  } catch (err) {
+    console.error('❌ Error load dashboard:', err);
+    res.status(500).send('Gagal memuat dashboard');
+  }
 });
 
+// GET halaman SKM
 router.get('/skm', isUser, async (req, res) => {
-  const existing = await Participant.findOne({ where: { userId: req.session.user.id } });
-  console.log(req.session.user)
-  console.log(existing)
-  const laporan = await Laporan.findOne({
-      where: { userId: req.session.user.id }, include: [{ model: Participant, as: "participant" }]
-  });
+  try {
+    const participant = await Participant.findOne({ where: { userId: req.session.user.id } });
 
-  // Tentukan status yang akan dikirim ke frontend
-  let statusLaporan = 'belum_upload';
-
-  if (laporan) {
-    if (laporan.status == 'approved') {
-      statusLaporan = 'approved';
-    } else if (laporan.status == 'rejected') {
-      statusLaporan = 'rejected';
-    } else {
-      statusLaporan = 'menunggu_approval';
+    if (!participant) {
+      return res.render('user/user-dashboard', {
+        username: req.session.user.username,
+        error: 'Silakan daftar magang terlebih dahulu untuk mengakses SKM'
+      });
     }
+
+    const laporan = await Laporan.findOne({
+      where: { userId: req.session.user.id },
+      include: [{ model: Participant, as: "participant" }]
+    });
+
+    let statusLaporan = 'belum_upload';
+    if (laporan) {
+      if (laporan.status === 'approved') statusLaporan = 'approved';
+      else if (laporan.status === 'rejected') statusLaporan = 'rejected';
+      else statusLaporan = 'menunggu_approval';
+    }
+
+    res.render('user/daftar-magang/skm', {
+      isRegistered: participant,
+      statusLaporan,
+      username: req.session.user.username
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Terjadi kesalahan server');
   }
-  res.render('user/daftar-magang/skm', {
-    isRegistered: existing,
-    statusLaporan: statusLaporan,
-    username: req.session.user.username
-  });
 });
 
 // GET halaman permintaan sertifikat
@@ -55,33 +75,7 @@ router.get('/daftar-magang/sertifikat', isUser, (req, res) => {
   });
 });
 
-// GET halaman SKM
-const { PendaftaranMagang } = require('../../models'); // sesuaikan dengan nama model kamu
-
-router.get('/skm', isUser, async (req, res) => {
-  try {
-    const pendaftaran = await PendaftaranMagang.findOne({
-      where: { userId: req.session.user.id } // sesuaikan nama kolom
-    });
-
-    if (!pendaftaran) {
-      return res.render('user/user-dashboard', {
-        username: req.session.user.username,
-        error: 'Silakan daftar magang terlebih dahulu untuk mengakses SKM'
-      });
-    }
-
-    res.render('user/skm', {
-      username: req.session.user.username
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Terjadi kesalahan server');
-  }
-});
-
-
-// POST logout (bisa juga dipindah ke routes/auth.js kalau ingin pisah total)
+// POST logout
 router.post('/logout', (req, res) => {
   req.session.destroy((err) => {
     if (err) {
