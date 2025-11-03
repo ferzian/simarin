@@ -1,2 +1,5 @@
 node_modules/
 .env
+
+data_participant.sql
+data_user.sql
