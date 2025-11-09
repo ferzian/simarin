@@ -85,17 +85,31 @@
           <div class="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-2xl">✅</div>
         </div>
         <h2 class="text-2xl font-bold mb-2">1. Isi Survey Kepuasan</h2>
-         <p class="text-sm">
-    Status: <span class="font-semibold"><%= user.id %></span>
-  </p>
+         <p class="text-2x1">isi i susan dan screenshoot lalu upload di card berikutnya</p>
         <p class="opacity-90 mb-4"></p>
         <button onclick="openStep('Survey Kepuasan','https://ptsp.kkp.go.id/skm/s/3327')"
           class="bg-white text-green-600 font-semibold py-2 px-6 rounded-full hover:bg-opacity-90 transition">Isi
           Survey</button>
       </div>
 
-      
-      <!-- Step 2 -->
+      <!-- 🆕 Step 2 - Upload Screenshot Si Susan -->
+      <div class="card bg-gradient-to-br from-blue-400 to-blue-500 p-6 rounded-2xl text-white text-center relative">
+        <div class="flex justify-center mb-4">
+          <div class="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-2xl">🖼️</div>
+        </div>
+        <h2 class="text-2xl font-bold mb-2">2. Upload Screenshot Si Susan</h2>
+        <button id="uploadSusanBtn"
+        class="bg-white text-blue-600 font-semibold py-2 px-6 rounded-full hover:bg-opacity-90 transition"
+        onclick="openStep('Upload Screenshot Si Susan', '/user/upload-susan')">
+        Upload Screenshot
+      </button>
+
+        <div id="upload-susan-status" class="mt-4 p-2 bg-white bg-opacity-20 rounded-lg">
+          <p class="text-sm">Status: <span class="font-semibold">Menunggu upload</span></p>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
       <div class="card bg-gradient-to-br from-yellow-400 to-yellow-500 p-6 rounded-2xl text-white text-center relative">
         <div class="flex justify-center mb-4">
           <div class="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-2xl">📑</div>
@@ -181,7 +195,7 @@
           progressWidth = '100%'; 
           progressText = '100%'; 
         }
-
+        
         progressBar.style.width = progressWidth;
         progressPercentage.textContent = progressText;
       uploadStatus.innerHTML = status === 'belum_upload' ?

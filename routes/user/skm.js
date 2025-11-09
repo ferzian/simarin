@@ -54,7 +54,6 @@ router.get('/', isAuthenticated, async (req, res) => {
       statusLaporan: statusLaporan, // VARIABLE YANG DIPAKAI DI FRONTEND
       user: req.user
     });
-
   } catch (error) {
     console.error('Error:', error);
     res.status(500).send('Server Error');

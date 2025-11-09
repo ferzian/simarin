@@ -12,7 +12,6 @@ const sequelize = new Sequelize(
     dialect: 'mysql',
   }
 );
-
 const db = {};
 
 // Import models
@@ -21,7 +20,7 @@ db.Participant = require('./Participant')(sequelize, DataTypes);
 db.Laporan = require('./Laporan')(sequelize, DataTypes);
 db.Visitor = require('./Visitor')(sequelize, DataTypes); 
 db.SuratPermohonan = require('./SuratPermohonan')(sequelize, DataTypes);
-
+db.UploadSusan = require('./upload_susan')(sequelize, DataTypes);
 // Jalankan associate kalau ada
 Object.values(db).forEach((model) => {
   if (model.associate) {

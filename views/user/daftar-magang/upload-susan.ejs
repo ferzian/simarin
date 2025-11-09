@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload Screenshot Si Susan</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+
+  <div class="max-w-3xl mx-auto py-12 px-6">
+
+    <!-- Card Upload -->
+    <div class="card bg-gradient-to-br from-blue-400 to-blue-500 p-6 rounded-2xl text-white text-center relative shadow-xl">
+      <div class="flex justify-center mb-4">
+        <div class="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-2xl">🖼️</div>
+      </div>
+      <h1 class="text-2xl font-bold mb-4">Upload Screenshot Si Susan</h1>
+
+      <!-- Form Upload -->
+      <form id="upload-susan-form" class="space-y-4" enctype="multipart/form-data">
+        <input type="file" name="screenshot" id="susan-file" class="border p-2 rounded-lg w-full" accept="image/*,application/pdf" required>
+
+        <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden hidden" id="progress-susan-container">
+          <div class="bg-blue-500 h-3 w-0 transition-all" id="progress-susan-bar"></div>
+        </div>
+
+        <button type="submit" class="w-full bg-white text-blue-600 font-semibold py-2 px-6 rounded-full hover:bg-opacity-90 transition">Upload Screenshot</button>
+      </form>
+
+      <!-- Status -->
+      <div id="upload-susan-status" class="mt-4 p-2 bg-white bg-opacity-20 rounded-lg">
+        <p class="text-sm">Status: <span class="font-semibold">Menunggu upload</span></p>
+      </div>
+
+      <!-- Tombol kembali ke halaman sebelumnya (opsional) -->
+      <button onclick="window.location.href='/user/skm'" class="mt-4 w-full bg-white text-blue-600 font-semibold py-2 px-6 rounded-full hover:bg-opacity-90 transition">
+        Kembali ke Halaman Utama
+      </button>
+
+    </div>
+
+  </div>
+
+  <script>
+    const formSusan = document.getElementById('upload-susan-form');
+    const fileSusan = document.getElementById('susan-file');
+    const statusSusan = document.getElementById('upload-susan-status').querySelector('span');
+    const progressContainer = document.getElementById('progress-susan-container');
+    const progressBar = document.getElementById('progress-susan-bar');
+
+    formSusan.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if(!fileSusan.files[0]) return alert('Pilih file terlebih dahulu!');
+
+      progressContainer.classList.remove('hidden');
+      progressBar.style.width = '0%';
+      statusSusan.textContent = 'Mengunggah...';
+
+      const formData = new FormData();
+      formData.append('screenshot', fileSusan.files[0]);
+
+      try {
+        const res = await fetch('/user/upload-susan', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+
+        progressBar.style.width = '100%';
+        progressContainer.classList.add('hidden');
+
+        if(data.success){
+          statusSusan.textContent = 'Berhasil diupload!';
+          fileSusan.value = '';
+          // Setelah 1 detik, redirect kembali ke halaman skm
+          setTimeout(()=> {
+            window.location.href = '/user/skm';
+          }, 1000);
+        } else {
+          statusSusan.textContent = 'Gagal upload: ' + data.message;
+        }
+      } catch(err){
+        console.error(err);
+        statusSusan.textContent = 'Terjadi error saat upload';
+      }
+    });
+  </script>
+
+</body>
+</html>

@@ -32,7 +32,7 @@
 <body class="bg-gray-50">
 
 <!-- Navigation -->
-<nav id="mainNav"class="bg-transparent text-white fixed w-full z-50">
+<nav id="mainNav" class="bg-transparent  text-white fixed top-0 w-full z-50 transition-transform duration-300">
     <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
       
       <!-- Kiri: Logo + SIMARIN -->
@@ -113,93 +113,118 @@
           </div>
         </div>
      </nav>
-<!-- ===== Popup Speaker Toa Sederhana ===== -->
-<div x-data="popupSpeaker(<%= showPopup %>)"
-  x-init="init()"
-  x-show="open"
-  class="fixed bottom-6 right-6 z-50 flex items-center space-x-4 bg-yellow-200/90 backdrop-blur-md p-4 rounded-2xl shadow-2xl max-w-sm transition-all duration-500"
-  x-transition:enter="transform transition ease-out duration-500"
-  x-transition:enter-start="opacity-0 translate-y-10 scale-90"
-  x-transition:enter-end="opacity-100 translate-y-0 scale-100"
-  x-transition:leave="transform transition ease-in duration-300"
-  x-transition:leave-start="opacity-100 translate-y-0 scale-100"
-  x-transition:leave-end="opacity-0 translate-y-10 scale-90">
+     <div 
+     x-data="popupSpeaker(true)"
+     x-show="open"
+     @click.outside="close()"
+     :class="bounce ? 'animate-bounce' : ''"
+     class="fixed bottom-6 right-6 z-[9999] flex items-center space-x-4 bg-yellow-200/90 backdrop-blur-md p-4 rounded-2xl shadow-2xl max-w-sm transition-all duration-500 cursor-pointer"
+     x-transition:enter="transform transition ease-out duration-500"
+     x-transition:enter-start="opacity-0 translate-y-10 scale-90"
+     x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+     x-transition:leave="transform transition ease-in duration-300"
+     x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+     x-transition:leave-end="opacity-0 translate-y-10 scale-90"
+   >
+     <!-- Icon Speaker -->
+     <svg class="w-10 h-10 text-yellow-600 animate-pulse" fill="none" stroke="currentColor" stroke-width="2"
+       viewBox="0 0 24 24">
+       <path stroke-linecap="round" stroke-linejoin="round"
+         d="M15 8a3 3 0 013 3v2a3 3 0 01-3 3M19 8l3-3M19 16l3 3M5 10v4H2l5 4V6l-5 4h3z" />
+     </svg>
+   
+     <div class="flex-1">
+       <h4 class="font-bold text-gray-800">Upload Surat Permohonan</h4>
+       <p class="text-gray-700 text-sm">
+         Hallo friend 👋. Upload surat permohonanmu sekarang, dan mari mulai petualangan magangmu!
+       </p>
+       <button 
+         @click="suratPermohonanCard()"
+         class="mt-2 bg-yellow-600 hover:bg-yellow-700 text-white font-semibold px-4 py-2 rounded shadow-md transition-all">
+         Ke Form Upload
+       </button>
+     </div>
+   
+     <button @click="close()" class="text-gray-600 hover:text-gray-800 font-bold text-xl">&times;</button>
+   </div>
+   
+   <script>
+   function popupSpeaker(show = true) {
+     return {
+       open: show,
+       bounce: true,
+       clicked: false,
+       init() {
+         // popup otomatis muncul setelah delay
+         this.open = show;
+       },
+       close() {
+         this.open = false;
+       },
+       suratPermohonanCard() {
+         this.clicked = true; // hentikan animasi
+         document.getElementById("suratPermohonanCard").scrollIntoView({ behavior: 'smooth', block: 'center' });
+         this.close();
+       }
+     }
+   }
+   </script>
+   
 
-  <!-- Icon Speaker Toa -->
-  <svg class="w-10 h-10 text-yellow-600 animate-pulse" fill="none" stroke="currentColor" stroke-width="2"
-    viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round"
-      d="M15 8a3 3 0 013 3v2a3 3 0 01-3 3M19 8l3-3M19 16l3 3M5 10v4H2l5 4V6l-5 4h3z" />
-  </svg>
+<!-- Hero Section -->
+<div class="relative w-full h-screen overflow-hidden"
+x-data="{
+  current: 0,
+  images: [
+    '/images/ikan.jpg',
+    '/images/kita.jpg',
+    '/images/barudak.jpg',
+    '/images/barudak-balai.jpg',
+    '/images/ngala.jpg',
+    '/images/pemandangan.jpg'
+  ],
+  start() {
+    setInterval(() => this.next(), 5000);
+  },
+  next() {
+    this.current = (this.current + 1) % this.images.length;
+  },
+  prev() {
+    this.current = (this.current - 1 + this.images.length) % this.images.length;
+  },
+  goTo(index) {
+    this.current = index;
+  }
+}" 
+x-init="start()"
+>
 
-  <div class="flex-1">
-    <h4 class="font-bold text-gray-800">Upload Surat Permohonan</h4>
-    <p class="text-gray-700 text-sm">
-     hallo friend 👋 Setiap langkah kecil penting. Upload surat permohonanmu sekarang, dan mari mulai petualangan magangmu!”
-    </p>
-    <button @click="suratPermohonanCard"
-      class="mt-2 bg-yellow-600 hover:bg-yellow-700 text-white font-semibold px-4 py-2 rounded shadow-md transition-all">
-      Ke Form Upload
-    </button>
+<!-- Gambar background -->
+<template x-for="(image, index) in images" :key="index">
+  <div 
+    x-show="current === index"
+    x-transition:enter="transition-opacity duration-700"
+    x-transition:enter-start="opacity-0"
+    x-transition:enter-end="opacity-100"
+    x-transition:leave="transition-opacity duration-700"
+    x-transition:leave-start="opacity-100"
+    x-transition:leave-end="opacity-0"
+    class="absolute inset-0 bg-cover bg-center"
+    :style="`background-image: url(${image});`"
+  >
+    <!-- Overlay gelap -->
+    <div class="absolute inset-0 bg-black/60"></div>
   </div>
+</template>
 
-  <button @click="close()"
-    class="text-gray-600 hover:text-gray-800 font-bold text-xl">&times;</button>
+<!-- Konten hero -->
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center text-white z-10 space-y-4">
+  <h1 class="text-5xl font-bold drop-shadow-lg">Selamat Datang di KA-Mari</h1>
+  <p class="text-lg max-w-xl mx-auto">Sistem Informasi Magang dan Praktik Industri</p>
 </div>
 
-<!-- ===== Alpine.js Script ===== -->
-<script>
-  function popupSpeaker(show) {
-    return {
-      open: show,
-      init() {
-        // Popup akan muncul otomatis jika show = true
-        if (this.open) {
-          setTimeout(() => {
-            this.open = true;
-          }, 500); // delay muncul popup
-        }
-      },
-      close() {
-        this.open = false;
-      },
-      suratPermohonanCard() {
-        document.getElementById("suratPermohonanCard").scrollIntoView({ behavior: 'smooth', block: 'center' });
-        this.close();
-      }
-    }
-  }
-</script>
-<!-- Hero Section -->
-<div 
-  class="relative w-full h-[90vh] overflow-hidden" 
-  x-data="{
-    current: 0,
-    images: [
-      '/images/ikan.jpg',
-      '/images/kita.jpg',
-      '/images/barudak.jpg',
-      '/images/barudak-balai.jpg',
-      '/images/ngala.jpg',
-      '/images/pemandangan.jpg'
-    ],
-    start() {
-      setInterval(() => {
-        this.next();
-      }, 5000);
-    },
-    next() {
-      this.current = (this.current + 1) % this.images.length;
-    },
-    prev() {
-      this.current = (this.current - 1 + this.images.length) % this.images.length;
-    },
-    goTo(index) {
-      this.current = index;
-    }
-  }" 
-  x-init="start()"
->
+</div>
+
   <!-- Slides -->
   <template x-for="(img, index) in images" :key="index">
     <div 
@@ -227,22 +252,6 @@
     </div>
   </div>
 
-  <!-- Tombol Sebelumnya -->
-  <button @click="prev"
-    class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white bg-black/50 p-3 rounded-full shadow-lg border border-white/20 hover:bg-black/80 hover:scale-105 transition-all duration-200 z-40">
-    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 font-bold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-    </svg>
-  </button>
-
-  <!-- Tombol Selanjutnya -->
-  <button @click="next"
-    class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white bg-black/50 p-3 rounded-full shadow-lg border border-white/20 hover:bg-black/80 hover:scale-105 transition-all duration-200 z-40">
-    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 font-bold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-    </svg>
-  </button>
-
   <!-- Dot Navigasi -->
   <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-2 z-40">
     <template x-for="(img, index) in images" :key="index">
@@ -262,7 +271,7 @@
 <% if (!suratUploaded) { %>
   <div
   id="suratPermohonanCard"
-  class="bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 
+  class="bg-gradient-to-r from-green-500 via-white-500 to-green-500 
          shadow-lg rounded-2xl p-8 flex flex-col items-center justify-between 
          w-full md:w-1/2 transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
   
@@ -275,23 +284,36 @@
     <h3 class="text-xl font-bold mb-3 text-center text-white">Upload Surat Permohonan</h3>
     <p class="text-white text-center">Langkah pertama untuk bisa daftar magang!</p>
   </div>
-
-  <form id="uploadForm" action="/user/surat-permohonan/upload" method="POST" enctype="multipart/form-data" class="mt-6 w-full">
-    <input type="file" name="suratPermohonan" accept="application/pdf"
-           class="border border-white p-2 rounded w-full mb-4 bg-yellow-100 text-gray-800" required>
-    <button type="submit" class="bg-white text-yellow-600 font-bold px-4 py-2 rounded w-full hover:bg-yellow-50 transition">
+  <form id="uploadForm" action="/user/surat-permohonan/upload" method="POST" enctype="multipart/form-data" class="mt-6 w-full max-w-md mx-auto bg-green-50 shadow-lg rounded-3xl p-6 flex flex-col gap-4">
+  
+    <label for="suratPermohonan" class="text-gray-800 font-semibold text-lg">Upload Surat Permohonan (PDF)</label>
+    
+    <input 
+      id="suratPermohonan"
+      type="file" 
+      name="suratPermohonan" 
+      accept="application/pdf"
+      class="border border-gray-300 rounded-xl p-3 w-full text-gray-800 placeholder-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-green-400 file:text-white file:font-semibold hover:file:bg-green-500 transition-all"
+      required
+    >
+  
+    <button 
+      type="submit" 
+      class="bg-green-500 text-white font-bold py-3 rounded-2xl shadow hover:bg-green-600 hover:scale-105 transition-all"
+    >
       Upload Sekarang
     </button>
-  </form>
+    
+  </form>  
 </div>
 <% } %>
 <!-- 🟩 Card Pendaftaran Magang -->
 <% if (suratUploaded && !isRegistered) { %>
-<div
-  class="bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 
-         shadow-lg rounded-2xl p-8 flex flex-col items-center justify-between 
+  <div
+  class="bg-blue-900
+         shadow-xl rounded-3xl p-8 flex flex-col items-center justify-between
          w-full md:w-1/2 transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
-  
+
   <div class="flex flex-col items-center">
     <svg class="w-12 h-12 text-white mb-4" fill="none" stroke="currentColor" stroke-width="2"
       viewBox="0 0 24 24">
@@ -302,7 +324,7 @@
   </div>
 
   <a href="/user/daftar-magang"
-    class="bg-white text-yellow-600 font-bold rounded-lg px-4 py-2 hover:bg-yellow-50 transition w-full text-center">
+    class="bg-white text-blue-900 font-bold rounded-2xl px-5 py-3 hover:bg-blue-50 transition w-full text-center shadow-md hover:shadow-lg">
     Daftar Sekarang
   </a>
 </div>
@@ -311,24 +333,29 @@
 
 <!-- 🟢 Card Form Alur Kegiatan -->
 <% if (isRegistered) { %>
-<div
-  class="bg-white p-6 rounded-2xl shadow-md mt-8 w-full md:w-1/2 mx-auto flex flex-col justify-between transform transition duration-300 hover:scale-105 hover:shadow-2xl">
-  <div>
+  <div
+  class="bg-amber-400 shadow-lg rounded-3xl mt-8 w-full md:w-1/2 mx-auto flex flex-col justify-between transform transition duration-300 hover:scale-105 hover:shadow-2xl">
+  
+  <div class="p-6 flex flex-col items-center">
     <div class="flex justify-center mb-4">
-      <svg class="w-14 h-14 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <svg class="w-14 h-14 text-amber-100" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round"
           d="M9 12l2 2 4-4M7 12c0-2.21 1.79-4 4-4s4 1.79 4 4-1.79 4-4 4-4-1.79-4-4zM5 20h14" />
       </svg>
     </div>
-    <h2 class="text-xl font-bold text-center text-gray-800">
+    <h2 class="text-2xl font-bold text-center text-white drop-shadow-lg">
       Form Alur Kegiatan
     </h2>
   </div>
-  <div class="mt-6 flex justify-center">
+  
+  <div class="mt-6 flex justify-center pb-6">
     <a href="/user/skm"
-      class="bg-green-600 text-white px-10 py-2 rounded-full hover:bg-green-700 transition">Silahkan isi</a>
+       class="bg-white text-amber-600 font-semibold px-10 py-3 rounded-full hover:bg-white/90 hover:scale-105 transition-all shadow-md">
+       Masuk
+    </a>
   </div>
 </div>
+
 <% } %>
 
 </div>
@@ -413,7 +440,6 @@
   </footer>
   </body>
 </html>
-<body>
 <!-- Popup sukses pendaftaran -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
@@ -503,23 +529,51 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
     });
   }
 });
-let lastScrollTop = 0;
-const nav = document.getElementById('mainNav');
+document.addEventListener('DOMContentLoaded', () => {
+  let lastScrollTop = 0;
+  const nav = document.getElementById('mainNav');
 
-window.addEventListener('scroll', () => {
-  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-  if (scrollTop > lastScrollTop && scrollTop > 100) {
-    // Scroll ke bawah → sembunyikan navbar
-    nav.style.transform = 'translateY(-100%)';
-    nav.style.transition = 'transform 0.3s ease-in-out';
-  } else {
-    // Scroll ke atas → tampilkan navbar
-    nav.style.transform = 'translateY(0)';
-    nav.style.transition = 'transform 0.3s ease-in-out';
-  }
+    // Hilangkan nav saat scroll ke bawah
+    if (scrollTop > lastScrollTop && scrollTop > 100) {
+      nav.style.transform = 'translateY(-100%)';
+    } else {
+      nav.style.transform = 'translateY(0)';
+    }
+    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
 
-  lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // untuk mobile
+  });
 });
 
 </script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const nav = document.getElementById('mainNav');
+    if (!nav) return; // jika navbar ga ada, jangan lanjut
+  
+    let lastScrollTop = 0;
+  
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  
+      // 🔹 Hide navbar saat scroll ke bawah
+      if (scrollTop > lastScrollTop && scrollTop > 100) {
+        nav.style.transform = 'translateY(-100%)';
+      } else {
+        nav.style.transform = 'translateY(0)';
+      }
+      lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+  
+    
+    });
+  });
+  </script>
+  
+  <style>
+  #mainNav {
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  </style>
+  
