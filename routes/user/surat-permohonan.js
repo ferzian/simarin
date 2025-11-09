@@ -59,13 +59,10 @@ router.post('/upload', ensureUser, upload.single('suratPermohonan'), async (req,
       return res.status(400).json({ success: false, message: 'File harus diunggah' });
     }
 
-    // 💡 Simpan path relatif agar bisa diakses lewat public
-    const filePath = `/uploads/suratPermohonan/${file.filename}`;
-
-    // 💾 Simpan ke database
+    // 💾 Simpan hanya nama file, bukan path lengkap
     const surat = await SuratPermohonan.create({
       userId: req.user.id,
-      suratPermohonan: filePath, // simpan path, bukan hanya nama file
+      suratPermohonan: file.filename, // ✅ hanya simpan nama file
       status: 'pending',
     });
 
@@ -80,6 +77,7 @@ router.post('/upload', ensureUser, upload.single('suratPermohonan'), async (req,
     res.status(500).json({ success: false, message: 'Terjadi kesalahan saat upload file.' });
   }
 });
+
 
 
 // ❌ Hapus surat

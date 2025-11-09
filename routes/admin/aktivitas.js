@@ -1,11 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const { User, Participant, Laporan } = require('../../models');
+const { User, Participant, Laporan, SuratPermohonan } = require('../../models');
 const { isAuthenticated, isAdmin } = require('../../middleware/authMiddleware');
 
 router.get('/aktivitas', isAuthenticated, isAdmin, async (req, res) => {
     try {
-        const pendingCount = await Laporan.count({ where: { status: 'pending' } });
+        // === Surat Permohonan Pending ===
+        const pendingCount = await SuratPermohonan.count({ where: { status: 'pending' } });
+
+        // === Laporan Pending ===
+        const laporanCount = await Laporan.count({
+            where: { status: 'pending' }
+        });
         const participants = await Participant.findAll({
             include: [{ model: User, where: { role: 'user', approved: true } }],
         }).catch(() => []);
@@ -22,7 +28,8 @@ router.get('/aktivitas', isAuthenticated, isAdmin, async (req, res) => {
                 tanggalSelesai: p.tanggalSelesai,
             })) || [],
             user: req.session.user,
-            pendingCount
+            pendingCount,
+            laporanCount
         });
     } catch (err) {
         console.error('❌ Gagal ambil data peserta:', err);

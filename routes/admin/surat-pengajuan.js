@@ -1,10 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const { Laporan, Participant, SuratPermohonan } = require('../../models');
+const { SuratPermohonan, User, Laporan } = require('../../models'); // pastikan model sudah ada
 const path = require('path');
-const fs = require('fs');
 
-// Middleware: cek login role admin
+// Middleware admin
 function isAdmin(req, res, next) {
   if (!req.session.user || req.session.user.role !== 'admin') {
     return res.redirect('/auth/login');
@@ -12,15 +11,14 @@ function isAdmin(req, res, next) {
   next();
 }
 
-// GET semua laporan
+// GET semua surat permohonan
 router.get('/', isAdmin, async (req, res) => {
-  const limit = 10; // maksimal 10 data per halaman
-  const page = parseInt(req.query.page) || 1; // halaman aktif
+  const limit = 10;
+  const page = parseInt(req.query.page) || 1;
   const offset = (page - 1) * limit;
 
-  // Ambil data laporan + total count
-  const { count, rows: laporan } = await Laporan.findAndCountAll({
-    include: [{ model: Participant, as: "participant", attributes: ['nama'] }],
+  const { count, rows: surat } = await SuratPermohonan.findAndCountAll({
+    include: [{ model: User, as: 'user', attributes: ['username', 'instansi'] }],
     order: [['createdAt', 'DESC']],
     limit,
     offset,
@@ -33,30 +31,27 @@ router.get('/', isAdmin, async (req, res) => {
   const laporanCount = await Laporan.count({
     where: { status: 'pending' }
   });
-
-  // Hitung total halaman
   const totalPages = Math.ceil(count / limit);
 
-  res.render('admin/laporan', {
-    laporan,
+  res.render('admin/surat-pengajuan', {
+    surat,
     pendingCount,
     laporanCount,
     currentPage: page,
-    totalPages
+    totalPages,
   });
 });
 
 // POST approve
 router.post('/:id/approve', isAdmin, async (req, res) => {
-  await Laporan.update({ status: 'approved' }, { where: { id: req.params.id } });
-  res.redirect('/admin/laporan');
+  await SuratPermohonan.update({ status: 'approved' }, { where: { id: req.params.id } });
+  res.redirect('/admin/surat-pengajuan');
 });
 
 // POST reject
 router.post('/:id/reject', isAdmin, async (req, res) => {
-  await Laporan.update({ status: 'rejected' }, { where: { id: req.params.id } });
-  res.redirect('/admin/laporan');
+  await SuratPermohonan.update({ status: 'rejected' }, { where: { id: req.params.id } });
+  res.redirect('/admin/surat-pengajuan');
 });
-
 
 module.exports = router;

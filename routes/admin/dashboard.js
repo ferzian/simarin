@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Laporan, Participant, Visitor } = require('../../models');
+const { Laporan, Participant, Visitor, SuratPermohonan } = require('../../models');
 const { Op, fn, col } = require('sequelize');
 const moment = require('moment');
 const { isAdmin } = require('../../middleware/authMiddleware');
@@ -8,19 +8,25 @@ const { isAdmin } = require('../../middleware/authMiddleware');
 // GET /admin/dashboard
 router.get('/dashboard', isAdmin, async (req, res) => {
   try {
-    const pendingCount = await Laporan.count({ where: { status: 'pending' } });
+    // === Surat Permohonan Pending ===
+    const pendingCount = await SuratPermohonan.count({ where: { status: 'pending' } });
+
+    // === Laporan Pending ===
+    const laporanCount = await Laporan.count({
+      where: { status: { [Op.in]: ['menunggu', 'pending', 'baru'] } }
+    });
+
     // === Variabel waktu ===
     const monthStart = moment().startOf('month').toDate();
     const today = moment().startOf('day').toDate();
     const sevenDaysLater = moment().add(7, 'days').endOf('day').toDate();
+
     // === Pendaftar hari ini ===
     const todayStart = moment().startOf('day').toDate();
     const todayEnd = moment().endOf('day').toDate();
 
     const todayRegistrants = await Participant.findAll({
-      where: {
-        createdAt: { [Op.between]: [todayStart, todayEnd] }
-      },
+      where: { createdAt: { [Op.between]: [todayStart, todayEnd] } },
       attributes: ['nama', 'jenisKelamin', 'instansi', 'kegiatan', 'lokasi'],
       order: [['createdAt', 'DESC']]
     });
@@ -57,12 +63,10 @@ router.get('/dashboard', isAdmin, async (req, res) => {
     lokasiCounts.forEach(row => {
       const lokasi = row.get('lokasi');
       const count = Number(row.get('count')) || 0;
-      if (lokasiData.hasOwnProperty(lokasi)) {
-        lokasiData[lokasi] = count;
-      }
+      if (lokasiData.hasOwnProperty(lokasi)) lokasiData[lokasi] = count;
     });
 
-    // === Kegiatan terdekat selesai (7 hari ke depan) ===
+    // === Kegiatan selesai dalam 7 hari ===
     const upcomingEndDate = await Participant.findAll({
       where: {
         tanggalSelesai: { [Op.between]: [today, sevenDaysLater] },
@@ -72,13 +76,12 @@ router.get('/dashboard', isAdmin, async (req, res) => {
       limit: 5
     });
 
-    // === Data semua visitors untuk chart ===
+    // === Data visitors untuk chart ===
     const rawVisitors = await Visitor.findAll({
       attributes: ['id', 'createdAt'],
       raw: true
     });
 
-    // Format createdAt manual jadi YYYY-MM-DDTHH:mm:ss
     const visitors = rawVisitors.map(v => {
       const d = new Date(v.createdAt);
       return {
@@ -87,8 +90,8 @@ router.get('/dashboard', isAdmin, async (req, res) => {
       };
     });
 
+    const totalNotif = pendingCount + laporanCount;
 
-    // === Render ke view ===
     res.render('admin/dashboard', {
       visitCount,
       aktifCount,
@@ -98,13 +101,17 @@ router.get('/dashboard', isAdmin, async (req, res) => {
       visitors,
       moment,
       pendingCount,
+      laporanCount,
+      totalNotif,
       todayRegistrants
     });
+
 
   } catch (err) {
     console.error(err);
     res.status(500).send('Error loading dashboard');
   }
 });
+
 
 module.exports = router;
