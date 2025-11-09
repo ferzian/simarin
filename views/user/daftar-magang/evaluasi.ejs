@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evaluasi Pelayanan Magang</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    /* Animasi Fade In untuk form */
+    .fade-in {
+      animation: fadeIn 1s ease forwards;
+      opacity: 0;
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-purple-50 to-purple-100 min-h-screen flex items-center justify-center">
+    <% if (sudahIsi) { %>
+        <script>
+          Swal.fire({
+            title: '✨ Evaluasi Selesai ✨',
+            text: 'Terima kasih atas partisipasi Anda dalam meningkatkan kualitas layanan magang. Semua masukan Anda sangat berharga!',
+            icon: 'success',
+            iconColor: '#7c3aed',
+            confirmButtonText: 'Kembali ke Dashboard',
+            background: 'linear-gradient(135deg, #f3e8ff, #ede9fe)',
+            color: '#4c1d95',
+            showClass: {
+              popup: 'animate__animated animate__fadeInDown'
+            },
+            hideClass: {
+              popup: 'animate__animated animate__fadeOutUp'
+            },
+            buttonsStyling: true,
+            customClass: {
+              confirmButton: 'bg-purple-700 hover:bg-purple-800 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-all duration-300'
+            }
+          }).then(() => {
+            window.location.href = '/user/dashboard';
+          });
+        </script>
+        <% } %>
+  <div class="max-w-6xl w-full px-6 py-12 fade-in">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <!-- Judul -->
+    <h1 class="text-5xl font-extrabold text-purple-800 text-center mb-4 drop-shadow-lg">
+      ✨ Evaluasi Pelayanan Magang ✨
+    </h1>
+    <p class="text-center text-purple-700 text-lg mb-12">
+      Berikan penilaian Anda dari 1 (Sangat Buruk) sampai 5 (Sangat Baik). <br>
+      Masukan Anda sangat berharga untuk meningkatkan kualitas pelayanan magang kami.
+    </p>
+
+    <!-- Form Evaluasi -->
+    <form action="/user/evaluasi/save" method="POST" class="bg-white p-12 rounded-3xl shadow-2xl space-y-10">
+
+      <% function renderQuestion(index, text, namePrefix) { %>
+        <div class="p-5 border border-purple-200 rounded-xl hover:shadow-lg transition-all duration-300">
+          <p class="font-semibold mb-3 text-purple-800 text-lg"><%= index %>. <%= text %></p>
+          <div class="flex gap-4 justify-start">
+            <% for(let n=1; n<=5; n++){ %>
+              <label class="flex flex-col items-center cursor-pointer">
+                <input type="radio" name="<%= namePrefix %>" value="<%= n %>" class="hidden peer" required>
+                <span class="w-12 h-12 flex items-center justify-center rounded-full border border-purple-300 text-purple-600 font-semibold peer-checked:bg-purple-700 peer-checked:text-white transition-all duration-300 hover:scale-110">
+                  <%= n %>
+                </span>
+              </label>
+            <% } %>
+          </div>
+        </div>
+      <% } %>
+
+      <!-- I. KEBIJAKAN PELAYANAN -->
+      <div class="space-y-6">
+        <h2 class="text-2xl font-bold text-purple-700 mb-4 border-b-2 border-purple-200 pb-2">I. KEBIJAKAN PELAYANAN</h2>
+        <% const kebijakan = [
+          "Persyaratan yang diperlukan untuk memperoleh layanan mudah dipenuhi.",
+          "Prosedur yang dilalui untuk memperoleh layanan mudah.",
+          "Tarif yang diinformasikan sesuai dengan yang dibayarkan.",
+          "Lama waktu pelayanan yang diinformasikan sesuai dengan waktu penyelesaian."
+        ] %>
+        <% kebijakan.forEach((q, i) => { %>
+          <%= renderQuestion(i+1, q, "kebijakan_"+(i+1)) %>
+        <% }) %>
+      </div>
+
+      <!-- II. PROFESIONALISME SDM -->
+      <div class="space-y-6">
+        <h2 class="text-2xl font-bold text-purple-700 mb-4 border-b-2 border-purple-200 pb-2">II. PROFESIONALISME SDM</h2>
+        <% const profesional = [
+          "Waktu pelayanan sesuai dengan yang ditetapkan.",
+          "Petugas layanan responsif dalam memberikan pelayanan.",
+          "Sikap petugas mencerminkan pelayanan yang berkualitas."
+        ] %>
+        <% profesional.forEach((q, i) => { %>
+          <%= renderQuestion(i+5, q, "profesional_"+(i+1)) %>
+        <% }) %>
+      </div>
+
+      <!-- III. SARANA PRASARANA -->
+      <div class="space-y-6">
+        <h2 class="text-2xl font-bold text-purple-700 mb-4 border-b-2 border-purple-200 pb-2">III. SARANA PRASARANA</h2>
+        <% const sarana = [
+          "Tempat parkir yang disediakan memadai.",
+          "Sarana ruang tunggu layanan nyaman.",
+          "Sarana toilet khusus pengguna layanan bersih dan memadai.",
+          "Ketersediaan sarana prasarana penunjang lainnya yang memadai (contoh: ruang laktasi/nursery, arena bermain anak, kantin/fotocopy/toko ATK, wifi, prioritas lansia, dst)"
+        ] %>
+        <% sarana.forEach((q, i) => { %>
+          <%= renderQuestion(i+8, q, "sarana_"+(i+1)) %>
+        <% }) %>
+      </div>
+
+      <!-- IV. SISTEM INFORMASI PELAYANAN PUBLIK -->
+      <div class="space-y-6">
+        <h2 class="text-2xl font-bold text-purple-700 mb-4 border-b-2 border-purple-200 pb-2">IV. SISTEM INFORMASI PELAYANAN PUBLIK</h2>
+        <% const sistem = [
+          "Akses informasi layanan secara daring mudah (website, aplikasi, media sosial dan sejenisnya).",
+          "Kemudahan akses informasi di lokasi layanan (tatap muka)."
+        ] %>
+        <% sistem.forEach((q, i) => { %>
+          <%= renderQuestion(i+12, q, "sistem_"+(i+1)) %>
+        <% }) %>
+      </div>
+
+      <!-- V. KONSULTASI DAN PENGADUAN -->
+      <div class="space-y-6">
+        <h2 class="text-2xl font-bold text-purple-700 mb-4 border-b-2 border-purple-200 pb-2">V. KONSULTASI DAN PENGADUAN</h2>
+        <%= renderQuestion(14, "Tersedia konsultasi dan pengaduan layanan yang memadai dan mudah diakses", "konsultasi_1") %>
+      </div>
+
+      <!-- Submit -->
+      <div class="text-center mt-8">
+        <button type="submit" class="bg-purple-700 text-white font-bold py-4 px-16 rounded-full text-xl shadow-lg hover:bg-purple-800 hover:scale-105 transition-all duration-300">
+          Kirim Evaluasi
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+</body>
+</html>

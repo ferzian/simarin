@@ -1,0 +1,27 @@
+<form action="/user/kegiatan/save" method="POST" class="space-y-12">
+  <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <% const colors = ['from-indigo-500 to-indigo-600', 'from-purple-500 to-purple-600', 'from-pink-500 to-pink-600', 'from-yellow-400 to-yellow-500', 'from-green-400 to-green-500'];
+       workdays.forEach(function(date, idx) {
+         const hari = aktivitas.find(a => a.tanggal === date);
+         const gradient = colors[idx % colors.length]; %>
+
+    <div class="relative bg-gradient-to-br <%= gradient %> p-6 rounded-3xl shadow-xl text-white flex flex-col transition-transform transform hover:scale-105 hover:shadow-2xl duration-300">
+      <% if(hari && hari.kegiatan.trim() !== '') { %>
+        <span class="absolute top-4 right-4 bg-green-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold uppercase shadow">Terisi</span>
+      <% } else { %>
+        <span class="absolute top-4 right-4 bg-red-400 text-white px-3 py-1 rounded-full text-xs font-bold uppercase shadow">Kosong</span>
+      <% } %>
+
+      <h3 class="font-bold mb-4 text-lg text-center tracking-wide"><%= date %></h3>
+
+      <textarea name="kegiatan[<%= date %>]" class="flex-1 p-4 rounded-2xl resize-none h-48 bg-white/20 backdrop-blur-sm shadow-inner text-gray-900 placeholder-gray-700 focus:outline-none focus:ring-4 focus:ring-green-400 scrollbar-thin scrollbar-thumb-white scrollbar-track-gray-300 transition-all duration-300" placeholder="Isi kegiatan hari ini"><%= hari ? hari.kegiatan : '' %></textarea>
+    </div>
+    <% }) %>
+  </div>
+
+  <div class="text-center">
+    <button type="submit" class="mt-6 px-14 py-4 bg-green-500 hover:bg-green-600 transition-all rounded-full text-white font-extrabold text-lg shadow-xl hover:shadow-2xl transform hover:-translate-y-1 hover:scale-105 duration-300">
+      Simpan Kegiatan
+    </button>
+  </div>
+</form>

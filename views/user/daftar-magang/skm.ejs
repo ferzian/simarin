@@ -18,12 +18,24 @@
 
     .card {
       transition: all 0.3s ease;
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6 -2 rgba(0, 0, 0, 0.05);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      min-height: 380px;
+      max-height: 380px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card-content {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
     .card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 20px 25px -5 rgba(0, 0, 0, 0.1), 0 10px 10px -5 rgba(0, 0, 0, 0.04);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     }
 
     .locked {
@@ -39,14 +51,17 @@
       0% {
         transform: scale(1);
       }
-
       50% {
         transform: scale(1.05);
       }
-
       100% {
         transform: scale(1);
       }
+    }
+
+    .clickable:hover {
+      transform: scale(1.05);
+      transition: transform 0.2s ease;
     }
   </style>
 </head>
@@ -75,84 +90,158 @@
       </div>
     </div>
 
-    <!-- Cards -->
-    <div class="grid md:grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-      
-  
-      <!-- Step 1 -->
-      <div class="card bg-gradient-to-br from-green-400 to-green-500 p-6 rounded-2xl text-white text-center relative">
-        <div class="flex justify-center mb-4">
-          <div class="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-2xl">✅</div>
-        </div>
-        <h2 class="text-2xl font-bold mb-2">1. Isi Survey Kepuasan</h2>
-         <p class="text-2x1">isi i susan dan screenshoot lalu upload di card berikutnya</p>
-        <p class="opacity-90 mb-4"></p>
-        <button onclick="openStep('Survey Kepuasan','https://ptsp.kkp.go.id/skm/s/3327')"
-          class="bg-white text-green-600 font-semibold py-2 px-6 rounded-full hover:bg-opacity-90 transition">Isi
-          Survey</button>
-      </div>
-
-      <!-- 🆕 Step 2 - Upload Screenshot Si Susan -->
-      <div class="card bg-gradient-to-br from-blue-400 to-blue-500 p-6 rounded-2xl text-white text-center relative">
-        <div class="flex justify-center mb-4">
-          <div class="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-2xl">🖼️</div>
-        </div>
-        <h2 class="text-2xl font-bold mb-2">2. Upload Screenshot Si Susan</h2>
-        <button id="uploadSusanBtn"
-        class="bg-white text-blue-600 font-semibold py-2 px-6 rounded-full hover:bg-opacity-90 transition"
-        onclick="openStep('Upload Screenshot Si Susan', '/user/upload-susan')">
-        Upload Screenshot
-      </button>
-
-        <div id="upload-susan-status" class="mt-4 p-2 bg-white bg-opacity-20 rounded-lg">
-          <p class="text-sm">Status: <span class="font-semibold">Menunggu upload</span></p>
-        </div>
-      </div>
-
-      <!-- Step 3 -->
-      <div class="card bg-gradient-to-br from-yellow-400 to-yellow-500 p-6 rounded-2xl text-white text-center relative">
-        <div class="flex justify-center mb-4">
-          <div class="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-2xl">📑</div>
-        </div>
-        <h2 class="text-2xl font-bold mb-2">2. Upload Laporan</h2>
-        <p class="opacity-90 mb-4">Kumpulkan laporan </p>
-        <button id="uploadBtn"
-          class="bg-white text-yellow-600 font-semibold py-2 px-6 rounded-full hover:bg-opacity-90 transition">Upload
-          Laporan</button>
-        <div id="upload-status" class="mt-4 p-2 bg-white bg-opacity-20 rounded-lg">
-          <p class="text-sm">Status: <span class="font-semibold">Menunggu upload</span></p>
-        </div>
-      </div>
-      <% if (statusLaporan=='approved' ) { %>
-        <!-- Step 3 -->
-        <div id="certificate-card"
-          class="card bg-gradient-to-br from-gray-300 to-gray-400 p-6 rounded-2xl text-white text-center relative">
+    <!-- Cards Container -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+      <!-- Card 1: Kegiatan Harian Magang -->
+      <div class="card bg-gradient-to-br from-indigo-400 to-indigo-500 p-6 rounded-2xl text-white text-center clickable hover:scale-105 transition"
+           onclick="openStep('Kegiatan Harian Magang', '/user/kegiatan/form')">
+        <div class="card-content">
           <div class="flex justify-center mb-4">
-            <div class="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-2xl"></div>
+            <div class="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-2xl">📅</div>
           </div>
-          <h2 class="text-2xl font-bold mb-2">3. Unduh Sertifikat</h2>
-          <p id="certificate-text" class="opacity-90 mb-4"></p>
-          <button id="certificate-btn"
-            class="bg-gray-200 text-gray-600 font-semibold py-2 px-6 rounded-full">Download</button>
+          <h2 class="text-2xl font-bold mb-2">Kegiatan Harian Magang</h2>
+          <p class="opacity-90 mb-4">Klik untuk mengisi kegiatan harian Anda sesuai hari kerja magang.</p>
+          <div class="mt-auto">
+            <button class="bg-white text-indigo-600 font-semibold py-2 px-6 rounded-full hover:bg-opacity-90 transition"
+              onclick="openStep('Kegiatan Harian Magang', '/user/kegiatan/form')">
+              Mulai Mengisi
+            </button>
+          </div>
         </div>
-        <% } else { %>
-          <div id="certificate-card"
-            class="card bg-gradient-to-br from-gray-300 to-gray-400 p-6 rounded-2xl text-white text-center relative locked">
-            <div class="flex justify-center mb-4">
-              <div class="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-2xl">🔒
-              </div>
-            </div>
-            <h2 class="text-2xl font-bold mb-2">3. Unduh Sertifikat</h2>
-            <p id="certificate-text" class="opacity-90 mb-4">Anda belum mengunggah laporan magang.</p>
-            <button id="certificate-btn"
-              class="bg-gray-200 text-gray-600 font-semibold py-2 px-6 rounded-full cursor-not-allowed"
-              disabled>Terkunci</button>
+      </div>
+
+      <!-- Card 2: Isi Survey Kepuasan -->
+      <div class="card bg-gradient-to-br from-green-400 to-green-500 p-6 rounded-2xl text-white text-center relative clickable"
+           onclick="openStep('Survey Kepuasan', 'https://ptsp.kkp.go.id/skm/s/3327')">
+        <div class="card-content">
+          <div class="flex justify-center mb-4">
+            <div class="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-2xl">✅</div>
           </div>
-          <% } %>
+          <h2 class="text-2xl font-bold mb-2">1. Isi Survey Kepuasan</h2>
+          <p class="text-xl mb-4">Isi survey dan screenshot lalu upload di card berikutnya</p>
+          <div class="mt-auto">
+            <button class="bg-white text-green-600 font-semibold py-2 px-6 rounded-full hover:bg-opacity-90 transition"
+              onclick="openStep('Survey Kepuasan', 'https://ptsp.kkp.go.id/skm/s/3327')">
+              Isi Survey
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Upload Screenshot Si Susan -->
+      <div class="card bg-gradient-to-br from-blue-400 to-blue-500 p-6 rounded-2xl text-white text-center relative clickable"
+           onclick="openStep('Upload Screenshot Si Susan', '/user/upload-susan')">
+        <div class="card-content">
+          <div class="flex justify-center mb-4">
+            <div class="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-2xl">🖼️</div>
+          </div>
+          <h2 class="text-2xl font-bold mb-2">2. Upload Screenshot Si Susan</h2>
+          <div class="mt-auto">
+            <button class="bg-white text-blue-600 font-semibold py-2 px-6 rounded-full hover:bg-opacity-90 transition mb-4"
+              onclick="openStep('Upload Screenshot Si Susan', '/user/upload-susan')">
+              Upload Screenshot
+            </button>
+            <div class="p-2 bg-white bg-opacity-20 rounded-lg">
+              <p class="text-sm">
+                Status: <span class="font-semibold">
+                  <% if(statusUploadSusan === 'approved') { %>
+                    Sudah Upload & Disetujui
+                  <% } else if(statusUploadSusan === 'menunggu_approval') { %>
+                    Menunggu Persetujuan
+                  <% } else { %>
+                    Belum Upload
+                  <% } %>
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4: Upload Laporan -->
+      <div class="card bg-gradient-to-br from-yellow-400 to-yellow-500 p-6 rounded-2xl text-white text-center relative clickable">
+        <div class="card-content">
+          <div class="flex justify-center mb-4">
+            <div class="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-2xl">📑</div>
+          </div>
+          <h2 class="text-2xl font-bold mb-2">3. Upload Laporan</h2>
+          <p class="opacity-90 mb-4">Kumpulkan laporan magang Anda.</p>
+          <div class="mt-auto">
+            <button
+            class="bg-yellow-600 text-white font-semibold py-2 px-6 rounded-full hover:bg-yellow-700 transition mb-4"
+            <% if(statusUploadSusan !== 'approved') { %> disabled class="bg-gray-300 text-gray-500 cursor-not-allowed" <% } else { %> onclick="window.location.href='/user/upload-laporan'" <% } %>
+          >
+            <% if(statusUploadSusan === 'approved'){ %>
+              Upload Laporan
+            <% } else if(statusUploadSusan === 'menunggu_approval'){ %>
+              🔒 Menunggu persetujuan Upload Susan
+            <% } else { %>
+              🔒 Belum Upload Screenshot Si Susan
+            <% } %>
+          </button>
+          
+            <div class="p-2 bg-white bg-opacity-20 rounded-lg">
+              <p class="text-sm">
+                Status: <span class="font-semibold">Menunggu upload</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 5: Unduh Sertifikat -->
+      <div class="card bg-gradient-to-br from-gray-300 to-gray-400 p-6 rounded-2xl text-white text-center relative">
+        
+        <div class="card-content">
+          <div class="flex justify-center mb-4">
+            <div class="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-2xl">🔒</div>
+          </div>
+          <h2 class="text-2xl font-bold mb-2">4. Unduh Sertifikat</h2>
+          <p class="opacity-90 mb-4">Anda belum mengunggah atau laporan belum disetujui.</p>
+          <div class="mt-auto">
+            <button class="bg-gray-200 text-gray-600 font-semibold py-2 px-6 rounded-full cursor-not-allowed"
+              disabled>
+              Terkunci
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 6: Evaluasi Pelayanan Magang -->
+      <div class="card bg-gradient-to-br from-pink-400 to-pink-500 p-6 rounded-2xl text-white text-center relative hover:scale-105 transition cursor-pointer"
+     onclick="openStep('Evaluasi Pelayanan Magang', '/user/evaluasi')">
+  <div class="card-content flex flex-col">
+    <div class="flex justify-center mb-4">
+      <div class="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-2xl">📝</div>
     </div>
-
+    <h2 class="text-2xl font-bold mb-2">5. Evaluasi Pelayanan Magang</h2>
+    <p class="opacity-90 mb-4">Isi evaluasi pengalaman magang Anda untuk peningkatan kualitas program.</p>
+    <div class="mt-auto">
+      <div class="bg-white text-pink-600 font-semibold py-2 px-6 rounded-full hover:bg-opacity-90 transition inline-block">
+        Isi Survey
+      </div>
+    </div>
   </div>
+</div>
 
+
+  <script>
+    function openStep(stepName, url) {
+      alert(`Membuka: ${stepName}\nURL: ${url}`);
+      // window.location.href = url; // Uncomment untuk mengaktifkan navigasi
+    }
+    
+    // Mencegah event bubbling dari tombol ke card
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.card button').forEach(button => {
+        button.addEventListener('click', function(e) {
+          e.stopPropagation();
+        });
+      });
+    });
+  </script>
+</body>
+</html>
   <script>
     let statusLaporan = "<%= typeof statusLaporan !== 'undefined' ? statusLaporan : 'belum_upload' %>";
 

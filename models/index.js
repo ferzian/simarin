@@ -21,6 +21,9 @@ db.Laporan = require('./Laporan')(sequelize, DataTypes);
 db.Visitor = require('./Visitor')(sequelize, DataTypes); 
 db.SuratPermohonan = require('./SuratPermohonan')(sequelize, DataTypes);
 db.UploadSusan = require('./upload_susan')(sequelize, DataTypes);
+db.AktivitasHarian = require('./aktivitas_harian')(sequelize, DataTypes);
+db.Evaluasi = require('./evaluasi')(sequelize, DataTypes);
+
 // Jalankan associate kalau ada
 Object.values(db).forEach((model) => {
   if (model.associate) {

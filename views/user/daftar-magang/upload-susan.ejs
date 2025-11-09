@@ -10,14 +10,14 @@
 
   <div class="max-w-3xl mx-auto py-12 px-6">
 
-    <!-- Card Upload -->
     <div class="card bg-gradient-to-br from-blue-400 to-blue-500 p-6 rounded-2xl text-white text-center relative shadow-xl">
       <div class="flex justify-center mb-4">
         <div class="w-16 h-16 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-2xl">🖼️</div>
       </div>
       <h1 class="text-2xl font-bold mb-4">Upload Screenshot Si Susan</h1>
 
-      <!-- Form Upload -->
+      <div id="susan-preview" class="mt-2"></div>
+
       <form id="upload-susan-form" class="space-y-4" enctype="multipart/form-data">
         <input type="file" name="screenshot" id="susan-file" class="border p-2 rounded-lg w-full" accept="image/*,application/pdf" required>
 
@@ -25,66 +25,89 @@
           <div class="bg-blue-500 h-3 w-0 transition-all" id="progress-susan-bar"></div>
         </div>
 
-        <button type="submit" class="w-full bg-white text-blue-600 font-semibold py-2 px-6 rounded-full hover:bg-opacity-90 transition">Upload Screenshot</button>
+        <button type="submit" class="w-full bg-white text-blue-600 font-semibold py-2 px-6 rounded-full hover:bg-opacity-90 transition">
+          Upload Screenshot
+        </button>
       </form>
 
-      <!-- Status -->
       <div id="upload-susan-status" class="mt-4 p-2 bg-white bg-opacity-20 rounded-lg">
         <p class="text-sm">Status: <span class="font-semibold">Menunggu upload</span></p>
       </div>
 
-      <!-- Tombol kembali ke halaman sebelumnya (opsional) -->
       <button onclick="window.location.href='/user/skm'" class="mt-4 w-full bg-white text-blue-600 font-semibold py-2 px-6 rounded-full hover:bg-opacity-90 transition">
         Kembali ke Halaman Utama
       </button>
-
     </div>
 
   </div>
 
   <script>
-    const formSusan = document.getElementById('upload-susan-form');
-    const fileSusan = document.getElementById('susan-file');
-    const statusSusan = document.getElementById('upload-susan-status').querySelector('span');
-    const progressContainer = document.getElementById('progress-susan-container');
-    const progressBar = document.getElementById('progress-susan-bar');
+  const formSusan = document.getElementById('upload-susan-form');
+  const fileSusan = document.getElementById('susan-file');
+  const statusSusan = document.getElementById('upload-susan-status').querySelector('span');
+  const progressContainer = document.getElementById('progress-susan-container');
+  const progressBar = document.getElementById('progress-susan-bar');
 
-    formSusan.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if(!fileSusan.files[0]) return alert('Pilih file terlebih dahulu!');
+  // ✅ Upload dengan Progress Bar
+  formSusan.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!fileSusan.files[0]) return alert('Pilih file terlebih dahulu!');
 
-      progressContainer.classList.remove('hidden');
-      progressBar.style.width = '0%';
-      statusSusan.textContent = 'Mengunggah...';
+    progressContainer.classList.remove('hidden');
+    progressBar.style.width = '0%';
+    statusSusan.textContent = 'Mengunggah...';
 
-      const formData = new FormData();
-      formData.append('screenshot', fileSusan.files[0]);
+    const formData = new FormData();
+    formData.append('screenshot', fileSusan.files[0]);
 
-      try {
-        const res = await fetch('/user/upload-susan', {
-          method: 'POST',
-          body: formData
-        });
-        const data = await res.json();
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/user/upload-susan', true);
 
-        progressBar.style.width = '100%';
-        progressContainer.classList.add('hidden');
-
-        if(data.success){
-          statusSusan.textContent = 'Berhasil diupload!';
-          fileSusan.value = '';
-          // Setelah 1 detik, redirect kembali ke halaman skm
-          setTimeout(()=> {
-            window.location.href = '/user/skm';
-          }, 1000);
-        } else {
-          statusSusan.textContent = 'Gagal upload: ' + data.message;
-        }
-      } catch(err){
-        console.error(err);
-        statusSusan.textContent = 'Terjadi error saat upload';
+    xhr.upload.onprogress = (e) => {
+      if (e.lengthComputable) {
+        const percent = (e.loaded / e.total) * 100;
+        progressBar.style.width = percent + '%';
       }
-    });
+    };
+
+    xhr.onload = () => {
+      progressContainer.classList.add('hidden');
+      try {
+        const data = JSON.parse(xhr.responseText);
+        if (data.success) {
+          statusSusan.textContent = '✅ Berhasil diupload!';
+          fileSusan.value = '';
+          setTimeout(() => window.location.href = '/user/skm', 1000);
+        } else {
+          statusSusan.textContent = '❌ Gagal upload: ' + data.message;
+        }
+      } catch {
+        statusSusan.textContent = '❌ Respons server tidak valid';
+      }
+    };
+
+    xhr.onerror = () => {
+      statusSusan.textContent = '⚠️ Terjadi error saat upload';
+    };
+
+    xhr.send(formData);
+  });
+
+  // ✅ Preview File
+  fileSusan.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    const preview = document.getElementById('susan-preview');
+    if (!file) return preview.innerHTML = '';
+    if (file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        preview.innerHTML = `<img src="${ev.target.result}" class="mx-auto mt-2 rounded-lg shadow-md" width="200">`;
+      };
+      reader.readAsDataURL(file);
+    } else {
+      preview.innerHTML = `<p class="text-sm bg-white/30 text-white p-2 rounded-md">📄 File terpilih: ${file.name}</p>`;
+    }
+  });
   </script>
 
 </body>
