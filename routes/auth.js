@@ -269,4 +269,4 @@ router.post('/logout', (req, res) => {
   res.redirect('/user/user-dashboard');
 });
 
-module.exports = router;
+module.exports = router

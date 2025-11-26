@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kegiatan Harian Magang</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .scrollbar-thin::-webkit-scrollbar { width: 6px; }
+    .scrollbar-thin::-webkit-scrollbar-track { background: rgba(255,255,255,0.2); border-radius: 9999px; }
+    .scrollbar-thin::-webkit-scrollbar-thumb { background-color: rgba(255,255,255,0.7); border-radius: 9999px; }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <div class="max-w-7xl mx-auto p-6">
+    <h1 class="text-4xl font-extrabold text-gray-900 mb-12 text-center">Kegiatan Harian Magang</h1>
+
+    <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <% 
+        const colors = ['from-indigo-500 to-indigo-600', 'from-purple-500 to-purple-600', 'from-pink-500 to-pink-600', 'from-yellow-400 to-yellow-500', 'from-green-400 to-green-500'];
+        workdays.forEach(function(date, idx) { 
+          const hari = aktivitas.find(a => a.tanggal === date); 
+          const gradient = colors[idx % colors.length]; 
+      %>
+        <div class="relative bg-gradient-to-br <%= gradient %> p-6 rounded-3xl shadow-xl text-white flex flex-col transition-transform transform hover:scale-105 hover:shadow-2xl duration-300">
+          <% if(hari && hari.kegiatan.trim() !== '') { %>
+            <span class="absolute top-4 right-4 bg-green-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold uppercase shadow">Terisi</span>
+          <% } else { %>
+            <span class="absolute top-4 right-4 bg-red-400 text-white px-3 py-1 rounded-full text-xs font-bold uppercase shadow">Kosong</span>
+          <% } %>
+
+          <h3 class="font-bold mb-4 text-lg text-center tracking-wide"><%= date %></h3>
+
+          <div class="flex-1 p-4 rounded-2xl h-48 bg-white/20 backdrop-blur-sm shadow-inner text-gray-900 overflow-y-auto scrollbar-thin">
+            <% if(hari && hari.kegiatan.trim() !== '') { %>
+              <p><%= hari.kegiatan %></p>
+            <% } else { %>
+              <p class="text-gray-400 italic">Belum ada kegiatan</p>
+            <% } %>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+
+    <div class="text-center mt-12">
+      <a href="/user/kegiatan/form" class="px-14 py-4 bg-green-500 hover:bg-green-600 transition-all rounded-full text-white font-extrabold text-lg shadow-xl hover:shadow-2xl transform hover:-translate-y-1 hover:scale-105 duration-300">
+        Kembali Mengisi
+      </a>
+    </div>
+  </div>
+</body>
+</html>

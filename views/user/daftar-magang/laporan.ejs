@@ -66,7 +66,7 @@
     formData.append('laporan', fileInput.files[0]);
     formData.append('judul', form.judul.value);
 
-    fetch('/user/submit-laporan', {
+    fetch('/user/laporan/submit-laporan', {
       method:'POST',
       body: formData
     }).then(res=>res.json())

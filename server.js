@@ -16,8 +16,11 @@ const visitorLogger = require('./middleware/visitorLogger');
 const sertifikatRoutes = require('./routes/user/sertifikat');
 const sertifikatAdminRoutes = require("./routes/admin/sertifikat");
 const suratPermohonanRoutes = require('./routes/user/surat-permohonan');
+const uploadSusanRouter = require('./routes/user/upload-susan');
+const kegiatanRoute = require('./routes/user/kegiatan');
+const evaluasiRouter = require('./routes/user/evaluasi');
+const skmRoutes = require('./routes/user/skm');
 const suratPengajuan= require('./routes/admin/surat-pengajuan');
-
 
 // Middleware
 app.use(express.urlencoded({ extended: false }));
@@ -63,8 +66,11 @@ app.use('/user', laporanRoutes);
 app.use('/sertifikat', sertifikatRoutes);
 app.use("/admin/sertifikat", sertifikatAdminRoutes);
 app.use("/user/surat", suratPermohonanRoutes);
+app.use('/user/upload-susan', uploadSusanRouter);
+app.use('/user/kegiatan', kegiatanRoute);
+app.use('/user/evaluasi', evaluasiRouter);
+app.use('/user/skm', skmRoutes);
 app.use('/admin/surat-pengajuan', suratPengajuan);
-
 
 // Visitor tracking
 app.use(async (req, res, next) => {
