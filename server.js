@@ -21,6 +21,7 @@ const kegiatanRoute = require('./routes/user/kegiatan');
 const evaluasiRouter = require('./routes/user/evaluasi');
 const skmRoutes = require('./routes/user/skm');
 const suratPengajuan= require('./routes/admin/surat-pengajuan');
+const ssSKMRoutes = require('./routes/admin/ss-skm');
 
 // Middleware
 app.use(express.urlencoded({ extended: false }));
@@ -70,6 +71,7 @@ app.use('/user/kegiatan', kegiatanRoute);
 app.use('/user/evaluasi', evaluasiRouter);
 app.use('/user/skm', skmRoutes);
 app.use('/admin/surat-pengajuan', suratPengajuan);
+app.use('/admin/ss-skm', ssSKMRoutes);
 
 // Visitor tracking
 app.use(async (req, res, next) => {
