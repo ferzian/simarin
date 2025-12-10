@@ -3,22 +3,16 @@
   <head>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <title>Statistik Peserta</title>
+    <title>Approval Pengisian SKM</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <!-- Favicon -->
     <link rel="icon" sizes="32x32" type="image/png" href="/images/logo.png" />
     <link rel="stylesheet" href="/css/admin.css" />
     <script src="/js/admin/index.js" defer></script>
-    <script src="/js/admin/peserta.js" defer></script>
   </head>
   <body class="bg-gray-100 flex h-screen">
-    <script>
-      const participantsData = <%- JSON.stringify(participants) %>;
-    </script>
-
     <aside
       class="sidebar bg-gray-800 text-white w-64 p-5 space-y-6 flex-shrink-0"
       id="sidebar"
@@ -114,7 +108,7 @@
           </a>
           <a
             href="/admin/ss-skm"
-            class="menu-item-link text-white hover:text-white"
+            class="menu-item-link text-white hover:text-white relative bg-gray-700"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -191,7 +185,7 @@
           </h3>
           <a
             href="/admin/peserta"
-            class="menu-item-link text-white hover:text-white relative bg-gray-700"
+            class="menu-item-link text-white hover:text-white"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -237,11 +231,14 @@
         class="bg-white shadow-md px-6 py-4 flex justify-between items-center border-b border-gray-200"
       >
         <div>
-          <h1 class="text-2xl font-bold text-gray-800">Statistik Peserta</h1>
+          <h1 class="text-2xl font-bold text-gray-800">
+            Approval Surat Permohonan
+          </h1>
           <p class="text-sm text-gray-500">
             Balai Riset Perikanan Budidaya Air Tawar dan Penyuluhan Perikanan
           </p>
         </div>
+
         <!-- Kanan -->
         <% var safePendingCount = pendingCount || 0; var safeLaporanCount =
         laporanCount || 0; var totalNotif = safePendingCount + safeLaporanCount;
@@ -383,224 +380,161 @@
       </header>
 
       <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-8">
-        <h2 class="text-3xl font-bold mb-6 text-gray-800">
-          Rekap Data Peserta
-        </h2>
-        <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
-          <h3 class="text-xl font-semibold text-gray-700 mb-4">Filter Data</h3>
-          <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-5">
-            <div class="flex flex-col">
-              <label
-                for="filterDateStart"
-                class="text-gray-700 font-medium mb-1"
-                >Dari:</label
-              >
-              <input
-                type="date"
-                id="filterDateStart"
-                class="w-full border-2 border-gray-300 rounded-lg px-3 py-2 text-gray-800 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 cursor-pointer"
-              />
-            </div>
+        <div class="max-w-10xl mx-auto">
+          <div class="bg-white rounded-xl shadow-lg p-6">
+            <h1 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-4">
+              Daftar Surat Permohonan
+            </h1>
 
-            <div class="flex flex-col">
-              <label for="filterDateEnd" class="text-gray-700 font-medium mb-1"
-                >Sampai:</label
-              >
-              <input
-                type="date"
-                id="filterDateEnd"
-                class="w-full border-2 border-gray-300 rounded-lg px-3 py-2 text-gray-800 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 cursor-pointer"
-              />
-            </div>
-
-            <div class="flex flex-col">
-              <label for="filterDuration" class="text-gray-700 font-medium mb-1"
-                >Durasi Kegiatan:</label
-              >
-              <select
-                id="filterDuration"
-                class="w-full border-2 border-gray-300 rounded-lg py-2 px-3 text-gray-800 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="">Semua Durasi</option>
-                <option value="under30">Dibawah 30 Hari</option>
-                <option value="1to3">1 - 3 Bulan</option>
-                <option value="3to6">3 - 6 Bulan</option>
-                <option value="above6">Diatas 6 Bulan</option>
-              </select>
-            </div>
-
-            <div class="flex flex-col">
-              <label for="filterType" class="text-gray-700 font-medium mb-1"
-                >Jenis Kegiatan:</label
-              >
-              <select
-                id="filterType"
-                class="w-full border-2 border-gray-300 rounded-lg py-2 px-3 text-gray-800 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="">Semua Jenis</option>
-                <option value="Magang">Magang</option>
-                <option value="Praktik Kerja Lapang">
-                  Praktik Kerja Lapang
-                </option>
-                <option value="Penelitian/Praktik Akhir">
-                  Penelitian/Praktik Akhir
-                </option>
-                <option value="MBKM">MBKM</option>
-              </select>
-            </div>
-
-            <div class="flex flex-col">
-              <label for="filterLocation" class="text-gray-700 font-medium mb-1"
-                >Lokasi Kegiatan:</label
-              >
-              <select
-                id="filterLocation"
-                class="w-full border-2 border-gray-300 rounded-lg py-2 px-3 text-gray-800 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="">Semua Lokasi</option>
-                <option value="Depok">Depok</option>
-                <option value="Sempur">Sempur</option>
-                <option value="Cibalagung">Cibalagung</option>
-                <option value="Cijeruk">Cijeruk</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="mt-6">
-            <button
-              id="applyFilterBtn"
-              class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 font-semibold"
+            <div
+              class="overflow-x-auto rounded-xl border border-gray-200 shadow-md"
             >
-              Terapkan Filter
-            </button>
-          </div>
-        </div>
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-blue-900 text-white uppercase text-md">
+                  <tr>
+                    <th class="py-3 px-6 text-left font-semibold">
+                      Nama Pengguna
+                    </th>
+                    <th class="py-3 px-6 text-left font-semibold">
+                      Asal Instansi
+                    </th>
+                    <th class="py-3 px-6 text-left font-semibold">
+                      File Surat
+                    </th>
+                    <th class="py-3 px-6 text-left font-semibold">Status</th>
+                    <th class="py-3 px-6 text-center font-semibold">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody class="text-gray-700 text-sm font-light">
+                  <% surat.forEach(s => { %>
+                  <tr class="border-b border-gray-200 hover:bg-gray-100">
+                    <td class="py-3 px-6">
+                      <%= s.user ? s.user.username : 'Unknown' %>
+                    </td>
+                    <td class="py-3 px-6">
+                      <%= s.user && s.user.instansi ? s.user.instansi :
+                      'Unknown' %>
+                    </td>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div
-            class="bg-white rounded-xl shadow-lg p-6 text-center border-b-4 border-sky-500"
-          >
-            <h3 class="text-lg font-semibold text-gray-700 mb-2">
-              Total Peserta
-            </h3>
-            <p class="text-4xl font-bold text-sky-600" id="totalParticipants">
-              0
-            </p>
-          </div>
-          <div
-            class="bg-white rounded-xl shadow-lg p-6 text-center border-b-4 border-yellow-500"
-          >
-            <h3 class="text-lg font-semibold text-gray-700 mb-2">
-              Durasi Terpopuler
-            </h3>
-            <p
-              class="text-2xl md:text-3xl font-bold text-yellow-600"
-              id="avgDuration"
-            >
-              N/A
-            </p>
-          </div>
+                    <td class="py-3 px-6">
+                      <a
+                        href="/uploads/suratPermohonan/<%= s.suratPermohonan %>"
+                        download
+                        class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 text-sm font-semibold"
+                      >
+                        Download
+                      </a>
+                    </td>
+                    <td class="py-3 px-6">
+                      <% if (s.status === 'approved') { %>
+                      <span
+                        class="bg-green-100 text-green-700 py-1 px-3 rounded-full text-xs font-semibold"
+                        >Approved</span
+                      >
+                      <% } else if (s.status === 'rejected') { %>
+                      <span
+                        class="bg-red-100 text-red-700 py-1 px-3 rounded-full text-xs font-semibold"
+                        >Rejected</span
+                      >
+                      <% } else { %>
+                      <span
+                        class="bg-yellow-100 text-yellow-700 py-1 px-3 rounded-full text-xs font-semibold"
+                        >Pending</span
+                      >
+                      <% } %>
+                    </td>
+                    <td class="py-4 px-6 text-center align-middle">
+                      <% if (s.status === 'pending') { %>
+                      <div class="flex items-center justify-start gap-3 h-full">
+                        <!-- Tombol Approve -->
+                        <form
+                          action="/admin/surat-pengajuan/<%= s.id %>/approve"
+                          method="POST"
+                          class="inline-block"
+                        >
+                          <button
+                            type="submit"
+                            title="Setujui Permohonan"
+                            class="bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg transition-all duration-150 shadow-md hover:scale-105"
+                          >
+                            Approve
+                          </button>
+                        </form>
 
-          <div
-            class="bg-white rounded-xl shadow-lg p-6 text-center border-b-4 border-pink-500"
-          >
-            <h3 class="text-lg font-semibold text-gray-700 mb-2">
-              Kegiatan Terpopuler
-            </h3>
-            <p class="text-2xl font-bold text-pink-600" id="mostPopularType">
-              N/A
-            </p>
-          </div>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
-          <h3 class="text-xl font-semibold text-gray-700 mb-4">
-            Daftar Peserta
-          </h3>
-          <div
-            class="overflow-x-auto rounded-xl border border-gray-200 shadow-md"
-          >
-            <table class="min-w-full divide-y divide-gray-200">
-              <thead class="bg-blue-900">
-                <tr
-                  class="text-left text-md text-white uppercase tracking-wider"
+                        <!-- Tombol Reject -->
+                        <form
+                          action="/admin/surat-pengajuan/<%= s.id %>/reject"
+                          method="POST"
+                          class="inline-block"
+                        >
+                          <button
+                            type="submit"
+                            title="Tolak Permohonan"
+                            class="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-lg transition-all duration-150 shadow-md hover:scale-105"
+                          >
+                            Reject
+                          </button>
+                        </form>
+                      </div>
+                      <% } else { %>
+                      <span class="text-gray-400 italic text-xs"
+                        >Tidak ada aksi</span
+                      >
+                      <% } %>
+                    </td>
+                  </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+
+              <!-- Pagination -->
+              <div
+                class="flex justify-between items-center mt-4 px-4 py-3 bg-white border-t border-gray-200 rounded-b-lg"
+              >
+                <div>
+                  <% if (currentPage > 1) { %>
+                  <a
+                    href="?page=<%= currentPage - 1 %>"
+                    class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg text-sm font-medium"
+                  >
+                    &larr; Sebelumnya
+                  </a>
+                  <% } else { %>
+                  <button
+                    disabled
+                    class="px-4 py-2 bg-gray-100 text-gray-400 rounded-lg text-sm cursor-not-allowed"
+                  >
+                    &larr; Sebelumnya
+                  </button>
+                  <% } %>
+                </div>
+
+                <div
+                  class="text-sm font-medium text-gray-600 text-center flex-1"
                 >
-                  <th class="px-4 py-3 font-semibold text-left">Nama</th>
-                  <th class="px-4 py-3 font-semibold text-left">
-                    Jenis Kelamin
-                  </th>
-                  <th class="px-4 py-3 font-semibold text-left">
-                    Asal Instansi
-                  </th>
-                  <th class="px-4 py-3 font-semibold text-left">
-                    Program Studi
-                  </th>
-                  <th class="px-4 py-3 font-semibold text-left">
-                    Jenis Kegiatan
-                  </th>
-                  <th class="px-4 py-3 font-semibold text-left">Lokasi</th>
-                  <th class="px-4 py-3 font-semibold text-left">Periode</th>
-                </tr>
-              </thead>
+                  Halaman <%= currentPage %> dari <%= totalPages %>
+                </div>
 
-              <tbody
-                class="bg-white divide-y divide-gray-100"
-                id="participantsTableBody"
-              ></tbody>
-            </table>
+                <div>
+                  <% if (currentPage < totalPages) { %>
+                  <a
+                    href="?page=<%= currentPage + 1 %>"
+                    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium"
+                  >
+                    Selanjutnya &rarr;
+                  </a>
+                  <% } else { %>
+                  <button
+                    disabled
+                    class="px-4 py-2 bg-gray-100 text-gray-400 rounded-lg text-sm cursor-not-allowed"
+                  >
+                    Selanjutnya &rarr;
+                  </button>
+                  <% } %>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="mt-4 flex justify-between items-center">
-            <button
-              id="prevPageBtn"
-              class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 disabled:opacity-50"
-              disabled
-            >
-              Sebelumnya
-            </button>
-            <span class="text-gray-700"
-              >Halaman <span id="currentPage">1</span> dari
-              <span id="totalPages">1</span></span
-            >
-            <button
-              id="nextPageBtn"
-              class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 disabled:opacity-50"
-              disabled
-            >
-              Berikutnya
-            </button>
-          </div>
-        </div>
-        <div class="flex justify-center mb-8">
-          <div
-            class="w-full md:w-1/2 lg:w-1/3 bg-white p-6 rounded-xl shadow-lg"
-          >
-            <h3 class="text-xl font-semibold text-gray-700 mb-4 text-center">
-              Distribusi Jenis Kelamin
-            </h3>
-            <canvas id="genderChart"></canvas>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <div class="bg-white p-6 rounded-xl shadow-lg">
-            <h3 class="text-xl font-semibold text-gray-700 mb-4 text-center">
-              Distribusi Lokasi Kegiatan
-            </h3>
-            <canvas id="locationChart"></canvas>
-          </div>
-
-          <div class="bg-white p-6 rounded-xl shadow-lg">
-            <h3 class="text-xl font-semibold text-gray-700 mb-4 text-center">
-              Distribusi Jenis Kegiatan
-            </h3>
-            <canvas id="activityTypeChart"></canvas>
-          </div>
-        </div>
-
-        <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
-          <h3 class="text-xl font-semibold text-gray-700 mb-4">
-            Distribusi Program Studi Populer
-          </h3>
-          <canvas id="majorChart"></canvas>
         </div>
       </main>
     </div>
