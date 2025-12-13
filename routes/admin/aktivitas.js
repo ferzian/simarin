@@ -14,6 +14,7 @@ router.get('/aktivitas', isAuthenticated, isAdmin, async (req, res) => {
         });
         const participants = await Participant.findAll({
             include: [{ model: User, where: { role: 'user', approved: true } }],
+            order: [['createdAt', 'DESC']],
         }).catch(() => []);
 
         res.render('admin/aktivitas', {
