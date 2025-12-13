@@ -1,6 +1,6 @@
 let filteredParticipants = [];
 let currentPage = 1;
-const rowsPerPage = 5; // Jumlah baris per halaman
+const rowsPerPage = 10; // Jumlah baris per halaman
 
 const totalParticipantsEl = document.getElementById("totalParticipants");
 const popularDurationEl = document.getElementById("avgDuration");
