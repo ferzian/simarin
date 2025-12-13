@@ -72,6 +72,7 @@ app.use('/user/evaluasi', evaluasiRouter);
 app.use('/user/skm', skmRoutes);
 app.use('/admin/surat-pengajuan', suratPengajuan);
 app.use('/admin/ss-skm', ssSKMRoutes);
+app.use('/admin', require('./routes/admin/aktivitas'));
 
 // Visitor tracking
 app.use(async (req, res, next) => {
