@@ -8,7 +8,7 @@ let currentSort = { key: null, asc: true };
 let baseParticipants = participantsData;
 let currentFilterPeriod = "Semua Data";
 
-const rowsPerPage = 10;
+const rowsPerPage = 15;
 
 const totalParticipantsEl = document.getElementById("totalParticipants");
 const avgDurationEl = document.getElementById("avgDuration");
